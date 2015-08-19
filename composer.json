@@ -1,0 +1,23 @@
+{
+  "name": "pixo/pixo-patternlab",
+  "type": "library",
+  "description": "Pattern Lab utilities",
+  "homepage": "http://pixotech.com/",
+  "license": "NCSA",
+  "authors": [
+    {
+      "name": "Pixo",
+      "homepage": "http://pixotech.com"
+    }
+  ],
+  "require": {
+    "twig/twig": "~1.0",
+    "symfony/yaml": "~2.7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.5"
+  },
+  "autoload": {
+    "psr-4": {"Pixo\\PatternLab\\": "src"}
+  }
+}
