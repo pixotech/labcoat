@@ -21,20 +21,12 @@ class HasPropertiesConstraint extends \PHPUnit_Framework_Constraint {
    * @see http://twig.sensiolabs.org/doc/templates.html
    */
   public function matches($className) {
-    $reflection = new \ReflectionClass($className);
+    $reflection = new ReflectionClass($className);
     foreach ($this->propertyNames as $name) {
-      if ($reflection->hasProperty($name) && $reflection->getProperty($name)->isPublic()) {
-        continue;
-      }
-      if ($reflection->hasMethod($name)) {
-        continue;
-      }
-      if ($reflection->hasMethod('get' . ucfirst($name))) {
-        continue;
-      }
-      if ($reflection->hasMethod('is' . ucfirst($name))) {
-        continue;
-      }
+      if ($reflection->hasPublicProperty($name)) continue;
+      if ($reflection->hasPublicMethod($name)) continue;
+      if ($reflection->hasPublicGetterMethod($name)) continue;
+      if ($reflection->hasPublicIsMethod($name)) continue;
       return false;
     }
     return true;
