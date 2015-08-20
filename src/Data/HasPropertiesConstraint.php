@@ -26,7 +26,7 @@ class HasPropertiesConstraint extends \PHPUnit_Framework_Constraint {
       if ($reflection->hasPublicProperty($name)) continue;
       if ($reflection->hasPublicMethod($name)) continue;
       if ($reflection->hasPublicGetterMethod($name)) continue;
-      if ($reflection->hasPublicIsMethod($name)) continue;
+      if ($reflection->hasPublicTestMethod($name)) continue;
       return false;
     }
     return true;

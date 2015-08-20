@@ -8,10 +8,6 @@ class ReflectionClass extends \ReflectionClass implements ReflectionClassInterfa
     return $this->hasPublicMethod($this->getGetterMethodName($property));
   }
 
-  public function hasPublicIsMethod($property) {
-    return $this->hasPublicMethod($this->getIsMethodName($property));
-  }
-
   public function hasPublicMethod($name) {
     return $this->hasMethod($name) && $this->getMethod($name)->isPublic();
   }
@@ -20,11 +16,15 @@ class ReflectionClass extends \ReflectionClass implements ReflectionClassInterfa
     return $this->hasProperty($name) && $this->getProperty($name)->isPublic();
   }
 
+  public function hasPublicTestMethod($property) {
+    return $this->hasPublicMethod($this->getTestMethodName($property));
+  }
+
   protected function getGetterMethodName($property) {
     return 'get' . ucfirst($property);
   }
 
-  protected function getIsMethodName($property) {
+  protected function getTestMethodName($property) {
     return 'is' . ucfirst($property);
   }
 }

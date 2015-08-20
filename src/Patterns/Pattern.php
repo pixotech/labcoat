@@ -82,8 +82,8 @@ class Pattern implements PatternInterface {
   }
 
   protected function getDataFilePath() {
-    $patternPath = $this->getFile()->getPathname();
-    return substr($patternPath, 0, strrpos($patternPath, '.')) . '.json';
+    $dir = substr($this->getFile()->getPathname(), 0, 0 - strlen($this->template));
+    return $dir . $this->getTemplateWithoutExtension() . '.json';
   }
 
   protected function parseTemplateName() {
