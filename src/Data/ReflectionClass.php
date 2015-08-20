@@ -1,6 +1,6 @@
 <?php
 
-namespace Pixo\PatternLab\Data;
+namespace Labcoat\Data;
 
 class ReflectionClass extends \ReflectionClass implements ReflectionClassInterface {
 

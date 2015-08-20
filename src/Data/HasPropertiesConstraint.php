@@ -1,8 +1,8 @@
 <?php
 
-namespace Pixo\PatternLab\Data;
+namespace Labcoat\Data;
 
-use Pixo\PatternLab\Patterns\PatternInterface;
+use Labcoat\Patterns\PatternInterface;
 
 class HasPropertiesConstraint extends \PHPUnit_Framework_Constraint {
 

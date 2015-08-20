@@ -1,8 +1,8 @@
 <?php
 
-namespace Pixo\PatternLab\Data;
+namespace Labcoat\Data;
 
-use Pixo\PatternLab\Patterns\PatternInterface;
+use Labcoat\Patterns\PatternInterface;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase {
 

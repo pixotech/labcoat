@@ -1,9 +1,9 @@
 <?php
 
-namespace Pixo\PatternLab;
+namespace Labcoat;
 
-use Pixo\PatternLab\Patterns\Pattern;
-use Pixo\PatternLab\Patterns\PatternCollectionInterface;
+use Labcoat\Patterns\Pattern;
+use Labcoat\Patterns\PatternCollectionInterface;
 
 interface PatternLabInterface {
   public function getConfiguration();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Pixo\PatternLab\Patterns;
+namespace Labcoat\Patterns;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {
 

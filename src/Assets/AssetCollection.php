@@ -1,6 +1,6 @@
 <?php
 
-namespace Pixo\PatternLab\Assets;
+namespace Labcoat\Assets;
 
 class AssetCollection implements AssetCollectionInterface, \Countable, \IteratorAggregate {
 

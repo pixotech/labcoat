@@ -1,8 +1,8 @@
 <?php
 
-namespace Pixo\PatternLab\Twig;
+namespace Labcoat\Twig;
 
-use Pixo\PatternLab\PatternLabInterface;
+use Labcoat\PatternLabInterface;
 
 class Loader implements \Twig_LoaderInterface {
 
@@ -26,7 +26,7 @@ class Loader implements \Twig_LoaderInterface {
 
   /**
    * @param $name
-   * @return \Pixo\PatternLab\Patterns\PatternInterface
+   * @return \Labcoat\Patterns\PatternInterface
    * @throws \Twig_Error_Loader
    */
   protected function getPattern($name) {

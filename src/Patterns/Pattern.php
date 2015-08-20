@@ -1,6 +1,6 @@
 <?php
 
-namespace Pixo\PatternLab\Patterns;
+namespace Labcoat\Patterns;
 
 class Pattern implements PatternInterface {
 

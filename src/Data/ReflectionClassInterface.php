@@ -1,6 +1,6 @@
 <?php
 
-namespace Pixo\PatternLab\Data;
+namespace Labcoat\Data;
 
 interface ReflectionClassInterface extends \Reflector {
   public function hasPublicGetterMethod($property);

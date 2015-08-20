@@ -1,11 +1,11 @@
 <?php
 
-namespace Pixo\PatternLab;
+namespace Labcoat;
 
-use Pixo\PatternLab\Assets\Asset;
-use Pixo\PatternLab\Assets\AssetCollection;
-use Pixo\PatternLab\Patterns\Pattern;
-use Pixo\PatternLab\Patterns\PatternCollection;
+use Labcoat\Assets\Asset;
+use Labcoat\Assets\AssetCollection;
+use Labcoat\Patterns\Pattern;
+use Labcoat\Patterns\PatternCollection;
 use Symfony\Component\Yaml\Yaml;
 
 class PatternLab implements PatternLabInterface {

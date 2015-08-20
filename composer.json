@@ -18,6 +18,6 @@
     "phpunit/phpunit": "~4.5"
   },
   "autoload": {
-    "psr-4": {"Pixo\\PatternLab\\": "src"}
+    "psr-4": {"Labcoat\\": "src"}
   }
 }
