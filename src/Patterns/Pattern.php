@@ -20,6 +20,10 @@ class Pattern implements PatternInterface {
     $this->parseTemplateName();
   }
 
+  public function getData() {
+    return json_decode(file_get_contents($this->getDataFilePath()), true);
+  }
+
   public function getFile() {
     return $this->file;
   }
@@ -48,6 +52,10 @@ class Pattern implements PatternInterface {
     return $this->type;
   }
 
+  public function hasData() {
+    return is_file($this->getDataFilePath());
+  }
+
   public function matches($name) {
     if ($this->matchesTemplate($name)) return true;
     if ($this->matchesPartialTemplate($name)) return true;
@@ -71,6 +79,11 @@ class Pattern implements PatternInterface {
 
   public function matchesTemplate($template) {
     return $template == $this->getTemplate();
+  }
+
+  protected function getDataFilePath() {
+    $patternPath = $this->getFile()->getPathname();
+    return substr($patternPath, 0, strrpos($patternPath, '.')) . '.json';
   }
 
   protected function parseTemplateName() {

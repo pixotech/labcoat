@@ -43,6 +43,10 @@ class PatternLab implements PatternLabInterface {
     return $this->path . '/config/config.yml';
   }
 
+  public function getPattern($name) {
+    return $this->getPatterns()->get($name);
+  }
+
   public function getPatternExtension() {
     return !empty($this->config['patternExtension']) ? $this->config['patternExtension'] : 'twig';
   }

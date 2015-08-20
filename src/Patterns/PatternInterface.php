@@ -4,6 +4,8 @@ namespace Pixo\PatternLab\Patterns;
 
 interface PatternInterface {
 
+  public function getData();
+
   /**
    * @return \SplFileInfo
    */
@@ -14,6 +16,7 @@ interface PatternInterface {
   public function getTemplate();
   public function getTemplateWithoutExtension();
   public function getType();
+  public function hasData();
   public function matches($name);
   public function matchesPartialShorthand($shorthand);
   public function matchesPartialTemplate($template);

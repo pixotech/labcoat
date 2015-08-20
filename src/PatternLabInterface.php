@@ -2,11 +2,19 @@
 
 namespace Pixo\PatternLab;
 
+use Pixo\PatternLab\Patterns\Pattern;
 use Pixo\PatternLab\Patterns\PatternCollectionInterface;
 
 interface PatternLabInterface {
   public function getConfiguration();
   public function getConfigurationFilePath();
+
+  /**
+   * @param $name
+   * @return Pattern
+   */
+  public function getPattern($name);
+
   public function getPatternExtension();
 
   /**
