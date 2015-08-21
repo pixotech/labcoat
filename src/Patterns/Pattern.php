@@ -87,7 +87,7 @@ class Pattern implements PatternInterface {
   }
 
   protected function parseTemplateName() {
-    $parts = array_map(['\Pixo\PatternLab\PatternLab', 'stripNumbering'], explode(DIRECTORY_SEPARATOR, $this->getTemplateWithoutExtension()));
+    $parts = array_map(['\Labcoat\PatternLab', 'stripNumbering'], explode(DIRECTORY_SEPARATOR, $this->getTemplateWithoutExtension()));
     $this->name = array_pop($parts);
     $this->type = array_shift($parts);
     if (!empty($parts)) $this->subType = array_shift($parts);

@@ -12,6 +12,8 @@ class PatternLab implements PatternLabInterface {
 
   protected $assets;
   protected $config;
+  protected $layouts;
+  protected $macros;
   protected $path;
   protected $patterns;
   protected $types;
@@ -43,12 +45,80 @@ class PatternLab implements PatternLabInterface {
     return $this->path . '/config/config.yml';
   }
 
+  public function getConfigurationValue($key, $default = null) {
+    return isset($this->config[$key]) ? $this->config[$key] : $default;
+  }
+
+  public function getFilterExtension() {
+    return $this->getConfigurationValue('twigFilterExt', 'filter.php');
+  }
+
+  public function getFilterFiles() {
+    return $this->getFilesInDirectoryWithExtension($this->getFiltersDirectoryPath(), $this->getFilterExtension());
+  }
+
+  public function getFiltersDirectoryPath() {
+    return $this->getTwigComponentsSubdirectoryPath('filters');
+  }
+
+  public function getFunctionExtension() {
+    return $this->getConfigurationValue('twigFunctionExt', 'function.php');
+  }
+
+  public function getFunctionFiles() {
+    return $this->getFilesInDirectoryWithExtension($this->getFunctionsDirectoryPath(), $this->getFunctionExtension());
+  }
+
+  public function getFunctionsDirectoryPath() {
+    return $this->getTwigComponentsSubdirectoryPath('functions');
+  }
+
+  /**
+   * @return \SplFileInfo[]
+   */
+  public function getLayoutFiles() {
+    return $this->getFilesInDirectoryWithExtension($this->getLayoutsDirectoryPath(), $this->getPatternExtension());
+  }
+
+  public function getLayoutFile($name) {
+    $layouts = $this->getLayouts();
+    return $layouts[$name];
+  }
+
+  public function getLayouts() {
+    if (!isset($this->layouts)) {
+      $this->layouts = [];
+      $dir = $this->getLayoutsDirectoryPath();
+      foreach ($this->getLayoutFiles() as $file) {
+        $filename = $this->getRelativePath($dir, $file->getPathname());
+        $this->layouts[$filename] = $file;
+      }
+    }
+    return $this->layouts;
+  }
+
+  public function getLayoutsDirectoryPath() {
+    return $this->getSourceSubdirectoryPath('_layouts');
+  }
+
+  public function getMacroExtension() {
+    return $this->getConfigurationValue('twigMacroExt', 'macro.twig');
+  }
+
+  public function getMacroFiles() {
+    return $this->getFilesInDirectoryWithExtension($this->getMacrosDirectoryPath(), $this->getMacroExtension());
+  }
+
+  public function getMacrosDirectoryPath() {
+    return $this->getSourceSubdirectoryPath('_macros');
+  }
+
   public function getPattern($name) {
     return $this->getPatterns()->get($name);
   }
 
   public function getPatternExtension() {
-    return !empty($this->config['patternExtension']) ? $this->config['patternExtension'] : 'twig';
+    return $this->getTemplateExtension();
   }
 
   /**
@@ -60,7 +130,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getPatternsDirectoryPath() {
-    return $this->getSourceDirectoryPath() . '/_patterns';
+    return $this->getSourceSubdirectoryPath('_patterns');
   }
 
   public function getPatternTypes() {
@@ -74,12 +144,51 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getSourceDirectoryPath() {
-    $dir = !empty($this->config['sourceDir']) ? $this->config['sourceDir'] : 'source';
-    return $this->path . "/$dir";
+    return $this->path . DIRECTORY_SEPARATOR . $this->getConfigurationValue('sourceDir', 'source');
+  }
+
+  public function getTagExtension() {
+    return $this->getConfigurationValue('twigTagExt', 'tag.php');
+  }
+
+  public function getTagFiles() {
+    return $this->getFilesInDirectoryWithExtension($this->getTagsDirectoryPath(), $this->getTagExtension());
+  }
+
+  public function getTagsDirectoryPath() {
+    return $this->getTwigComponentsSubdirectoryPath('tags');
+  }
+
+  public function getTemplateExtension() {
+    return $this->getConfigurationValue('patternExtension', 'twig');
+  }
+
+  public function getTestExtension() {
+    return $this->getConfigurationValue('twigTestExt', 'test.php');
+  }
+
+  public function getTestFiles() {
+    return $this->getFilesInDirectoryWithExtension($this->getTestsDirectoryPath(), $this->getTestExtension());
+  }
+
+  public function getTestsDirectoryPath() {
+    return $this->getTwigComponentsSubdirectoryPath('tests');
+  }
+
+  public function getTwigDefaultDateFormat() {
+    return $this->getConfigurationValue('twigDefaultDateFormat');
+  }
+
+  public function getTwigDefaultIntervalFormat() {
+    return $this->getConfigurationValue('twigDefaultIntervalFormat');
   }
 
   public function hasConfiguration() {
     return is_file($this->getConfigurationFilePath());
+  }
+
+  public function hasLayout($name) {
+    return array_key_exists($name, $this->getLayouts());
   }
 
   public function loadAssets() {
@@ -95,12 +204,37 @@ class PatternLab implements PatternLabInterface {
     $this->config = Yaml::parse(file_get_contents($this->getConfigurationFilePath()));
   }
 
+  protected function getFilesInDirectoryIterator($directory) {
+    $dir = new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS);
+    return new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::LEAVES_ONLY);
+  }
+
+  /**
+   * @param $directory
+   * @param $extension
+   * @return \SplFileInfo[]
+   */
+  protected function getFilesInDirectoryWithExtension($directory, $extension) {
+    return iterator_to_array($this->getFilesInDirectoryWithExtensionIterator($directory, $extension), false);
+  }
+
+  /**
+   * @param $directory
+   * @param $extension
+   * @return \RegexIterator
+   */
+  protected function getFilesInDirectoryWithExtensionIterator($directory, $extension) {
+    $pattern = '|\.' . preg_quote($extension) . '$|';
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
+    return new \RegexIterator($files, $pattern, \RegexIterator::MATCH);
+  }
+
   protected function getIgnoredAssetDirectories() {
-    return !empty($this->config['id']) ? $this->config['id'] : [];
+    return $this->getConfigurationValue('id', []);
   }
 
   protected function getIgnoredAssetExtensions() {
-    return !empty($this->config['ie']) ? $this->config['ie'] : [];
+    return $this->getConfigurationValue('ie', []);
   }
 
   protected function getPathExtension($path) {
@@ -116,17 +250,23 @@ class PatternLab implements PatternLabInterface {
   }
 
   protected function getPatternFilesIterator() {
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->getPatternsDirectoryPath()));
-    return new \RegexIterator($files, $this->getPatternPathRegex(), \RegexIterator::MATCH);
+    return $this->getFilesInDirectoryWithExtensionIterator($this->getPatternsDirectoryPath(), $this->getPatternExtension());
   }
 
-  protected function getPatternPathRegex() {
-    return '|\.' . preg_quote($this->getPatternExtension()) . '$|';
+  protected function getRelativePath($directory, $fullPath) {
+    return substr($fullPath, strlen($directory) + 1);
   }
 
   protected function getSourceFilesIterator() {
-    $dir = new \RecursiveDirectoryIterator($this->getSourceDirectoryPath(), \FilesystemIterator::SKIP_DOTS);
-    return new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::LEAVES_ONLY);
+    return $this->getFilesInDirectoryIterator($this->getSourceDirectoryPath());
+  }
+
+  protected function getSourceSubdirectoryPath($dir) {
+    return $this->getSourceDirectoryPath() . DIRECTORY_SEPARATOR . $dir;
+  }
+
+  protected function getTwigComponentsSubdirectoryPath($dir) {
+    return $this->getSourceSubdirectoryPath('_twig-components' . DIRECTORY_SEPARATOR . $dir);
   }
 
   protected function hasIgnoredExtension($path) {

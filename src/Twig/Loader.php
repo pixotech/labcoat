@@ -13,15 +13,15 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   public function getSource($name) {
-    return file_get_contents($this->getPattern($name)->getFile()->getPathname());
+    return file_get_contents($this->getTemplateFile($name)->getFile()->getPathname());
   }
 
   public function getCacheKey($name) {
-    return md5($this->getPattern($name)->getTemplate());
+    return md5($this->getTemplateFile($name)->getTemplate());
   }
 
   public function isFresh($name, $time) {
-    return $this->getPattern($name)->getFile()->getMTime() > $time;
+    return $this->getTemplateFile($name)->getFile()->getMTime() > $time;
   }
 
   /**
@@ -36,5 +36,10 @@ class Loader implements \Twig_LoaderInterface {
     catch (\OutOfBoundsException $e) {
       throw new \Twig_Error_Loader($e->getMessage());
     }
+  }
+
+  protected function getTemplateFile($name) {
+    if ($this->patternlab->hasLayout($name)) return $this->patternlab->getLayoutFile($name);
+    return $this->getPattern($name);
   }
 }
