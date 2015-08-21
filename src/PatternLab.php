@@ -49,30 +49,6 @@ class PatternLab implements PatternLabInterface {
     return isset($this->config[$key]) ? $this->config[$key] : $default;
   }
 
-  public function getFilterExtension() {
-    return $this->getConfigurationValue('twigFilterExt', 'filter.php');
-  }
-
-  public function getFilterFiles() {
-    return $this->getFilesInDirectoryWithExtension($this->getFiltersDirectoryPath(), $this->getFilterExtension());
-  }
-
-  public function getFiltersDirectoryPath() {
-    return $this->getTwigComponentsSubdirectoryPath('filters');
-  }
-
-  public function getFunctionExtension() {
-    return $this->getConfigurationValue('twigFunctionExt', 'function.php');
-  }
-
-  public function getFunctionFiles() {
-    return $this->getFilesInDirectoryWithExtension($this->getFunctionsDirectoryPath(), $this->getFunctionExtension());
-  }
-
-  public function getFunctionsDirectoryPath() {
-    return $this->getTwigComponentsSubdirectoryPath('functions');
-  }
-
   /**
    * @return \SplFileInfo[]
    */
@@ -99,18 +75,6 @@ class PatternLab implements PatternLabInterface {
 
   public function getLayoutsDirectoryPath() {
     return $this->getSourceSubdirectoryPath('_layouts');
-  }
-
-  public function getMacroExtension() {
-    return $this->getConfigurationValue('twigMacroExt', 'macro.twig');
-  }
-
-  public function getMacroFiles() {
-    return $this->getFilesInDirectoryWithExtension($this->getMacrosDirectoryPath(), $this->getMacroExtension());
-  }
-
-  public function getMacrosDirectoryPath() {
-    return $this->getSourceSubdirectoryPath('_macros');
   }
 
   public function getPattern($name) {
@@ -147,40 +111,8 @@ class PatternLab implements PatternLabInterface {
     return $this->path . DIRECTORY_SEPARATOR . $this->getConfigurationValue('sourceDir', 'source');
   }
 
-  public function getTagExtension() {
-    return $this->getConfigurationValue('twigTagExt', 'tag.php');
-  }
-
-  public function getTagFiles() {
-    return $this->getFilesInDirectoryWithExtension($this->getTagsDirectoryPath(), $this->getTagExtension());
-  }
-
-  public function getTagsDirectoryPath() {
-    return $this->getTwigComponentsSubdirectoryPath('tags');
-  }
-
   public function getTemplateExtension() {
     return $this->getConfigurationValue('patternExtension', 'twig');
-  }
-
-  public function getTestExtension() {
-    return $this->getConfigurationValue('twigTestExt', 'test.php');
-  }
-
-  public function getTestFiles() {
-    return $this->getFilesInDirectoryWithExtension($this->getTestsDirectoryPath(), $this->getTestExtension());
-  }
-
-  public function getTestsDirectoryPath() {
-    return $this->getTwigComponentsSubdirectoryPath('tests');
-  }
-
-  public function getTwigDefaultDateFormat() {
-    return $this->getConfigurationValue('twigDefaultDateFormat');
-  }
-
-  public function getTwigDefaultIntervalFormat() {
-    return $this->getConfigurationValue('twigDefaultIntervalFormat');
   }
 
   public function hasConfiguration() {
