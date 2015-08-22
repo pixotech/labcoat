@@ -2,6 +2,9 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Filesystem\File;
+use Labcoat\Mocks\PatternLab;
+
 class PatternCollectionTest extends \PHPUnit_Framework_TestCase {
 
   public static $testPaths = [
@@ -52,6 +55,8 @@ class PatternCollectionTest extends \PHPUnit_Framework_TestCase {
   }
 
   protected function makePattern($template) {
-    return new Pattern($template, new \SplFileInfo(__FILE__));
+    $patternlab = new PatternLab();
+    $file = new File($patternlab, __FILE__);
+    return new Pattern($template, $file);
   }
 }

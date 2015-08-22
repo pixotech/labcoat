@@ -18,6 +18,9 @@
     "phpunit/phpunit": "~4.5"
   },
   "autoload": {
-    "psr-4": {"Labcoat\\": "src"}
+    "psr-4": {
+      "Labcoat\\": "src",
+      "Labcoat\\Mocks\\": "test/Mocks"
+    }
   }
 }

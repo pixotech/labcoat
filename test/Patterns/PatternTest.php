@@ -2,6 +2,10 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Filesystem\Directory;
+use Labcoat\Filesystem\File;
+use Labcoat\Mocks\PatternLab;
+
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testShorthand() {
@@ -44,6 +48,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
   }
 
   protected function makeFile() {
-    return new \SplFileInfo(__FILE__);
+    $patternlab = new PatternLab();
+    return new File($patternlab, __FILE__);
   }
 }

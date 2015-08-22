@@ -13,7 +13,7 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   public function getSource($name) {
-    return file_get_contents($this->getPattern($name)->getFile()->getPathname());
+    return file_get_contents($this->getPattern($name)->getFile());
   }
 
   public function getCacheKey($name) {
@@ -21,7 +21,7 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   public function isFresh($name, $time) {
-    return $this->getPattern($name)->getFile()->getMTime() > $time;
+    return $this->getPattern($name)->getFile() > $time;
   }
 
   /**

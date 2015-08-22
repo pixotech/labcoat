@@ -2,21 +2,27 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Filesystem\FileInterface;
+use Labcoat\PatternLabInterface;
+
 class Pattern implements PatternInterface {
 
   protected $file;
   protected $name;
+  protected $path;
   protected $subType;
   protected $template;
+  protected $templateWithoutExtension;
   protected $type;
 
   public static function isShorthand($name) {
     return false === strpos($name, '/');
   }
 
-  public function __construct($template, \SplFileInfo $file) {
-    $this->template = $template;
-    $this->file = $file;
+  public function __construct(PatternLabInterface $patternlab, FileInterface $file) {
+    $this->template = $file->getPath();
+    $this->templateWithoutExtension = $file->getPathWithoutExtension();
+    $this->file = $file->getFullPath();
     $this->parseTemplateName();
   }
 
@@ -45,7 +51,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getTemplateWithoutExtension() {
-    return substr($this->template, 0, strrpos($this->template, '.'));
+    return $this->templateWithoutExtension;
   }
 
   public function getType() {
@@ -88,6 +94,7 @@ class Pattern implements PatternInterface {
 
   protected function parseTemplateName() {
     $parts = array_map(['\Labcoat\PatternLab', 'stripNumbering'], explode(DIRECTORY_SEPARATOR, $this->getTemplateWithoutExtension()));
+    $this->path = implode('/', $parts);
     $this->name = array_pop($parts);
     $this->type = array_shift($parts);
     if (!empty($parts)) $this->subType = array_shift($parts);

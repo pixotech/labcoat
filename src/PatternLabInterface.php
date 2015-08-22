@@ -7,6 +7,10 @@ use Labcoat\Patterns\PatternCollectionInterface;
 
 interface PatternLabInterface {
   public function copyAssetsTo($directoryPath);
-  public function makeDocument($patternName, array $variables = []);
-  public function render($patternName, array $variables = []);
+  public function getIgnoredDirectories();
+  public function getIgnoredExtensions();
+  public function getPatternExtension();
+  public function getPatternsDirectory();
+  public function makeDocument($patternName, $variables = null);
+  public function render($patternName, $variables = null);
 }
