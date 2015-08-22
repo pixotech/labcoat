@@ -17,7 +17,7 @@ class Directory extends File implements DirectoryInterface {
    * @return File
    */
   public function getFile($path) {
-    if (is_array($path)) $path = implode(static::SLASH, $path);
+    if (is_array($path)) $path = implode(DIRECTORY_SEPARATOR, $path);
     return new File($this->patternlab, $path, $this);
   }
 
@@ -53,6 +53,7 @@ class Directory extends File implements DirectoryInterface {
   protected function makeFilesFromIterator(\Iterator $iterator) {
     $files = [];
     foreach ($iterator as $path) {
+      if (!is_file($path)) continue;
       $files[$path] = $this->getFile($this->makeRelativePath($path));
     }
     asort($files);

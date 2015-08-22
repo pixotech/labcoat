@@ -49,64 +49,170 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twigOptions;
 
+  /**
+   * Test if the requested pattern name is shorthand
+   *
+   * @param string $name The name of a requested pattern
+   * @return bool True if the name is shorthand, false if not
+   */
   public static function isShorthand($name) {
     return false === strpos($name, '/');
   }
 
+  /**
+   * Remove ordering prefixes from a path and separate segments with a forward slash
+   *
+   * @param string $path A pattern path
+   * @return string The normalized path
+   */
   public static function normalizePath($path) {
     $segments = explode(DIRECTORY_SEPARATOR, $path);
     return implode('/', array_map(['Labcoat\\PatternLab', 'stripNumbering'], $segments));
   }
 
+  /**
+   * Remove the ordering prefix from a string
+   *
+   * @param string $str A segment of a pattern path
+   * @return string The segment, with ordering removed
+   */
   public static function stripNumbering($str) {
     return preg_match('/^[0-9]+-(.+)$/', $str, $matches) ? $matches[1] : $str;
   }
 
+  /**
+   * Constructor
+   *
+   * @param string $path The full path to the Pattern Lab installation
+   * @param array $twigOptions Options for the Twig parser
+   */
   public function __construct($path, array $twigOptions = []) {
     $this->directory = new Directory($this, $path);
     $this->twigOptions = $twigOptions;
   }
 
+  /**
+   * Get an array of Pattern Lab assets
+   *
+   * @return Assets\Asset[]
+   */
   public function getAssets() {
     if (!isset($this->assets)) $this->findAssets();
     return $this->assets;
   }
 
+  /**
+   * Copy all assets to another directory
+   *
+   * Copies all Pattern Lab assets that are not hidden or ignored. Missing subdirectories will be created as needed.
+   *
+   * @param string $directoryPath The full path to the destination directory
+   */
   public function copyAssetsTo($directoryPath) {
     $copier = new Copier($this);
     $copier->copyTo($directoryPath);
   }
 
+  /**
+   * Get an array of ignored asset directories
+   *
+   * This list is taken from the configuration file value "id".
+   *
+   * @return array
+   */
   public function getIgnoredDirectories() {
     return $this->getConfiguration()->getIgnoredDirectories();
   }
 
+  /**
+   * Get an array of ignored asset extensions
+   *
+   * This list is taken from the configuration file value "ie".
+   *
+   * @return array
+   */
   public function getIgnoredExtensions() {
     return $this->getConfiguration()->getIgnoredExtensions();
   }
 
+  /**
+   * Get the full path to a layout template file
+   *
+   * @param string $name The path to the layout file, relative to the "source/_layouts" directory
+   * @return string The full path to the layout file
+   */
   public function getLayout($name) {
     return $this->getLayouts()[$name];
   }
 
+  /**
+   * Get a pattern by shorthand or path
+   *
+   * Supported pattern selectors:
+   * - Shorthand, e.g. "atoms-button" or "pages-contact". Fuzzy matching is not supported.
+   * - Path, relative to the "source/_patterns" directory, without the template extension.
+   *   Ordering prefixes are disregarded.
+   *
+   * @param string $name The path or shorthand name of a pattern
+   * @return \Labcoat\Patterns\Pattern
+   * @throws \OutOfBoundsException No matching pattern was found
+   * @see http://patternlab.io/docs/pattern-including.html "Including Patterns"
+   */
   public function getPattern($name) {
     $matches = PatternLab::isShorthand($name) ? $this->makeShorthandFilter($name) : $this->makePathFilter($name);
     foreach ($matches as $match) return $match;
     throw new \OutOfBoundsException("Unknown pattern: $name");
   }
 
+  /**
+   * Get the pattern template extension
+   *
+   * This value comes from the configuration file value "patternExtension".
+   *
+   * @return string A file extension
+   */
   public function getPatternExtension() {
     return $this->getConfiguration()->getPatternExtension();
   }
 
+  /**
+   * Get the Twig parser
+   *
+   * @return \Labcoat\Twig\Environment The Twig parser
+   */
+  public function getTwig() {
+    if (!isset($this->twig)) $this->makeTwig();
+    return $this->twig;
+  }
+
+  /**
+   * Test if there is a layout template with the specified name
+   *
+   * @param string $name The name of a layout template
+   * @return bool True if the layout exists, false if not
+   */
   public function hasLayout($name) {
     return array_key_exists($name, $this->getLayouts());
   }
 
+  /**
+   * Create an HTML document from a pattern
+   *
+   * @param string $patternName The name of the pattern to render
+   * @param mixed $variables Variables for the pattern template; can be an array, object, or null
+   * @return \Labcoat\Html\Document
+   */
   public function makeDocument($patternName, $variables = null) {
     return new Document($this->render($patternName, $variables));
   }
 
+  /**
+   * Render a pattern template
+   *
+   * @param string $patternName The name of the pattern to render
+   * @param mixed $variables Variables for the pattern template; can be an array, object, or null
+   * @return string The rendered template
+   */
   public function render($patternName, $variables = null) {
     if (is_object($variables)) $variables = get_object_vars($variables);
     return $this->getTwig()->render($patternName, $variables ?: []);
@@ -164,7 +270,14 @@ class PatternLab implements PatternLabInterface {
     return $this->layouts;
   }
 
-  public function getPatterns() {
+  /**
+   * @return \Labcoat\Filesystem\File[]
+   */
+  protected function getPatternFiles() {
+    return $this->getPatternsDirectory()->getPatternFiles();
+  }
+
+  protected function getPatterns() {
     if (!isset($this->patterns)) $this->findPatterns();
     return $this->patterns;
   }
@@ -172,15 +285,8 @@ class PatternLab implements PatternLabInterface {
   /**
    * @return Directory
    */
-  public function getPatternsDirectory() {
+  protected function getPatternsDirectory() {
     return $this->getSourceDirectory()->getDirectory('_patterns');
-  }
-
-  /**
-   * @return \Labcoat\Filesystem\File[]
-   */
-  protected function getPatternFiles() {
-    return $this->getPatternsDirectory()->getPatternFiles();
   }
 
   protected function getPatternsIterator() {
@@ -208,19 +314,12 @@ class PatternLab implements PatternLabInterface {
     return $this->getSourceDirectory()->getFiles();
   }
 
-  protected function getTwig() {
-    if (!isset($this->twig)) $this->makeTwig();
-    return $this->twig;
-  }
-
   protected function loadConfiguration() {
     $this->config = Configuration::load($this->getConfigurationFile()->getFullPath());
   }
 
   protected function makePathFilter($path) {
-    $ext = '.' . $this->getPatternExtension();
-    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
-    return new PathFilterIterator($this->getPatternsIterator(), PatternLab::normalizePath($path));
+    return new PathFilterIterator($this->getPatternsIterator(), $this->normalizePatternPath($path));
   }
 
   protected function makeShorthandFilter($shorthand) {
@@ -229,5 +328,16 @@ class PatternLab implements PatternLabInterface {
 
   protected function makeTwig() {
     $this->twig = new Environment($this, $this->twigOptions);
+  }
+
+  protected function normalizePatternPath($path) {
+    $path = $this->stripPatternExtensionFromPath($path);
+    return self::normalizePath($path);
+  }
+
+  protected function stripPatternExtensionFromPath($path) {
+    $ext = '.' . $this->getPatternExtension();
+    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
+    return $path;
   }
 }

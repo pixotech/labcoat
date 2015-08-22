@@ -10,7 +10,7 @@ class Document implements DocumentInterface {
   protected $meta = [];
   protected $scripts = [];
   protected $scriptBlocks = [];
-  protected $styles = [];
+  protected $styleBlocks = [];
   protected $stylesheets = [];
   protected $themeColor;
   protected $title;
@@ -21,34 +21,26 @@ class Document implements DocumentInterface {
   }
 
   public function __toString() {
-    return (string)$this->toString();
-  }
-
-  public function toString() {
     return $this->makeDoctype() . $this->makeDocument();
-  }
-
-  public function addCriticalStyles($styles) {
-    $this->addStyles($styles);
   }
 
   public function addMeta($name, $content) {
     $this->meta[] = [$name, $content];
   }
 
-  public function addScript($url) {
+  public function includeScript($url) {
     $this->scripts[] = $url;
   }
 
-  public function addScriptBlock($script) {
+  public function addScript($script) {
     $this->scriptBlocks[] = $script;
   }
 
   public function addStyles($styles) {
-    $this->styles[] = $styles;
+    $this->styleBlocks[] = $styles;
   }
 
-  public function addStylesheet($url) {
+  public function includeStylesheet($url) {
     $this->stylesheets[] = $url;
   }
 
@@ -74,6 +66,10 @@ class Document implements DocumentInterface {
 
   public function setThemeColor($themeColor) {
     $this->themeColor = $themeColor;
+  }
+
+  public function setTitle($title) {
+    $this->title = $title;
   }
 
   protected function hasScripts() {
@@ -167,7 +163,7 @@ class Document implements DocumentInterface {
   }
 
   protected function makeStyleBlocks() {
-    foreach ($this->styles as $styles) {
+    foreach ($this->styleBlocks as $styles) {
       $blocks[] = $this->makeElement('style', $styles);
     }
     return !empty($blocks) ? implode($blocks) : '';

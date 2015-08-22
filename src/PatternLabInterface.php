@@ -20,7 +20,11 @@ interface PatternLabInterface {
    */
   public function getPattern($name);
   public function getPatternExtension();
-  public function getPatternsDirectory();
+
+  /**
+   * @return \Labcoat\Twig\Environment
+   */
+  public function getTwig();
   public function hasLayout($name);
   public function makeDocument($patternName, $variables = null);
   public function render($patternName, $variables = null);

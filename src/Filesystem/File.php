@@ -6,8 +6,6 @@ use Labcoat\PatternLabInterface;
 
 class File implements FileInterface {
 
-  const SLASH = DIRECTORY_SEPARATOR;
-
   protected $path;
   protected $patternlab;
   protected $root;
@@ -19,7 +17,7 @@ class File implements FileInterface {
   }
 
   public function getDirectoryNames() {
-    return explode(self::SLASH, dirname($this->getPath()));
+    return explode(DIRECTORY_SEPARATOR, dirname($this->getPath()));
   }
 
   public function getExtension() {
@@ -31,8 +29,8 @@ class File implements FileInterface {
   public function getFullPath() {
     $path = $this->getPath();
     if ($this->hasRoot()) {
-      $prefix = rtrim($this->getRoot()->getFullPath(), self::SLASH);
-      $path = $prefix . self::SLASH . $path;
+      $prefix = rtrim($this->getRoot()->getFullPath(), DIRECTORY_SEPARATOR);
+      $path = $prefix . DIRECTORY_SEPARATOR . $path;
     }
     return $path;
   }
@@ -42,7 +40,7 @@ class File implements FileInterface {
   }
 
   public function getPathSegments() {
-    return explode(self::SLASH, $this->getPath());
+    return explode(DIRECTORY_SEPARATOR, $this->getPath());
   }
 
   public function getPathWithoutExtension() {
@@ -82,7 +80,7 @@ class File implements FileInterface {
   }
 
   public function isHidden() {
-    return false !== strpos(self::SLASH . $this->getPath(),  self::SLASH . '_');
+    return false !== strpos(DIRECTORY_SEPARATOR . $this->getPath(),  DIRECTORY_SEPARATOR . '_');
   }
 
   public function isIgnored() {

@@ -24,10 +24,6 @@ class PatternLab implements PatternLabInterface {
     // TODO: Implement getPatternExtension() method.
   }
 
-  public function getPatternsDirectory() {
-    // TODO: Implement getPatternsDirectory() method.
-  }
-
   public function makeDocument($patternName, $variables = NULL) {
     // TODO: Implement makeDocument() method.
   }
@@ -50,5 +46,9 @@ class PatternLab implements PatternLabInterface {
 
   public function hasLayout($name) {
     // TODO: Implement hasLayout() method.
+  }
+
+  public function getTwig() {
+    // TODO: Implement getTwig() method.
   }
 }
