@@ -35,4 +35,20 @@ class PatternLab implements PatternLabInterface {
   public function render($patternName, $variables = NULL) {
     // TODO: Implement render() method.
   }
+
+  public function getAssets() {
+    // TODO: Implement getAssets() method.
+  }
+
+  public function getLayout($name) {
+    // TODO: Implement getLayout() method.
+  }
+
+  public function getPattern($name) {
+    // TODO: Implement getPattern() method.
+  }
+
+  public function hasLayout($name) {
+    // TODO: Implement hasLayout() method.
+  }
 }

@@ -2,101 +2,57 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Data\Data;
 use Labcoat\Filesystem\FileInterface;
-use Labcoat\PatternLabInterface;
+use Labcoat\PatternLab;
 
 class Pattern implements PatternInterface {
 
+  protected $data;
   protected $file;
   protected $name;
   protected $path;
   protected $subType;
-  protected $template;
-  protected $templateWithoutExtension;
   protected $type;
 
-  public static function isShorthand($name) {
-    return false === strpos($name, '/');
-  }
-
-  public function __construct(PatternLabInterface $patternlab, FileInterface $file) {
-    $this->template = $file->getPath();
-    $this->templateWithoutExtension = $file->getPathWithoutExtension();
+  public function __construct(FileInterface $file) {
     $this->file = $file->getFullPath();
-    $this->parseTemplateName();
+    $this->path = PatternLab::normalizePath($file->getPathWithoutExtension());
+    $parts = explode('/', $this->path);
+    $this->name = array_pop($parts);
+    $this->type = array_shift($parts);
+    if (!empty($parts)) $this->subType = array_shift($parts);
+    $this->findData($file);
   }
 
   public function getData() {
-    return json_decode(file_get_contents($this->getDataFilePath()), true);
+    return new Data(file_get_contents($this->data));
   }
 
   public function getFile() {
     return $this->file;
   }
 
-  public function getName() {
-    return $this->name;
+  public function getPath() {
+    return $this->path;
   }
 
   public function getShorthand() {
     return $this->type . '-' . $this->name;
   }
 
-  public function getSubType() {
-    return $this->subType;
-  }
-
-  public function getTemplate() {
-    return $this->template;
-  }
-
-  public function getTemplateWithoutExtension() {
-    return $this->templateWithoutExtension;
-  }
-
-  public function getType() {
-    return $this->type;
-  }
-
   public function hasData() {
-    return is_file($this->getDataFilePath());
+    return !empty($this->data);
   }
 
-  public function matches($name) {
-    if ($this->matchesTemplate($name)) return true;
-    if ($this->matchesPartialTemplate($name)) return true;
-    if ($this->matchesShorthand($name)) return true;
-    if ($this->matchesPartialShorthand($name)) return true;
-    return false;
+  protected function findData(FileInterface $file) {
+    $path = $this->getDataFilePath($file);
+    if (is_file($path)) $this->data = $path;
   }
 
-  public function matchesPartialShorthand($shorthand) {
-    list($type, $name) = explode('-', $shorthand, 2);
-    return $type == $this->type && !(false === strpos($this->name, $name));
-  }
-
-  public function matchesPartialTemplate($template) {
-    return $template == $this->getTemplateWithoutExtension();
-  }
-
-  public function matchesShorthand($shorthand) {
-    return $shorthand == $this->getShorthand();
-  }
-
-  public function matchesTemplate($template) {
-    return $template == $this->getTemplate();
-  }
-
-  protected function getDataFilePath() {
-    $dir = substr($this->getFile()->getPathname(), 0, 0 - strlen($this->template));
-    return $dir . $this->getTemplateWithoutExtension() . '.json';
-  }
-
-  protected function parseTemplateName() {
-    $parts = array_map(['\Labcoat\PatternLab', 'stripNumbering'], explode(DIRECTORY_SEPARATOR, $this->getTemplateWithoutExtension()));
-    $this->path = implode('/', $parts);
-    $this->name = array_pop($parts);
-    $this->type = array_shift($parts);
-    if (!empty($parts)) $this->subType = array_shift($parts);
+  protected function getDataFilePath(FileInterface $file) {
+    $dir = dirname($file->getFullPath());
+    $basename = basename($file->getPathWithoutExtension());
+    return $dir . DIRECTORY_SEPARATOR . $basename . '.json';
   }
 }

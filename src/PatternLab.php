@@ -3,18 +3,19 @@
 namespace Labcoat;
 
 use Labcoat\Assets\Asset;
-use Labcoat\Assets\AssetCollection;
+use Labcoat\Assets\Copier;
 use Labcoat\Configuration\Configuration;
 use Labcoat\Filesystem\Directory;
 use Labcoat\Html\Document;
+use Labcoat\Patterns\Filters\PathFilterIterator;
+use Labcoat\Patterns\Filters\ShorthandFilterIterator;
 use Labcoat\Patterns\Pattern;
-use Labcoat\Patterns\PatternCollection;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
 
   /**
-   * @var AssetCollection
+   * @var \Labcoat\Assets\Asset[]
    */
   protected $assets;
 
@@ -34,7 +35,7 @@ class PatternLab implements PatternLabInterface {
   protected $layouts;
 
   /**
-   * @var PatternCollection
+   * @var \Labcoat\Patterns\Pattern[]
    */
   protected $patterns;
 
@@ -48,6 +49,15 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twigOptions;
 
+  public static function isShorthand($name) {
+    return false === strpos($name, '/');
+  }
+
+  public static function normalizePath($path) {
+    $segments = explode(DIRECTORY_SEPARATOR, $path);
+    return implode('/', array_map(['Labcoat\\PatternLab', 'stripNumbering'], $segments));
+  }
+
   public static function stripNumbering($str) {
     return preg_match('/^[0-9]+-(.+)$/', $str, $matches) ? $matches[1] : $str;
   }
@@ -57,8 +67,14 @@ class PatternLab implements PatternLabInterface {
     $this->twigOptions = $twigOptions;
   }
 
+  public function getAssets() {
+    if (!isset($this->assets)) $this->findAssets();
+    return $this->assets;
+  }
+
   public function copyAssetsTo($directoryPath) {
-    $this->assets->copyTo($directoryPath);
+    $copier = new Copier($this);
+    $copier->copyTo($directoryPath);
   }
 
   public function getIgnoredDirectories() {
@@ -74,7 +90,9 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getPattern($name) {
-    return $this->getPatterns()->get($name);
+    $matches = PatternLab::isShorthand($name) ? $this->makeShorthandFilter($name) : $this->makePathFilter($name);
+    foreach ($matches as $match) return $match;
+    throw new \OutOfBoundsException("Unknown pattern: $name");
   }
 
   public function getPatternExtension() {
@@ -95,10 +113,10 @@ class PatternLab implements PatternLabInterface {
   }
 
   protected function findAssets() {
-    $this->assets = new AssetCollection();
+    $this->assets = [];
     foreach ($this->getSourceFiles() as $file) {
       if (!$file->isHidden() && !$file->isIgnored()) {
-        $this->assets->add(new Asset($this, $file));
+        $this->assets[] = new Asset($file);
       }
     }
   }
@@ -113,17 +131,12 @@ class PatternLab implements PatternLabInterface {
   }
 
   protected function findPatterns() {
-    $this->patterns = new PatternCollection();
+    $this->patterns = [];
     foreach ($this->getPatternFiles() as $file) {
       if ($file->hasPatternExtension() && !$file->isHidden()) {
-        $this->patterns->add(new Pattern($this, $file));
+        $this->patterns[] = new Pattern($file);
       }
     }
-  }
-
-  protected function getAssets() {
-    if (!isset($this->assets)) $this->findAssets();
-    return $this->assets;
   }
 
   /**
@@ -151,7 +164,7 @@ class PatternLab implements PatternLabInterface {
     return $this->layouts;
   }
 
-  protected function getPatterns() {
+  public function getPatterns() {
     if (!isset($this->patterns)) $this->findPatterns();
     return $this->patterns;
   }
@@ -168,6 +181,10 @@ class PatternLab implements PatternLabInterface {
    */
   protected function getPatternFiles() {
     return $this->getPatternsDirectory()->getPatternFiles();
+  }
+
+  protected function getPatternsIterator() {
+    return new \ArrayIterator($this->getPatterns());
   }
 
   /**
@@ -198,6 +215,16 @@ class PatternLab implements PatternLabInterface {
 
   protected function loadConfiguration() {
     $this->config = Configuration::load($this->getConfigurationFile()->getFullPath());
+  }
+
+  protected function makePathFilter($path) {
+    $ext = '.' . $this->getPatternExtension();
+    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
+    return new PathFilterIterator($this->getPatternsIterator(), PatternLab::normalizePath($path));
+  }
+
+  protected function makeShorthandFilter($shorthand) {
+    return new ShorthandFilterIterator($this->getPatternsIterator(), $shorthand);
   }
 
   protected function makeTwig() {

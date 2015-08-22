@@ -3,6 +3,12 @@
 namespace Labcoat;
 
 interface PatternLabInterface {
+
+  /**
+   * @return \Labcoat\Assets\AssetInterface[]
+   */
+  public function getAssets();
+
   public function copyAssetsTo($directoryPath);
   public function getIgnoredDirectories();
   public function getIgnoredExtensions();
