@@ -6,11 +6,11 @@ use Labcoat\Patterns\PatternInterface;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase {
 
-  public static function assertHasProperties($className, PatternInterface $pattern, $variable, $message = '') {
-    self::assertThat($className, self::hasProperties($pattern, $variable), $message);
+  public static function assertPatternData(PatternInterface $pattern, array $dataClasses, $message = '') {
+    self::assertThat($dataClasses, self::hasPatternData($pattern), $message);
   }
 
-  protected static function hasProperties(PatternInterface $pattern, $variable) {
-    return new HasPropertiesConstraint($pattern, $variable);
+  protected static function hasPatternData(PatternInterface $pattern) {
+    return new HasPatternDataConstraint($pattern);
   }
 }
