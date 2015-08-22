@@ -3,5 +3,6 @@
 namespace Labcoat\Assets;
 
 interface CopierInterface {
-  public function copyTo($path);
+  public function getAssetDestination(AssetInterface $asset);
+  public function copy(AssetInterface $asset);
 }

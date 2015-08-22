@@ -2,36 +2,42 @@
 
 namespace Labcoat\Assets;
 
-use Labcoat\PatternLabInterface;
-
 class Copier implements CopierInterface {
 
-  /**
-   * @var PatternLabInterface
-   */
-  protected $patternlab;
+  const STATUS_FAILED = 'failed';
+  const STATUS_MISSING = 'missing';
+  const STATUS_NEEDS_UPDATE = 'needs update';
+  const STATUS_READONLY = 'readonly';
+  const STATUS_UP_TO_DATE = 'up-to-date';
+  const STATUS_UPDATED = 'updated';
 
-  public function __construct(PatternLabInterface $patternlab) {
-    $this->patternlab = $patternlab;
-  }
+  protected $destination;
 
-  public function copyTo($destination) {
+  public function __construct($destination) {
     if (!is_dir($destination)) throw new \InvalidArgumentException("Not a directory: $destination");
-    foreach ($this->getAssets() as $asset) {
-      $destinationPath = $destination . DIRECTORY_SEPARATOR . $asset->getPath();
-      $this->ensureDirectory(dirname($destinationPath));
-      copy($asset->getFile(), $destinationPath);
-    }
+    if (!is_writable($destination)) throw new \InvalidArgumentException("Not writable: $destination");
+    $this->destination = rtrim($destination, DIRECTORY_SEPARATOR);
   }
 
-  protected function ensureDirectory($path) {
-    if (!is_dir($path)) {
-      if ($dir = dirname($path)) $this->ensureDirectory($dir);
-      mkdir($path);
+  public function copy(AssetInterface $asset, $mode = 0777) {
+    $destinationPath = $this->getAssetDestination($asset);
+    if (!is_dir(dirname($destinationPath))) {
+      if (!mkdir(dirname($destinationPath), $mode, true)) return self::STATUS_FAILED;
     }
+    if (!copy($asset->getFile(), $destinationPath)) return self::STATUS_FAILED;
+    chmod($destinationPath, $mode);
+    return self::STATUS_UPDATED;
   }
 
-  protected function getAssets() {
-    return $this->patternlab->getAssets();
+  public function getAssetDestination(AssetInterface $asset) {
+     return $this->destination . DIRECTORY_SEPARATOR . $asset->getPath();
+  }
+
+  public function getAssetStatus(AssetInterface $asset) {
+    $destination = $this->getAssetDestination($asset);
+    if (!is_file($destination)) return self::STATUS_MISSING;
+    if (!is_writable($destination)) return self::STATUS_READONLY;
+    $source = $asset->getFile();
+    return filemtime($source) > filemtime($destination) ? self::STATUS_NEEDS_UPDATE : self::STATUS_UP_TO_DATE;
   }
 }

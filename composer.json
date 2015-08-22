@@ -11,6 +11,8 @@
     }
   ],
   "require": {
+    "nategood/commando": "~0.2",
+    "wp-cli/php-cli-tools": "~0.10",
     "twig/twig": "~1.0",
     "symfony/yaml": "~2.7"
   },
