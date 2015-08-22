@@ -15,22 +15,23 @@ class Copier implements CopierInterface {
     $this->patternlab = $patternlab;
   }
 
-  public function copyTo($path) {
-    if (!is_dir($path)) throw new \InvalidArgumentException("Not a directory: $path");
-    foreach ($this->patternlab->getAssets() as $asset) {
-      $this->ensureSubdirectory($path, dirname($asset->getPath()));
-      copy($asset->getFile(), $this->makeSubdirectoryPath($path, $asset->getPath()));
+  public function copyTo($destination) {
+    if (!is_dir($destination)) throw new \InvalidArgumentException("Not a directory: $destination");
+    foreach ($this->getAssets() as $asset) {
+      $destinationPath = $destination . DIRECTORY_SEPARATOR . $asset->getPath();
+      $this->ensureDirectory(dirname($destinationPath));
+      copy($asset->getFile(), $destinationPath);
     }
   }
 
-  protected function ensureSubdirectory($directory, $path) {
-    if ($path && !is_dir($this->makeSubdirectoryPath($directory, $path))) {
-      $this->ensureSubdirectory($directory, dirname($path));
-      mkdir($this->makeSubdirectoryPath($directory, $path));
+  protected function ensureDirectory($path) {
+    if (!is_dir($path)) {
+      if ($dir = dirname($path)) $this->ensureDirectory($dir);
+      mkdir($path);
     }
   }
 
-  protected function makeSubdirectoryPath($directory, $path) {
-    return $directory . DIRECTORY_SEPARATOR . $path;
+  protected function getAssets() {
+    return $this->patternlab->getAssets();
   }
 }
