@@ -29,6 +29,11 @@ class PatternLab implements PatternLabInterface {
   protected $directory;
 
   /**
+   * @var array
+   */
+  protected $layouts;
+
+  /**
    * @var PatternCollection
    */
   protected $patterns;
@@ -64,8 +69,20 @@ class PatternLab implements PatternLabInterface {
     return $this->getConfiguration()->getIgnoredExtensions();
   }
 
+  public function getLayout($name) {
+    return $this->getLayouts()[$name];
+  }
+
+  public function getPattern($name) {
+    return $this->getPatterns()->get($name);
+  }
+
   public function getPatternExtension() {
     return $this->getConfiguration()->getPatternExtension();
+  }
+
+  public function hasLayout($name) {
+    return array_key_exists($name, $this->getLayouts());
   }
 
   public function makeDocument($patternName, $variables = null) {
@@ -82,6 +99,15 @@ class PatternLab implements PatternLabInterface {
     foreach ($this->getSourceFiles() as $file) {
       if (!$file->isHidden() && !$file->isIgnored()) {
         $this->assets->add(new Asset($this, $file));
+      }
+    }
+  }
+
+  protected function findLayouts() {
+    $this->layouts = [];
+    foreach ($this->getLayoutFiles() as $file) {
+      if (!$file->isHidden()) {
+        $this->layouts[$file->getPath()] = $file->getFullPath();
       }
     }
   }
@@ -112,7 +138,20 @@ class PatternLab implements PatternLabInterface {
     return $this->directory->getFile(['config', 'config.yml']);
   }
 
-  public function getPatterns() {
+  /**
+   * @return Filesystem\File[]
+   */
+  protected function getLayoutFiles() {
+    $directory = $this->getSourceDirectory()->getDirectory('_layouts');
+    return $directory->getFilesWithExtension('twig');
+  }
+
+  protected function getLayouts() {
+    if (!isset($this->layouts)) $this->findLayouts();
+    return $this->layouts;
+  }
+
+  protected function getPatterns() {
     if (!isset($this->patterns)) $this->findPatterns();
     return $this->patterns;
   }
