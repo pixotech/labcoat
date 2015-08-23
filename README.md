@@ -65,10 +65,10 @@ print $homepage;
 
 ## Copying assets
 
-Labcoat provides a command-line utility for copying asset files from Pattern Lab to another directory. The `labcoat.php` script is found in the root of the Labcoat library.
+Labcoat provides a command-line utility for copying asset files from Pattern Lab to another directory. The `copy-assets.php` script is found in the root of the Labcoat library.
 
 ```bash
-php labcoat.php copy --patternlab=/patternlab --destination=/production
+php copy-assets.php /path/to/patternlab /path/to/production
 ```
 
 ## Validating data classes
