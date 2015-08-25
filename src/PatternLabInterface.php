@@ -11,13 +11,18 @@ interface PatternLabInterface {
 
   public function copyAssetsTo($directoryPath);
 
+  public function getDataDirectory();
+
+  public function getDefaultDirectoryPermissions();
+
   /**
    * @return array
    */
   public function getExposedOptions();
   public function getIgnoredDirectories();
   public function getIgnoredExtensions();
-  public function getLayout($name);
+
+  public function getMetaDirectory();
 
   /**
    * @param $name
@@ -25,13 +30,19 @@ interface PatternLabInterface {
    */
   public function getPattern($name);
   public function getPatternExtension();
+
+  /**
+   * @return \Labcoat\Patterns\PatternCollection
+   */
+  public function getPatterns();
+
   public function getPatternsDirectory();
 
   /**
    * @return \Labcoat\Twig\Environment
    */
   public function getTwig();
-  public function hasLayout($name);
+  public function getVendorDirectory();
   public function makeDocument($patternName, $variables = null);
   public function render($patternName, $variables = null);
   public function setPatternsDirectory($path);

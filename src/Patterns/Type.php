@@ -20,8 +20,13 @@ class Type extends Group implements \RecursiveIterator {
   }
 
   public function add(PatternInterface $pattern) {
-    if ($pattern->hasSubType()) $this->getSubType($pattern->getSubType())->add($pattern);
-    else $this->addPattern($pattern);
+    if ($pattern->hasSubType()) {
+      $this->ensureSubType($pattern->getSubType());
+      $this->getSubType($pattern->getSubType())->add($pattern);
+    }
+    else {
+      $this->addPattern($pattern);
+    }
     $this->patterns[$pattern->getName()] = $pattern;
     ksort($this->patterns, SORT_NATURAL);
   }
@@ -56,6 +61,10 @@ class Type extends Group implements \RecursiveIterator {
     return $this->name;
   }
 
+  public function getPath() {
+    return $this->name;
+  }
+
   /**
    * @return Pattern[]
    */
@@ -68,7 +77,6 @@ class Type extends Group implements \RecursiveIterator {
    * @return SubType
    */
   public function getSubType($name) {
-    if (!isset($this->items[$name])) $this->addItem($name, new SubType($name));
     return $this->items[$name];
   }
 
@@ -77,6 +85,10 @@ class Type extends Group implements \RecursiveIterator {
    */
   public function getSubTypes() {
     return iterator_to_array($this->getSubTypesIterator());
+  }
+
+  protected function ensureSubType($name) {
+    if (!isset($this->items[$name])) $this->addItem($name, new SubType($this, $name));
   }
 
   protected function getAllPatternsIterator() {

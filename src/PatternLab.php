@@ -40,7 +40,7 @@ class PatternLab implements PatternLabInterface {
   /**
    * @var array
    */
-  protected $twigOptions;
+  protected $twigOptions = [];
 
   public function __construct() {
   }
@@ -71,6 +71,14 @@ class PatternLab implements PatternLabInterface {
   public function copyAssetsTo($directoryPath) {
     $copier = new Copier($this);
     $copier->copyTo($directoryPath);
+  }
+
+  public function getDataDirectory() {
+    return $this->patternsDirectory . '/../_data';
+  }
+
+  public function getDefaultDirectoryPermissions() {
+    return 0777;
   }
 
   public function getExposedOptions() {
@@ -117,6 +125,10 @@ class PatternLab implements PatternLabInterface {
     return [];
   }
 
+  public function getMetaDirectory() {
+    return $this->patternsDirectory . '/../_meta';
+  }
+
   /**
    * Get a pattern by shorthand or path
    *
@@ -131,9 +143,7 @@ class PatternLab implements PatternLabInterface {
    * @see http://patternlab.io/docs/pattern-including.html "Including Patterns"
    */
   public function getPattern($name) {
-    $matches = PatternLab::isShorthand($name) ? $this->makeShorthandFilter($name) : $this->makePathFilter($name);
-    foreach ($matches as $match) return $match;
-    throw new \OutOfBoundsException("Unknown pattern: $name");
+    return $this->getPatterns()->getPattern($name);
   }
 
   /**
@@ -166,14 +176,11 @@ class PatternLab implements PatternLabInterface {
     return $this->twig;
   }
 
-  /**
-   * Test if there is a layout template with the specified name
-   *
-   * @param string $name The name of a layout template
-   * @return bool True if the layout exists, false if not
-   */
-  public function hasLayout($name) {
-    return array_key_exists($name, $this->getLayouts());
+  public function getVendorDirectory() {
+    $loaderClassName = "Composer\\Autoload\\ClassLoader";
+    if (!class_exists($loaderClassName)) throw new \Exception("Could not location vendor path");
+    $reflection = new \ReflectionClass($loaderClassName);
+    return realpath(dirname($reflection->getFileName()) . '/..');
   }
 
   /**
@@ -208,15 +215,6 @@ class PatternLab implements PatternLabInterface {
     }
   }
 
-  protected function findLayouts() {
-    $this->layouts = [];
-    foreach ($this->getLayoutFiles() as $file) {
-      if (!$file->isHidden()) {
-        $this->layouts[$file->getPath()] = $file->getFullPath();
-      }
-    }
-  }
-
   protected function findPatterns() {
     $this->patterns = [];
     foreach ($this->getPatternFiles() as $file) {
@@ -239,19 +237,6 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * @return Filesystem\File[]
-   */
-  protected function getLayoutFiles() {
-    $directory = $this->getSourceDirectory()->getDirectory('_layouts');
-    return $directory->getFilesWithExtension('twig');
-  }
-
-  protected function getLayouts() {
-    if (!isset($this->layouts)) $this->findLayouts();
-    return $this->layouts;
-  }
-
-  /**
    * @return \Labcoat\Filesystem\File[]
    */
   protected function getPatternFiles() {
@@ -260,27 +245,6 @@ class PatternLab implements PatternLabInterface {
 
   protected function getPatternsIterator() {
     return new \ArrayIterator($this->getPatterns());
-  }
-
-  /**
-   * @return Directory
-   */
-  protected function getSourceDirectory() {
-    return $this->directory->getDirectory($this->getSourceDirectoryPath());
-  }
-
-  /**
-   * @return string
-   */
-  protected function getSourceDirectoryPath() {
-    return $this->getConfiguration()->getSourceDirectory();
-  }
-
-  /**
-   * @return \Labcoat\Filesystem\File[]
-   */
-  protected function getSourceFiles() {
-    return $this->getSourceDirectory()->getFiles();
   }
 
   /**

@@ -75,7 +75,7 @@ class PatternCollection extends Group implements PatternCollectionInterface {
     $matches = new \RegexIterator($files, '|\.json$|', \RegexIterator::MATCH);
     foreach ($matches as $match) {
       $path = substr($match, strlen($dir) + 1, -5);
-      list ($path, $pseudoPattern) = explode('~', $path, 2);
+      list ($path, $pseudoPattern) = array_pad(explode('~', $path, 2), 2, null);
       if ($pattern = $this->getPatternByPath($path)) {
         if ($pseudoPattern) $pattern->addPseudoPattern($pseudoPattern, $match);
         else $pattern->setDataFile($match);

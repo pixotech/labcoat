@@ -24,11 +24,11 @@ class Pattern implements PatternInterface {
     $parts = explode('/', $path);
     if (count($parts) == 3) return $parts;
     if (count($parts) == 2) return [$parts[0], null, $parts[1]];
-    throw new \InvalidArgumentException("Invalid path");
+    throw new \InvalidArgumentException("Invalid path: $path");
   }
 
   public static function stripOrdering($str) {
-    list($num, $name) = explode('-', $str, 2);
+    list($num, $name) = array_pad(explode('-', $str, 2), 2, null);
     return is_numeric($num) ? $name : $str;
   }
 
@@ -44,6 +44,10 @@ class Pattern implements PatternInterface {
 
   public function getDataFile() {
     return $this->dataFile;
+  }
+
+  public function getFile() {
+    return $this->file;
   }
 
   public function getName() {

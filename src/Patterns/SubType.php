@@ -5,8 +5,10 @@ namespace Labcoat\Patterns;
 class SubType extends Group {
 
   protected $name;
+  protected $type;
 
-  public function __construct($name) {
+  public function __construct(Type $type, $name) {
+    $this->type = $type;
     $this->name = $name;
   }
 
@@ -27,10 +29,21 @@ class SubType extends Group {
     return $this->name;
   }
 
+  public function getPath() {
+    return $this->getType()->getPath() . '-' . $this->name;
+  }
+
   /**
    * @return Pattern[]
    */
   public function getPatterns() {
     return $this->items;
+  }
+
+  /**
+   * @return Type
+   */
+  public function getType() {
+    return $this->type;
   }
 }

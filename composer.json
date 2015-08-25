@@ -12,9 +12,10 @@
   ],
   "require": {
     "nategood/commando": "~0.2",
-    "wp-cli/php-cli-tools": "~0.10",
+    "pattern-lab/styleguidekit-twig-default": "*",
     "twig/twig": "~1.0",
-    "symfony/yaml": "~2.7"
+    "symfony/yaml": "~2.7",
+    "wp-cli/php-cli-tools": "~0.10"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.5"

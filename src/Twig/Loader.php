@@ -30,9 +30,6 @@ class Loader implements \Twig_LoaderInterface {
    * @throws \Twig_Error_Loader
    */
   protected function getFile($name) {
-    if ($this->patternlab->hasLayout($name)) {
-      return $this->patternlab->getLayout($name);
-    }
     try {
       return $this->patternlab->getPattern($name)->getFile();
     }
