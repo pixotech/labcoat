@@ -4,8 +4,11 @@ namespace Labcoat\Patterns;
 
 class Pattern implements PatternInterface {
 
+  protected $dataFile;
+  protected $file;
   protected $name;
   protected $path;
+  protected $pseudoPatterns = [];
   protected $subType;
   protected $type;
 
@@ -29,17 +32,34 @@ class Pattern implements PatternInterface {
     return is_numeric($num) ? $name : $str;
   }
 
-  public function __construct($path) {
+  public function __construct($path, $file) {
     $this->path = $path;
+    $this->file = $file;
     list($this->type, $this->subType, $this->name) = self::splitPath($path);
+  }
+
+  public function addPseudoPattern($name, $dataFile) {
+    $this->pseudoPatterns[$name] = $dataFile;
+  }
+
+  public function getDataFile() {
+    return $this->dataFile;
   }
 
   public function getName() {
     return $this->name;
   }
 
+  public function getPartial() {
+    return $this->getType() . '-' . $this->getName();
+  }
+
   public function getPath() {
     return $this->path;
+  }
+
+  public function getPseudoPatterns() {
+    return $this->pseudoPatterns;
   }
 
   public function getSubtype() {
@@ -52,5 +72,9 @@ class Pattern implements PatternInterface {
 
   public function hasSubtype() {
     return !empty($this->subType);
+  }
+
+  public function setDataFile($path) {
+    $this->dataFile = $path;
   }
 }

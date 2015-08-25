@@ -23,6 +23,10 @@ class SubType extends Group {
     return $this->getPatterns()[Pattern::stripOrdering($name)];
   }
 
+  public function getName() {
+    return $this->name;
+  }
+
   /**
    * @return Pattern[]
    */

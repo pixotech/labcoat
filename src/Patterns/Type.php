@@ -36,11 +36,7 @@ class Type extends Group implements \RecursiveIterator {
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    $n = Pattern::stripOrdering($name);
-    foreach ($this->getPatterns() as $patternName => $pattern) {
-      if ($pattern->getNameWithoutOrdering() == $n) return $pattern;
-    }
-    throw new \OutOfBoundsException("Unknown pattern: $name");
+    return $this->getPatterns()[Pattern::stripOrdering($name)];
   }
 
   /**
@@ -54,6 +50,10 @@ class Type extends Group implements \RecursiveIterator {
 
   public function getAllPatterns() {
     return iterator_to_array($this->getAllPatternsIterator());
+  }
+
+  public function getName() {
+    return $this->name;
   }
 
   /**

@@ -8,6 +8,7 @@ class PatternCollection extends Group implements PatternCollectionInterface {
 
   public function __construct(PatternLabInterface $patternlab) {
     $this->findPatterns($patternlab);
+    $this->findData($patternlab);
   }
 
   public function add(PatternInterface $pattern) {
@@ -30,6 +31,10 @@ class PatternCollection extends Group implements PatternCollectionInterface {
 
   public function getPattern($name) {
     return Pattern::isPartialName($name) ? $this->getPatternByPartial($name) : $this->getPatternByPath($name);
+  }
+
+  public function getPatterns() {
+    return iterator_to_array($this->getPatternsIterator(), false);
   }
 
   public function getPatternsIterator() {
@@ -61,6 +66,21 @@ class PatternCollection extends Group implements PatternCollectionInterface {
 
   public function hasType($name) {
     return array_key_exists($name, $this->items);
+  }
+
+  protected function findData(PatternLabInterface $patternlab) {
+    $dir = $patternlab->getPatternsDirectory();
+    $flags = \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS;
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+    $matches = new \RegexIterator($files, '|\.json$|', \RegexIterator::MATCH);
+    foreach ($matches as $match) {
+      $path = substr($match, strlen($dir) + 1, -5);
+      list ($path, $pseudoPattern) = explode('~', $path, 2);
+      if ($pattern = $this->getPatternByPath($path)) {
+        if ($pseudoPattern) $pattern->addPseudoPattern($pseudoPattern, $match);
+        else $pattern->setDataFile($match);
+      }
+    }
   }
 
   protected function findPatterns(PatternLabInterface $patternlab) {

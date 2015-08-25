@@ -7,13 +7,13 @@ use Labcoat\Assets\Copier;
 use Labcoat\Configuration\Configuration;
 use Labcoat\Filesystem\Directory;
 use Labcoat\Html\Document;
-use Labcoat\Patterns\Filters\PathFilterIterator;
-use Labcoat\Patterns\Filters\ShorthandFilterIterator;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternCollection;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
+
+  protected $assetsDirectory;
 
   /**
    * @var \Labcoat\Assets\Asset[]
@@ -45,6 +45,8 @@ class PatternLab implements PatternLabInterface {
   public function __construct() {
   }
 
+
+
   public function setPatternsDirectory($path) {
     $this->patternsDirectory = $path;
   }
@@ -72,7 +74,11 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getExposedOptions() {
+    return [];
+  }
 
+  public function getHiddenControls() {
+    return [];
   }
 
   /**
@@ -105,6 +111,10 @@ class PatternLab implements PatternLabInterface {
    */
   public function getLayout($name) {
     return $this->getLayouts()[$name];
+  }
+
+  public function getMediaQueries() {
+    return [];
   }
 
   /**
