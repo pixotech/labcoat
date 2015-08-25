@@ -10,6 +10,11 @@ interface PatternLabInterface {
   public function getAssets();
 
   public function copyAssetsTo($directoryPath);
+
+  /**
+   * @return array
+   */
+  public function getExposedOptions();
   public function getIgnoredDirectories();
   public function getIgnoredExtensions();
   public function getLayout($name);
@@ -20,6 +25,7 @@ interface PatternLabInterface {
    */
   public function getPattern($name);
   public function getPatternExtension();
+  public function getPatternsDirectory();
 
   /**
    * @return \Labcoat\Twig\Environment
@@ -28,4 +34,5 @@ interface PatternLabInterface {
   public function hasLayout($name);
   public function makeDocument($patternName, $variables = null);
   public function render($patternName, $variables = null);
+  public function setPatternsDirectory($path);
 }

@@ -10,6 +10,7 @@ use Labcoat\Html\Document;
 use Labcoat\Patterns\Filters\PathFilterIterator;
 use Labcoat\Patterns\Filters\ShorthandFilterIterator;
 use Labcoat\Patterns\Pattern;
+use Labcoat\Patterns\PatternCollection;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
@@ -24,18 +25,10 @@ class PatternLab implements PatternLabInterface {
    */
   protected $config;
 
-  /**
-   * @var Directory
-   */
-  protected $directory;
+  protected $patternsDirectory;
 
   /**
-   * @var array
-   */
-  protected $layouts;
-
-  /**
-   * @var \Labcoat\Patterns\Pattern[]
+   * @var \Labcoat\Patterns\PatternCollection
    */
   protected $patterns;
 
@@ -49,46 +42,11 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twigOptions;
 
-  /**
-   * Test if the requested pattern name is shorthand
-   *
-   * @param string $name The name of a requested pattern
-   * @return bool True if the name is shorthand, false if not
-   */
-  public static function isShorthand($name) {
-    return false === strpos($name, '/');
+  public function __construct() {
   }
 
-  /**
-   * Remove ordering prefixes from a path and separate segments with a forward slash
-   *
-   * @param string $path A pattern path
-   * @return string The normalized path
-   */
-  public static function normalizePath($path) {
-    $segments = explode(DIRECTORY_SEPARATOR, $path);
-    return implode('/', array_map(['Labcoat\\PatternLab', 'stripNumbering'], $segments));
-  }
-
-  /**
-   * Remove the ordering prefix from a string
-   *
-   * @param string $str A segment of a pattern path
-   * @return string The segment, with ordering removed
-   */
-  public static function stripNumbering($str) {
-    return preg_match('/^[0-9]+-(.+)$/', $str, $matches) ? $matches[1] : $str;
-  }
-
-  /**
-   * Constructor
-   *
-   * @param string $path The full path to the Pattern Lab installation
-   * @param array $twigOptions Options for the Twig parser
-   */
-  public function __construct($path, array $twigOptions = []) {
-    $this->directory = new Directory($this, $path);
-    $this->twigOptions = $twigOptions;
+  public function setPatternsDirectory($path) {
+    $this->patternsDirectory = $path;
   }
 
   /**
@@ -111,6 +69,10 @@ class PatternLab implements PatternLabInterface {
   public function copyAssetsTo($directoryPath) {
     $copier = new Copier($this);
     $copier->copyTo($directoryPath);
+  }
+
+  public function getExposedOptions() {
+
   }
 
   /**
@@ -172,7 +134,16 @@ class PatternLab implements PatternLabInterface {
    * @return string A file extension
    */
   public function getPatternExtension() {
-    return $this->getConfiguration()->getPatternExtension();
+    return 'twig';
+  }
+
+  public function getPatterns() {
+    if (!isset($this->patterns)) $this->patterns = new PatternCollection($this);
+    return $this->patterns;
+  }
+
+  public function getPatternsDirectory() {
+    return $this->patternsDirectory;
   }
 
   /**
@@ -277,18 +248,6 @@ class PatternLab implements PatternLabInterface {
     return $this->getPatternsDirectory()->getPatternFiles();
   }
 
-  protected function getPatterns() {
-    if (!isset($this->patterns)) $this->findPatterns();
-    return $this->patterns;
-  }
-
-  /**
-   * @return Directory
-   */
-  protected function getPatternsDirectory() {
-    return $this->getSourceDirectory()->getDirectory('_patterns');
-  }
-
   protected function getPatternsIterator() {
     return new \ArrayIterator($this->getPatterns());
   }
@@ -314,16 +273,18 @@ class PatternLab implements PatternLabInterface {
     return $this->getSourceDirectory()->getFiles();
   }
 
+  /**
+   * @return \SplFileInfo[]
+   */
+  protected function getStylesheets() {
+    $finder = new Finder();
+    $finder->files()->name("*.css")->in($this->getSourceDirectoryPath());
+    $finder->sortByName();
+    return iterator_to_array($finder, false);
+  }
+
   protected function loadConfiguration() {
     $this->config = Configuration::load($this->getConfigurationFile()->getFullPath());
-  }
-
-  protected function makePathFilter($path) {
-    return new PathFilterIterator($this->getPatternsIterator(), $this->normalizePatternPath($path));
-  }
-
-  protected function makeShorthandFilter($shorthand) {
-    return new ShorthandFilterIterator($this->getPatternsIterator(), $shorthand);
   }
 
   protected function makeTwig() {

@@ -2,57 +2,55 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\Data\Data;
-use Labcoat\Filesystem\FileInterface;
-use Labcoat\PatternLab;
-
 class Pattern implements PatternInterface {
 
-  protected $data;
-  protected $file;
   protected $name;
   protected $path;
   protected $subType;
   protected $type;
 
-  public function __construct(FileInterface $file) {
-    $this->file = $file->getFullPath();
-    $this->path = PatternLab::normalizePath($file->getPathWithoutExtension());
-    $parts = explode('/', $this->path);
-    $this->name = array_pop($parts);
-    $this->type = array_shift($parts);
-    if (!empty($parts)) $this->subType = array_shift($parts);
-    $this->findData($file);
+  public static function isPartialName($name) {
+    return false === strpos($name, '/');
   }
 
-  public function getData() {
-    return new Data(file_get_contents($this->data));
+  public static function splitPartial($partial) {
+    return explode('-', $partial, 2);
   }
 
-  public function getFile() {
-    return $this->file;
+  public static function splitPath($path) {
+    $parts = explode('/', $path);
+    if (count($parts) == 3) return $parts;
+    if (count($parts) == 2) return [$parts[0], null, $parts[1]];
+    throw new \InvalidArgumentException("Invalid path");
+  }
+
+  public static function stripOrdering($str) {
+    list($num, $name) = explode('-', $str, 2);
+    return is_numeric($num) ? $name : $str;
+  }
+
+  public function __construct($path) {
+    $this->path = $path;
+    list($this->type, $this->subType, $this->name) = self::splitPath($path);
+  }
+
+  public function getName() {
+    return $this->name;
   }
 
   public function getPath() {
     return $this->path;
   }
 
-  public function getShorthand() {
-    return $this->type . '-' . $this->name;
+  public function getSubtype() {
+    return $this->subType;
   }
 
-  public function hasData() {
-    return !empty($this->data);
+  public function getType() {
+    return $this->type;
   }
 
-  protected function findData(FileInterface $file) {
-    $path = $this->getDataFilePath($file);
-    if (is_file($path)) $this->data = $path;
-  }
-
-  protected function getDataFilePath(FileInterface $file) {
-    $dir = dirname($file->getFullPath());
-    $basename = basename($file->getPathWithoutExtension());
-    return $dir . DIRECTORY_SEPARATOR . $basename . '.json';
+  public function hasSubtype() {
+    return !empty($this->subType);
   }
 }

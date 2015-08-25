@@ -3,14 +3,9 @@
 namespace Labcoat\Patterns;
 
 interface PatternInterface {
-
-  public function getData();
-
-  /**
-   * @return \SplFileInfo
-   */
-  public function getFile();
+  public function getName();
   public function getPath();
-  public function getShorthand();
-  public function hasData();
+  public function getSubtype();
+  public function getType();
+  public function hasSubtype();
 }
