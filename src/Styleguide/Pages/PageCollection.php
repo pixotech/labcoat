@@ -3,8 +3,8 @@
 namespace Labcoat\Styleguide\Pages;
 
 use Labcoat\Patterns\Pattern;
-use Labcoat\Patterns\SubType;
-use Labcoat\Patterns\Type;
+use Labcoat\Patterns\PatternSubType;
+use Labcoat\Patterns\PatternType;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class PageCollection implements \IteratorAggregate, PageCollectionInterface {
@@ -41,10 +41,10 @@ class PageCollection implements \IteratorAggregate, PageCollectionInterface {
           $this->pages[] = new PseudoPatternPage($this->styleguide, $item, $pseudoPattern);
         }
       }
-      elseif ($item instanceof Type) {
+      elseif ($item instanceof PatternType) {
         $this->pages[] = new TypePage($this->styleguide, $item);
       }
-      elseif ($item instanceof SubType) {
+      elseif ($item instanceof PatternSubType) {
         $this->pages[] = new SubTypePage($this->styleguide, $item);
       }
     }

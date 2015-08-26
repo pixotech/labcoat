@@ -2,7 +2,7 @@
 
 namespace Labcoat\Patterns;
 
-abstract class Group implements \Countable, \RecursiveIterator {
+abstract class PatternGroup implements \Countable, \RecursiveIterator {
 
   protected $items = [];
   protected $iteratorPosition = 0;
@@ -22,7 +22,7 @@ abstract class Group implements \Countable, \RecursiveIterator {
   }
 
   public function hasChildren() {
-    if (!($this->current() instanceof Group)) return false;
+    if (!($this->current() instanceof PatternGroup)) return false;
     return count($this->current()) > 0;
   }
 

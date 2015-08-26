@@ -32,7 +32,7 @@ class Navigation implements \JsonSerializable {
   }
 
   /**
-   * @return \Labcoat\Patterns\Type[]
+   * @return \Labcoat\Patterns\PatternType[]
    */
   protected function getTypes() {
     return $this->patternlab->getPatterns()->getTypes();

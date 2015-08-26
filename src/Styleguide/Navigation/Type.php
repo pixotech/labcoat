@@ -7,11 +7,11 @@ use Labcoat\Patterns\Pattern;
 class Type extends ItemWithPatterns implements \JsonSerializable {
 
   /**
-   * @var \Labcoat\Patterns\Type
+   * @var \Labcoat\Patterns\PatternType
    */
   protected $type;
 
-  public function __construct(\Labcoat\Patterns\Type $type) {
+  public function __construct(\Labcoat\Patterns\PatternType $type) {
     $this->type = $type;
   }
 

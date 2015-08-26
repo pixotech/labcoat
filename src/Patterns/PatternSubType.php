@@ -2,12 +2,12 @@
 
 namespace Labcoat\Patterns;
 
-class SubType extends Group {
+class PatternSubType extends PatternGroup {
 
   protected $name;
   protected $type;
 
-  public function __construct(Type $type, $name) {
+  public function __construct(PatternType $type, $name) {
     $this->type = $type;
     $this->name = $name;
   }
@@ -18,7 +18,7 @@ class SubType extends Group {
 
   /**
    * @param $name
-   * @return SubType
+   * @return PatternSubType
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
@@ -41,7 +41,7 @@ class SubType extends Group {
   }
 
   /**
-   * @return Type
+   * @return PatternType
    */
   public function getType() {
     return $this->type;

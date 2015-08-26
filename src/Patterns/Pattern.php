@@ -42,6 +42,10 @@ class Pattern implements PatternInterface {
     $this->pseudoPatterns[$name] = $dataFile;
   }
 
+  public function getData() {
+    return $this->data;
+  }
+
   public function getDataFile() {
     return $this->dataFile;
   }
@@ -80,5 +84,18 @@ class Pattern implements PatternInterface {
 
   public function setDataFile($path) {
     $this->dataFile = $path;
+  }
+
+  protected function findData() {
+    foreach (glob(dirname($this->file) . '/*.json') as $path) {
+      $name = basename($path, '.json');
+      list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
+      if (!empty($pseudoPattern)) {
+        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $name, $path);
+      }
+      else {
+        $this->data = new PatternData($this, $path);
+      }
+    }
   }
 }

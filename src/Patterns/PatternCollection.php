@@ -4,11 +4,11 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLabInterface;
 
-class PatternCollection extends Group implements PatternCollectionInterface {
+class PatternCollection extends PatternGroup implements PatternCollectionInterface {
 
   public function __construct(PatternLabInterface $patternlab) {
     $this->findPatterns($patternlab);
-    $this->findData($patternlab);
+    #$this->findData($patternlab);
   }
 
   public function add(PatternInterface $pattern) {
@@ -18,7 +18,7 @@ class PatternCollection extends Group implements PatternCollectionInterface {
 
   /**
    * @param $name
-   * @return Type
+   * @return PatternType
    * @throws \OutOfBoundsException
    */
   public function findType($name) {
@@ -54,7 +54,7 @@ class PatternCollection extends Group implements PatternCollectionInterface {
 
   /**
    * @param $name
-   * @return Type
+   * @return PatternType
    */
   public function getType($name) {
     return $this->items[$name];
@@ -98,10 +98,10 @@ class PatternCollection extends Group implements PatternCollectionInterface {
 
   /**
    * @param $name
-   * @return Type
+   * @return PatternType
    */
   protected function addType($name) {
-    $this->addItem($name, new Type($name));
+    $this->addItem($name, new PatternType($name));
   }
 
   protected function ensureType($name) {

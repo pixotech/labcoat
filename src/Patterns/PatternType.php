@@ -6,7 +6,7 @@ use Labcoat\Patterns\Filters\PatternFilterIterator;
 use Labcoat\Patterns\Filters\SubTypeFilterIterator;
 use RecursiveIterator;
 
-class Type extends Group implements \RecursiveIterator {
+class PatternType extends PatternGroup implements \RecursiveIterator {
 
   protected $name;
 
@@ -37,7 +37,7 @@ class Type extends Group implements \RecursiveIterator {
 
   /**
    * @param $name
-   * @return SubType
+   * @return PatternSubType
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
@@ -46,7 +46,7 @@ class Type extends Group implements \RecursiveIterator {
 
   /**
    * @param $name
-   * @return SubType
+   * @return PatternSubType
    * @throws \OutOfBoundsException
    */
   public function findSubType($name) {
@@ -74,21 +74,21 @@ class Type extends Group implements \RecursiveIterator {
 
   /**
    * @param $name
-   * @return SubType
+   * @return PatternSubType
    */
   public function getSubType($name) {
     return $this->items[$name];
   }
 
   /**
-   * @return SubType[]
+   * @return PatternSubType[]
    */
   public function getSubTypes() {
     return iterator_to_array($this->getSubTypesIterator());
   }
 
   protected function ensureSubType($name) {
-    if (!isset($this->items[$name])) $this->addItem($name, new SubType($this, $name));
+    if (!isset($this->items[$name])) $this->addItem($name, new PatternSubType($this, $name));
   }
 
   protected function getAllPatternsIterator() {
