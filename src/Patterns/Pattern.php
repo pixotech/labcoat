@@ -4,11 +4,17 @@ namespace Labcoat\Patterns;
 
 class Pattern implements PatternInterface {
 
-  protected $dataFile;
+  /**
+   * @var PatternDataInterface[]
+   */
+  protected $data;
+
   protected $file;
+  protected $includedPatterns;
   protected $name;
   protected $path;
-  protected $pseudoPatterns = [];
+  protected $pseudoPatterns;
+  protected $state;
   protected $subType;
   protected $type;
 
@@ -36,22 +42,23 @@ class Pattern implements PatternInterface {
     $this->path = $path;
     $this->file = $file;
     list($this->type, $this->subType, $this->name) = self::splitPath($path);
-  }
-
-  public function addPseudoPattern($name, $dataFile) {
-    $this->pseudoPatterns[$name] = $dataFile;
+    $this->extractState();
+    $this->findData();
+    $this->findIncludedPatterns();
   }
 
   public function getData() {
+    if (!isset($this->data)) $this->findData();
     return $this->data;
-  }
-
-  public function getDataFile() {
-    return $this->dataFile;
   }
 
   public function getFile() {
     return $this->file;
+  }
+
+  public function getIncludedPatterns() {
+    if (!isset($this->includedPatterns)) $this->findIncludedPatterns();
+    return $this->includedPatterns;
   }
 
   public function getName() {
@@ -67,6 +74,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getPseudoPatterns() {
+    if (!isset($this->pseudoPatterns)) $this->findData();
     return $this->pseudoPatterns;
   }
 
@@ -78,24 +86,58 @@ class Pattern implements PatternInterface {
     return $this->type;
   }
 
+  public function getState() {
+    return $this->state;
+  }
+
   public function hasSubtype() {
     return !empty($this->subType);
   }
 
-  public function setDataFile($path) {
-    $this->dataFile = $path;
+  protected function extractState() {
+    if (false !== strpos($this->name, '@')) {
+      list($this->name, $this->state) = explode('@', $this->name, 2);
+    }
   }
 
   protected function findData() {
-    foreach (glob(dirname($this->file) . '/*.json') as $path) {
+    $this->data = [];
+    $this->pseudoPatterns = [];
+    foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
-        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $name, $path);
+        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
-        $this->data = new PatternData($this, $path);
+        $this->data[] = new PatternData($path);
       }
     }
+  }
+
+  protected function findIncludedPatterns() {
+    $this->includedPatterns = [];
+    $template = file_get_contents($this->file);
+    $twig = new \Twig_Environment();
+    $lexer = new \Twig_Lexer($twig);
+    $tokens = $lexer->tokenize($template);
+    while (!$tokens->isEOF()) {
+      $token = $tokens->next();
+      if ($token->getType() == \Twig_Token::NAME_TYPE && in_array($token->getValue(), ['include', 'extend'])) {
+        $this->includedPatterns[] = $tokens->next()->getValue();
+      }
+    }
+  }
+
+  protected function getDataFilePattern() {
+    return dirname($this->file) . DIRECTORY_SEPARATOR . $this->name . '*.json';
+  }
+
+  protected function getLineageMatch() {
+    return '{%([ ]+)?include [&quot;\&#039;]([A-Za-z0-9-_]+)[&quot;\&#039;](.*)%}';
+  }
+
+  protected function getLineageMatchKey() {
+    return 2;
   }
 }

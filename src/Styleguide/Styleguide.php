@@ -28,6 +28,16 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function generate($destination) {
+    /*
+     * copy assets/dist/*
+     * /patterns/*
+     * /styleguide/data/patternlab-data.json
+     * /annotations/annotations.js
+     * index.html
+     * latest-change.txt
+     */
+
+
     #$data = new Data($this->patternlab);
     $this->pages = new PageCollection($this);
     foreach ($this->pages as $page) {
