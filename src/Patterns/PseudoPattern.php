@@ -15,7 +15,11 @@ class PseudoPattern implements PseudoPatternInterface {
   }
 
   public function getData() {
-    return $this->data;
+    return $this->data->getData() + $this->pattern->getData();
+  }
+
+  public function getDisplayName() {
+    return $this->pattern->getDisplayName() . ' ' . ucwords(str_replace('-', ' ', $this->getVariantName()));
   }
 
   public function getFile() {
@@ -24,6 +28,10 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getName() {
     return $this->pattern->getName();
+  }
+
+  public function getPartial() {
+    return $this->pattern->getPartial();
   }
 
   public function getPath() {
@@ -36,6 +44,10 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getStyleguidePathName() {
     return $this->pattern->getStyleguidePathName() . '-' . str_replace('/', '-', $this->getVariantName());
+  }
+
+  public function getTemplateContent() {
+    return $this->pattern->getTemplateContent();
   }
 
   public function getTime() {

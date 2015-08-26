@@ -5,7 +5,7 @@ namespace Labcoat\Styleguide\Files;
 class PatternTemplateFile extends PatternFile implements PatternTemplateFileInterface {
 
   public function getContents() {
-    // TODO: Implement getContents() method.
+    return htmlentities($this->pattern->getTemplateContent());
   }
 
   public function getPath() {

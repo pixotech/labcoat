@@ -5,7 +5,7 @@ namespace Labcoat\Styleguide\Files;
 class PatternEscapedHtmlFile extends PatternFile implements PatternEscapedHtmlFileInterface {
 
   public function getContents() {
-    // TODO: Implement getContents() method.
+    return htmlentities($this->render());
   }
 
   public function getPath() {

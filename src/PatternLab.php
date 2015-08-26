@@ -111,16 +111,6 @@ class PatternLab implements PatternLabInterface {
     return $this->getConfiguration()->getIgnoredExtensions();
   }
 
-  /**
-   * Get the full path to a layout template file
-   *
-   * @param string $name The path to the layout file, relative to the "source/_layouts" directory
-   * @return string The full path to the layout file
-   */
-  public function getLayout($name) {
-    return $this->getLayouts()[$name];
-  }
-
   public function getMediaQueries() {
     return [];
   }
@@ -143,6 +133,7 @@ class PatternLab implements PatternLabInterface {
    * @see http://patternlab.io/docs/pattern-including.html "Including Patterns"
    */
   public function getPattern($name) {
+    $name = $this->stripPatternExtensionFromPath($name);
     return $this->getPatterns()->getPattern($name);
   }
 

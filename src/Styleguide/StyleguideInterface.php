@@ -13,4 +13,8 @@ interface StyleguideInterface {
    * @return \Labcoat\PatternLabInterface
    */
   public function getPatternLab();
+
+  public function makeFooter(array $data = []);
+
+  public function makeHeader(array $data = []);
 }

@@ -12,12 +12,23 @@ interface PatternInterface {
   /**
    * @return string
    */
+  public function getDisplayName();
+
+  /**
+   * @return string
+   */
   public function getFile();
 
   /**
    * @return string
    */
   public function getName();
+
+  /**
+   * @return string
+   */
+  public function getPartial();
+
   public function getPath();
   public function getSubtype();
 
@@ -30,6 +41,8 @@ interface PatternInterface {
    * @return int
    */
   public function getTime();
+
+  public function getTemplateContent();
 
   public function getType();
   public function hasSubtype();

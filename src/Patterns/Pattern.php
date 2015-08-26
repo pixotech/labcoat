@@ -47,7 +47,13 @@ class Pattern implements PatternInterface {
 
   public function getData() {
     if (!isset($this->data)) $this->findData();
-    return $this->data;
+    $data = [];
+    foreach ($this->data as $d) $data += $d->getData();
+    return $data;
+  }
+
+  public function getDisplayName() {
+    return ucwords(str_replace('-', ' ', $this->getName()));
   }
 
   public function getFile() {
@@ -78,6 +84,10 @@ class Pattern implements PatternInterface {
 
   public function getSubtype() {
     return $this->subType;
+  }
+
+  public function getTemplateContent() {
+    return file_get_contents($this->file);
   }
 
   public function getTime() {
