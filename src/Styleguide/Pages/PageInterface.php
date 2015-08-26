@@ -2,6 +2,6 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-interface PageCollectionInterface {
+interface PageInterface {
 
 }
