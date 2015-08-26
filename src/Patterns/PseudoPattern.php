@@ -38,6 +38,12 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getStyleguidePathName() . '-' . str_replace('/', '-', $this->getVariantName());
   }
 
+  public function getTime() {
+    $patternTime = $this->pattern->getTime();
+    $dataTime = filemtime($this->data->getFile());
+    return max($patternTime, $dataTime);
+  }
+
   public function getType() {
     return $this->pattern->getType();
   }

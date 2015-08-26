@@ -10,6 +10,6 @@ class PatternPageFile extends PatternFile implements PatternPageFileInterface {
 
   public function getPath() {
     $path = $this->pattern->getStyleguidePathName();
-    return "$path/$path.html";
+    return $this->makePath(['patterns', $path, "$path.html"]);
   }
 }

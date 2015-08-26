@@ -6,6 +6,7 @@ abstract class PatternGroup implements \Countable, \RecursiveIterator {
 
   protected $items = [];
   protected $iteratorPosition = 0;
+  protected $time;
 
   abstract public function add(PatternInterface $pattern);
 
@@ -17,8 +18,24 @@ abstract class PatternGroup implements \Countable, \RecursiveIterator {
     return $this->items[$this->getIteratorKey()];
   }
 
+  /**
+   * @return PatternInterface[]
+   */
+  abstract public function getAllPatterns();
+
   public function getChildren() {
     return $this->current();
+  }
+
+  public function getTime() {
+    if (!isset($this->time)) {
+      $this->time = 0;
+      foreach ($this->getAllPatterns() as $pattern) {
+        $time = $pattern->getTime();
+        if ($time > $this->time) $this->time = $time;
+      }
+    }
+    return $this->time;
   }
 
   public function hasChildren() {

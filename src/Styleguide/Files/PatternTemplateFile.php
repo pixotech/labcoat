@@ -11,6 +11,6 @@ class PatternTemplateFile extends PatternFile implements PatternTemplateFileInte
   public function getPath() {
     $path = $this->pattern->getStyleguidePathName();
     $ext = 'twig';
-    return "$path/$path.$ext";
+    return $this->makePath(['patterns', $path, "$path.$ext"]);
   }
 }

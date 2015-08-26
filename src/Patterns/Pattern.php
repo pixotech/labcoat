@@ -80,6 +80,12 @@ class Pattern implements PatternInterface {
     return $this->subType;
   }
 
+  public function getTime() {
+    $time = filemtime($this->file);
+    // Check data file
+    return $time;
+  }
+
   public function getType() {
     return $this->type;
   }

@@ -5,10 +5,15 @@ namespace Labcoat\Styleguide;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternInterface;
+use Labcoat\Patterns\PatternSubType;
+use Labcoat\Patterns\PatternType;
 use Labcoat\Styleguide\Files\PatternEscapedHtmlFile;
 use Labcoat\Styleguide\Files\PatternHtmlFile;
 use Labcoat\Styleguide\Files\PatternPageFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
+use Labcoat\Styleguide\Files\StyleguideIndexFile;
+use Labcoat\Styleguide\Files\SubTypeIndexFile;
+use Labcoat\Styleguide\Files\TypeIndexFile;
 use Labcoat\Styleguide\Pages\PageCollection;
 use Labcoat\Styleguide\Pages\PatternPage;
 
@@ -35,7 +40,11 @@ class Styleguide implements StyleguideInterface {
   public function generate($destination) {
     $files = $this->makeFiles();
     foreach ($files as $file) {
-      print_r(['file' => $file->getPath(), 'time' => $file->getTime()]);
+      print_r([
+        'class' => get_class($file),
+        'file' => $file->getPath(),
+        'time' => $file->getTime(),
+      ]);
     }
   }
 
@@ -99,6 +108,7 @@ class Styleguide implements StyleguideInterface {
   protected function makeFiles() {
     $files = [];
     $patterns = $this->patternlab->getPatterns();
+    $files[] = new StyleguideIndexFile($patterns);
     $iterator = new \RecursiveIteratorIterator($patterns, \RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($iterator as $item) {
       if ($item instanceof Pattern) {
@@ -106,6 +116,12 @@ class Styleguide implements StyleguideInterface {
         foreach ($item->getPseudoPatterns() as $pseudoPattern) {
           $files = array_merge($files, $this->makePatternFiles($pseudoPattern));
         }
+      }
+      elseif ($item instanceof PatternType) {
+        $files[] = new TypeIndexFile($item);
+      }
+      elseif ($item instanceof PatternSubType) {
+        $files[] = new SubTypeIndexFile($item);
       }
     }
     return $files;

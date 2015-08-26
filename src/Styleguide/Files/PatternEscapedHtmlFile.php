@@ -10,6 +10,6 @@ class PatternEscapedHtmlFile extends PatternFile implements PatternEscapedHtmlFi
 
   public function getPath() {
     $path = $this->pattern->getStyleguidePathName();
-    return "$path/$path.escaped.html";
+    return $this->makePath(['patterns', $path, "$path.escaped.html"]);
   }
 }

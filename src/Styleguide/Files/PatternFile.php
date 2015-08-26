@@ -4,7 +4,7 @@ namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Patterns\PatternInterface;
 
-abstract class PatternFile implements PatternFileInterface {
+abstract class PatternFile extends File implements PatternFileInterface {
 
   protected $pattern;
 
@@ -13,6 +13,6 @@ abstract class PatternFile implements PatternFileInterface {
   }
 
   public function getTime() {
-    return filemtime($this->pattern->getFile());
+    return $this->pattern->getTime();
   }
 }

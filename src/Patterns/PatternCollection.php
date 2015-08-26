@@ -29,6 +29,10 @@ class PatternCollection extends PatternGroup implements PatternCollectionInterfa
     throw new \OutOfBoundsException("Unknown type: $name");
   }
 
+  public function getAllPatterns() {
+    return $this->getPatterns();
+  }
+
   public function getPattern($name) {
     return Pattern::isPartialName($name) ? $this->getPatternByPartial($name) : $this->getPatternByPath($name);
   }

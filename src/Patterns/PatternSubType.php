@@ -25,6 +25,10 @@ class PatternSubType extends PatternGroup {
     return $this->getPatterns()[Pattern::stripOrdering($name)];
   }
 
+  public function getAllPatterns() {
+    return $this->getPatterns();
+  }
+
   public function getName() {
     return $this->name;
   }
@@ -38,6 +42,10 @@ class PatternSubType extends PatternGroup {
    */
   public function getPatterns() {
     return $this->items;
+  }
+
+  public function getStyleguidePathName() {
+    return $this->type->getName() . '-' . $this->getName();
   }
 
   /**

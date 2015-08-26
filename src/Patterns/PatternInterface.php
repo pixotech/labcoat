@@ -26,6 +26,11 @@ interface PatternInterface {
    */
   public function getStyleguidePathName();
 
+  /**
+   * @return int
+   */
+  public function getTime();
+
   public function getType();
   public function hasSubtype();
 }
