@@ -195,8 +195,8 @@ class Styleguide implements StyleguideInterface {
     $templates = [
       'partials/general-footer' => $this->getStyleguideTemplateContent('partials/general-footer.twig'),
       'partials/general-header' => $this->getStyleguideTemplateContent('partials/general-header.twig'),
-      'partials/patternSection' => $this->getStyleguideTemplateContent('partials/patternSection.twig'),
-      'partials/patternSectionSubtype' => $this->getStyleguideTemplateContent('partials/patternSectionSubtype.twig'),
+      'patternSection.twig' => $this->getStyleguideTemplateContent('partials/patternSection.twig'),
+      'patternSectionSubtype.twig' => $this->getStyleguideTemplateContent('partials/patternSectionSubtype.twig'),
       'viewall' => $this->getStyleguideTemplateContent('viewall.twig'),
     ];
     $templates['patternLabHead'] = file_get_contents($this->getPatternHeaderTemplatePath());
