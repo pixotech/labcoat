@@ -34,6 +34,10 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getSubtype();
   }
 
+  public function getStyleguidePathName() {
+    return $this->pattern->getStyleguidePathName() . '-' . str_replace('/', '-', $this->getVariantName());
+  }
+
   public function getType() {
     return $this->pattern->getType();
   }

@@ -20,6 +20,12 @@ interface PatternInterface {
   public function getName();
   public function getPath();
   public function getSubtype();
+
+  /**
+   * @return string
+   */
+  public function getStyleguidePathName();
+
   public function getType();
   public function hasSubtype();
 }

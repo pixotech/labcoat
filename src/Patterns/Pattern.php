@@ -43,8 +43,6 @@ class Pattern implements PatternInterface {
     $this->file = $file;
     list($this->type, $this->subType, $this->name) = self::splitPath($path);
     $this->extractState();
-    $this->findData();
-    $this->findIncludedPatterns();
   }
 
   public function getData() {
@@ -90,6 +88,10 @@ class Pattern implements PatternInterface {
     return $this->state;
   }
 
+  public function getStyleguidePathName() {
+    return str_replace('/', '-', $this->getPath());
+  }
+
   public function hasSubtype() {
     return !empty($this->subType);
   }
@@ -117,15 +119,17 @@ class Pattern implements PatternInterface {
 
   protected function findIncludedPatterns() {
     $this->includedPatterns = [];
-    $template = file_get_contents($this->file);
-    $twig = new \Twig_Environment();
-    $lexer = new \Twig_Lexer($twig);
-    $tokens = $lexer->tokenize($template);
-    while (!$tokens->isEOF()) {
-      $token = $tokens->next();
-      if ($token->getType() == \Twig_Token::NAME_TYPE && in_array($token->getValue(), ['include', 'extend'])) {
-        $this->includedPatterns[] = $tokens->next()->getValue();
+    try {
+      $tokens = $this->getTemplateTokens();
+      while (!$tokens->isEOF()) {
+        $token = $tokens->next();
+        if ($token->getType() == \Twig_Token::NAME_TYPE && in_array($token->getValue(), ['include', 'extend'])) {
+          $this->includedPatterns[] = $tokens->next()->getValue();
+        }
       }
+    }
+    catch (\Twig_Error_Syntax $e) {
+      // Template syntax error
     }
   }
 
@@ -139,5 +143,15 @@ class Pattern implements PatternInterface {
 
   protected function getLineageMatchKey() {
     return 2;
+  }
+
+  /**
+   * @return \Twig_TokenStream
+   * @throws \Twig_Error_Syntax
+   */
+  protected function getTemplateTokens() {
+    $template = file_get_contents($this->file);
+    $lexer = new \Twig_Lexer(new \Twig_Environment());
+    return $lexer->tokenize($template);
   }
 }

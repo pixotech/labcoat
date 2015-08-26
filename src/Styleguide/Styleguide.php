@@ -4,6 +4,11 @@ namespace Labcoat\Styleguide;
 
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Pattern;
+use Labcoat\Patterns\PatternInterface;
+use Labcoat\Styleguide\Files\PatternEscapedHtmlFile;
+use Labcoat\Styleguide\Files\PatternHtmlFile;
+use Labcoat\Styleguide\Files\PatternPageFile;
+use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Pages\PageCollection;
 use Labcoat\Styleguide\Pages\PatternPage;
 
@@ -28,21 +33,9 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function generate($destination) {
-    /*
-     * copy assets/dist/*
-     * /patterns/*
-     * /styleguide/data/patternlab-data.json
-     * /annotations/annotations.js
-     * index.html
-     * latest-change.txt
-     */
-
-
-    #$data = new Data($this->patternlab);
-    $this->pages = new PageCollection($this);
-    foreach ($this->pages as $page) {
-      $path = $destination . '/patterns/' . $page->getPath();
-      $this->ensureDirectory($path);
+    $files = $this->makeFiles();
+    foreach ($files as $file) {
+      print_r(['file' => $file->getPath(), 'time' => $file->getTime()]);
     }
   }
 
@@ -98,6 +91,33 @@ class Styleguide implements StyleguideInterface {
         break;
       }
     }
+  }
+
+  /**
+   * @return \Labcoat\Styleguide\Files\FileInterface[]
+   */
+  protected function makeFiles() {
+    $files = [];
+    $patterns = $this->patternlab->getPatterns();
+    $iterator = new \RecursiveIteratorIterator($patterns, \RecursiveIteratorIterator::CHILD_FIRST);
+    foreach ($iterator as $item) {
+      if ($item instanceof Pattern) {
+        $files = array_merge($files, $this->makePatternFiles($item));
+        foreach ($item->getPseudoPatterns() as $pseudoPattern) {
+          $files = array_merge($files, $this->makePatternFiles($pseudoPattern));
+        }
+      }
+    }
+    return $files;
+  }
+
+  protected function makePatternFiles(PatternInterface $pattern) {
+    $files = [];
+    $files[] = new PatternPageFile($pattern);
+    $files[] = new PatternHtmlFile($pattern);
+    $files[] = new PatternEscapedHtmlFile($pattern);
+    $files[] = new PatternTemplateFile($pattern);
+    return $files;
   }
 
   protected function findGlobalDataFiles() {
