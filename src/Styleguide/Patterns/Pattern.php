@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Patterns;
 
+use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
@@ -9,7 +10,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $pattern;
   protected $styleguide;
 
-  public function __construct(StyleguideInterface $styleguide, \Labcoat\Patterns\PatternInterface $pattern) {
+  public function __construct(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
     $this->styleguide = $styleguide;
     $this->pattern = $pattern;
   }
@@ -21,7 +22,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
       'lineageR' => $this->patternLineagesR(),
       'patternBreadcrumb' => $this->getBreadcrumb(),
       'patternDesc' => $this->patternDesc(),
-      'patternExtension' => $this->styleguide->getPatternLab()->getPatternExtension(),
+      'patternExtension' => 'twig',
       'patternName' => $this->patternName(),
       'patternPartial' => $this->patternPartial(),
       'patternState' => $this->pattern->getState(),
@@ -39,15 +40,15 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternDesc() {
-
+    return "";
   }
 
   public function patternDescAdditions() {
-
+    return [];
   }
 
   public function patternDescExists() {
-
+    return false;
   }
 
   public function patternEngineName() {
@@ -55,52 +56,59 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternExampleAdditions() {
-
+    return [];
   }
 
   public function patternLineageExists() {
-
+    return false;
   }
 
   public function patternLineageEExists() {
-
+    return false;
   }
 
   public function patternLineageRExists() {
-
+    return false;
   }
 
   public function patternLineages() {
-
+    return [];
   }
 
   public function patternLineagesR() {
-
+    return [];
   }
 
   public function patternLink() {
-
+    $path = $this->pattern->getStyleguidePathName();
+    return $path . DIRECTORY_SEPARATOR . $path . '.html';
   }
 
   public function patternName() {
-
+    return $this->pattern->getDisplayName();
   }
 
   public function patternPartial() {
-
+    return $this->pattern->getPartial();
   }
 
   public function patternPartialCode() {
-
+    $path = $this->pattern->getPath();
+    $data = $this->pattern->getData();
+    return $this->styleguide->getPatternLab()->render($path, $data);
   }
 
   public function patternPartialCodeE() {
+    return '';
+  }
 
+  public function patternSectionSubtype() {
+    return false;
   }
 
   protected function getBreadcrumb() {
     $crumb = [$this->pattern->getType()];
-    if ($this->pattern->hasSubtype()) $crumb[] = $this->pattern->getSubtype();
+    if ($this->pattern->hasSubType()) $crumb[] = $this->pattern->getSubType();
     return implode(' &gt; ', $crumb);
   }
 }

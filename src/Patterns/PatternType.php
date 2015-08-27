@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLab;
 use Labcoat\Patterns\Filters\PatternFilterIterator;
 use Labcoat\Patterns\Filters\SubTypeFilterIterator;
 use RecursiveIterator;
@@ -32,7 +33,7 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
   }
 
   public function findAnyPattern($name) {
-    return $this->getAllPatterns()[Pattern::stripOrdering($name)];
+    return $this->getAllPatterns()[PatternLab::stripOrdering($name)];
   }
 
   /**
@@ -41,7 +42,7 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[Pattern::stripOrdering($name)];
+    return $this->getPatterns()[PatternLab::stripOrdering($name)];
   }
 
   /**
@@ -50,7 +51,7 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
    * @throws \OutOfBoundsException
    */
   public function findSubType($name) {
-    return $this->getSubTypes()[Pattern::stripOrdering($name)];
+    return $this->getSubTypes()[PatternLab::stripOrdering($name)];
   }
 
   public function getAllPatterns() {
@@ -59,6 +60,10 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getNameWithoutDigits() {
+    return PatternLab::stripOrdering($this->getName());
   }
 
   public function getPath() {

@@ -11,4 +11,60 @@ abstract class Page implements PageInterface {
   public function __construct(StyleguideInterface $styleguide) {
     $this->styleguide = $styleguide;
   }
+
+  public function __toString() {
+    return $this->getHeader() . $this->getContent() . $this->getFooter();
+  }
+
+  protected function getCacheBuster() {
+    return $this->styleguide->getCacheBuster();
+  }
+
+  abstract public function getContent();
+
+  protected function getFooter() {
+    return $this->getTwig()->render('patternLabFoot', $this->getFooterVariables());
+  }
+
+  protected function getFooterVariables() {
+    return [
+      'cacheBuster' => $this->getCacheBuster(),
+      'patternLabFoot' => $this->getPatternLabFooterContent(),
+    ];
+  }
+
+  protected function getHeader() {
+    return $this->getTwig()->render('patternLabHead', $this->getHeaderVariables());
+  }
+
+  protected function getHeaderVariables() {
+    return [
+      'cacheBuster' => $this->getCacheBuster(),
+      'patternLabHead' => $this->getPatternLabHeaderContent(),
+    ];
+  }
+
+  abstract protected function getPatternData();
+
+  protected function getPatternLabFooterContent() {
+    $data = [
+      'cacheBuster' => $this->getCacheBuster(),
+      'patternData' => json_encode($this->getPatternData()),
+    ];
+    return $this->getTwig()->render('partials/general-footer', $data);
+  }
+
+  protected function getPatternLabHeaderContent() {
+    $data = [
+      'cacheBuster' => $this->getCacheBuster(),
+    ];
+    return $this->getTwig()->render('partials/general-header', $data);
+  }
+
+  /**
+   * @return \Twig_Environment
+   */
+  protected function getTwig() {
+    return $this->styleguide->getTwig();
+  }
 }

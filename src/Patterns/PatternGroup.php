@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLab;
+
 abstract class PatternGroup implements \Countable, \RecursiveIterator {
 
   protected $items = [];
@@ -44,7 +46,7 @@ abstract class PatternGroup implements \Countable, \RecursiveIterator {
   }
 
   public function key() {
-    return Pattern::stripOrdering($this->getIteratorKey());
+    return PatternLab::stripOrdering($this->getIteratorKey());
   }
 
   public function next() {

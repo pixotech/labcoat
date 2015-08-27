@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLab;
+
 class PatternSubType extends PatternGroup {
 
   protected $name;
@@ -22,7 +24,7 @@ class PatternSubType extends PatternGroup {
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[Pattern::stripOrdering($name)];
+    return $this->getPatterns()[PatternLab::stripOrdering($name)];
   }
 
   public function getAllPatterns() {

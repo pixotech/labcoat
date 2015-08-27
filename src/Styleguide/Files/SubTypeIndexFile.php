@@ -4,6 +4,8 @@ namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Patterns\PatternSubType;
 use Labcoat\Patterns\PatternType;
+use Labcoat\Styleguide\Pages\SubTypeIndexPage;
+use Labcoat\Styleguide\StyleguideInterface;
 
 class SubTypeIndexFile extends File implements SubTypeIndexFileInterface {
 
@@ -12,12 +14,14 @@ class SubTypeIndexFile extends File implements SubTypeIndexFileInterface {
    */
   protected $subType;
 
-  public function __construct(PatternSubType $subType) {
+  public function __construct(StyleguideInterface $styleguide, PatternSubType $subType) {
+    $this->styleguide = $styleguide;
     $this->subType = $subType;
   }
 
   public function getContents() {
-    // TODO: Implement getContents() method.
+    $page = new SubTypeIndexPage($this->styleguide, $this->subType);
+    return $page->__toString();
   }
 
   public function getPath() {

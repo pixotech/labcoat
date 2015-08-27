@@ -2,6 +2,8 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
+use Labcoat\PatternLab;
+
 class Pattern implements \JsonSerializable {
 
   protected $pattern;
@@ -11,7 +13,7 @@ class Pattern implements \JsonSerializable {
   }
 
   public function getName() {
-    $name = \Labcoat\Patterns\Pattern::stripOrdering($this->pattern->getName());
+    $name = PatternLab::stripOrdering($this->pattern->getName());
     return ucwords(str_replace('-', ' ', $name));
   }
 

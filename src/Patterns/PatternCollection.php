@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 
 class PatternCollection extends PatternGroup implements PatternCollectionInterface {
@@ -22,9 +23,9 @@ class PatternCollection extends PatternGroup implements PatternCollectionInterfa
    * @throws \OutOfBoundsException
    */
   public function findType($name) {
-    $n = Pattern::stripOrdering($name);
+    $n = PatternLab::stripOrdering($name);
     foreach ($this->getTypes() as $typeName => $type) {
-      if (Pattern::stripOrdering($typeName) == $n) return $type;
+      if (PatternLab::stripOrdering($typeName) == $n) return $type;
     }
     throw new \OutOfBoundsException("Unknown type: $name");
   }
@@ -34,7 +35,7 @@ class PatternCollection extends PatternGroup implements PatternCollectionInterfa
   }
 
   public function getPattern($name) {
-    return Pattern::isPartialName($name) ? $this->getPatternByPartial($name) : $this->getPatternByPath($name);
+    return PatternLab::isPartialName($name) ? $this->getPatternByPartial($name) : $this->getPatternByPath($name);
   }
 
   public function getPatterns() {
@@ -46,12 +47,12 @@ class PatternCollection extends PatternGroup implements PatternCollectionInterfa
   }
 
   public function getPatternByPartial($name) {
-    list($type, $name) = Pattern::splitPartial($name);
+    list($type, $name) = PatternLab::splitPartial($name);
     return $this->findType($type)->findAnyPattern($name);
   }
 
   public function getPatternByPath($path) {
-    list($type, $subtype, $name) = Pattern::splitPath($path);
+    list($type, $subtype, $name) = PatternLab::splitPath($path);
     $type = $this->findType($type);
     return $subtype ? $type->findSubType($subtype)->findPattern($name) : $type->findPattern($name);
   }

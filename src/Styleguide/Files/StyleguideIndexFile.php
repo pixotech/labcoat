@@ -20,6 +20,10 @@ class StyleguideIndexFile implements StyleguideIndexFileInterface {
     return implode(DIRECTORY_SEPARATOR, ['styleguide', 'html', 'styleguide.html']);
   }
 
+  public function getPatterns() {
+
+  }
+
   public function getTime() {
     return $this->patterns->getTime();
   }

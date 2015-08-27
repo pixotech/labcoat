@@ -20,4 +20,5 @@ interface PatternInterface {
   public function patternPartial();
   public function patternPartialCode();
   public function patternPartialCodeE();
+  public function patternSectionSubtype();
 }

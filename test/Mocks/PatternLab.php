@@ -7,6 +7,7 @@ use Labcoat\PatternLabInterface;
 class PatternLab implements PatternLabInterface {
 
   public $ignoredExtensions = [];
+  public $render;
 
   public function getIgnoredExtensions() {
     return $this->ignoredExtensions;
@@ -29,7 +30,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function render($patternName, $variables = NULL) {
-    // TODO: Implement render() method.
+    return $this->render;
   }
 
   public function getAssets() {
@@ -50,5 +51,37 @@ class PatternLab implements PatternLabInterface {
 
   public function getTwig() {
     // TODO: Implement getTwig() method.
+  }
+
+  public function getDataDirectory() {
+    // TODO: Implement getDataDirectory() method.
+  }
+
+  public function getDefaultDirectoryPermissions() {
+    // TODO: Implement getDefaultDirectoryPermissions() method.
+  }
+
+  public function getExposedOptions() {
+    // TODO: Implement getExposedOptions() method.
+  }
+
+  public function getMetaDirectory() {
+    // TODO: Implement getMetaDirectory() method.
+  }
+
+  public function getPatterns() {
+    // TODO: Implement getPatterns() method.
+  }
+
+  public function getPatternsDirectory() {
+    // TODO: Implement getPatternsDirectory() method.
+  }
+
+  public function getVendorDirectory() {
+    // TODO: Implement getVendorDirectory() method.
+  }
+
+  public function setPatternsDirectory($path) {
+    // TODO: Implement setPatternsDirectory() method.
   }
 }

@@ -5,7 +5,7 @@ namespace Labcoat\Patterns;
 interface PatternInterface {
 
   /**
-   * @return PatternDataInterface
+   * @return array
    */
   public function getData();
 
@@ -30,12 +30,18 @@ interface PatternInterface {
   public function getPartial();
 
   public function getPath();
-  public function getSubtype();
+
+  /**
+   * @return string
+   */
+  public function getState();
 
   /**
    * @return string
    */
   public function getStyleguidePathName();
+
+  public function getSubType();
 
   /**
    * @return int
@@ -45,5 +51,5 @@ interface PatternInterface {
   public function getTemplateContent();
 
   public function getType();
-  public function hasSubtype();
+  public function hasSubType();
 }

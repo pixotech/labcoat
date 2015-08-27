@@ -23,6 +23,10 @@ class TypeIndexFile extends File implements TypeIndexFileInterface {
     return $this->makePath(['patterns', $this->type->getName(), 'index.html']);
   }
 
+  public function getPatterns() {
+
+  }
+
   public function getTime() {
     return $this->type->getTime();
   }

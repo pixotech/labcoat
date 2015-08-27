@@ -5,7 +5,6 @@ namespace Labcoat;
 use Labcoat\Assets\Asset;
 use Labcoat\Assets\Copier;
 use Labcoat\Configuration\Configuration;
-use Labcoat\Filesystem\Directory;
 use Labcoat\Html\Document;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternCollection;
@@ -24,6 +23,8 @@ class PatternLab implements PatternLabInterface {
    * @var Configuration
    */
   protected $config;
+
+  protected $data;
 
   protected $patternsDirectory;
 
@@ -45,6 +46,29 @@ class PatternLab implements PatternLabInterface {
   public function __construct() {
   }
 
+  public static function isPartialName($name) {
+    return FALSE === strpos($name, '/');
+  }
+
+  public static function splitPartial($partial) {
+    return explode('-', $partial, 2);
+  }
+
+  public static function splitPath($path) {
+    $parts = explode('/', $path);
+    if (count($parts) == 3) {
+      return $parts;
+    }
+    if (count($parts) == 2) {
+      return [$parts[0], NULL, $parts[1]];
+    }
+    throw new \InvalidArgumentException("Invalid path: $path");
+  }
+
+  public static function stripOrdering($str) {
+    list($num, $name) = array_pad(explode('-', $str, 2), 2, NULL);
+    return is_numeric($num) ? $name : $str;
+  }
 
 
   public function setPatternsDirectory($path) {
@@ -71,6 +95,16 @@ class PatternLab implements PatternLabInterface {
   public function copyAssetsTo($directoryPath) {
     $copier = new Copier($this);
     $copier->copyTo($directoryPath);
+  }
+
+  public function getData($reload = false) {
+    if ($reload || !isset($this->data)) {
+      $this->data = [];
+      foreach ($this->findDataFiles() as $path) {
+        $this->data += json_decode(file_get_contents($path), true);
+      }
+    }
+    return $this->data;
   }
 
   public function getDataDirectory() {
@@ -206,6 +240,16 @@ class PatternLab implements PatternLabInterface {
     }
   }
 
+  protected function findDataFiles() {
+    $files = [];
+    $dir = new \FilesystemIterator($this->getDataDirectory(), \FilesystemIterator::SKIP_DOTS);
+    foreach ($dir as $file) {
+      if ($file->getExtension() == 'json') $files[] = $file->getPathname();
+    }
+    sort($files);
+    return $files;
+  }
+
   protected function findPatterns() {
     $this->patterns = [];
     foreach ($this->getPatternFiles() as $file) {
@@ -221,17 +265,6 @@ class PatternLab implements PatternLabInterface {
   protected function getConfiguration() {
     if (!isset($this->config)) $this->loadConfiguration();
     return $this->config;
-  }
-
-  protected function getConfigurationFile() {
-    return $this->directory->getFile(['config', 'config.yml']);
-  }
-
-  /**
-   * @return \Labcoat\Filesystem\File[]
-   */
-  protected function getPatternFiles() {
-    return $this->getPatternsDirectory()->getPatternFiles();
   }
 
   protected function getPatternsIterator() {

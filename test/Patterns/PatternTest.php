@@ -2,24 +2,50 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\Filesystem\File;
-use Labcoat\Mocks\PatternLab;
-
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
-  public function testShorthand() {
-    $pattern = new Pattern($this->makeFile("00-atoms/03-images/02-landscape-16x9.twig"));
-    $this->assertEquals("atoms-landscape-16x9", $pattern->getShorthand());
+  public function testDisplayName() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('Three', $pattern->getDisplayName());
+  }
+
+  public function testFile() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals(__FILE__, $pattern->getFile());
+  }
+
+  public function testName() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('three', $pattern->getName());
+  }
+
+  public function testPartial() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('one-three', $pattern->getPartial());
   }
 
   public function testPath() {
-    $template = "00-atoms/00-global/05-test.twig";
-    $pattern = new Pattern($this->makeFile($template));
-    $this->assertEquals("atoms/global/test", $pattern->getPath());
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('one/two/three', $pattern->getPath());
   }
 
-  protected function makeFile($template) {
-    $patternlab = new PatternLab();
-    return new File($patternlab, $template);
+  public function testStyleguidePathName() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('one-two-three', $pattern->getStyleguidePathName());
+  }
+
+  public function testSubType() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('two', $pattern->getSubType());
+  }
+
+  public function testType() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertEquals('one', $pattern->getType());
+  }
+
+  public function testHasSubType() {
+    $pattern = new Pattern('one/two/three', __FILE__);
+    $this->assertTrue($pattern->hasSubType());
   }
 }

@@ -16,17 +16,11 @@ use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Files\StyleguideIndexFile;
 use Labcoat\Styleguide\Files\SubTypeIndexFile;
 use Labcoat\Styleguide\Files\TypeIndexFile;
-use Labcoat\Styleguide\Pages\PageCollection;
 use Labcoat\Styleguide\Pages\PatternPage;
 
 class Styleguide implements StyleguideInterface {
 
   protected $data;
-
-  /**
-   * @var PageCollection
-   */
-  protected $pages;
 
   protected $patternlab;
   protected $twig;
@@ -49,16 +43,6 @@ class Styleguide implements StyleguideInterface {
     return 0;
   }
 
-  public function getGlobalData($reload = false) {
-    if ($reload || !isset($this->data)) {
-      $this->data = [];
-      foreach ($this->findGlobalDataFiles() as $path) {
-        $this->data += json_decode(file_get_contents($path), true);
-      }
-    }
-    return $this->data;
-  }
-
   public function getPatternLab() {
     return $this->patternlab;
   }
@@ -69,28 +53,6 @@ class Styleguide implements StyleguideInterface {
   public function getTwig() {
     if (!isset($this->twig)) $this->makeTwig();
     return $this->twig;
-  }
-
-  public function makeFooter(array $data = []) {
-    $data += ['cacheBuster' => $this->getCacheBuster()];
-    $data['patternLabFoot'] = $this->makePatternFooter($data);
-    return $this->getTwig()->render('patternLabFoot', $data);
-  }
-
-  public function makeHeader(array $data = []) {
-    $data += ['cacheBuster' => $this->getCacheBuster()];
-    $data['patternLabHead'] = $this->makePatternHeader($data);
-    return $this->getTwig()->render('patternLabHead', $data);
-  }
-
-  public function makePatternFooter(array $data = []) {
-    $data += ['cacheBuster' => $this->getCacheBuster()];
-    return $this->getTwig()->render('partials/general-footer', $data);
-  }
-
-  public function makePatternHeader(array $data = []) {
-    $data += ['cacheBuster' => $this->getCacheBuster()];
-    return $this->getTwig()->render('partials/general-header', $data);
   }
 
   protected function createPatterns() {
@@ -129,7 +91,7 @@ class Styleguide implements StyleguideInterface {
         $files[] = new TypeIndexFile($item);
       }
       elseif ($item instanceof PatternSubType) {
-        $files[] = new SubTypeIndexFile($item);
+        $files[] = new SubTypeIndexFile($this, $item);
       }
     }
     return $files;
@@ -158,16 +120,6 @@ class Styleguide implements StyleguideInterface {
     $files[] = new PatternHtmlFile($this, $pattern);
     $files[] = new PatternEscapedHtmlFile($this, $pattern);
     $files[] = new PatternPageFile($this, $pattern);
-    return $files;
-  }
-
-  protected function findGlobalDataFiles() {
-    $files = [];
-    $dir = new \FilesystemIterator($this->patternlab->getDataDirectory(), \FilesystemIterator::SKIP_DOTS);
-    foreach ($dir as $file) {
-      if ($file->getExtension() == 'json') $files[] = $file->getPathname();
-    }
-    sort($files);
     return $files;
   }
 

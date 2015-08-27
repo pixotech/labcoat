@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLab;
+
 class Pattern implements PatternInterface {
 
   /**
@@ -18,30 +20,10 @@ class Pattern implements PatternInterface {
   protected $subType;
   protected $type;
 
-  public static function isPartialName($name) {
-    return false === strpos($name, '/');
-  }
-
-  public static function splitPartial($partial) {
-    return explode('-', $partial, 2);
-  }
-
-  public static function splitPath($path) {
-    $parts = explode('/', $path);
-    if (count($parts) == 3) return $parts;
-    if (count($parts) == 2) return [$parts[0], null, $parts[1]];
-    throw new \InvalidArgumentException("Invalid path: $path");
-  }
-
-  public static function stripOrdering($str) {
-    list($num, $name) = array_pad(explode('-', $str, 2), 2, null);
-    return is_numeric($num) ? $name : $str;
-  }
-
   public function __construct($path, $file) {
     $this->path = $path;
     $this->file = $file;
-    list($this->type, $this->subType, $this->name) = self::splitPath($path);
+    list($this->type, $this->subType, $this->name) = PatternLab::splitPath($path);
     $this->extractState();
   }
 
@@ -69,8 +51,12 @@ class Pattern implements PatternInterface {
     return $this->name;
   }
 
+  public function getNameWithoutDigits() {
+    return PatternLab::stripOrdering($this->name);
+  }
+
   public function getPartial() {
-    return $this->getType() . '-' . $this->getName();
+    return PatternLab::stripOrdering($this->getType()) . '-' . $this->getNameWithoutDigits();
   }
 
   public function getPath() {
@@ -82,7 +68,15 @@ class Pattern implements PatternInterface {
     return $this->pseudoPatterns;
   }
 
-  public function getSubtype() {
+  public function getState() {
+    return $this->state;
+  }
+
+  public function getStyleguidePathName() {
+    return str_replace('/', '-', $this->getPath());
+  }
+
+  public function getSubType() {
     return $this->subType;
   }
 
@@ -100,15 +94,7 @@ class Pattern implements PatternInterface {
     return $this->type;
   }
 
-  public function getState() {
-    return $this->state;
-  }
-
-  public function getStyleguidePathName() {
-    return str_replace('/', '-', $this->getPath());
-  }
-
-  public function hasSubtype() {
+  public function hasSubType() {
     return !empty($this->subType);
   }
 

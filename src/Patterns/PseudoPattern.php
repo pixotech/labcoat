@@ -38,8 +38,12 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getPath();
   }
 
-  public function getSubtype() {
-    return $this->pattern->getSubtype();
+  public function getState() {
+    return $this->pattern->getState();
+  }
+
+  public function getSubType() {
+    return $this->pattern->getSubType();
   }
 
   public function getStyleguidePathName() {
@@ -60,8 +64,8 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getType();
   }
 
-  public function hasSubtype() {
-    return $this->pattern->hasSubtype();
+  public function hasSubType() {
+    return $this->pattern->hasSubType();
   }
 
   public function getPattern() {

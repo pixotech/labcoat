@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
+use Labcoat\PatternLab;
 use Labcoat\Patterns\Pattern;
 
 class SubType extends ItemWithPatterns implements \JsonSerializable {
@@ -24,7 +25,7 @@ class SubType extends ItemWithPatterns implements \JsonSerializable {
   }
 
   public function getNameWithDashes() {
-    return Pattern::stripOrdering($this->getName());
+    return PatternLab::stripOrdering($this->getName());
   }
 
   public function getNameWithSpaces() {

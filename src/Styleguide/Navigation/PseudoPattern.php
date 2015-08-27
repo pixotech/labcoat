@@ -2,6 +2,8 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
+use Labcoat\PatternLab;
+
 class PseudoPattern extends Pattern {
 
   protected $pseudoPattern;
@@ -12,7 +14,7 @@ class PseudoPattern extends Pattern {
   }
 
   public function getName() {
-    $name = \Labcoat\Patterns\Pattern::stripOrdering($this->pattern->getName()) . '-' . $this->pseudoPattern;
+    $name = PatternLab::stripOrdering($this->pattern->getName()) . '-' . $this->pseudoPattern;
     return ucwords(str_replace('-', ' ', $name));
   }
 
