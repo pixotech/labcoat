@@ -2,7 +2,6 @@
 
 namespace Labcoat\Styleguide\Files;
 
-use Labcoat\Patterns\PatternCollectionInterface;
 use Labcoat\Styleguide\Pages\StyleguideIndexPage;
 use Labcoat\Styleguide\StyleguideInterface;
 
@@ -21,11 +20,7 @@ class StyleguideIndexFile implements StyleguideIndexFileInterface {
     return implode(DIRECTORY_SEPARATOR, ['styleguide', 'html', 'styleguide.html']);
   }
 
-  public function getPatterns() {
-
-  }
-
   public function getTime() {
-    return $this->patterns->getTime();
+    return $this->styleguide->getPatternLab()->getPatterns()->getTime();
   }
 }
