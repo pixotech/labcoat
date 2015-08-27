@@ -77,9 +77,8 @@ class Styleguide implements StyleguideInterface {
 
   protected function makeAllPatternFiles() {
     $files = [];
-    $patterns = $this->patternlab->getPatterns();
-    $files[] = new StyleguideIndexFile($patterns);
-    $iterator = new \RecursiveIteratorIterator($patterns, \RecursiveIteratorIterator::CHILD_FIRST);
+    $files[] = new StyleguideIndexFile($this);
+    $iterator = new \RecursiveIteratorIterator($this->patternlab->getPatterns(), \RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($iterator as $item) {
       if ($item instanceof Pattern) {
         $files = array_merge($files, $this->makePatternFiles($item));
@@ -88,7 +87,7 @@ class Styleguide implements StyleguideInterface {
         }
       }
       elseif ($item instanceof PatternType) {
-        $files[] = new TypeIndexFile($item);
+        $files[] = new TypeIndexFile($this, $item);
       }
       elseif ($item instanceof PatternSubType) {
         $files[] = new SubTypeIndexFile($this, $item);

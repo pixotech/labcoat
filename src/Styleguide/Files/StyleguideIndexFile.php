@@ -3,17 +3,18 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Patterns\PatternCollectionInterface;
+use Labcoat\Styleguide\Pages\StyleguideIndexPage;
+use Labcoat\Styleguide\StyleguideInterface;
 
 class StyleguideIndexFile implements StyleguideIndexFileInterface {
 
-  protected $patterns;
-
-  public function __construct(PatternCollectionInterface $patterns) {
-    $this->patterns = $patterns;
+  public function __construct(StyleguideInterface $styleguide) {
+    $this->styleguide = $styleguide;
   }
 
   public function getContents() {
-    // TODO: Implement getContents() method.
+    $page = new StyleguideIndexPage($this->styleguide, $this->styleguide->getPatternLab());
+    return $page->__toString();
   }
 
   public function getPath() {

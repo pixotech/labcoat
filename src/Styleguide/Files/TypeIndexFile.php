@@ -3,6 +3,8 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Patterns\PatternType;
+use Labcoat\Styleguide\Pages\TypeIndexPage;
+use Labcoat\Styleguide\StyleguideInterface;
 
 class TypeIndexFile extends File implements TypeIndexFileInterface {
 
@@ -11,20 +13,18 @@ class TypeIndexFile extends File implements TypeIndexFileInterface {
    */
   protected $type;
 
-  public function __construct(PatternType $type) {
+  public function __construct(StyleguideInterface $styleguide, PatternType $type) {
+    $this->styleguide = $styleguide;
     $this->type = $type;
   }
 
   public function getContents() {
-    // TODO: Implement getContents() method.
+    $page = new TypeIndexPage($this->styleguide, $this->type);
+    return $page->__toString();
   }
 
   public function getPath() {
     return $this->makePath(['patterns', $this->type->getName(), 'index.html']);
-  }
-
-  public function getPatterns() {
-
   }
 
   public function getTime() {
