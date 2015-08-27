@@ -8,8 +8,10 @@ class Pattern implements PatternInterface {
 
   public $displayName;
   public $example;
+  public $file;
   public $name;
   public $partial;
+  public $path;
   public $state;
   public $styleguidePathName;
   public $subType;
@@ -24,7 +26,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getFile() {
-    // TODO: Implement getFile() method.
+    return $this->file;
   }
 
   public function getName() {
@@ -36,7 +38,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getPath() {
-    // TODO: Implement getPath() method.
+    return $this->path;
   }
 
   public function getState() {
