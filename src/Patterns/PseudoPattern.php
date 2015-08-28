@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLab;
+
 class PseudoPattern implements PseudoPatternInterface {
 
   protected $data;
@@ -15,11 +17,7 @@ class PseudoPattern implements PseudoPatternInterface {
   }
 
   public function getData() {
-    return $this->data->getData() + $this->pattern->getData();
-  }
-
-  public function getDisplayName() {
-    return $this->pattern->getDisplayName() . ' ' . ucwords(str_replace('-', ' ', $this->getVariantName()));
+    return array_merge_recursive($this->pattern->getData(), $this->data->getData());
   }
 
   public function getFile() {
@@ -27,15 +25,15 @@ class PseudoPattern implements PseudoPatternInterface {
   }
 
   public function getName() {
-    return $this->pattern->getName();
+    return $this->pattern->getName() . '-' . $this->getVariantName();
   }
 
   public function getPartial() {
-    return $this->pattern->getPartial();
+    return $this->pattern->getPartial() . '-' . $this->getVariantName();
   }
 
   public function getPath() {
-    return $this->pattern->getPath();
+    return $this->pattern->getPath() . '-' . $this->getVariantName();
   }
 
   public function getState() {
@@ -47,7 +45,11 @@ class PseudoPattern implements PseudoPatternInterface {
   }
 
   public function getStyleguidePathName() {
-    return $this->pattern->getStyleguidePathName() . '-' . str_replace('/', '-', $this->getVariantName());
+    return $this->pattern->getStyleguidePathName() . '-' . $this->getVariantName();
+  }
+
+  public function getTemplate() {
+    return $this->pattern->getPath();
   }
 
   public function getTemplateContent() {
@@ -74,5 +76,17 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getVariantName() {
     return $this->name;
+  }
+
+  public function getLowercaseName() {
+    return str_replace('-', ' ', $this->getNameWithoutDigits());
+  }
+
+  public function getNameWithoutDigits() {
+    return $this->pattern->getNameWithoutDigits() . '-' . $this->getVariantName();
+  }
+
+  public function getUppercaseName() {
+    return ucwords($this->getLowercaseName());
   }
 }

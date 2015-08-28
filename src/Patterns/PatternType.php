@@ -7,7 +7,7 @@ use Labcoat\Patterns\Filters\PatternFilterIterator;
 use Labcoat\Patterns\Filters\SubTypeFilterIterator;
 use RecursiveIterator;
 
-class PatternType extends PatternGroup implements \RecursiveIterator {
+class PatternType extends PatternSection implements \RecursiveIterator, PatternTypeInterface {
 
   protected $name;
 
@@ -33,29 +33,33 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
   }
 
   public function findAnyPattern($name) {
-    return $this->getAllPatterns()[PatternLab::stripOrdering($name)];
+    return $this->getAllPatterns()[PatternLab::stripDigits($name)];
   }
 
   /**
    * @param $name
-   * @return PatternSubType
+   * @return PatternSubTypeInterface
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[PatternLab::stripOrdering($name)];
+    return $this->getPatterns()[PatternLab::stripDigits($name)];
   }
 
   /**
    * @param $name
-   * @return PatternSubType
+   * @return PatternSubTypeInterface
    * @throws \OutOfBoundsException
    */
   public function findSubType($name) {
-    return $this->getSubTypes()[PatternLab::stripOrdering($name)];
+    return $this->getSubTypes()[PatternLab::stripDigits($name)];
   }
 
   public function getAllPatterns() {
     return iterator_to_array($this->getAllPatternsIterator());
+  }
+
+  public function getLowercaseName() {
+    return str_replace('-', ' ', $this->getNameWithoutDigits());
   }
 
   public function getName() {
@@ -63,15 +67,15 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
   }
 
   public function getNameWithoutDigits() {
-    return PatternLab::stripOrdering($this->getName());
+    return PatternLab::stripDigits($this->getName());
   }
 
   public function getPath() {
-    return $this->name;
+    return $this->getName();
   }
 
   /**
-   * @return Pattern[]
+   * @return PatternInterface[]
    */
   public function getPatterns() {
     return iterator_to_array($this->getPatternsIterator());
@@ -79,17 +83,21 @@ class PatternType extends PatternGroup implements \RecursiveIterator {
 
   /**
    * @param $name
-   * @return PatternSubType
+   * @return PatternSubTypeInterface
    */
   public function getSubType($name) {
     return $this->items[$name];
   }
 
   /**
-   * @return PatternSubType[]
+   * @return PatternSubTypeInterface[]
    */
   public function getSubTypes() {
     return iterator_to_array($this->getSubTypesIterator());
+  }
+
+  public function getUppercaseName() {
+    return ucwords($this->getLowercaseName());
   }
 
   protected function ensureSubType($name) {

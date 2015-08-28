@@ -25,7 +25,7 @@ class SubType extends ItemWithPatterns implements \JsonSerializable {
   }
 
   public function getNameWithDashes() {
-    return PatternLab::stripOrdering($this->getName());
+    return PatternLab::stripDigits($this->getName());
   }
 
   public function getNameWithSpaces() {

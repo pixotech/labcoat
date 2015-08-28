@@ -38,10 +38,12 @@ abstract class Page implements PageInterface {
   }
 
   protected function getHeaderVariables() {
-    return [
+    $data = [
       'cacheBuster' => $this->getCacheBuster(),
       'patternLabHead' => $this->getPatternLabHeaderContent(),
     ];
+    $data += $this->styleguide->getPatternLab()->getData();
+    return $data;
   }
 
   abstract protected function getPatternData();

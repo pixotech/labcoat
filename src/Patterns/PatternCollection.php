@@ -5,7 +5,7 @@ namespace Labcoat\Patterns;
 use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 
-class PatternCollection extends PatternGroup implements PatternCollectionInterface {
+class PatternCollection extends PatternSection implements PatternCollectionInterface {
 
   public function __construct(PatternLabInterface $patternlab) {
     $this->findPatterns($patternlab);
@@ -23,9 +23,9 @@ class PatternCollection extends PatternGroup implements PatternCollectionInterfa
    * @throws \OutOfBoundsException
    */
   public function findType($name) {
-    $n = PatternLab::stripOrdering($name);
+    $n = PatternLab::stripDigits($name);
     foreach ($this->getTypes() as $typeName => $type) {
-      if (PatternLab::stripOrdering($typeName) == $n) return $type;
+      if (PatternLab::stripDigits($typeName) == $n) return $type;
     }
     throw new \OutOfBoundsException("Unknown type: $name");
   }

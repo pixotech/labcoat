@@ -4,12 +4,12 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLab;
 
-class PatternSubType extends PatternGroup {
+class PatternSubType extends PatternSection implements PatternSubTypeInterface {
 
   protected $name;
   protected $type;
 
-  public function __construct(PatternType $type, $name) {
+  public function __construct(PatternTypeInterface $type, $name) {
     $this->type = $type;
     $this->name = $name;
   }
@@ -20,27 +20,35 @@ class PatternSubType extends PatternGroup {
 
   /**
    * @param $name
-   * @return PatternSubType
+   * @return PatternInterface
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[PatternLab::stripOrdering($name)];
+    return $this->getPatterns()[PatternLab::stripDigits($name)];
   }
 
   public function getAllPatterns() {
     return $this->getPatterns();
   }
 
+  public function getLowercaseName() {
+    return str_replace('-', ' ', $this->getNameWithoutDigits());
+  }
+
   public function getName() {
     return $this->name;
   }
 
+  public function getNameWithoutDigits() {
+    return PatternLab::stripDigits($this->getName());
+  }
+
   public function getPath() {
-    return $this->getType()->getPath() . '-' . $this->name;
+    return $this->getType()->getPath() . '-' . $this->getName();
   }
 
   /**
-   * @return Pattern[]
+   * @return PatternInterface[]
    */
   public function getPatterns() {
     return $this->items;
@@ -51,9 +59,13 @@ class PatternSubType extends PatternGroup {
   }
 
   /**
-   * @return PatternType
+   * @return PatternTypeInterface
    */
   public function getType() {
     return $this->type;
+  }
+
+  public function getUppercaseName() {
+    return ucwords($this->getLowercaseName());
   }
 }

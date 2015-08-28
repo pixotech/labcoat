@@ -84,4 +84,8 @@ class PatternLab implements PatternLabInterface {
   public function setPatternsDirectory($path) {
     // TODO: Implement setPatternsDirectory() method.
   }
+
+  public function getTypes() {
+    // TODO: Implement getTypes() method.
+  }
 }

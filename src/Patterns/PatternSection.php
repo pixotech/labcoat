@@ -4,7 +4,7 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLab;
 
-abstract class PatternGroup implements \Countable, \RecursiveIterator {
+abstract class PatternSection implements \Countable, \RecursiveIterator {
 
   protected $items = [];
   protected $iteratorPosition = 0;
@@ -41,12 +41,12 @@ abstract class PatternGroup implements \Countable, \RecursiveIterator {
   }
 
   public function hasChildren() {
-    if (!($this->current() instanceof PatternGroup)) return false;
+    if (!($this->current() instanceof PatternSection)) return false;
     return count($this->current()) > 0;
   }
 
   public function key() {
-    return PatternLab::stripOrdering($this->getIteratorKey());
+    return PatternLab::stripDigits($this->getIteratorKey());
   }
 
   public function next() {

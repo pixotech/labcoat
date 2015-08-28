@@ -30,7 +30,7 @@ class Pattern implements PatternInterface {
   public function getData() {
     if (!isset($this->data)) $this->findData();
     $data = [];
-    foreach ($this->data as $d) $data += $d->getData();
+    foreach ($this->data as $d) $data = array_merge_recursive($data, $d->getData());
     return $data;
   }
 
@@ -47,16 +47,20 @@ class Pattern implements PatternInterface {
     return $this->includedPatterns;
   }
 
+  public function getLowercaseName() {
+    return str_replace('-', ' ', $this->getNameWithoutDigits());
+  }
+
   public function getName() {
     return $this->name;
   }
 
   public function getNameWithoutDigits() {
-    return PatternLab::stripOrdering($this->name);
+    return PatternLab::stripDigits($this->name);
   }
 
   public function getPartial() {
-    return PatternLab::stripOrdering($this->getType()) . '-' . $this->getNameWithoutDigits();
+    return PatternLab::stripDigits($this->getType()) . '-' . $this->getNameWithoutDigits();
   }
 
   public function getPath() {
@@ -69,7 +73,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getState() {
-    return $this->state;
+    return $this->state ?: '';
   }
 
   public function getStyleguidePathName() {
@@ -78,6 +82,10 @@ class Pattern implements PatternInterface {
 
   public function getSubType() {
     return $this->subType;
+  }
+
+  public function getTemplate() {
+    return $this->getPath();
   }
 
   public function getTemplateContent() {
@@ -92,6 +100,10 @@ class Pattern implements PatternInterface {
 
   public function getType() {
     return $this->type;
+  }
+
+  public function getUppercaseName() {
+    return ucwords($this->getLowercaseName());
   }
 
   public function hasSubType() {

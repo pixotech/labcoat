@@ -68,4 +68,16 @@ class Pattern implements PatternInterface {
   public function hasSubType() {
     return !empty($this->subType);
   }
+
+  public function getLowercaseName() {
+    // TODO: Implement getLowercaseName() method.
+  }
+
+  public function getNameWithoutDigits() {
+    // TODO: Implement getNameWithoutDigits() method.
+  }
+
+  public function getUppercaseName() {
+    // TODO: Implement getUppercaseName() method.
+  }
 }

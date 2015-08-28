@@ -16,9 +16,15 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getContent() {
-    $path = $this->pattern->getPath();
-    $data = [];
-    return $this->styleguide->getPatternLab()->render($path, $data);
+    return $this->styleguide->renderPattern($this->pattern);
+  }
+
+  protected function getFooterVariables() {
+    return array_merge(parent::getFooterVariables(), $this->pattern->getData());
+  }
+
+  protected function getHeaderVariables() {
+    return array_merge(parent::getHeaderVariables(), $this->pattern->getData());
   }
 
   protected function getPatternData() {

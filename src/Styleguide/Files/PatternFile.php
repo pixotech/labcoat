@@ -32,6 +32,6 @@ abstract class PatternFile extends File implements PatternFileInterface {
   }
 
   protected function render() {
-    return $this->getPatternLab()->render($this->getPatternPath(), $this->getPatternData());
+    return $this->styleguide->renderPattern($this->pattern);
   }
 }

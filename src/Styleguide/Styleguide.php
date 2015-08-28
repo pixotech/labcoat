@@ -8,6 +8,7 @@ use Labcoat\Patterns\PatternInterface;
 use Labcoat\Patterns\PatternSubType;
 use Labcoat\Patterns\PatternType;
 use Labcoat\Styleguide\Files\AnnotationsFile;
+use Labcoat\Styleguide\Files\DataFile;
 use Labcoat\Styleguide\Files\DynamicFileInterface;
 use Labcoat\Styleguide\Files\PatternEscapedHtmlFile;
 use Labcoat\Styleguide\Files\PatternHtmlFile;
@@ -25,6 +26,11 @@ class Styleguide implements StyleguideInterface {
   protected $patternlab;
   protected $twig;
 
+  public static function makePatternPath(PatternInterface $pattern) {
+    $pathName = $pattern->getStyleguidePathName();
+    return $pathName . DIRECTORY_SEPARATOR . $pathName . '.html';
+  }
+
   public function __construct(PatternLabInterface $patternlab) {
     $this->patternlab = $patternlab;
   }
@@ -40,7 +46,7 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function getCacheBuster() {
-    return 0;
+    return time();
   }
 
   public function getPatternLab() {
@@ -53,6 +59,12 @@ class Styleguide implements StyleguideInterface {
   public function getTwig() {
     if (!isset($this->twig)) $this->makeTwig();
     return $this->twig;
+  }
+
+  public function renderPattern(PatternInterface $pattern) {
+    $template = $pattern->getTemplate();
+    $data = array_merge_recursive($this->getPatternLab()->getData(), $pattern->getData());
+    return $this->getPatternLab()->render($template, $data);
   }
 
   protected function createPatterns() {
@@ -77,6 +89,7 @@ class Styleguide implements StyleguideInterface {
 
   protected function makeAllPatternFiles() {
     $files = [];
+    $files[] = new DataFile($this->getPatternLab());
     $files[] = new StyleguideIndexFile($this);
     $iterator = new \RecursiveIteratorIterator($this->patternlab->getPatterns(), \RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($iterator as $item) {

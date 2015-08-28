@@ -13,7 +13,7 @@ class Pattern implements \JsonSerializable {
   }
 
   public function getName() {
-    $name = PatternLab::stripOrdering($this->pattern->getName());
+    $name = PatternLab::stripDigits($this->pattern->getName());
     return ucwords(str_replace('-', ' ', $name));
   }
 

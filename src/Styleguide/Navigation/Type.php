@@ -25,13 +25,16 @@ class Type extends ItemWithPatterns implements \JsonSerializable {
   }
 
   public function getNameWithDashes() {
-    return PatternLab::stripOrdering($this->getName());
+    return PatternLab::stripDigits($this->getName());
   }
 
   public function getNameWithSpaces() {
     return str_replace('-', ' ', $this->getNameWithDashes());
   }
 
+  /**
+   * @return SubType[]
+   */
   public function getSubTypes() {
     $subTypes = [];
     foreach ($this->type->getSubTypes() as $subType) {

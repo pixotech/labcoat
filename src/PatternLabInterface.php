@@ -42,6 +42,12 @@ interface PatternLabInterface {
    * @return \Labcoat\Twig\Environment
    */
   public function getTwig();
+
+  /**
+   * @return \Labcoat\Patterns\PatternType
+   */
+  public function getTypes();
+
   public function getVendorDirectory();
   public function makeDocument($patternName, $variables = null);
   public function render($patternName, $variables = null);

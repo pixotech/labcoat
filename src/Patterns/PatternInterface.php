@@ -12,12 +12,12 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getDisplayName();
+  public function getFile();
 
   /**
    * @return string
    */
-  public function getFile();
+  public function getLowercaseName();
 
   /**
    * @return string
@@ -27,8 +27,16 @@ interface PatternInterface {
   /**
    * @return string
    */
+  public function getNameWithoutDigits();
+
+  /**
+   * @return string
+   */
   public function getPartial();
 
+  /**
+   * @return string
+   */
   public function getPath();
 
   /**
@@ -41,6 +49,9 @@ interface PatternInterface {
    */
   public function getStyleguidePathName();
 
+  /**
+   * @return string
+   */
   public function getSubType();
 
   /**
@@ -48,8 +59,28 @@ interface PatternInterface {
    */
   public function getTime();
 
+  /**
+   * @return string
+   */
+  public function getTemplate();
+
+  /**
+   * @return string
+   */
   public function getTemplateContent();
 
+  /**
+   * @return string
+   */
   public function getType();
+
+  /**
+   * @return string
+   */
+  public function getUppercaseName();
+
+  /**
+   * @return bool
+   */
   public function hasSubType();
 }

@@ -65,7 +65,7 @@ class PatternLab implements PatternLabInterface {
     throw new \InvalidArgumentException("Invalid path: $path");
   }
 
-  public static function stripOrdering($str) {
+  public static function stripDigits($str) {
     list($num, $name) = array_pad(explode('-', $str, 2), 2, NULL);
     return is_numeric($num) ? $name : $str;
   }
@@ -101,6 +101,7 @@ class PatternLab implements PatternLabInterface {
     if ($reload || !isset($this->data)) {
       $this->data = [];
       foreach ($this->findDataFiles() as $path) {
+        if (basename($path, '.json') == 'listitems') continue;
         $this->data += json_decode(file_get_contents($path), true);
       }
     }
@@ -143,10 +144,6 @@ class PatternLab implements PatternLabInterface {
    */
   public function getIgnoredExtensions() {
     return $this->getConfiguration()->getIgnoredExtensions();
-  }
-
-  public function getMediaQueries() {
-    return [];
   }
 
   public function getMetaDirectory() {
@@ -199,6 +196,13 @@ class PatternLab implements PatternLabInterface {
   public function getTwig() {
     if (!isset($this->twig)) $this->makeTwig();
     return $this->twig;
+  }
+
+  /**
+   * @return \Labcoat\Patterns\PatternType[]
+   */
+  public function getTypes() {
+    return $this->getPatterns()->getTypes();
   }
 
   public function getVendorDirectory() {
@@ -269,16 +273,6 @@ class PatternLab implements PatternLabInterface {
 
   protected function getPatternsIterator() {
     return new \ArrayIterator($this->getPatterns());
-  }
-
-  /**
-   * @return \SplFileInfo[]
-   */
-  protected function getStylesheets() {
-    $finder = new Finder();
-    $finder->files()->name("*.css")->in($this->getSourceDirectoryPath());
-    $finder->sortByName();
-    return iterator_to_array($finder, false);
   }
 
   protected function loadConfiguration() {

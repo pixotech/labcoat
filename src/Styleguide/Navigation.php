@@ -25,7 +25,6 @@ class Navigation implements \JsonSerializable {
   }
 
   public function jsonSerialize() {
-    print_r($this->getPatternTypes());
     return [
       'patternTypes' => $this->getPatternTypes(),
     ];

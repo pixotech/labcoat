@@ -14,7 +14,7 @@ class PseudoPattern extends Pattern {
   }
 
   public function getName() {
-    $name = PatternLab::stripOrdering($this->pattern->getName()) . '-' . $this->pseudoPattern;
+    $name = PatternLab::stripDigits($this->pattern->getName()) . '-' . $this->pseudoPattern;
     return ucwords(str_replace('-', ' ', $name));
   }
 

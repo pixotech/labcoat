@@ -85,7 +85,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternName() {
-    return $this->pattern->getDisplayName();
+    return $this->pattern->getUppercaseName();
   }
 
   public function patternPartial() {
