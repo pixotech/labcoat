@@ -30,6 +30,11 @@ class Styleguide implements StyleguideInterface {
 
   protected $indexFiles;
 
+  /**
+   * @var Navigation
+   */
+  protected $navigation;
+
   protected $patternFileSets;
 
   protected $patternlab;
@@ -49,13 +54,8 @@ class Styleguide implements StyleguideInterface {
     $this->makeFiles($patternlab);
   }
 
-  public function generate($destination) {
-    foreach ($files as $file) {
-      $path = $this->makeDestinationPath($destination, $file->getPath());
-      if ($file instanceof DynamicFileInterface) {
-        $this->writeFile($path, $file->getContents());
-      }
-    }
+  public function generate() {
+    $this->writePatternPages();
   }
 
   public function getCacheBuster() {
@@ -101,55 +101,6 @@ class Styleguide implements StyleguideInterface {
         $this->navigation->addType($item);
       }
     }
-    return;
-
-
-
-    /** @var \Labcoat\Patterns\PatternTypeInterface $type */
-    foreach ($patternlab->getTypes() as $type) {
-      $navigation->addType($type);
-      foreach ($type->getSubTypes() as $subType) {
-        $this->data->addSubtypeIndexPath($subType);
-        $navigation->addSubtype($subType);
-        foreach ($subType->getPatterns() as $pattern) {
-          $this->data->addPatternPath($pattern);
-          $navigation->addPattern($pattern);
-          foreach ($pattern->getPseudoPatterns() as $pseudo) {
-            $this->data->addPatternPath($pseudo);
-            $navigation->addPattern($pseudo);
-          }
-        }
-      }
-      foreach ($type->getPatterns() as $pattern) {
-        $this->data->addPatternPath($pattern);
-
-
-        $typeData['patternItems'][] = self::makePatternNavigationItem($pattern);
-        foreach ($pattern->getPseudoPatterns() as $pseudo) {
-          $this->data->addPatternPath($pseudo);
-
-          $typeData['patternItems'][] = self::makePatternNavigationItem($pseudo);
-        }
-      }
-      $this->navigationItems['patternTypes'][] = $typeData;
-      asort($this->patternPaths[$typeName]);
-    }
-
-
-
-
-  }
-
-  protected function createPatterns() {
-    $patterns = $this->patternlab->getPatterns();
-    $iterator = new \RecursiveIteratorIterator($patterns, \RecursiveIteratorIterator::CHILD_FIRST);
-    foreach ($iterator as $item) {
-      if ($item instanceof Pattern) {
-        $page = new PatternPage($this, $item);
-        print $page;
-        break;
-      }
-    }
   }
 
   protected function ensureDirectory($path) {
@@ -158,36 +109,6 @@ class Styleguide implements StyleguideInterface {
 
   protected function ensurePathDirectory($path) {
     $this->ensureDirectory(dirname($path));
-  }
-
-  protected function makeAllPatternFiles() {
-    $files = [];
-    $files[] = new DataFile($this->getPatternLab());
-    $files[] = new StyleguideIndexFile($this);
-    $iterator = new \RecursiveIteratorIterator($this->patternlab->getPatterns(), \RecursiveIteratorIterator::CHILD_FIRST);
-    foreach ($iterator as $item) {
-      if ($item instanceof Pattern) {
-        $files = array_merge($files, $this->makePatternFiles($item));
-        foreach ($item->getPseudoPatterns() as $pseudoPattern) {
-          $files = array_merge($files, $this->makePatternFiles($pseudoPattern));
-        }
-      }
-      elseif ($item instanceof PatternType) {
-        $files[] = new TypeIndexFile($this, $item);
-      }
-      elseif ($item instanceof PatternSubType) {
-        $files[] = new SubTypeIndexFile($this, $item);
-      }
-    }
-    return $files;
-  }
-
-  protected function makeAnnotationsFile() {
-    return new AnnotationsFile();
-  }
-
-  protected function makeDestinationPath($dir, $path) {
-    return $dir . DIRECTORY_SEPARATOR . $path;
   }
 
   protected function makePatternFiles(PatternInterface $pattern) {
@@ -236,5 +157,29 @@ class Styleguide implements StyleguideInterface {
   protected function writeFile($path, $content) {
     $this->ensurePathDirectory($path);
     file_put_contents($path, $content);
+  }
+
+  protected function writePatternPages() {
+    $patterns = [];
+    foreach ($this->navigation->getTypes() as $type) {
+      $typePatterns = [];
+      foreach ($type->getSubtypes() as $subtype) {
+        $subtypePatterns = [];
+        foreach ($subtype->getPatterns() as $pattern) {
+          $this->writePatternPage($pattern);
+          $subtypePatterns[] = $pattern;
+          $typePatterns[] = $pattern;
+          $patterns[] = $pattern;
+        }
+        $this->writeSubtypePage($subtype, $subtypePatterns);
+      }
+      foreach ($type->getPatterns() as $pattern) {
+        $this->writePatternPage($pattern);
+        $typePatterns[] = $pattern;
+        $patterns[] = $pattern;
+      }
+      $this->writeTypePage($type, $typePatterns);
+    }
+    $this->writeIndexPage($patterns);
   }
 }

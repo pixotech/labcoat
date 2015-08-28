@@ -43,6 +43,14 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twigOptions = [];
 
+  public static function load() {
+
+  }
+
+  public static function loadStandardEdition() {
+
+  }
+
   public function __construct() {
   }
 
