@@ -2,63 +2,33 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\PatternLab;
-use Labcoat\Patterns\Pattern;
+class Type implements \JsonSerializable {
 
-class Type extends ItemWithPatterns implements \JsonSerializable {
-
-  /**
-   * @var \Labcoat\Patterns\PatternType
-   */
-  protected $type;
-
-  public function __construct(\Labcoat\Patterns\PatternType $type) {
-    $this->type = $type;
-  }
-
-  public function getLowercaseName() {
-    return strtolower($this->getNameWithSpaces());
-  }
-
-  public function getName() {
-    return $this->type->getName();
-  }
-
-  public function getNameWithDashes() {
-    return PatternLab::stripDigits($this->getName());
-  }
-
-  public function getNameWithSpaces() {
-    return str_replace('-', ' ', $this->getNameWithDashes());
-  }
-
-  /**
-   * @return SubType[]
-   */
-  public function getSubTypes() {
-    $subTypes = [];
-    foreach ($this->type->getSubTypes() as $subType) {
-      $subTypes[] = new SubType($subType);
-    }
-    return $subTypes;
-  }
-
-  public function getUppercaseName() {
-    return ucwords($this->getNameWithSpaces());
-  }
+  protected $patterns = [];
+  protected $subtypes = [];
+  protected $time = 0;
 
   public function jsonSerialize() {
     return [
-      "patternTypeLC" => $this->getLowercaseName(),
-      "patternTypeUC" => $this->getUppercaseName(),
-      "patternType" => $this->getName(),
-      "patternTypeDash" => $this->getNameWithDashes(),
-      "patternTypeItems" => $this->getSubTypes(),
-      "patternItems" => $this->getItems(),
+      'patternTypeLC' => $type->getLowercaseName(),
+      'patternTypeUC' => $type->getUppercaseName(),
+      'patternType' => $type->getName(),
+      'patternTypeDash' => $type->getNameWithoutDigits(),
+      'patternTypeItems' => [],
+      'patternItems' => [],
     ];
   }
 
-  protected function getPatterns() {
-    return $this->type->getPatterns();
+  public function addPattern(Pattern $pattern) {
+    $this->patterns[$pattern->getName()] = $pattern;
+    $this->time = max($this->time, $pattern->getTime());
+  }
+
+  public function addSubtype(Subtype $subtype) {
+    $this->subtypes[$subtype->getName()] = $subtype;
+  }
+
+  public function getSubtype($name) {
+    return $this->subtypes[$name];
   }
 }

@@ -2,27 +2,85 @@
 
 namespace Labcoat\Styleguide\Files;
 
+use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
+use Labcoat\Patterns\PatternInterface;
+use Labcoat\Patterns\PatternSubTypeInterface;
+use Labcoat\Patterns\PatternTypeInterface;
 use Labcoat\Styleguide\Data;
-use Labcoat\Styleguide\Navigation;
+use Labcoat\Styleguide\Navigation\Navigation;
+use Labcoat\Styleguide\Styleguide;
 
 class DataFile extends File implements DataFileInterface {
 
-  /**
-   * @var \Labcoat\Styleguide\Data
-   */
-  protected $data;
+  protected $indexPaths = [];
+
+  protected $patternPaths = [];
 
   /**
-   * @var PatternLabInterface
+   * @param \Labcoat\Patterns\PatternInterface $pattern
+   * @return array
    */
-  protected $patternlab;
+  public static function makePatternNavigationItem(PatternInterface $pattern) {
+    return [
+      'patternPath' => Styleguide::makePatternPath($pattern),
+      'patternSrcPath' => $pattern->getPath(),
+      'patternName' => $pattern->getUppercaseName(),
+      'patternState' => $pattern->getState(),
+      'patternPartial' => $pattern->getPartial(),
+    ];
+  }
 
-  protected $patternPaths;
+  /**
+   * @param \Labcoat\Patterns\PatternSubTypeInterface $subType
+   * @return array
+   */
+  public static function makeSubTypeNavigationItem(PatternSubTypeInterface $subType) {
+    return [
+      'patternSubtypeLC' => $subType->getLowercaseName(),
+      'patternSubtypeUC' => $subType->getUppercaseName(),
+      'patternSubtype' => $subType->getName(),
+      'patternSubtypeDash' => $subType->getNameWithoutDigits(),
+      'patternSubtypeItems' => [],
+    ];
+  }
 
-  public function __construct(PatternLabInterface $patternlab) {
+  /**
+   * @param \Labcoat\Patterns\PatternTypeInterface $type
+   * @return array
+   */
+  public static function makeTypeNavigationItem(PatternTypeInterface $type) {
+    return [
+      'patternTypeLC' => $type->getLowercaseName(),
+      'patternTypeUC' => $type->getUppercaseName(),
+      'patternType' => $type->getName(),
+      'patternTypeDash' => $type->getNameWithoutDigits(),
+      'patternTypeItems' => [],
+      'patternItems' => [],
+    ];
+  }
+
+  public function __construct(PatternLabInterface $patternlab = null) {
     $this->patternlab = $patternlab;
   }
+
+  public function addPatternPath(PatternInterface $pattern) {
+    $typeName = PatternLab::stripDigits($pattern->getType());
+    $patternName = $pattern->getNameWithoutDigits();
+    $this->patternPaths[$typeName][$patternName] = $pattern->getStyleguidePathName();
+  }
+
+  public function addSubtypeIndexPath(PatternSubTypeInterface $subtype) {
+    $typeName = $subtype->getType()->getNameWithoutDigits();
+    $subtypeName = $subtype->getNameWithoutDigits();
+    $this->indexPaths[$typeName][$subtypeName] = $subtype->getStyleguidePathName();
+  }
+
+
+
+
+
+
 
   public function getContents() {
     $contents  = "var config = " . json_encode($this->getConfig()).";";

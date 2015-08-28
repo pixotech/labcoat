@@ -29,9 +29,7 @@ class Pattern implements PatternInterface {
 
   public function getData() {
     if (!isset($this->data)) $this->findData();
-    $data = [];
-    foreach ($this->data as $d) $data = array_merge_recursive($data, $d->getData());
-    return $data;
+    return $this->data;
   }
 
   public function getDisplayName() {

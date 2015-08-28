@@ -17,7 +17,7 @@ class PseudoPattern implements PseudoPatternInterface {
   }
 
   public function getData() {
-    return array_merge_recursive($this->pattern->getData(), $this->data->getData());
+    return $this->data;
   }
 
   public function getFile() {

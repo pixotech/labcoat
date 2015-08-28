@@ -6,7 +6,9 @@ use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternInterface;
 use Labcoat\Patterns\PatternSubType;
+use Labcoat\Patterns\PatternSubTypeInterface;
 use Labcoat\Patterns\PatternType;
+use Labcoat\Patterns\PatternTypeInterface;
 use Labcoat\Styleguide\Files\AnnotationsFile;
 use Labcoat\Styleguide\Files\DataFile;
 use Labcoat\Styleguide\Files\DynamicFileInterface;
@@ -17,13 +19,23 @@ use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Files\StyleguideIndexFile;
 use Labcoat\Styleguide\Files\SubTypeIndexFile;
 use Labcoat\Styleguide\Files\TypeIndexFile;
+use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\Pages\PatternPage;
 
 class Styleguide implements StyleguideInterface {
 
+  protected $cacheBuster;
+
   protected $data;
 
+  protected $indexFiles;
+
+  protected $patternFileSets;
+
   protected $patternlab;
+
+  protected $patterns;
+
   protected $twig;
 
   public static function makePatternPath(PatternInterface $pattern) {
@@ -32,11 +44,12 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function __construct(PatternLabInterface $patternlab) {
-    $this->patternlab = $patternlab;
+    #$this->patternlab = $patternlab;
+    $this->cacheBuster = time();
+    $this->makeFiles($patternlab);
   }
 
   public function generate($destination) {
-    $files = $this->makeFiles();
     foreach ($files as $file) {
       $path = $this->makeDestinationPath($destination, $file->getPath());
       if ($file instanceof DynamicFileInterface) {
@@ -46,7 +59,7 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function getCacheBuster() {
-    return time();
+    return $this->cacheBuster;
   }
 
   public function getPatternLab() {
@@ -65,6 +78,66 @@ class Styleguide implements StyleguideInterface {
     $template = $pattern->getTemplate();
     $data = array_merge_recursive($this->getPatternLab()->getData(), $pattern->getData());
     return $this->getPatternLab()->render($template, $data);
+  }
+
+  protected function makeFiles(PatternLabInterface $patternlab) {
+    $this->data = new DataFile();
+    $this->navigation = new Navigation();
+
+    $iterator = new \RecursiveIteratorIterator($patternlab->getPatterns(), \RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($iterator as $item) {
+      if ($item instanceof PatternInterface) {
+        $this->data->addPatternPath($item);
+        $this->navigation->addPattern($item);
+        foreach ($item->getPseudoPatterns() as $pseudo) {
+          $this->data->addPatternPath($pseudo);
+        }
+      }
+      elseif ($item instanceof PatternSubTypeInterface) {
+        $this->data->addSubtypeIndexPath($item);
+        $this->navigation->addSubtype($item);
+      }
+      elseif ($item instanceof PatternTypeInterface) {
+        $this->navigation->addType($item);
+      }
+    }
+    return;
+
+
+
+    /** @var \Labcoat\Patterns\PatternTypeInterface $type */
+    foreach ($patternlab->getTypes() as $type) {
+      $navigation->addType($type);
+      foreach ($type->getSubTypes() as $subType) {
+        $this->data->addSubtypeIndexPath($subType);
+        $navigation->addSubtype($subType);
+        foreach ($subType->getPatterns() as $pattern) {
+          $this->data->addPatternPath($pattern);
+          $navigation->addPattern($pattern);
+          foreach ($pattern->getPseudoPatterns() as $pseudo) {
+            $this->data->addPatternPath($pseudo);
+            $navigation->addPattern($pseudo);
+          }
+        }
+      }
+      foreach ($type->getPatterns() as $pattern) {
+        $this->data->addPatternPath($pattern);
+
+
+        $typeData['patternItems'][] = self::makePatternNavigationItem($pattern);
+        foreach ($pattern->getPseudoPatterns() as $pseudo) {
+          $this->data->addPatternPath($pseudo);
+
+          $typeData['patternItems'][] = self::makePatternNavigationItem($pseudo);
+        }
+      }
+      $this->navigationItems['patternTypes'][] = $typeData;
+      asort($this->patternPaths[$typeName]);
+    }
+
+
+
+
   }
 
   protected function createPatterns() {
@@ -115,15 +188,6 @@ class Styleguide implements StyleguideInterface {
 
   protected function makeDestinationPath($dir, $path) {
     return $dir . DIRECTORY_SEPARATOR . $path;
-  }
-
-  /**
-   * @return \Labcoat\Styleguide\Files\FileInterface[]
-   */
-  protected function makeFiles() {
-    $files = [];
-    $files = array_merge($files, $this->makeAllPatternFiles());
-    return $files;
   }
 
   protected function makePatternFiles(PatternInterface $pattern) {
