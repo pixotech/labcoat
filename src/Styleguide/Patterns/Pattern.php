@@ -80,12 +80,12 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLink() {
-    $path = $this->pattern->getStyleguidePathName();
-    return $path . DIRECTORY_SEPARATOR . $path . '.html';
+    $nav = new \Labcoat\Styleguide\Navigation\Pattern($this->pattern);
+    return $nav->getPath();
   }
 
   public function patternName() {
-    return $this->pattern->getUppercaseName();
+    return ucwords(str_replace('-', ' ', $this->pattern->getName()));
   }
 
   public function patternPartial() {

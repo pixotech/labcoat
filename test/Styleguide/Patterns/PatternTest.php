@@ -83,7 +83,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
   public function testPatternLink() {
     $path = 'type-subtype-name';
     $source = $this->makeSourcePattern();
-    $source->styleguidePathName = $path;
+    $source->path = "type/subtype/name";
     $pattern = new Pattern($this->makeStyleguide(), $source);
     $link = $path . DIRECTORY_SEPARATOR . $path . '.html';
     $this->assertEquals($link, $pattern->patternLink());
@@ -91,9 +91,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testPatternName() {
     $source = $this->makeSourcePattern();
-    $source->displayName = 'Pattern Name';
+    $source->name = 'pattern-name';
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals($source->displayName, $pattern->patternName());
+    $this->assertEquals("Pattern Name", $pattern->patternName());
   }
 
   public function testPatternPartial() {
