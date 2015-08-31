@@ -2,39 +2,45 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternSubTypeInterface;
 
-class Subtype implements \JsonSerializable {
+class Subtype implements \JsonSerializable, SubtypeInterface {
 
-  protected $name;
   protected $patterns = [];
-  protected $time = 0;
+  protected $subtype;
 
   public function __construct(PatternSubTypeInterface $subtype) {
-    $this->name = $subtype->getName();
+    $this->subtype = $subtype;
   }
 
   public function jsonSerialize() {
     return [
-      'patternSubtypeLC' => $subType->getLowercaseName(),
-      'patternSubtypeUC' => $subType->getUppercaseName(),
-      'patternSubtype' => $subType->getName(),
-      'patternSubtypeDash' => $subType->getNameWithoutDigits(),
+      'patternSubtypeLC' => $this->getLowercaseName(),
+      'patternSubtypeUC' => $this->getUppercaseName(),
+      'patternSubtype' => $this->getName(),
+      'patternSubtypeDash' => $this->getNameWithDashes(),
       'patternSubtypeItems' => [],
     ];
   }
 
-  public function addPattern(Pattern $pattern) {
+  public function addPattern(PatternInterface $pattern) {
     $this->patterns[$pattern->getName()] = $pattern;
-    $this->time = max($this->time, $pattern->getTime());
+  }
+
+  public function getLowercaseName() {
+    return str_replace('-', ' ', $this->getNameWithDashes());
   }
 
   public function getName() {
-    return $this->name;
+    return $this->subtype->getName();
   }
 
-  public function getTime() {
-    return $this->time;
+  public function getNameWithDashes() {
+    return PatternLab::stripDigits($this->getName());
+  }
+
+  public function getUppercaseName() {
+    return ucwords($this->getLowercaseName());
   }
 }
