@@ -6,21 +6,25 @@ use Labcoat\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 
+  public $file;
+  public $id;
   public $name;
   public $path;
   public $partial;
   public $state;
+  public $subtype;
+  public $type;
 
   public function getData() {
     // TODO: Implement getData() method.
   }
 
   public function getFile() {
-    // TODO: Implement getFile() method.
+    return $this->file;
   }
 
   public function getId() {
-    // TODO: Implement getId() method.
+    return $this->id;
   }
 
   public function getName() {
@@ -40,7 +44,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getSubType() {
-    // TODO: Implement getSubType() method.
+    return $this->subtype;
   }
 
   public function getTime() {
@@ -56,10 +60,10 @@ class Pattern implements PatternInterface {
   }
 
   public function getType() {
-    // TODO: Implement getType() method.
+    return $this->type;
   }
 
   public function hasSubType() {
-    // TODO: Implement hasSubType() method.
+    return !empty($this->subtype);
   }
 }
