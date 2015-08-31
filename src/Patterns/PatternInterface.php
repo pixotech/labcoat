@@ -17,17 +17,12 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getLowercaseName();
+  public function getId();
 
   /**
    * @return string
    */
   public function getName();
-
-  /**
-   * @return string
-   */
-  public function getNameWithoutDigits();
 
   /**
    * @return string
@@ -47,11 +42,6 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getStyleguidePathName();
-
-  /**
-   * @return string
-   */
   public function getSubType();
 
   /**
@@ -62,22 +52,7 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getTemplate();
-
-  /**
-   * @return string
-   */
-  public function getTemplateContent();
-
-  /**
-   * @return string
-   */
   public function getType();
-
-  /**
-   * @return string
-   */
-  public function getUppercaseName();
 
   /**
    * @return bool

@@ -12,19 +12,23 @@ class Pattern implements PatternInterface {
   protected $data;
 
   protected $file;
+  protected $id;
   protected $includedPatterns;
   protected $name;
-  protected $path;
+  protected $nameWithDashes;
+  protected $nameWithDashesWithoutDigits;
+  protected $partial;
   protected $pseudoPatterns;
   protected $state;
   protected $subType;
   protected $type;
 
-  public function __construct($path, $file) {
-    $this->path = $path;
+  public function __construct($id, $file) {
+    $this->id = $id;
     $this->file = $file;
-    list($this->type, $this->subType, $this->name) = PatternLab::splitPath($path);
+    list($this->type, $this->subType, $this->name) = PatternLab::splitPath($id);
     $this->extractState();
+    $this->makePartial();
   }
 
   public function getData() {
@@ -32,12 +36,12 @@ class Pattern implements PatternInterface {
     return $this->data;
   }
 
-  public function getDisplayName() {
-    return ucwords(str_replace('-', ' ', $this->getName()));
-  }
-
   public function getFile() {
     return $this->file;
+  }
+
+  public function getId() {
+    return $this->id;
   }
 
   public function getIncludedPatterns() {
@@ -45,24 +49,16 @@ class Pattern implements PatternInterface {
     return $this->includedPatterns;
   }
 
-  public function getLowercaseName() {
-    return str_replace('-', ' ', $this->getNameWithoutDigits());
-  }
-
   public function getName() {
     return $this->name;
   }
 
-  public function getNameWithoutDigits() {
-    return PatternLab::stripDigits($this->name);
-  }
-
   public function getPartial() {
-    return PatternLab::stripDigits($this->getType()) . '-' . $this->getNameWithoutDigits();
+    return $this->partial;
   }
 
   public function getPath() {
-    return $this->path;
+    return $this->id;
   }
 
   public function getPseudoPatterns() {
@@ -74,20 +70,8 @@ class Pattern implements PatternInterface {
     return $this->state ?: '';
   }
 
-  public function getStyleguidePathName() {
-    return str_replace('/', '-', $this->getPath());
-  }
-
   public function getSubType() {
     return $this->subType;
-  }
-
-  public function getTemplate() {
-    return $this->getPath();
-  }
-
-  public function getTemplateContent() {
-    return file_get_contents($this->file);
   }
 
   public function getTime() {
@@ -98,10 +82,6 @@ class Pattern implements PatternInterface {
 
   public function getType() {
     return $this->type;
-  }
-
-  public function getUppercaseName() {
-    return ucwords($this->getLowercaseName());
   }
 
   public function hasSubType() {
@@ -149,14 +129,6 @@ class Pattern implements PatternInterface {
     return dirname($this->file) . DIRECTORY_SEPARATOR . $this->name . '*.json';
   }
 
-  protected function getLineageMatch() {
-    return '{%([ ]+)?include [&quot;\&#039;]([A-Za-z0-9-_]+)[&quot;\&#039;](.*)%}';
-  }
-
-  protected function getLineageMatchKey() {
-    return 2;
-  }
-
   /**
    * @return \Twig_TokenStream
    * @throws \Twig_Error_Syntax
@@ -165,5 +137,9 @@ class Pattern implements PatternInterface {
     $template = file_get_contents($this->file);
     $lexer = new \Twig_Lexer(new \Twig_Environment());
     return $lexer->tokenize($template);
+  }
+
+  protected function makePartial() {
+    $this->partial = PatternLab::stripDigits($this->type) . '-' . PatternLab::stripDigits($this->name);
   }
 }
