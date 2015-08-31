@@ -6,27 +6,21 @@ use Labcoat\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 
-  public $displayName;
-  public $example;
-  public $file;
   public $name;
-  public $partial;
   public $path;
+  public $partial;
   public $state;
-  public $styleguidePathName;
-  public $subType;
-  public $type;
 
   public function getData() {
     // TODO: Implement getData() method.
   }
 
-  public function getDisplayName() {
-    return $this->displayName;
+  public function getFile() {
+    // TODO: Implement getFile() method.
   }
 
-  public function getFile() {
-    return $this->file;
+  public function getId() {
+    // TODO: Implement getId() method.
   }
 
   public function getName() {
@@ -45,16 +39,16 @@ class Pattern implements PatternInterface {
     return $this->state;
   }
 
-  public function getStyleguidePathName() {
-    return $this->styleguidePathName;
-  }
-
   public function getSubType() {
-    return $this->subType;
+    // TODO: Implement getSubType() method.
   }
 
   public function getTime() {
     // TODO: Implement getTime() method.
+  }
+
+  public function getTemplate() {
+    // TODO: Implement getTemplate() method.
   }
 
   public function getTemplateContent() {
@@ -62,22 +56,10 @@ class Pattern implements PatternInterface {
   }
 
   public function getType() {
-    return $this->type;
+    // TODO: Implement getType() method.
   }
 
   public function hasSubType() {
-    return !empty($this->subType);
-  }
-
-  public function getLowercaseName() {
-    // TODO: Implement getLowercaseName() method.
-  }
-
-  public function getNameWithoutDigits() {
-    // TODO: Implement getNameWithoutDigits() method.
-  }
-
-  public function getUppercaseName() {
-    // TODO: Implement getUppercaseName() method.
+    // TODO: Implement hasSubType() method.
   }
 }

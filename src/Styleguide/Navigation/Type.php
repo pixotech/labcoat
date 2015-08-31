@@ -41,19 +41,28 @@ class Type implements \JsonSerializable, TypeInterface {
       'patternTypeUC' => $this->getUppercaseName(),
       'patternType' => $this->getName(),
       'patternTypeDash' => $this->getNameWithDashes(),
-      'patternTypeItems' => [],
-      'patternItems' => [],
+      'patternTypeItems' => array_values($this->subtypes),
+      'patternItems' => array_values($this->patterns),
     ];
   }
 
-  public function addPattern(PatternInterface $pattern) {
-    $this->patterns[$pattern->getName()] = $pattern;
+  public function addPattern(\Labcoat\Patterns\PatternInterface $pattern) {
+    if ($pattern->hasSubtype()) {
+      $this->getSubtype($pattern->getSubType())->addPattern($pattern);
+    }
+    else {
+      $this->patterns[$pattern->getName()] = new Pattern($pattern);
+    }
   }
 
   public function addSubtype(SubtypeInterface $subtype) {
     $this->subtypes[$subtype->getName()] = $subtype;
   }
 
+  /**
+   * @param $name
+   * @return SubtypeInterface
+   */
   public function getSubtype($name) {
     return $this->subtypes[$name];
   }

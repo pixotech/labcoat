@@ -20,12 +20,12 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
       'patternSubtypeUC' => $this->getUppercaseName(),
       'patternSubtype' => $this->getName(),
       'patternSubtypeDash' => $this->getNameWithDashes(),
-      'patternSubtypeItems' => [],
+      'patternSubtypeItems' => array_values($this->patterns),
     ];
   }
 
-  public function addPattern(PatternInterface $pattern) {
-    $this->patterns[$pattern->getName()] = $pattern;
+  public function addPattern(\Labcoat\Patterns\PatternInterface $pattern) {
+    $this->patterns[$pattern->getName()] = new Pattern($pattern);
   }
 
   public function getLowercaseName() {

@@ -7,8 +7,10 @@ use Labcoat\PatternLab;
 class PatternSubType extends PatternSection implements PatternSubTypeInterface {
 
   protected $name;
+  protected $type;
 
-  public function __construct($name) {
+  public function __construct(PatternTypeInterface $type, $name) {
+    $this->type = $type;
     $this->name = $name;
   }
 
@@ -38,5 +40,9 @@ class PatternSubType extends PatternSection implements PatternSubTypeInterface {
    */
   public function getPatterns() {
     return $this->items;
+  }
+
+  public function getType() {
+    return $this->type;
   }
 }

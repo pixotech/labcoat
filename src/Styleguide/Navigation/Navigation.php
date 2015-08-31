@@ -15,18 +15,13 @@ class Navigation implements \JsonSerializable {
 
   public function jsonSerialize() {
     return [
-      'patternTypes' => $this->types,
+      'patternTypes' => array_values($this->types),
     ];
   }
 
   public function addPattern(PatternInterface $pattern) {
     $type = $pattern->getType();
-    if ($pattern->hasSubType()) {
-      $this->types[$type]->getSubtype($pattern->getSubtype())->addPattern(new Pattern($pattern));
-    }
-    else {
-      $this->types[$type]->addPattern(new Pattern($pattern));
-    }
+    $this->types[$type]->addPattern($pattern);
   }
 
   public function addSubtype(PatternSubTypeInterface $subtype) {

@@ -24,6 +24,10 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getFile();
   }
 
+  public function getId() {
+    return $this->pattern->getId() . '~' . $this->getName();
+  }
+
   public function getName() {
     return $this->pattern->getName() . '-' . $this->getVariantName();
   }
@@ -42,18 +46,6 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getSubType() {
     return $this->pattern->getSubType();
-  }
-
-  public function getStyleguidePathName() {
-    return $this->pattern->getStyleguidePathName() . '-' . $this->getVariantName();
-  }
-
-  public function getTemplate() {
-    return $this->pattern->getPath();
-  }
-
-  public function getTemplateContent() {
-    return $this->pattern->getTemplateContent();
   }
 
   public function getTime() {
@@ -76,17 +68,5 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getVariantName() {
     return $this->name;
-  }
-
-  public function getLowercaseName() {
-    return str_replace('-', ' ', $this->getNameWithoutDigits());
-  }
-
-  public function getNameWithoutDigits() {
-    return $this->pattern->getNameWithoutDigits() . '-' . $this->getVariantName();
-  }
-
-  public function getUppercaseName() {
-    return ucwords($this->getLowercaseName());
   }
 }

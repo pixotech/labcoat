@@ -39,14 +39,9 @@ class Styleguide implements StyleguideInterface {
 
   protected $patternlab;
 
-  protected $patterns;
+  protected $pattern;
 
   protected $twig;
-
-  public static function makePatternPath(PatternInterface $pattern) {
-    $pathName = $pattern->getStyleguidePathName();
-    return $pathName . DIRECTORY_SEPARATOR . $pathName . '.html';
-  }
 
   public function __construct(PatternLabInterface $patternlab) {
     #$this->patternlab = $patternlab;
@@ -60,6 +55,10 @@ class Styleguide implements StyleguideInterface {
 
   public function getCacheBuster() {
     return $this->cacheBuster;
+  }
+
+  public function getNavigation() {
+    return $this->navigation;
   }
 
   public function getPatternLab() {
