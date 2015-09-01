@@ -4,7 +4,8 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLab;
 
-class Pattern implements PatternInterface {
+class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
+  use HasChildItems;
 
   /**
    * @var PatternDataInterface[]
@@ -29,6 +30,7 @@ class Pattern implements PatternInterface {
     list($this->type, $this->subType, $this->name) = PatternLab::splitPath($id);
     $this->extractState();
     $this->makePartial();
+    $this->findData();
   }
 
   public function getData() {
@@ -102,6 +104,7 @@ class Pattern implements PatternInterface {
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
         $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
+        $this->items[$pseudoPattern] = $this->pseudoPatterns[$pseudoPattern];
       }
       else {
         $this->data[] = new PatternData($path);

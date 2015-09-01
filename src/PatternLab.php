@@ -8,6 +8,10 @@ use Labcoat\Configuration\Configuration;
 use Labcoat\Html\Document;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternCollection;
+use Labcoat\Patterns\PatternInterface;
+use Labcoat\Patterns\PatternSubTypeInterface;
+use Labcoat\Patterns\PatternTypeInterface;
+use Labcoat\Patterns\PseudoPatternInterface;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
@@ -207,7 +211,15 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * @return \Labcoat\Patterns\PatternType[]
+   * @param string $name
+   * @return Patterns\PatternTypeInterface
+   */
+  public function getType($name) {
+    return $this->getPatterns()->getType($name);
+  }
+
+  /**
+   * @return \Labcoat\Patterns\PatternTypeInterface[]
    */
   public function getTypes() {
     return $this->getPatterns()->getTypes();

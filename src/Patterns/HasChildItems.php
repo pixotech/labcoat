@@ -4,13 +4,10 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLab;
 
-abstract class PatternSection implements \Countable, \RecursiveIterator {
+trait HasChildItems {
 
   protected $items = [];
   protected $iteratorPosition = 0;
-  protected $time;
-
-  abstract public function add(PatternInterface $pattern);
 
   public function count() {
     return count($this->items);
@@ -20,27 +17,12 @@ abstract class PatternSection implements \Countable, \RecursiveIterator {
     return $this->items[$this->getIteratorKey()];
   }
 
-  /**
-   * @return PatternInterface[]
-   */
-  abstract public function getAllPatterns();
-
   public function getChildren() {
     return $this->current();
   }
 
-  public function getTime() {
-    if (!isset($this->time)) {
-      $this->time = 0;
-      foreach ($this->getAllPatterns() as $pattern) {
-        $time = $pattern->getTime();
-        if ($time > $this->time) $this->time = $time;
-      }
-    }
-    return $this->time;
-  }
-
   public function hasChildren() {
+    print_r($this->current());
     if (!($this->current() instanceof \RecursiveIterator)) return false;
     return count($this->current()) > 0;
   }
@@ -59,15 +41,6 @@ abstract class PatternSection implements \Countable, \RecursiveIterator {
 
   public function valid() {
     return $this->iteratorPosition < $this->count();
-  }
-
-  protected function addItem($key, $item) {
-    $this->items[$key] = $item;
-    ksort($this->items, SORT_NATURAL);
-  }
-
-  protected function addPattern(PatternInterface $pattern) {
-    $this->addItem($pattern->getName(), $pattern);
   }
 
   protected function getIteratorKey() {

@@ -58,6 +58,10 @@ class PatternType extends PatternSection implements \RecursiveIterator, PatternT
     return iterator_to_array($this->getAllPatternsIterator());
   }
 
+  public function getId() {
+    return $this->name;
+  }
+
   public function getLowercaseName() {
     return str_replace('-', ' ', $this->getNameWithoutDigits());
   }
