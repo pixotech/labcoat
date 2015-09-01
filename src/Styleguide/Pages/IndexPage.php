@@ -2,9 +2,16 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-use Labcoat\Styleguide\Patterns\Pattern;
+use Labcoat\Styleguide\StyleguideInterface;
 
 abstract class IndexPage extends Page implements IndexPageInterface {
+
+  protected $partials;
+
+  public function __construct(StyleguideInterface $styleguide, array $partials) {
+    parent::__construct($styleguide);
+    $this->partials = $partials;
+  }
 
   public function getContent() {
     $variables = [
@@ -15,12 +22,6 @@ abstract class IndexPage extends Page implements IndexPageInterface {
   }
 
   protected function getPartials() {
-    $partials = [];
-    foreach ($this->getPatterns() as $pattern) {
-      $partials[] = new Pattern($this->styleguide, $pattern);
-    }
-    return $partials;
+    return $this->partials;
   }
-
-  abstract protected function getPatterns();
 }

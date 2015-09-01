@@ -25,49 +25,6 @@ class Data {
   protected $patternPaths = [];
 
   /**
-   * @param PatternInterface $pattern
-   * @return array
-   */
-  public static function makePatternNavigationItem(PatternInterface $pattern) {
-    return [
-      'patternPath' => Styleguide::makePatternPath($pattern),
-      'patternSrcPath' => $pattern->getPath(),
-      'patternName' => $pattern->getUppercaseName(),
-      'patternState' => $pattern->getState(),
-      'patternPartial' => $pattern->getPartial(),
-    ];
-  }
-
-  /**
-   * @param PatternSubTypeInterface $subType
-   * @return array
-   */
-  public static function makeSubTypeNavigationItem(PatternSubTypeInterface $subType) {
-    return [
-      'patternSubtypeLC' => $subType->getLowercaseName(),
-      'patternSubtypeUC' => $subType->getUppercaseName(),
-      'patternSubtype' => $subType->getName(),
-      'patternSubtypeDash' => $subType->getNameWithoutDigits(),
-      'patternSubtypeItems' => [],
-    ];
-  }
-
-  /**
-   * @param PatternTypeInterface $type
-   * @return array
-   */
-  public static function makeTypeNavigationItem(PatternTypeInterface $type) {
-    return [
-      'patternTypeLC' => $type->getLowercaseName(),
-      'patternTypeUC' => $type->getUppercaseName(),
-      'patternType' => $type->getName(),
-      'patternTypeDash' => $type->getNameWithoutDigits(),
-      'patternTypeItems' => [],
-      'patternItems' => [],
-    ];
-  }
-
-  /**
    * @param PatternLabInterface $patternlab
    */
   public function __construct(PatternLabInterface $patternlab) {

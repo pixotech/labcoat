@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide;
 
+use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternInterface;
@@ -20,6 +21,7 @@ use Labcoat\Styleguide\Files\StyleguideIndexFile;
 use Labcoat\Styleguide\Files\SubTypeIndexFile;
 use Labcoat\Styleguide\Files\TypeIndexFile;
 use Labcoat\Styleguide\Navigation\Navigation;
+use Labcoat\Styleguide\Navigation\Pattern as NavigationPattern;
 use Labcoat\Styleguide\Pages\PatternPage;
 
 class Styleguide implements StyleguideInterface {
@@ -30,6 +32,8 @@ class Styleguide implements StyleguideInterface {
 
   protected $indexFiles;
 
+  protected $indexPaths = [];
+
   /**
    * @var Navigation
    */
@@ -39,7 +43,9 @@ class Styleguide implements StyleguideInterface {
 
   protected $patternlab;
 
-  protected $pattern;
+  protected $patternPaths = [];
+
+  protected $patterns;
 
   protected $twig;
 
@@ -57,12 +63,34 @@ class Styleguide implements StyleguideInterface {
     return $this->cacheBuster;
   }
 
+  public function getData() {
+    return $this->data;
+  }
+
+  public function getDataFileContents() {
+    $contents  = "var config = " . json_encode($this->getConfig()).";";
+    $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
+    $contents .= "var navItems = " . json_encode($this->navigation) . ";";
+    $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
+    $contents .= "var viewAllPaths = " . json_encode($this->getIndexPaths()) . ";";
+    $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
+    return $contents;
+  }
+
+  public function getIndexPaths() {
+    return $this->indexPaths;
+  }
+
   public function getNavigation() {
     return $this->navigation;
   }
 
   public function getPatternLab() {
     return $this->patternlab;
+  }
+
+  public function getPatternPaths() {
+    return $this->patternPaths;
   }
 
   /**
@@ -79,27 +107,83 @@ class Styleguide implements StyleguideInterface {
     return $this->getPatternLab()->render($template, $data);
   }
 
-  protected function makeFiles(PatternLabInterface $patternlab) {
-    $this->data = new DataFile();
-    $this->navigation = new Navigation();
+  protected function addPatternPath(PatternInterface $pattern) {
+    $typeName = PatternLab::stripDigits($pattern->getType());
+    $patternName = PatternLab::stripDigits($pattern->getName());
+    $navPattern = new NavigationPattern($pattern);
+    $this->patternPaths[$typeName][$patternName] = dirname($navPattern->getPath());
+  }
 
+  protected function addSubtypeIndexPath(PatternSubTypeInterface $subtype) {
+    $type = $subtype->getType();
+    $typeName = PatternLab::stripDigits($type->getName());
+    $subtypeName = PatternLab::stripDigits($subtype->getName());
+    if (!isset($this->indexPaths[$typeName])) {
+      $this->indexPaths[$typeName] = ['all' => $type->getName()];
+    }
+    $this->indexPaths[$typeName][$subtypeName] = $type->getName() . '-' . $subtype->getName();
+  }
+
+  protected function makeFiles(PatternLabInterface $patternlab) {
+
+    $this->patterns = [];
+    $this->typePatterns = [];
+    $this->subtypePatterns = [];
+
+    $globalData = $this->getGlobalData();
+
+    $this->navigation = new Navigation();
     $iterator = new \RecursiveIteratorIterator($patternlab->getPatterns(), \RecursiveIteratorIterator::SELF_FIRST);
     foreach ($iterator as $item) {
       if ($item instanceof PatternInterface) {
-        $this->data->addPatternPath($item);
+
+        $patternData = $globalData->import($item->getData());
+
+        $patternContent = $this->renderPattern($item, $patternData);
+
+        $this->patterns[$item->getId()] = $patternContent;
+        $this->typePatterns[$item->getType()][] = $patternContent;
+        if ($item->hasSubType()) $this->subtypePatterns[$item->getSubType()][] = $patternContent;
+
+        $this->addPatternPath($item);
         $this->navigation->addPattern($item);
         foreach ($item->getPseudoPatterns() as $pseudo) {
-          $this->data->addPatternPath($pseudo);
+
+          $pseudoData = $patternData->import($pseudo->getData());
+
+          $pseudoContent = $this->renderPattern($pseudo, $pseudoData);
+
+          $this->addPatternPath($pseudo);
+          # $this->navigation->addPattern($item);
         }
       }
       elseif ($item instanceof PatternSubTypeInterface) {
-        $this->data->addSubtypeIndexPath($item);
+
+        $contents = $this->subtypePatterns[$item->getId()];
+
+        $this->writeSubtypeIndex($item, $contents);
+
+        $this->addSubtypeIndexPath($item);
         $this->navigation->addSubtype($item);
+
+        unset($this->subtypePatterns[$item->getId()]);
+
       }
       elseif ($item instanceof PatternTypeInterface) {
+
+        $contents = $this->typePatterns[$item->getId()];
+
+        $this->writeTypeIndex($item, $contents);
+
         $this->navigation->addType($item);
+
+        unset($this->typePatterns[$item->getId()]);
+
       }
     }
+
+    $this->writeIndex($patterns);
+
   }
 
   protected function ensureDirectory($path) {
@@ -180,5 +264,21 @@ class Styleguide implements StyleguideInterface {
       $this->writeTypePage($type, $typePatterns);
     }
     $this->writeIndexPage($patterns);
+  }
+
+  protected function makeIndexPage() {
+
+  }
+
+  protected function makePatternPage() {
+
+  }
+
+  protected function makePageHeader(array $data) {
+
+  }
+
+  protected function makePageFooter(array $data) {
+
   }
 }

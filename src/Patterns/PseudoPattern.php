@@ -37,7 +37,11 @@ class PseudoPattern implements PseudoPatternInterface {
   }
 
   public function getPath() {
-    return $this->getId();
+    return $this->pattern->getPath() . '-' . $this->getVariantName();
+  }
+
+  public function getPseudoPatterns() {
+    return [];
   }
 
   public function getState() {

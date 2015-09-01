@@ -26,31 +26,39 @@ class DataFile extends File implements DataFileInterface {
     $typeName = PatternLab::stripDigits($pattern->getType());
     $patternName = PatternLab::stripDigits($pattern->getName());
     $navPattern = new NavigationPattern($pattern);
-    $this->patternPaths[$typeName][$patternName] = $navPattern->getPath();
+    $this->patternPaths[$typeName][$patternName] = dirname($navPattern->getPath());
   }
 
   public function addSubtypeIndexPath(PatternSubTypeInterface $subtype) {
     $type = $subtype->getType();
     $typeName = PatternLab::stripDigits($type->getName());
     $subtypeName = PatternLab::stripDigits($subtype->getName());
+    if (!isset($this->indexPaths[$typeName])) {
+      $this->indexPaths[$typeName] = ['all' => $type->getName()];
+    }
     $this->indexPaths[$typeName][$subtypeName] = $type->getName() . '-' . $subtype->getName();
   }
-
-
-
-
-
-
 
   public function getContents() {
     $contents  = "var config = " . json_encode($this->getConfig()).";";
     $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
     $contents .= "var navItems = " . json_encode($this->getData()->getNavigationItems()) . ";";
-    $contents .= "var patternPaths = " . json_encode($this->getData()->getPatternPaths()) . ";";
+    $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
     $contents .= "var viewAllPaths = " . json_encode($this->getData()->getIndexPaths()) . ";";
     $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
     return $contents;
   }
+
+  public function getIndexPaths() {
+    return $this->indexPaths;
+  }
+
+  public function getPatternPaths() {
+    return $this->patternPaths;
+  }
+
+
+
 
   public function getPath() {
     return $this->makePath(['styleguide', 'data', 'patternlab-data.js']);

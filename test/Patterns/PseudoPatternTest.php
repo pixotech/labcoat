@@ -74,9 +74,9 @@ class PseudoPatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testPath() {
     $pattern = new Pattern();
-    $pattern->id = 'one/two/three';
+    $pattern->path = 'one/two/three';
     $pseudo = new PseudoPattern($pattern, 'four', __FILE__);
-    $this->assertEquals('one/two/three~four', $pseudo->getPath());
+    $this->assertEquals('one/two/three-four', $pseudo->getPath());
   }
 
   # State

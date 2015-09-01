@@ -52,6 +52,9 @@ class Type implements \JsonSerializable, TypeInterface {
     }
     else {
       $this->patterns[$pattern->getName()] = new Pattern($pattern);
+      foreach ($pattern->getPseudoPatterns() as $pseudo) {
+        $this->patterns[] = new Pattern($pseudo);
+      }
     }
   }
 

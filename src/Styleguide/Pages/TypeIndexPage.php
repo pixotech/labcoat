@@ -9,16 +9,12 @@ class TypeIndexPage extends IndexPage {
 
   protected $type;
 
-  public function __construct(StyleguideInterface $styleguide, PatternType $type) {
-    parent::__construct($styleguide);
+  public function __construct(StyleguideInterface $styleguide, PatternType $type, array $partials) {
+    parent::__construct($styleguide, $partials);
     $this->type = $type;
   }
 
   protected function getPatternData() {
-    return 'viewall-' . $this->type->getName();
-  }
-
-  protected function getPatterns() {
-    return $this->type->getAllPatterns();
+    return ['patternPartial' => 'viewall-' . $this->type->getName()];
   }
 }

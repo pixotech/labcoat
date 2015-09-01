@@ -3,6 +3,7 @@
 namespace Labcoat\Mocks\Patterns;
 
 use Labcoat\Patterns\PatternInterface;
+use Labcoat\Patterns\PseudoPatternInterface;
 
 class Pattern implements PatternInterface {
 
@@ -37,6 +38,10 @@ class Pattern implements PatternInterface {
 
   public function getPath() {
     return $this->path;
+  }
+
+  public function getPseudoPatterns() {
+    // TODO: Implement getPseudoPatterns() method.
   }
 
   public function getState() {
