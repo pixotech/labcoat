@@ -9,8 +9,6 @@
 
 namespace Labcoat\Assets;
 
-use Labcoat\Filesystem\File;
-
 class Asset implements AssetInterface {
 
   /**
@@ -23,14 +21,9 @@ class Asset implements AssetInterface {
    */
   protected $path;
 
-  /**
-   * Constructor
-   *
-   * @param File $file The asset file
-   */
-  public function __construct(File $file) {
-    $this->path = $file->getPath();
-    $this->file = $file->getFullPath();
+  public function __construct($path, $file) {
+    $this->path = $path;
+    $this->file = $file;
   }
 
   /**

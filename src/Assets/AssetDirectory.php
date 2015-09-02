@@ -4,7 +4,7 @@ namespace Labcoat\Assets;
 
 use Labcoat\PatternLabInterface;
 
-class AssetDirectory implements AssetDirectoryInterface {
+class AssetDirectory implements \Countable, \IteratorAggregate, AssetDirectoryInterface {
 
   protected $assets = [];
   protected $path;
@@ -14,17 +14,25 @@ class AssetDirectory implements AssetDirectoryInterface {
     $this->findAssets($patternlab);
   }
 
+  public function count() {
+    return count($this->assets);
+  }
+
   public function getAssets() {
     return $this->assets;
+  }
+
+  public function getIterator() {
+    return new \ArrayIterator($this->assets);
   }
 
   protected function findAssets(PatternLabInterface $patternlab) {
     $dir = new \RecursiveDirectoryIterator($this->path, \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS);
     $files = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::LEAVES_ONLY);
-    foreach ($files as $path) {
-      $relativePath = substr($path, strlen($this->path) + 1);
-      if (!$patternlab->isHiddenFile($relativePath) && !$patternlab->isIgnoredFile($relativePath)) {
-        $this->assets[$relativePath] = $path;
+    foreach ($files as $file) {
+      $path = substr($file, strlen($this->path) + 1);
+      if (!$patternlab->isHiddenFile($path) && !$patternlab->isIgnoredFile($path)) {
+        $this->assets[$path] = new Asset($path, $file);
       }
     }
   }
