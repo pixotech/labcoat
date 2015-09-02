@@ -3,6 +3,7 @@
 namespace Labcoat;
 
 use Labcoat\Assets\Asset;
+use Labcoat\Assets\AssetDirectory;
 use Labcoat\Assets\Copier;
 use Labcoat\Configuration\Configuration;
 use Labcoat\Configuration\ConfigurationInterface;
@@ -59,12 +60,8 @@ class PatternLab implements PatternLabInterface {
 
   public static function splitPath($path) {
     $parts = explode('/', $path);
-    if (count($parts) == 3) {
-      return $parts;
-    }
-    if (count($parts) == 2) {
-      return [$parts[0], NULL, $parts[1]];
-    }
+    if (count($parts) == 3) return $parts;
+    if (count($parts) == 2) return [$parts[0], NULL, $parts[1]];
     throw new \InvalidArgumentException("Invalid path: $path");
   }
 
@@ -83,6 +80,9 @@ class PatternLab implements PatternLabInterface {
    * @return Assets\Asset[]
    */
   public function getAssets() {
+
+
+
     if (!isset($this->assets)) $this->findAssets();
     return $this->assets;
   }
@@ -217,11 +217,22 @@ class PatternLab implements PatternLabInterface {
     return $this->getPatterns()->getTypes();
   }
 
-  public function getVendorDirectory() {
-    $loaderClassName = "Composer\\Autoload\\ClassLoader";
-    if (!class_exists($loaderClassName)) throw new \Exception("Could not location vendor path");
-    $reflection = new \ReflectionClass($loaderClassName);
-    return realpath(dirname($reflection->getFileName()) . '/..');
+  public function hasIgnoredExtension($path) {
+    $ext = pathinfo($path, PATHINFO_EXTENSION);
+    return in_array($ext, $this->getIgnoredExtensions());
+  }
+
+  public function isHiddenFile($path) {
+    return false !== strpos(DIRECTORY_SEPARATOR . $path, DIRECTORY_SEPARATOR . '_');
+  }
+
+  public function isIgnoredFile($path) {
+    return $this->hasIgnoredExtension($path) || $this->isInIgnoredDirectory($path);
+  }
+
+  public function isInIgnoredDirectory($path) {
+    $dirs = explode(DIRECTORY_SEPARATOR, dirname($path));
+    return count(array_intersect($dirs, $this->getIgnoredDirectories())) > 0;
   }
 
   /**
@@ -249,10 +260,9 @@ class PatternLab implements PatternLabInterface {
 
   protected function findAssets() {
     $this->assets = [];
-    foreach ($this->getSourceFiles() as $file) {
-      if (!$file->isHidden() && !$file->isIgnored()) {
-        $this->assets[] = new Asset($file);
-      }
+    foreach ($this->config->getAssetDirectories() as $dir) {
+      $dir = new AssetDirectory($this, $dir);
+      $this->assets += $dir->getAssets();
     }
   }
 

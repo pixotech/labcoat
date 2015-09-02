@@ -124,6 +124,10 @@ class Configuration implements ConfigurationInterface {
     $this->listItemFiles[] = $path;
   }
 
+  public function getAssetDirectories() {
+    return $this->assetDirectories;
+  }
+
   public function getExposedOptions() {
     return $this->exposedOptions;
   }

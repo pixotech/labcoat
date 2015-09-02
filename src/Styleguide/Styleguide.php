@@ -118,42 +118,64 @@ class Styleguide implements StyleguideInterface {
     $this->loadControls($patternlab);
     $this->addPatterns($patternlab->getPatterns());
     $this->makeFiles();
+    unset($this->pages);
+    unset($this->indexPage);
   }
 
   public function generate() {
   }
 
+  /**
+   * @return int
+   */
   public function getCacheBuster() {
     return $this->cacheBuster;
   }
 
+  /**
+   * @return array
+   */
   public function getConfig() {
     return $this->config;
   }
 
+  /**
+   * @return array
+   */
   public function getControls() {
     return $this->controls;
   }
 
+  /**
+   * @return array
+   */
   public function getIndexPaths() {
     return $this->indexPaths;
   }
 
+  /**
+   * @return Navigation
+   */
   public function getNavigation() {
     return $this->navigation;
   }
 
+  /**
+   * @param PatternInterface $pattern
+   */
   public function getPatternExample(PatternInterface $pattern) {
   }
 
-  public function getPatternExampleData(PatternInterface $pattern) {
-    return $pattern->getData();
-  }
-
+  /**
+   * @return array
+   */
   public function getPatternPaths() {
     return $this->patternPaths;
   }
 
+  /**
+   * @return array
+   */
   public function getPlugins() {
     return [];
   }
@@ -166,10 +188,16 @@ class Styleguide implements StyleguideInterface {
     return $this->twig;
   }
 
+  /**
+   * @param FileInterface $file
+   */
   protected function addFile(FileInterface $file) {
     $this->files[$file->getPath()] = $file;
   }
 
+  /**
+   * @param PatternInterface $pattern
+   */
   protected function addPattern(PatternInterface $pattern) {
     $this->pages[$pattern->getId()] = new PatternPage($this, $pattern);
     $this->getIndexPage()->addPattern($pattern);
@@ -179,6 +207,9 @@ class Styleguide implements StyleguideInterface {
     $this->addPatternPath($pattern);
   }
 
+  /**
+   * @param PatternInterface $pattern
+   */
   protected function addPatternPath(PatternInterface $pattern) {
     $typeName = PatternLab::stripDigits($pattern->getType());
     $patternName = PatternLab::stripDigits($pattern->getName());
@@ -186,6 +217,9 @@ class Styleguide implements StyleguideInterface {
     $this->patternPaths[$typeName][$patternName] = dirname($navPattern->getPath());
   }
 
+  /**
+   * @param PatternCollection $patterns
+   */
   protected function addPatterns(PatternCollection $patterns) {
     $this->navigation = new Navigation();
     $items = new \RecursiveIteratorIterator($patterns, \RecursiveIteratorIterator::SELF_FIRST);
@@ -202,12 +236,18 @@ class Styleguide implements StyleguideInterface {
     }
   }
 
+  /**
+   * @param PatternSubTypeInterface $subtype
+   */
   protected function addSubtype(PatternSubTypeInterface $subtype) {
     $this->pages[$subtype->getId()] = new SubTypeIndexPage($this, $subtype);
     $this->navigation->addSubtype($subtype);
     $this->addSubtypeIndexPath($subtype);
   }
 
+  /**
+   * @param PatternSubTypeInterface $subtype
+   */
   protected function addSubtypeIndexPath(PatternSubTypeInterface $subtype) {
     $type = $subtype->getType();
     $typeName = PatternLab::stripDigits($type->getName());
@@ -218,15 +258,24 @@ class Styleguide implements StyleguideInterface {
     $this->indexPaths[$typeName][$subtypeName] = $type->getName() . '-' . $subtype->getName();
   }
 
+  /**
+   * @param PatternTypeInterface $type
+   */
   protected function addType(PatternTypeInterface $type) {
     $this->pages[$type->getId()] = new TypeIndexPage($this, $type);
     $this->navigation->addType($type);
   }
 
+  /**
+   * @param $path
+   */
   protected function ensureDirectory($path) {
     if (!is_dir($path)) mkdir($path, 0777, true);
   }
 
+  /**
+   * @param $path
+   */
   protected function ensurePathDirectory($path) {
     $this->ensureDirectory(dirname($path));
   }
@@ -238,6 +287,9 @@ class Styleguide implements StyleguideInterface {
     return $this->indexPage;
   }
 
+  /**
+   * @return array
+   */
   protected function getMediaQueries() {
     $mediaQueries = [];
     foreach ($this->getStylesheets() as $path) {
@@ -277,30 +329,53 @@ class Styleguide implements StyleguideInterface {
     return $this->pages[$id];
   }
 
+  /**
+   * @return string
+   */
   protected function getPatternFooterTemplatePath() {
     return $this->footerTemplatePath;
   }
 
+  /**
+   * @return string
+   */
   protected function getPatternHeaderTemplatePath() {
     return $this->headerTemplatePath;
   }
 
+  /**
+   * @param $template
+   * @return string
+   */
   protected function getStyleguideTemplateContent($template) {
     return file_get_contents($this->getStyleguideTemplatePath($template));
   }
 
+  /**
+   * @param $template
+   * @return string
+   */
   protected function getStyleguideTemplatePath($template) {
     return Configuration::makePath([$this->templatesDirectory, $template]);
   }
 
+  /**
+   * @return array
+   */
   protected function getStylesheets() {
     return [];
   }
 
+  /**
+   * @param PatternLabInterface $patternlab
+   */
   protected function loadConfig(PatternLabInterface $patternlab) {
     $this->config = $patternlab->getExposedOptions();
   }
 
+  /**
+   * @param PatternLabInterface $patternlab
+   */
   protected function loadControls(PatternLabInterface $patternlab) {
     $this->controls = [
       'ishControlsHide' => [],
@@ -309,10 +384,6 @@ class Styleguide implements StyleguideInterface {
     foreach ($patternlab->getHiddenControls() as $control) {
       $this->controls['ishControlsHide'][$control] = 'true';
     }
-  }
-
-  protected function loadGlobalData() {
-    $this->globalData = [];
   }
 
   protected function makeDataFile() {
@@ -348,6 +419,10 @@ class Styleguide implements StyleguideInterface {
     $this->twig = new \Twig_Environment($loader, ['cache' => false]);
   }
 
+  /**
+   * @param $path
+   * @param $content
+   */
   protected function writeFile($path, $content) {
     $this->ensurePathDirectory($path);
     file_put_contents($path, $content);

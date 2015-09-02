@@ -70,7 +70,16 @@ interface PatternLabInterface {
    */
   public function getTypes();
 
-  public function getVendorDirectory();
+  /**
+   * @return bool
+   */
+  public function isHiddenFile($path);
+
+  /**
+   * @return bool
+   */
+  public function isIgnoredFile($path);
+
   public function makeDocument($patternName, $variables = null);
   public function render($patternName, $variables = null);
 }
