@@ -6,18 +6,22 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 abstract class Page implements PageInterface {
 
-  protected $styleguide;
+  protected $cacheBuster;
 
   public function __construct(StyleguideInterface $styleguide) {
-    $this->styleguide = $styleguide;
+    $this->cacheBuster = $styleguide->getCacheBuster();
   }
 
   public function __toString() {
     return $this->getHeader() . $this->getContent() . $this->getFooter();
   }
 
+  public function render(StyleguideInterface $styleguide) {
+    // TODO: Implement render() method.
+  }
+
   protected function getCacheBuster() {
-    return $this->styleguide->getCacheBuster();
+    return $this->cacheBuster;
   }
 
   abstract public function getContent();
@@ -42,7 +46,6 @@ abstract class Page implements PageInterface {
       'cacheBuster' => $this->getCacheBuster(),
       'patternLabHead' => $this->getPatternLabHeaderContent(),
     ];
-    $data += $this->styleguide->getPatternLab()->getData();
     return $data;
   }
 
@@ -61,12 +64,5 @@ abstract class Page implements PageInterface {
       'cacheBuster' => $this->getCacheBuster(),
     ];
     return $this->getTwig()->render('partials/general-header', $data);
-  }
-
-  /**
-   * @return \Twig_Environment
-   */
-  protected function getTwig() {
-    return $this->styleguide->getTwig();
   }
 }

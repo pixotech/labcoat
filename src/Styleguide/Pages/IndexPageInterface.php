@@ -2,6 +2,8 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-interface IndexPageInterface extends PageInterface {
+use Labcoat\Patterns\PatternInterface;
 
+interface IndexPageInterface extends PageInterface {
+  public function addPattern(PatternInterface $pattern);
 }

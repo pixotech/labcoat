@@ -18,4 +18,9 @@ interface PatternSubTypeInterface {
    * @return PatternTypeInterface
    */
   public function getType();
+
+  /**
+   * @return string
+   */
+  public function getTypeId();
 }

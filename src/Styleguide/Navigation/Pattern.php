@@ -7,7 +7,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $pattern;
 
   public function __construct(\Labcoat\Patterns\PatternInterface $pattern) {
-    $this->pattern = $pattern;
+    #$this->pattern = $pattern;
   }
 
   public function getName() {

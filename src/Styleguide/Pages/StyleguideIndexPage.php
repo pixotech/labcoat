@@ -4,17 +4,21 @@ namespace Labcoat\Styleguide\Pages;
 
 use Labcoat\Styleguide\StyleguideInterface;
 
-class StyleguideIndexPage extends IndexPage {
+class StyleguideIndexPage extends IndexPage implements StyleguideIndexPageInterface {
 
   public function __construct(StyleguideInterface $styleguide) {
     parent::__construct($styleguide);
   }
 
-  protected function getPatternData() {
-    return [];
+  public function getPath() {
+    return ['styleguide', 'html', 'styleguide.html'];
   }
 
-  protected function getPatterns() {
-    return $this->styleguide->getPatternLab()->getPatterns()->getAllPatterns();
+  public function render(StyleguideInterface $styleguide) {
+    // TODO: Implement render() method.
+  }
+
+  protected function getPatternData() {
+    return [];
   }
 }

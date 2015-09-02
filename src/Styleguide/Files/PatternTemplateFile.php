@@ -2,15 +2,24 @@
 
 namespace Labcoat\Styleguide\Files;
 
+use Labcoat\Styleguide\StyleguideInterface;
+
 class PatternTemplateFile extends PatternFile implements PatternTemplateFileInterface {
 
-  public function getContents() {
-    return htmlentities($this->pattern->getTemplateContent());
+  public function put(StyleguideInterface $styleguide, $path) {
+    $template = $this->getTemplateContent();
+    file_put_contents($path, htmlentities($template));
   }
 
   public function getPath() {
-    $path = $this->pattern->getStyleguidePathName();
-    $ext = 'twig';
-    return $this->makePath(['patterns', $path, "$path.$ext"]);
+    return $this->makePath($this->pattern->getFilePath($this->getTemplateExtension()));
+  }
+
+  protected function getTemplateContent() {
+    return file_get_contents($this->pattern->getFile());
+  }
+
+  protected function getTemplateExtension() {
+    return 'twig';
   }
 }

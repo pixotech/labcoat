@@ -28,6 +28,10 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getId() . '~' . $this->getVariantName();
   }
 
+  public function getIncludedPatterns() {
+    return $this->pattern->getIncludedPatterns();
+  }
+
   public function getName() {
     return $this->pattern->getName() . '-' . $this->getVariantName();
   }
@@ -52,6 +56,10 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getSubType();
   }
 
+  public function getSubTypeId() {
+    return $this->pattern->getSubTypeId();
+  }
+
   public function getTime() {
     $patternTime = $this->pattern->getTime();
     $dataTime = filemtime($this->data->getFile());
@@ -60,6 +68,10 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getType() {
     return $this->pattern->getType();
+  }
+
+  public function getTypeId() {
+    return $this->pattern->getTypeId();
   }
 
   public function hasSubType() {

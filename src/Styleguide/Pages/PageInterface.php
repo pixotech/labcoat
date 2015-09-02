@@ -2,6 +2,9 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-interface PageInterface {
+use Labcoat\Styleguide\StyleguideInterface;
 
+interface PageInterface {
+  public function getPath();
+  public function render(StyleguideInterface $styleguide);
 }

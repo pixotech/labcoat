@@ -12,11 +12,19 @@ class PatternPage extends Page implements PatternPageInterface {
 
   public function __construct(StyleguideInterface $styleguide, PatternInterface $pattern) {
     parent::__construct($styleguide);
-    $this->pattern = $pattern;
+    $this->pattern = new Pattern($pattern);
   }
 
   public function getContent() {
     return $this->styleguide->getPatternExample($this->pattern);
+  }
+
+  public function getPath() {
+    return $this->pattern->getFilePath('html');
+  }
+
+  public function getPattern() {
+    return $this->pattern;
   }
 
   protected function getFooterVariables() {
@@ -28,7 +36,6 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   protected function getPatternData() {
-    $pattern = new Pattern($this->styleguide, $this->pattern);
-    return $pattern;
+    return $this->pattern;
   }
 }

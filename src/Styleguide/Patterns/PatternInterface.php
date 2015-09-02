@@ -3,6 +3,9 @@
 namespace Labcoat\Styleguide\Patterns;
 
 interface PatternInterface {
+  public function getName();
+  public function getFilePath($extension);
+  public function getPath();
   public function patternCSS();
   public function patternCSSExists();
   public function patternDesc();

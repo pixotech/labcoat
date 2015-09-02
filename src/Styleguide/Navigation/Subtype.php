@@ -11,7 +11,8 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   protected $subtype;
 
   public function __construct(PatternSubTypeInterface $subtype) {
-    $this->subtype = $subtype;
+    #$this->subtype = $subtype;
+    $this->name = $subtype->getName();
   }
 
   public function jsonSerialize() {
@@ -36,7 +37,7 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   }
 
   public function getName() {
-    return $this->subtype->getName();
+    return $this->name;
   }
 
   public function getNameWithDashes() {

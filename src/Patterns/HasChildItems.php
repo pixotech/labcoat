@@ -22,7 +22,6 @@ trait HasChildItems {
   }
 
   public function hasChildren() {
-    print_r($this->current());
     if (!($this->current() instanceof \RecursiveIterator)) return false;
     return count($this->current()) > 0;
   }

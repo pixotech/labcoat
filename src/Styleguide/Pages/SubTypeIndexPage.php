@@ -3,25 +3,27 @@
 namespace Labcoat\Styleguide\Pages;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\PatternSubType;
+use Labcoat\Patterns\PatternSubTypeInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
-class SubTypeIndexPage extends IndexPage {
+class SubTypeIndexPage extends IndexPage implements SubTypeIndexPageInterface {
 
-  protected $subType;
+  protected $subtypeName;
+  protected $typeName;
 
-  public function __construct(StyleguideInterface $styleguide, PatternSubType $subType, array $partials = []) {
-    parent::__construct($styleguide, $partials);
-    $this->subType = $subType;
+  public function __construct(StyleguideInterface $styleguide, PatternSubTypeInterface $subType) {
+    parent::__construct($styleguide);
+    $this->subtypeName = $subType->getName();
+    $this->typeName = $subType->getType()->getName();
+  }
+
+  public function getPath() {
+    return ['patterns', "{$this->typeName}-{$this->subtypeName}", "index.html"];
   }
 
   protected function getPatternData() {
-    $typeName = PatternLab::stripDigits($this->subType->getType()->getName());
-    $name = PatternLab::stripDigits($this->subType->getName());
+    $typeName = PatternLab::stripDigits($this->typeName);
+    $name = PatternLab::stripDigits($this->subtypeName);
     return ['patternData' => "viewall-{$typeName}-{$name}"];
-  }
-
-  protected function getPatterns() {
-    return $this->subType->getAllPatterns();
   }
 }

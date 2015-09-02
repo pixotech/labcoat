@@ -50,6 +50,11 @@ interface PatternInterface {
   public function getSubType();
 
   /**
+   * @return string
+   */
+  public function getSubTypeId();
+
+  /**
    * @return int
    */
   public function getTime();
@@ -58,6 +63,11 @@ interface PatternInterface {
    * @return string
    */
   public function getType();
+
+  /**
+   * @return string
+   */
+  public function getTypeId();
 
   /**
    * @return bool

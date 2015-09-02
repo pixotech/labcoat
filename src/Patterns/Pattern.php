@@ -76,6 +76,10 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
     return $this->subType;
   }
 
+  public function getSubTypeId() {
+    return $this->type . '/' . $this->subType;
+  }
+
   public function getTime() {
     $time = filemtime($this->file);
     // Check data file
@@ -83,6 +87,10 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
   }
 
   public function getType() {
+    return $this->type;
+  }
+
+  public function getTypeId() {
     return $this->type;
   }
 

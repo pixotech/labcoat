@@ -7,6 +7,7 @@ use Labcoat\Patterns\PatternTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
 
+  protected $name;
   protected $patterns = [];
   protected $subtypes = [];
 
@@ -16,7 +17,8 @@ class Type implements \JsonSerializable, TypeInterface {
   protected $type;
 
   public function __construct(PatternTypeInterface $type) {
-    $this->type = $type;
+    #$this->type = $type;
+    $this->name = $type->getName();
   }
 
   public function getLowercaseName() {
@@ -24,7 +26,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function getName() {
-    return $this->type->getName();
+    return $this->name;
   }
 
   public function getNameWithDashes() {
@@ -53,7 +55,7 @@ class Type implements \JsonSerializable, TypeInterface {
     else {
       $this->patterns[$pattern->getName()] = new Pattern($pattern);
       foreach ($pattern->getPseudoPatterns() as $pseudo) {
-        $this->patterns[] = new Pattern($pseudo);
+        $this->patterns[$pseudo->getName()] = new Pattern($pseudo);
       }
     }
   }

@@ -6,17 +6,25 @@ use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternTypeInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
-class TypeIndexPage extends IndexPage {
+class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
 
-  protected $type;
+  protected $typeName;
 
-  public function __construct(StyleguideInterface $styleguide, PatternTypeInterface $type, array $partials = []) {
-    parent::__construct($styleguide, $partials);
-    $this->type = $type;
+  public function __construct(StyleguideInterface $styleguide, PatternTypeInterface $type) {
+    parent::__construct($styleguide);
+    $this->typeName = $type->getName();
+  }
+
+  public function getPath() {
+    return $this->typeName;
+  }
+
+  public function render(StyleguideInterface $styleguide) {
+    // TODO: Implement render() method.
   }
 
   protected function getPatternData() {
-    $name = PatternLab::stripDigits($this->type->getName());
+    $name = PatternLab::stripDigits($this->typeName);
     return ['patternPartial' => "viewall-{$name}-all"];
   }
 }

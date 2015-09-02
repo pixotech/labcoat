@@ -7,12 +7,33 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
 
-  protected $pattern;
-  protected $styleguide;
+  protected $id;
+  protected $name;
+  protected $partial;
+  protected $path;
+  protected $state;
 
-  public function __construct(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
-    $this->styleguide = $styleguide;
-    $this->pattern = $pattern;
+  public function __construct(SourcePatternInterface $pattern) {
+    #$this->pattern = $pattern;
+    $this->id = $pattern->getId();
+    $this->name = $pattern->getName();
+    $this->partial = $pattern->getPartial();
+    $this->path = $pattern->getPath();
+    $this->state = $pattern->getState();
+    #$this->includes = $pattern->getIncludedPatterns();
+  }
+
+  public function getName() {
+    return $this->name;
+  }
+
+  public function getFilePath($extension) {
+    $path = str_replace('/', '-', $this->getPath());
+    return ['patterns', $path, "$path.$extension"];
+  }
+
+  public function getPath() {
+    return $this->path;
   }
 
   public function jsonSerialize() {
@@ -25,7 +46,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
       'patternExtension' => 'twig',
       'patternName' => $this->patternName(),
       'patternPartial' => $this->patternPartial(),
-      'patternState' => $this->pattern->getState(),
+      'patternState' => $this->state,
       'extraOutput' => [],
     ];
     return $data;
@@ -85,17 +106,14 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternName() {
-    return ucwords(str_replace('-', ' ', $this->pattern->getName()));
+    return ucwords(str_replace('-', ' ', $this->name));
   }
 
   public function patternPartial() {
-    return $this->pattern->getPartial();
+    return $this->partial;
   }
 
   public function patternPartialCode() {
-    $path = $this->pattern->getPath();
-    $data = $this->pattern->getData();
-    return $this->styleguide->getPatternLab()->render($path, $data);
   }
 
   public function patternPartialCodeE() {
@@ -107,7 +125,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   protected function getBreadcrumb() {
-    $crumb = [$this->pattern->getType()];
+    $crumb = [$this->type];
     if ($this->pattern->hasSubType()) $crumb[] = $this->pattern->getSubType();
     return implode(' &gt; ', $crumb);
   }

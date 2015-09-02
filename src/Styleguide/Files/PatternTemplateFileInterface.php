@@ -2,6 +2,6 @@
 
 namespace Labcoat\Styleguide\Files;
 
-interface PatternTemplateFileInterface extends DynamicFileInterface {
+interface PatternTemplateFileInterface extends FileInterface {
 
 }

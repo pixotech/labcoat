@@ -11,41 +11,27 @@ use Labcoat\Styleguide\Data;
 use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\Navigation\Pattern as NavigationPattern;
 use Labcoat\Styleguide\Styleguide;
+use Labcoat\Styleguide\StyleguideInterface;
 
 class DataFile extends File implements DataFileInterface {
 
-  protected $indexPaths = [];
+  protected $navigation;
 
-  protected $patternPaths = [];
-
-  public function __construct(PatternLabInterface $patternlab = null) {
-    $this->patternlab = $patternlab;
+  public function __construct(Navigation $navigation) {
+    $this->navigation = $navigation;
   }
 
-  public function addPatternPath(PatternInterface $pattern) {
-    $typeName = PatternLab::stripDigits($pattern->getType());
-    $patternName = PatternLab::stripDigits($pattern->getName());
-    $navPattern = new NavigationPattern($pattern);
-    $this->patternPaths[$typeName][$patternName] = dirname($navPattern->getPath());
+  public function put(StyleguideInterface $styleguide, $path) {
+    file_put_contents($path, $this->getContents($styleguide));
   }
 
-  public function addSubtypeIndexPath(PatternSubTypeInterface $subtype) {
-    $type = $subtype->getType();
-    $typeName = PatternLab::stripDigits($type->getName());
-    $subtypeName = PatternLab::stripDigits($subtype->getName());
-    if (!isset($this->indexPaths[$typeName])) {
-      $this->indexPaths[$typeName] = ['all' => $type->getName()];
-    }
-    $this->indexPaths[$typeName][$subtypeName] = $type->getName() . '-' . $subtype->getName();
-  }
-
-  public function getContents() {
-    $contents  = "var config = " . json_encode($this->getConfig()).";";
-    $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
-    $contents .= "var navItems = " . json_encode($this->getData()->getNavigationItems()) . ";";
-    $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
-    $contents .= "var viewAllPaths = " . json_encode($this->getData()->getIndexPaths()) . ";";
-    $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
+  public function getContents(StyleguideInterface $styleguide) {
+    $contents  = "var config = " . json_encode($styleguide->getConfig()).";";
+    $contents .= "var ishControls = " . json_encode($styleguide->getControls()) . ";";
+    $contents .= "var navItems = " . json_encode($this->navigation) . ";";
+    $contents .= "var patternPaths = " . json_encode($styleguide->getPatternPaths()) . ";";
+    $contents .= "var viewAllPaths = " . json_encode($styleguide->getIndexPaths()) . ";";
+    $contents .= "var plugins = " . json_encode($styleguide->getPlugins()) . ";";
     return $contents;
   }
 

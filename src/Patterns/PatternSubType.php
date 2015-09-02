@@ -49,4 +49,8 @@ class PatternSubType extends PatternSection implements PatternSubTypeInterface {
   public function getType() {
     return $this->type;
   }
+
+  public function getTypeId() {
+    return $this->getType()->getId();
+  }
 }
