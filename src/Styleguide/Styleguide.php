@@ -129,7 +129,12 @@ class Styleguide implements StyleguideInterface {
     unset($this->indexPage);
   }
 
-  public function generate() {
+  public function generate($directory) {
+    foreach ($this->files as $path => $file) {
+      $destination = PatternLab::makePath([$directory, $path]);
+      $this->ensurePathDirectory($destination);
+      $file->put($this, $destination);
+    }
   }
 
   /**
@@ -171,7 +176,7 @@ class Styleguide implements StyleguideInterface {
     return $this->navigation;
   }
 
-  public function getPatternExample(PatternInterface $pattern) {
+  public function getPatternContent(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
   }
 
   /**

@@ -2,9 +2,14 @@
 
 namespace Labcoat\Styleguide;
 
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\Styleguide\Patterns\PatternInterface;
 
 interface StyleguideInterface {
+
+  /**
+   * @param string $directory
+   */
+  public function generate($directory);
 
   /**
    * @return string
@@ -29,7 +34,7 @@ interface StyleguideInterface {
   /**
    * @return string
    */
-  public function getPatternExample(PatternInterface $pattern);
+  public function getPatternContent(PatternInterface $pattern);
 
   /**
    * @return array

@@ -7,6 +7,7 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
 
+  protected $file;
   protected $id;
   protected $name;
   protected $partial;
@@ -14,7 +15,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $state;
 
   public function __construct(SourcePatternInterface $pattern) {
-    #$this->pattern = $pattern;
+    $this->file = $pattern->getFile();
     $this->id = $pattern->getId();
     $this->name = $pattern->getName();
     $this->partial = $pattern->getPartial();
@@ -25,6 +26,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getFile() {
+    return $this->file;
   }
 
   public function getFilePath($extension) {
