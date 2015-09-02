@@ -12,7 +12,6 @@ use Labcoat\Styleguide\Files\DataFile;
 use Labcoat\Styleguide\Files\FileInterface;
 use Labcoat\Styleguide\Files\PageFile;
 use Labcoat\Styleguide\Files\PatternSourceFile;
-use Labcoat\Styleguide\Files\PatternHtmlFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\Navigation\Pattern as NavigationPattern;
@@ -56,19 +55,9 @@ class Styleguide implements StyleguideInterface {
    */
   protected $pages;
 
-  protected $patternFileSets;
-
-  protected $patternlab;
-
   protected $patternPaths = [];
 
-  protected $patterns;
-
-  protected $subtypePatterns;
-
   protected $twig;
-
-  protected $typePatterns;
 
   public function __construct(PatternLabInterface $patternlab) {
     #$this->patternlab = $patternlab;
@@ -86,18 +75,23 @@ class Styleguide implements StyleguideInterface {
     return $this->cacheBuster;
   }
 
-  public function getData() {
-    return $this->data;
+  public function getConfig() {
+    return $this->patternlab->getExposedOptions();
   }
 
-  public function getDataFileContents() {
-    $contents  = "var config = " . json_encode($this->getConfig()).";";
-    $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
-    $contents .= "var navItems = " . json_encode($this->navigation) . ";";
-    $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
-    $contents .= "var viewAllPaths = " . json_encode($this->getIndexPaths()) . ";";
-    $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
-    return $contents;
+  public function getControls() {
+    $controls = [
+      'ishControlsHide' => [],
+      'mqs' => $this->getMediaQueries(),
+    ];
+    foreach ($this->patternlab->getHiddenControls() as $control) {
+      $controls['ishControlsHide'][$control] = 'true';
+    }
+    return $controls;
+  }
+
+  public function getData() {
+    return $this->data;
   }
 
   public function getIndexPaths() {
@@ -124,6 +118,10 @@ class Styleguide implements StyleguideInterface {
 
   public function getPatternPaths() {
     return $this->patternPaths;
+  }
+
+  public function getPlugins() {
+    return [];
   }
 
   /**
@@ -170,6 +168,21 @@ class Styleguide implements StyleguideInterface {
 
   protected function getPatternsIterator() {
     return new \RecursiveIteratorIterator($this->patternlab->getPatterns(), \RecursiveIteratorIterator::CHILD_FIRST);
+  }
+
+  protected function getMediaQueries() {
+    $mediaQueries = [];
+    foreach ($this->getStylesheets() as $file) {
+      $data = file_get_contents($file->getPathname());
+      preg_match_all("/@media.*(min|max)-width:([ ]+)?(([0-9]{1,5})(\.[0-9]{1,20}|)(px|em))/", $data, $matches);
+      foreach ($matches[3] as $match) {
+        if (!in_array($match, $mediaQueries)) {
+          $mediaQueries[] = $match;
+        }
+      }
+    }
+    usort($mediaQueries, "strnatcmp");
+    return $mediaQueries;
   }
 
   protected function getTypePatterns(PatternTypeInterface $type) {
@@ -255,11 +268,13 @@ class Styleguide implements StyleguideInterface {
     $this->getTypePage($pattern->getTypeId())->addPattern($pattern);
     if ($pattern->hasSubType()) $this->getSubtypePage($pattern->getSubTypeId())->addPattern($pattern);
     $this->navigation->addPattern($pattern);
+    $this->addPatternPath($pattern);
   }
 
   protected function addSubtype(PatternSubTypeInterface $subtype) {
     $this->pages[$subtype->getId()] = new SubTypeIndexPage($this, $subtype);
     $this->navigation->addSubtype($subtype);
+    $this->addSubtypeIndexPath($subtype);
   }
 
   protected function addType(PatternTypeInterface $type) {

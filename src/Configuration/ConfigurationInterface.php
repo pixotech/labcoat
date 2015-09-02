@@ -6,7 +6,9 @@ interface ConfigurationInterface {
   public function addAssetDirectory($path);
   public function addGlobalData($path);
   public function addListItems($path);
+  public function getExposedOptions();
   public function getGlobalDataFiles();
+  public function getHiddenControls();
   public function getIgnoredDirectories();
   public function getIgnoredExtensions();
   public function getListItemFiles();

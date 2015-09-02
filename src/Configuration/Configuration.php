@@ -10,6 +10,10 @@ class Configuration implements ConfigurationInterface {
 
   protected $dataFiles = [];
 
+  protected $exposedOptions = [];
+
+  protected $hiddenControls = [];
+
   protected $ignoredDirectories = [];
 
   protected $ignoredExtensions = [];
@@ -66,6 +70,9 @@ class Configuration implements ConfigurationInterface {
       if (!empty($seConfig['ie'])) {
         $config->setIgnoredExtensions($seConfig['ie']);
       }
+      if (!empty($seConfig['ishControlsHide'])) {
+        $config->setHiddenControls($seConfig['ishControlsHide']);
+      }
       if (!empty($seConfig['patternExtension'])) {
         $config->setPatternExtension($seConfig['patternExtension']);
       }
@@ -89,8 +96,16 @@ class Configuration implements ConfigurationInterface {
     $this->listItemFiles[] = $path;
   }
 
+  public function getExposedOptions() {
+    return $this->exposedOptions;
+  }
+
   public function getGlobalDataFiles() {
     return $this->dataFiles;
+  }
+
+  public function getHiddenControls() {
+    return $this->hiddenControls;
   }
 
   public function getIgnoredDirectories() {
@@ -130,6 +145,14 @@ class Configuration implements ConfigurationInterface {
 
   public function setIgnoredDirectories(array $directories) {
     $this->ignoredDirectories = $directories;
+  }
+
+  public function setExposedOptions($options) {
+    $this->exposedOptions = $options;
+  }
+
+  public function setHiddenControls($controls) {
+    $this->hiddenControls = $controls;
   }
 
   public function setIgnoredExtensions(array $extensions) {

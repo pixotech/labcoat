@@ -25,7 +25,10 @@ class PatternLab implements PatternLabInterface {
    */
   protected $config;
 
-  protected $data;
+  /**
+   * @var array|null
+   */
+  protected $globalData;
 
   /**
    * @var \Labcoat\Patterns\PatternCollection
@@ -36,6 +39,10 @@ class PatternLab implements PatternLabInterface {
    * @var \Labcoat\Twig\Environment
    */
   protected $twig;
+
+  public static function loadData($path) {
+    return json_decode(file_get_contents($path), true);
+  }
 
   public static function loadStandardEdition($dir) {
     $config = Configuration::fromStandardEdition($dir);
@@ -70,11 +77,6 @@ class PatternLab implements PatternLabInterface {
     $this->config = $config;
   }
 
-
-  public function setPatternsDirectory($path) {
-    $this->patternsDirectory = $path;
-  }
-
   /**
    * Get an array of Pattern Lab assets
    *
@@ -97,21 +99,6 @@ class PatternLab implements PatternLabInterface {
     $copier->copyTo($directoryPath);
   }
 
-  public function getData($reload = false) {
-    if ($reload || !isset($this->data)) {
-      $this->data = [];
-      foreach ($this->findDataFiles() as $path) {
-        if (basename($path, '.json') == 'listitems') continue;
-        $this->data += json_decode(file_get_contents($path), true);
-      }
-    }
-    return $this->data;
-  }
-
-  public function getDataDirectory() {
-    return $this->patternsDirectory . '/../_data';
-  }
-
   public function getDefaultDirectoryPermissions() {
     return 0777;
   }
@@ -120,8 +107,13 @@ class PatternLab implements PatternLabInterface {
     return [];
   }
 
+  public function getGlobalData() {
+    if (!isset($this->globalData)) $this->loadGlobalData();
+    return $this->globalData;
+  }
+
   public function getHiddenControls() {
-    return [];
+    return $this->config->getHiddenControls();
   }
 
   /**
@@ -132,7 +124,7 @@ class PatternLab implements PatternLabInterface {
    * @return array
    */
   public function getIgnoredDirectories() {
-    return $this->getConfiguration()->getIgnoredDirectories();
+    return $this->config->getIgnoredDirectories();
   }
 
   /**
@@ -143,7 +135,7 @@ class PatternLab implements PatternLabInterface {
    * @return array
    */
   public function getIgnoredExtensions() {
-    return $this->getConfiguration()->getIgnoredExtensions();
+    return $this->config->getIgnoredExtensions();
   }
 
   /**
@@ -248,33 +240,6 @@ class PatternLab implements PatternLabInterface {
     }
   }
 
-  protected function findDataFiles() {
-    $files = [];
-    $dir = new \FilesystemIterator($this->getDataDirectory(), \FilesystemIterator::SKIP_DOTS);
-    foreach ($dir as $file) {
-      if ($file->getExtension() == 'json') $files[] = $file->getPathname();
-    }
-    sort($files);
-    return $files;
-  }
-
-  protected function findPatterns() {
-    $this->patterns = [];
-    foreach ($this->getPatternFiles() as $file) {
-      if ($file->hasPatternExtension() && !$file->isHidden()) {
-        $this->patterns[] = new Pattern($file);
-      }
-    }
-  }
-
-  /**
-   * @return \Labcoat\Configuration\ConfigurationInterface
-   */
-  protected function getConfiguration() {
-    if (!isset($this->config)) $this->loadConfiguration();
-    return $this->config;
-  }
-
   protected function getPatternsIterator() {
     return new \ArrayIterator($this->getPatterns());
   }
@@ -283,8 +248,20 @@ class PatternLab implements PatternLabInterface {
     return $this->config->getTwigOptions();
   }
 
-  protected function loadConfiguration() {
-    $this->config = Configuration::load($this->getConfigurationFile()->getFullPath());
+  protected function loadGlobalData() {
+    $this->globalData = [];
+    foreach ($this->config->getGlobalDataFiles() as $path) {
+      $this->globalData = array_merge_recursive($this->globalData, self::loadData($path));
+    }
+    $this->loadListItems();
+  }
+
+  protected function loadListItems() {
+    $this->globalData['listitems'] = [];
+    foreach ($this->config->getListItemFiles() as $path) {
+      $this->globalData['listitems'] = array_merge($this->globalData['listitems'], self::loadData($path));
+    }
+    shuffle($this->globalData['listitems']);
   }
 
   protected function makeTwig() {

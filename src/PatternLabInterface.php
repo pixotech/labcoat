@@ -17,6 +17,12 @@ interface PatternLabInterface {
    * @return array
    */
   public function getExposedOptions();
+
+  /**
+   * @return array
+   */
+  public function getHiddenControls();
+
   public function getIgnoredDirectories();
   public function getIgnoredExtensions();
 
