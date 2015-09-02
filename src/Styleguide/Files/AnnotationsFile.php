@@ -2,11 +2,9 @@
 
 namespace Labcoat\Styleguide\Files;
 
-class AnnotationsFile extends File implements AnnotationsFileInterface {
+use Labcoat\Styleguide\StyleguideInterface;
 
-  public function getContents() {
-    // TODO: Implement getContents() method.
-  }
+class AnnotationsFile extends File implements AnnotationsFileInterface {
 
   public function getPath() {
     return $this->makePath(['annotations', 'annotations.js']);
@@ -14,5 +12,9 @@ class AnnotationsFile extends File implements AnnotationsFileInterface {
 
   public function getTime() {
     // TODO: Implement getTime() method.
+  }
+
+  public function put(StyleguideInterface $styleguide, $path) {
+    // TODO: Implement put() method.
   }
 }

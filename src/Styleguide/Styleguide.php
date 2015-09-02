@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide;
 
+use Labcoat\Assets\AssetDirectory;
 use Labcoat\Configuration\Configuration;
 use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
@@ -9,11 +10,15 @@ use Labcoat\Patterns\PatternCollection;
 use Labcoat\Patterns\PatternInterface;
 use Labcoat\Patterns\PatternSubTypeInterface;
 use Labcoat\Patterns\PatternTypeInterface;
+use Labcoat\Styleguide\Files\AnnotationsFile;
+use Labcoat\Styleguide\Files\AssetFile;
 use Labcoat\Styleguide\Files\DataFile;
 use Labcoat\Styleguide\Files\FileInterface;
+use Labcoat\Styleguide\Files\LatestChangeFile;
 use Labcoat\Styleguide\Files\PageFile;
 use Labcoat\Styleguide\Files\PatternSourceFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
+use Labcoat\Styleguide\Files\StyleguideAssetFile;
 use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\Navigation\Pattern as NavigationPattern;
 use Labcoat\Styleguide\Pages\PatternPage;
@@ -23,6 +28,8 @@ use Labcoat\Styleguide\Pages\SubTypeIndexPage;
 use Labcoat\Styleguide\Pages\TypeIndexPage;
 
 class Styleguide implements StyleguideInterface {
+
+  protected $assets;
 
   /**
    * @var string
@@ -117,7 +124,8 @@ class Styleguide implements StyleguideInterface {
     $this->loadConfig($patternlab);
     $this->loadControls($patternlab);
     $this->addPatterns($patternlab->getPatterns());
-    $this->makeFiles();
+    $this->findAssets($patternlab);
+    $this->makeFiles($patternlab);
     unset($this->pages);
     unset($this->indexPage);
   }
@@ -144,6 +152,10 @@ class Styleguide implements StyleguideInterface {
    */
   public function getControls() {
     return $this->controls;
+  }
+
+  public function getFiles() {
+    return $this->files;
   }
 
   /**
@@ -280,6 +292,12 @@ class Styleguide implements StyleguideInterface {
     $this->ensureDirectory(dirname($path));
   }
 
+
+  protected function findAssets(PatternLabInterface $patternlab) {
+    $assets = new AssetDirectory($patternlab, $this->assetsDirectory);
+    $this->assets = $assets->getAssets();
+  }
+
   /**
    * @return \Labcoat\Styleguide\Pages\StyleguideIndexPageInterface
    */
@@ -356,7 +374,7 @@ class Styleguide implements StyleguideInterface {
    * @return string
    */
   protected function getStyleguideTemplatePath($template) {
-    return Configuration::makePath([$this->templatesDirectory, $template]);
+    return NavigationPattern::makePath([$this->templatesDirectory, $template]);
   }
 
   /**
@@ -386,13 +404,33 @@ class Styleguide implements StyleguideInterface {
     }
   }
 
+  protected function makeAnnotationsFile() {
+    $this->addFile(new AnnotationsFile());
+  }
+
+  protected function makeAssetFiles(PatternLabInterface $patternlab) {
+    foreach ($patternlab->getAssets() as $asset) {
+      $this->addFile(new AssetFile($asset));
+    }
+    foreach ($this->assets as $asset) {
+      $this->addFile(new StyleguideAssetFile($asset));
+    }
+  }
+
   protected function makeDataFile() {
     $this->addFile(new DataFile($this->navigation));
   }
 
-  protected function makeFiles() {
+  protected function makeFiles(PatternLabInterface $patternlab) {
     $this->makeDataFile();
     $this->makePageFiles();
+    $this->makeAssetFiles($patternlab);
+    $this->makeAnnotationsFile();
+    $this->makeLatestChangeFile();
+  }
+
+  protected function makeLatestChangeFile() {
+    $this->addFile(new LatestChangeFile(time()));
   }
 
   protected function makePageFiles() {

@@ -2,6 +2,7 @@
 
 namespace Labcoat\Configuration;
 
+use Labcoat\PatternLab;
 use Symfony\Component\Yaml\Yaml;
 
 class Configuration implements ConfigurationInterface {
@@ -36,35 +37,35 @@ class Configuration implements ConfigurationInterface {
 
   public static function fromStandardEdition($dir) {
     $config = new Configuration();
-    $configPath = self::makePath([$dir, 'config', 'config.yml']);
+    $configPath = PatternLab::makePath([$dir, 'config', 'config.yml']);
     if (is_file($configPath)) {
       $seConfig = Yaml::parse(file_get_contents($configPath));
 
       if (!empty($seConfig['sourceDir'])) {
-        $sourceDir = self::makePath([$dir, $seConfig['sourceDir']]);
+        $sourceDir = PatternLab::makePath([$dir, $seConfig['sourceDir']]);
         if (is_dir($sourceDir)) {
 
           $config->addAssetDirectory($sourceDir);
 
-          $patternsDir = self::makePath([$sourceDir, '_patterns']);
+          $patternsDir = PatternLab::makePath([$sourceDir, '_patterns']);
           if (is_dir($patternsDir)) {
             $config->setPatternsDirectory($patternsDir);
           }
 
-          $dataDir = self::makePath([$sourceDir, '_data']);
+          $dataDir = PatternLab::makePath([$sourceDir, '_data']);
           if (is_dir($dataDir)) {
-            foreach (glob(self::makePath([$dataDir, '*.json'])) as $path) {
+            foreach (glob(PatternLab::makePath([$dataDir, '*.json'])) as $path) {
               if (basename($path) == 'listitems.json') $config->addListItems($path);
               else $config->addGlobalData($path);
             }
           }
 
-          $headerPath = self::makePath([$sourceDir, '_meta', '_00-head.twig']);
+          $headerPath = PatternLab::makePath([$sourceDir, '_meta', '_00-head.twig']);
           if (is_file($headerPath)) {
             $config->setStyleguideHeader($headerPath);
           }
 
-          $footerPath = self::makePath([$sourceDir, '_meta', '_01-foot.twig']);
+          $footerPath = PatternLab::makePath([$sourceDir, '_meta', '_01-foot.twig']);
           if (is_file($footerPath)) {
             $config->setStyleguideFooter($footerPath);
           }
@@ -72,16 +73,16 @@ class Configuration implements ConfigurationInterface {
       }
 
       if (!empty($seConfig['packagesDir'])) {
-        $packagesDir = self::makePath([$dir, $seConfig['packagesDir']]);
+        $packagesDir = PatternLab::makePath([$dir, $seConfig['packagesDir']]);
         if (is_dir($packagesDir)) {
 
-          $assetsDir = self::makePath([$packagesDir, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
+          $assetsDir = PatternLab::makePath([$packagesDir, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
           if (is_dir($assetsDir)) {
             $config->setStyleguideAssetsDirectory($assetsDir);
           }
 
           if (!empty($seConfig['styleguideKit'])) {
-            $templatesDir = self::makePath([$packagesDir, $seConfig['styleguideKit'], 'views']);
+            $templatesDir = PatternLab::makePath([$packagesDir, $seConfig['styleguideKit'], 'views']);
             if (is_dir($templatesDir)) {
               $config->setStyleguideTemplatesDirectory($templatesDir);
             }
@@ -106,10 +107,6 @@ class Configuration implements ConfigurationInterface {
       }
     }
     return $config;
-  }
-
-  public static function makePath(array $segments) {
-    return implode(DIRECTORY_SEPARATOR, $segments);
   }
 
   public function addAssetDirectory($path) {

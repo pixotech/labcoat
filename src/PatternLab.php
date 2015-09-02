@@ -41,6 +41,10 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twig;
 
+  public static function makePath(array $segments) {
+    return implode(DIRECTORY_SEPARATOR, $segments);
+  }
+
   public static function loadData($path) {
     return json_decode(file_get_contents($path), true);
   }

@@ -2,6 +2,6 @@
 
 namespace Labcoat\Styleguide\Files;
 
-interface LatestChangeFileInterface extends DynamicFileInterface {
+interface LatestChangeFileInterface extends FileInterface {
 
 }

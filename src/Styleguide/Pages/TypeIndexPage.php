@@ -16,11 +16,7 @@ class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
   }
 
   public function getPath() {
-    return $this->typeName;
-  }
-
-  public function render(StyleguideInterface $styleguide) {
-    // TODO: Implement render() method.
+    return ['patterns', $this->typeName, 'index.html'];
   }
 
   protected function getPatternData() {
