@@ -32,11 +32,6 @@ interface StyleguideInterface {
   public function getPatternExample(PatternInterface $pattern);
 
   /**
-   * @return \Labcoat\PatternLabInterface
-   */
-  public function getPatternLab();
-
-  /**
    * @return array
    */
   public function getPatternPaths();

@@ -176,6 +176,22 @@ class PatternLab implements PatternLabInterface {
     return $this->config->getPatternsDirectory();
   }
 
+  public function getStyleguideAssetsDirectory() {
+    return $this->config->getStyleguideAssetsDirectory();
+  }
+
+  public function getStyleguideFooter() {
+    return $this->config->getStyleguideFooter();
+  }
+
+  public function getStyleguideHeader() {
+    return $this->config->getStyleguideHeader();
+  }
+
+  public function getStyleguideTemplatesDirectory() {
+    return $this->config->getStyleguideTemplatesDirectory();
+  }
+
   /**
    * Get the Twig parser
    *
@@ -266,11 +282,6 @@ class PatternLab implements PatternLabInterface {
 
   protected function makeTwig() {
     $this->twig = new Environment($this, $this->getTwigOptions());
-  }
-
-  protected function normalizePatternPath($path) {
-    $path = $this->stripPatternExtensionFromPath($path);
-    return self::normalizePath($path);
   }
 
   protected function stripPatternExtensionFromPath($path) {

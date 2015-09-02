@@ -24,9 +24,13 @@ class Configuration implements ConfigurationInterface {
 
   protected $patternsDirectory;
 
+  protected $styleguideAssetsDirectory;
+
   protected $styleguideFooterPath;
 
   protected $styleguideHeaderPath;
+
+  protected $styleguideTemplatesDirectory;
 
   protected $twigOptions = [];
 
@@ -35,9 +39,11 @@ class Configuration implements ConfigurationInterface {
     $configPath = self::makePath([$dir, 'config', 'config.yml']);
     if (is_file($configPath)) {
       $seConfig = Yaml::parse(file_get_contents($configPath));
+
       if (!empty($seConfig['sourceDir'])) {
         $sourceDir = self::makePath([$dir, $seConfig['sourceDir']]);
         if (is_dir($sourceDir)) {
+
           $config->addAssetDirectory($sourceDir);
 
           $patternsDir = self::makePath([$sourceDir, '_patterns']);
@@ -64,15 +70,37 @@ class Configuration implements ConfigurationInterface {
           }
         }
       }
+
+      if (!empty($seConfig['packagesDir'])) {
+        $packagesDir = self::makePath([$dir, $seConfig['packagesDir']]);
+        if (is_dir($packagesDir)) {
+
+          $assetsDir = self::makePath([$packagesDir, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
+          if (is_dir($assetsDir)) {
+            $config->setStyleguideAssetsDirectory($assetsDir);
+          }
+
+          if (!empty($seConfig['styleguideKit'])) {
+            $templatesDir = self::makePath([$packagesDir, $seConfig['styleguideKit'], 'views']);
+            if (is_dir($templatesDir)) {
+              $config->setStyleguideTemplatesDirectory($templatesDir);
+            }
+          }
+        }
+      }
+
       if (!empty($seConfig['id'])) {
         $config->setIgnoredDirectories($seConfig['id']);
       }
+
       if (!empty($seConfig['ie'])) {
         $config->setIgnoredExtensions($seConfig['ie']);
       }
+
       if (!empty($seConfig['ishControlsHide'])) {
         $config->setHiddenControls($seConfig['ishControlsHide']);
       }
+
       if (!empty($seConfig['patternExtension'])) {
         $config->setPatternExtension($seConfig['patternExtension']);
       }
@@ -80,7 +108,7 @@ class Configuration implements ConfigurationInterface {
     return $config;
   }
 
-  protected static function makePath(array $segments) {
+  public static function makePath(array $segments) {
     return implode(DIRECTORY_SEPARATOR, $segments);
   }
 
@@ -128,12 +156,20 @@ class Configuration implements ConfigurationInterface {
     return $this->patternsDirectory;
   }
 
+  public function getStyleguideAssetsDirectory() {
+    return $this->styleguideAssetsDirectory;
+  }
+
   public function getStyleguideFooter() {
     return $this->styleguideFooterPath;
   }
 
   public function getStyleguideHeader() {
     return $this->styleguideHeaderPath;
+  }
+
+  public function getStyleguideTemplatesDirectory() {
+    return $this->styleguideTemplatesDirectory;
   }
 
   /**
@@ -167,12 +203,20 @@ class Configuration implements ConfigurationInterface {
     $this->patternsDirectory = $path;
   }
 
+  public function setStyleguideAssetsDirectory($path) {
+    $this->styleguideAssetsDirectory = $path;
+  }
+
   public function setStyleguideFooter($path) {
     $this->styleguideFooterPath = $path;
   }
 
   public function setStyleguideHeader($path) {
     $this->styleguideHeaderPath = $path;
+  }
+
+  public function setStyleguideTemplatesDirectory($path) {
+    $this->styleguideTemplatesDirectory = $path;
   }
 
   public function setTwigOptions(array $options) {

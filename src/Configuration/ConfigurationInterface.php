@@ -14,13 +14,17 @@ interface ConfigurationInterface {
   public function getListItemFiles();
   public function getPatternExtension();
   public function getPatternsDirectory();
+  public function getStyleguideAssetsDirectory();
   public function getStyleguideFooter();
   public function getStyleguideHeader();
+  public function getStyleguideTemplatesDirectory();
   public function getTwigOptions();
   public function setIgnoredDirectories(array $directories);
   public function setIgnoredExtensions(array $extensions);
   public function setPatternsDirectory($path);
+  public function setStyleguideAssetsDirectory($path);
   public function setStyleguideFooter($path);
   public function setStyleguideHeader($path);
+  public function setStyleguideTemplatesDirectory($path);
   public function setTwigOptions(array $options);
 }

@@ -41,6 +41,26 @@ interface PatternLabInterface {
   public function getPatternsDirectory();
 
   /**
+   * @return string
+   */
+  public function getStyleguideAssetsDirectory();
+
+  /**
+   * @return string
+   */
+  public function getStyleguideFooter();
+
+  /**
+   * @return string
+   */
+  public function getStyleguideHeader();
+
+  /**
+   * @return string
+   */
+  public function getStyleguideTemplatesDirectory();
+
+  /**
    * @return \Labcoat\Twig\Environment
    */
   public function getTwig();
