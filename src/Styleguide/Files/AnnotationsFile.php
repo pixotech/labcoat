@@ -15,6 +15,6 @@ class AnnotationsFile extends File implements AnnotationsFileInterface {
   }
 
   public function put(StyleguideInterface $styleguide, $path) {
-    // TODO: Implement put() method.
+    file_put_contents($path, '');
   }
 }

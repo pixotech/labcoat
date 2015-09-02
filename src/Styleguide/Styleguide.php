@@ -435,6 +435,7 @@ class Styleguide implements StyleguideInterface {
   }
 
   protected function makePageFiles() {
+    $this->addFile(new PageFile($this->indexPage));
     foreach ($this->pages as $page) {
       $this->addFile(new PageFile($page));
       if ($page instanceof PatternPageInterface) {

@@ -14,10 +14,6 @@ class StyleguideIndexPage extends IndexPage implements StyleguideIndexPageInterf
     return ['styleguide', 'html', 'styleguide.html'];
   }
 
-  public function render(StyleguideInterface $styleguide) {
-    // TODO: Implement render() method.
-  }
-
   protected function getPatternData() {
     return [];
   }
