@@ -3,7 +3,6 @@
 namespace Labcoat\Styleguide;
 
 use Labcoat\Assets\AssetDirectory;
-use Labcoat\Configuration\Configuration;
 use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\PatternCollection;
@@ -172,9 +171,6 @@ class Styleguide implements StyleguideInterface {
     return $this->navigation;
   }
 
-  /**
-   * @param PatternInterface $pattern
-   */
   public function getPatternExample(PatternInterface $pattern) {
   }
 
@@ -374,7 +370,7 @@ class Styleguide implements StyleguideInterface {
    * @return string
    */
   protected function getStyleguideTemplatePath($template) {
-    return NavigationPattern::makePath([$this->templatesDirectory, $template]);
+    return PatternLab::makePath([$this->templatesDirectory, $template]);
   }
 
   /**

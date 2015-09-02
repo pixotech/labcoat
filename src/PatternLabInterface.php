@@ -9,10 +9,6 @@ interface PatternLabInterface {
    */
   public function getAssets();
 
-  public function copyAssetsTo($directoryPath);
-
-  public function getDefaultDirectoryPermissions();
-
   /**
    * @return array
    */

@@ -2,13 +2,10 @@
 
 namespace Labcoat;
 
-use Labcoat\Assets\Asset;
 use Labcoat\Assets\AssetDirectory;
-use Labcoat\Assets\Copier;
 use Labcoat\Configuration\Configuration;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Html\Document;
-use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternCollection;
 use Labcoat\Twig\Environment;
 
@@ -89,22 +86,6 @@ class PatternLab implements PatternLabInterface {
 
     if (!isset($this->assets)) $this->findAssets();
     return $this->assets;
-  }
-
-  /**
-   * Copy all assets to another directory
-   *
-   * Copies all Pattern Lab assets that are not hidden or ignored. Missing subdirectories will be created as needed.
-   *
-   * @param string $directoryPath The full path to the destination directory
-   */
-  public function copyAssetsTo($directoryPath) {
-    $copier = new Copier($this);
-    $copier->copyTo($directoryPath);
-  }
-
-  public function getDefaultDirectoryPermissions() {
-    return 0777;
   }
 
   public function getExposedOptions() {
