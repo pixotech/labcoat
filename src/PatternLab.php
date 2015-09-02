@@ -5,13 +5,10 @@ namespace Labcoat;
 use Labcoat\Assets\Asset;
 use Labcoat\Assets\Copier;
 use Labcoat\Configuration\Configuration;
+use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Html\Document;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternCollection;
-use Labcoat\Patterns\PatternInterface;
-use Labcoat\Patterns\PatternSubTypeInterface;
-use Labcoat\Patterns\PatternTypeInterface;
-use Labcoat\Patterns\PseudoPatternInterface;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
@@ -24,13 +21,11 @@ class PatternLab implements PatternLabInterface {
   protected $assets;
 
   /**
-   * @var Configuration
+   * @var ConfigurationInterface
    */
   protected $config;
 
   protected $data;
-
-  protected $patternsDirectory;
 
   /**
    * @var \Labcoat\Patterns\PatternCollection
@@ -42,20 +37,9 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twig;
 
-  /**
-   * @var array
-   */
-  protected $twigOptions = [];
-
-  public static function load() {
-
-  }
-
-  public static function loadStandardEdition() {
-
-  }
-
-  public function __construct() {
+  public static function loadStandardEdition($dir) {
+    $config = Configuration::fromStandardEdition($dir);
+    return new PatternLab($config);
   }
 
   public static function isPartialName($name) {
@@ -80,6 +64,10 @@ class PatternLab implements PatternLabInterface {
   public static function stripDigits($str) {
     list($num, $name) = array_pad(explode('-', $str, 2), 2, NULL);
     return is_numeric($num) ? $name : $str;
+  }
+
+  public function __construct(ConfigurationInterface $config) {
+    $this->config = $config;
   }
 
 
@@ -158,10 +146,6 @@ class PatternLab implements PatternLabInterface {
     return $this->getConfiguration()->getIgnoredExtensions();
   }
 
-  public function getMetaDirectory() {
-    return $this->patternsDirectory . '/../_meta';
-  }
-
   /**
    * Get a pattern by shorthand or path
    *
@@ -188,7 +172,7 @@ class PatternLab implements PatternLabInterface {
    * @return string A file extension
    */
   public function getPatternExtension() {
-    return 'twig';
+    return $this->config->getPatternExtension();
   }
 
   public function getPatterns() {
@@ -197,7 +181,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getPatternsDirectory() {
-    return $this->patternsDirectory;
+    return $this->config->getPatternsDirectory();
   }
 
   /**
@@ -295,12 +279,16 @@ class PatternLab implements PatternLabInterface {
     return new \ArrayIterator($this->getPatterns());
   }
 
+  protected function getTwigOptions() {
+    return $this->config->getTwigOptions();
+  }
+
   protected function loadConfiguration() {
     $this->config = Configuration::load($this->getConfigurationFile()->getFullPath());
   }
 
   protected function makeTwig() {
-    $this->twig = new Environment($this, $this->twigOptions);
+    $this->twig = new Environment($this, $this->getTwigOptions());
   }
 
   protected function normalizePatternPath($path) {

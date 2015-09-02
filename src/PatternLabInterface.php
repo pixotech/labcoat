@@ -11,8 +11,6 @@ interface PatternLabInterface {
 
   public function copyAssetsTo($directoryPath);
 
-  public function getDataDirectory();
-
   public function getDefaultDirectoryPermissions();
 
   /**
@@ -21,8 +19,6 @@ interface PatternLabInterface {
   public function getExposedOptions();
   public function getIgnoredDirectories();
   public function getIgnoredExtensions();
-
-  public function getMetaDirectory();
 
   /**
    * @param $name
@@ -51,5 +47,4 @@ interface PatternLabInterface {
   public function getVendorDirectory();
   public function makeDocument($patternName, $variables = null);
   public function render($patternName, $variables = null);
-  public function setPatternsDirectory($path);
 }
