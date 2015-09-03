@@ -12,6 +12,8 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
    */
   protected $data;
 
+  protected $dataFiles;
+
   protected $file;
   protected $id;
   protected $includedPatterns;
@@ -36,6 +38,11 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
   public function getData() {
     if (!isset($this->data)) $this->findData();
     return $this->data;
+  }
+
+  public function getDataFiles() {
+    if (!isset($this->dataFiles)) $this->findData();
+    return $this->dataFiles;
   }
 
   public function getFile() {
@@ -110,6 +117,7 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
 
   protected function findData() {
     $this->data = [];
+    $this->dataFiles = [];
     $this->pseudoPatterns = [];
     foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');
@@ -119,6 +127,7 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
         $this->items[$pseudoPattern] = $this->pseudoPatterns[$pseudoPattern];
       }
       else {
+        $this->dataFiles[] = $path;
         $this->data[] = new PatternData($path);
       }
     }

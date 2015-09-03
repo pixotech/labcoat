@@ -195,7 +195,19 @@ class Styleguide implements StyleguideInterface {
   public function getPatternData(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
     $id = $pattern->getId();
     if (!isset($this->patternData[$id])) {
-      $data = $this->getGlobalData();
+      if ($pattern->isPseudo()) {
+        $parent = $this->patternlab->getPattern($pattern->getParentId());
+        $source = $parent->getPseudoPatterns()[$pattern->getVariantName()];
+        $data = $this->patternData[$pattern->getParentId()];
+        $data = array_replace_recursive($data, $source->getData()->getData());
+      }
+      else {
+        $data = $this->getGlobalData();
+        $source = $this->patternlab->getPattern($pattern->getId());
+        foreach ($source->getData() as $patternData) {
+          $data = array_replace_recursive($data, $patternData->getData());
+        }
+      }
       $this->patternData[$id] = $data;
     }
     return $this->patternData[$id];

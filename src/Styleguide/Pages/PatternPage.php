@@ -29,12 +29,12 @@ class PatternPage extends Page implements PatternPageInterface {
 
   protected function getFooterVariables(StyleguideInterface $styleguide) {
     $data = $styleguide->getPatternData($this->pattern);
-    return array_merge(parent::getFooterVariables($styleguide), $data);
+    return array_replace_recursive(parent::getFooterVariables($styleguide), $data);
   }
 
   protected function getHeaderVariables(StyleguideInterface $styleguide) {
     $data = $styleguide->getPatternData($this->pattern);
-    return array_merge(parent::getHeaderVariables($styleguide), $data);
+    return array_replace_recursive(parent::getHeaderVariables($styleguide), $data);
   }
 
   protected function getPatternData() {

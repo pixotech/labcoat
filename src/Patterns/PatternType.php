@@ -109,7 +109,8 @@ class PatternType extends PatternSection implements \RecursiveIterator, PatternT
   }
 
   protected function getAllPatternsIterator() {
-    return new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::LEAVES_ONLY);
+    $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
+    return new PatternFilterIterator($iterator, false);
   }
 
   protected function getPatternsIterator() {

@@ -267,7 +267,7 @@ class PatternLab implements PatternLabInterface {
   protected function loadGlobalData() {
     $this->globalData = [];
     foreach ($this->config->getGlobalDataFiles() as $path) {
-      $this->globalData = array_merge_recursive($this->globalData, self::loadData($path));
+      $this->globalData = array_replace_recursive($this->globalData, self::loadData($path));
     }
     $this->loadListItems();
   }

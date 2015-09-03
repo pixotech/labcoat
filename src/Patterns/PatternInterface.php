@@ -5,7 +5,7 @@ namespace Labcoat\Patterns;
 interface PatternInterface {
 
   /**
-   * @return array
+   * @return PatternData
    */
   public function getData();
 

@@ -7,8 +7,11 @@ interface PatternInterface {
   public function getName();
   public function getFile();
   public function getFilePath($extension);
+  public function getParentId();
   public function getPath();
   public function getTemplate();
+  public function getVariantName();
+  public function isPseudo();
   public function patternCSS();
   public function patternCSSExists();
   public function patternDesc();

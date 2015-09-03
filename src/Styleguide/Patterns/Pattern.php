@@ -3,19 +3,24 @@
 namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
+use Labcoat\Patterns\PseudoPatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
 
+  protected $data;
   protected $file;
   protected $id;
+  protected $isPseudo = false;
   protected $name;
+  protected $parentId;
   protected $partial;
   protected $path;
   protected $state;
   protected $subtype;
   protected $template;
   protected $type;
+  protected $variant;
 
   public function __construct(SourcePatternInterface $pattern) {
     $this->file = $pattern->getFile();
@@ -27,6 +32,13 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->subtype = $pattern->hasSubType() ? $pattern->getSubTypeId() : null;
     $this->template = $pattern->getTemplate();
     $this->type = $pattern->getTypeId();
+
+    if ($pattern instanceof PseudoPatternInterface) {
+      $this->isPseudo = true;
+      $this->parentId = $pattern->getPattern()->getId();
+      $this->variant = $pattern->getVariantName();
+    }
+
     #$this->includes = $pattern->getIncludedPatterns();
   }
 
@@ -47,6 +59,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return ['patterns', $path, "$path.$extension"];
   }
 
+  public function getParentId() {
+    return $this->parentId;
+  }
+
   public function getPath() {
     return $this->path;
   }
@@ -56,6 +72,17 @@ class Pattern implements \JsonSerializable, PatternInterface {
    */
   public function getTemplate() {
     return $this->template;
+  }
+
+  /**
+   * @return string
+   */
+  public function getVariantName() {
+    return $this->variant;
+  }
+
+  public function isPseudo() {
+    return $this->isPseudo;
   }
 
   public function jsonSerialize() {
