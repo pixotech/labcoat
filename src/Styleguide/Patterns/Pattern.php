@@ -151,7 +151,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLink() {
-    return $this->getPath();
+    return $this->name . DIRECTORY_SEPARATOR . $this->name . '.html';
   }
 
   public function patternName() {

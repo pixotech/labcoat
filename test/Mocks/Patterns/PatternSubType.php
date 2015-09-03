@@ -16,4 +16,12 @@ class PatternSubType implements PatternSubTypeInterface {
   public function getType() {
     return $this->type;
   }
+
+  public function getId() {
+    // TODO: Implement getId() method.
+  }
+
+  public function getTypeId() {
+    // TODO: Implement getTypeId() method.
+  }
 }

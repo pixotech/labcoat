@@ -71,4 +71,12 @@ class Pattern implements PatternInterface {
   public function hasSubType() {
     return !empty($this->subtype);
   }
+
+  public function getSubTypeId() {
+    // TODO: Implement getSubTypeId() method.
+  }
+
+  public function getTypeId() {
+    // TODO: Implement getTypeId() method.
+  }
 }

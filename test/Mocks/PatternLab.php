@@ -88,4 +88,40 @@ class PatternLab implements PatternLabInterface {
   public function getTypes() {
     // TODO: Implement getTypes() method.
   }
+
+  public function getAnnotationsFile() {
+    // TODO: Implement getAnnotationsFile() method.
+  }
+
+  public function getGlobalData() {
+    // TODO: Implement getGlobalData() method.
+  }
+
+  public function getHiddenControls() {
+    // TODO: Implement getHiddenControls() method.
+  }
+
+  public function getStyleguideAssetsDirectory() {
+    // TODO: Implement getStyleguideAssetsDirectory() method.
+  }
+
+  public function getStyleguideFooter() {
+    // TODO: Implement getStyleguideFooter() method.
+  }
+
+  public function getStyleguideHeader() {
+    // TODO: Implement getStyleguideHeader() method.
+  }
+
+  public function getStyleguideTemplatesDirectory() {
+    // TODO: Implement getStyleguideTemplatesDirectory() method.
+  }
+
+  public function isHiddenFile($path) {
+    // TODO: Implement isHiddenFile() method.
+  }
+
+  public function isIgnoredFile($path) {
+    // TODO: Implement isIgnoredFile() method.
+  }
 }
