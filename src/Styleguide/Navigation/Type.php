@@ -38,13 +38,24 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function jsonSerialize() {
+    $type = PatternLab::stripDigits($this->name);
+    $items = array_values($this->patterns);
+    if (!empty($this->subtypes)) {
+      $items[] = [
+        "patternPath" => "{$this->type}/index.html",
+        "patternName" => "View All",
+        "patternType" => $this->name,
+        "patternSubtype" => "all",
+        "patternPartial" => "viewall-{$type}-all",
+      ];
+    }
     return [
       'patternTypeLC' => $this->getLowercaseName(),
       'patternTypeUC' => $this->getUppercaseName(),
       'patternType' => $this->getName(),
       'patternTypeDash' => $this->getNameWithDashes(),
       'patternTypeItems' => array_values($this->subtypes),
-      'patternItems' => array_values($this->patterns),
+      'patternItems' => $items,
     ];
   }
 

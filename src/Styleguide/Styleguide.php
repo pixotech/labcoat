@@ -258,8 +258,12 @@ class Styleguide implements StyleguideInterface {
   protected function addPattern(PatternInterface $pattern) {
     $this->pages[$pattern->getId()] = new PatternPage($this, $pattern);
     $this->getIndexPage()->addPattern($pattern);
-    $this->getTypePage($pattern->getTypeId())->addPattern($pattern);
-    if ($pattern->hasSubType()) $this->getSubtypePage($pattern->getSubTypeId())->addPattern($pattern);
+    if (isset($this->pages[$pattern->getTypeId()])) {
+      $this->getTypePage($pattern->getTypeId())->addPattern($pattern);
+    }
+    if ($pattern->hasSubType()) {
+      $this->getSubtypePage($pattern->getSubTypeId())->addPattern($pattern);
+    }
     $this->navigation->addPattern($pattern);
     $this->addPatternPath($pattern);
   }
@@ -319,7 +323,9 @@ class Styleguide implements StyleguideInterface {
    * @param PatternTypeInterface $type
    */
   protected function addType(PatternTypeInterface $type) {
-    $this->pages[$type->getId()] = new TypeIndexPage($this, $type);
+    if ($type->hasSubtypes()) {
+      $this->pages[$type->getId()] = new TypeIndexPage($this, $type);
+    }
     $this->navigation->addType($type);
   }
 

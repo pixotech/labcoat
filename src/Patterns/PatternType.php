@@ -104,6 +104,10 @@ class PatternType extends PatternSection implements \RecursiveIterator, PatternT
     return ucwords($this->getLowercaseName());
   }
 
+  public function hasSubtypes() {
+    return count($this->getSubTypes()) > 0;
+  }
+
   protected function ensureSubType($name) {
     if (!isset($this->items[$name])) $this->addItem($name, new PatternSubType($this, $name));
   }

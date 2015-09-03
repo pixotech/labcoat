@@ -8,6 +8,7 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
 
+  protected $content;
   protected $data;
   protected $file;
   protected $id;
@@ -162,6 +163,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternPartialCode() {
+    return $this->content;
   }
 
   public function patternPartialCodeE() {
@@ -170,6 +172,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public function patternSectionSubtype() {
     return false;
+  }
+
+  public function setContent($content) {
+    $this->content = $content;
   }
 
   protected function getBreadcrumb() {

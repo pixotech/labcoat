@@ -24,6 +24,6 @@ class SubTypeIndexPage extends IndexPage implements SubTypeIndexPageInterface {
   protected function getPatternData() {
     $typeName = PatternLab::stripDigits($this->typeName);
     $name = PatternLab::stripDigits($this->subtypeName);
-    return ['patternData' => "viewall-{$typeName}-{$name}"];
+    return ['patternPartial' => "viewall-{$typeName}-{$name}"];
   }
 }

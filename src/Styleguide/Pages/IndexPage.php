@@ -19,8 +19,12 @@ abstract class IndexPage extends Page implements IndexPageInterface {
   }
 
   public function getContent(StyleguideInterface $styleguide) {
+    $patterns = $this->getPatterns();
+    foreach ($patterns as $pattern) {
+      $pattern->setContent($styleguide->renderPattern($pattern));
+    }
     $variables = [
-      'partials' => $this->getPatterns(),
+      'partials' => $patterns,
       'patternPartial' => '',
     ];
     return $styleguide->getTwig()->render('viewall', $variables);

@@ -13,4 +13,9 @@ interface PatternTypeInterface {
    * @return string
    */
   public function getName();
+
+  /**
+   * @return bool
+   */
+  public function hasSubtypes();
 }
