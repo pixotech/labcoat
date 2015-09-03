@@ -80,6 +80,10 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
     return $this->type . '/' . $this->subType;
   }
 
+  public function getTemplate() {
+    return $this->getPath();
+  }
+
   public function getTime() {
     $time = filemtime($this->file);
     // Check data file

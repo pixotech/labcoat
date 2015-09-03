@@ -75,6 +75,10 @@ class PatternLab implements PatternLabInterface {
     $this->config = $config;
   }
 
+  public function getAnnotationsFile() {
+    return $this->config->getAnnotationsFile();
+  }
+
   /**
    * Get an array of Pattern Lab assets
    *
@@ -138,7 +142,8 @@ class PatternLab implements PatternLabInterface {
    */
   public function getPattern($name) {
     $name = $this->stripPatternExtensionFromPath($name);
-    return $this->getPatterns()->getPattern($name);
+    if ($pattern = $this->getPatterns()->getPattern($name)) return $pattern;
+    throw new \OutOfBoundsException("Unknown pattern: $name");
   }
 
   /**

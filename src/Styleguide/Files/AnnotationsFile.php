@@ -6,15 +6,21 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class AnnotationsFile extends File implements AnnotationsFileInterface {
 
+  protected $path;
+
+  public function __construct($path) {
+    $this->path = $path;
+  }
+
   public function getPath() {
     return $this->makePath(['annotations', 'annotations.js']);
   }
 
   public function getTime() {
-    // TODO: Implement getTime() method.
+    return filemtime($this->path);
   }
 
   public function put(StyleguideInterface $styleguide, $path) {
-    file_put_contents($path, '');
+    copy($this->path, $path);
   }
 }

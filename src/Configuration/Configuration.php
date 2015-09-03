@@ -7,6 +7,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class Configuration implements ConfigurationInterface {
 
+  protected $annotationsPath;
+
   protected $assetDirectories = [];
 
   protected $dataFiles = [];
@@ -58,6 +60,11 @@ class Configuration implements ConfigurationInterface {
               if (basename($path) == 'listitems.json') $config->addListItems($path);
               else $config->addGlobalData($path);
             }
+          }
+
+          $annotationsPath = PatternLab::makePath([$sourceDir, '_annotations', 'annotations.js']);
+          if (is_file($annotationsPath)) {
+            $config->setAnnotationsFile($annotationsPath);
           }
 
           $headerPath = PatternLab::makePath([$sourceDir, '_meta', '_00-head.twig']);
@@ -121,6 +128,10 @@ class Configuration implements ConfigurationInterface {
     $this->listItemFiles[] = $path;
   }
 
+  public function getAnnotationsFile() {
+    return $this->annotationsPath;
+  }
+
   public function getAssetDirectories() {
     return $this->assetDirectories;
   }
@@ -180,8 +191,8 @@ class Configuration implements ConfigurationInterface {
     return $this->twigOptions;
   }
 
-  public function setIgnoredDirectories(array $directories) {
-    $this->ignoredDirectories = $directories;
+  public function setAnnotationsFile($path) {
+    $this->annotationsPath = $path;
   }
 
   public function setExposedOptions($options) {
@@ -190,6 +201,10 @@ class Configuration implements ConfigurationInterface {
 
   public function setHiddenControls($controls) {
     $this->hiddenControls = $controls;
+  }
+
+  public function setIgnoredDirectories(array $directories) {
+    $this->ignoredDirectories = $directories;
   }
 
   public function setIgnoredExtensions(array $extensions) {

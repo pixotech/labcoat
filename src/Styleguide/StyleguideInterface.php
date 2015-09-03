@@ -32,9 +32,9 @@ interface StyleguideInterface {
   public function getIndexPaths();
 
   /**
-   * @return string
+   * @return array
    */
-  public function getPatternContent(PatternInterface $pattern);
+  public function getPatternData(PatternInterface $pattern);
 
   /**
    * @return array
@@ -45,4 +45,14 @@ interface StyleguideInterface {
    * @return array
    */
   public function getPlugins();
+
+  /**
+   * @return \Twig_Environment
+   */
+  public function getTwig();
+
+  /**
+   * @return string
+   */
+  public function renderPattern(PatternInterface $pattern);
 }

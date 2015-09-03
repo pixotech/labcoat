@@ -98,7 +98,22 @@ class Styleguide implements StyleguideInterface {
   /**
    * @var array
    */
+  protected $patternData = [];
+
+  /**
+   * @var \Labcoat\PatternLabInterface
+   */
+  protected $patternlab;
+
+  /**
+   * @var array
+   */
   protected $patternPaths = [];
+
+  /**
+   * @var array
+   */
+  protected $patterns = [];
 
   /**
    * @var string
@@ -114,6 +129,7 @@ class Styleguide implements StyleguideInterface {
    * @param PatternLabInterface $patternlab
    */
   public function __construct(PatternLabInterface $patternlab) {
+    $this->patternlab = $patternlab;
     $this->cacheBuster = time();
     $this->indexPage = new StyleguideIndexPage($this);
     $this->assetsDirectory = $patternlab->getStyleguideAssetsDirectory();
@@ -176,7 +192,13 @@ class Styleguide implements StyleguideInterface {
     return $this->navigation;
   }
 
-  public function getPatternContent(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
+  public function getPatternData(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
+    $id = $pattern->getId();
+    if (!isset($this->patternData[$id])) {
+      $data = $this->getGlobalData();
+      $this->patternData[$id] = $data;
+    }
+    return $this->patternData[$id];
   }
 
   /**
@@ -199,6 +221,16 @@ class Styleguide implements StyleguideInterface {
   public function getTwig() {
     if (!isset($this->twig)) $this->makeTwig();
     return $this->twig;
+  }
+
+  public function renderPattern(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
+    $id = $pattern->getId();
+    if (!isset($this->patterns[$id])) {
+      $template = $pattern->getTemplate();
+      $data = $this->getPatternData($pattern);
+      $this->patterns[$id] = $this->patternlab->render($template, $data);
+    }
+    return $this->patterns[$id];
   }
 
   /**
@@ -297,6 +329,11 @@ class Styleguide implements StyleguideInterface {
   protected function findAssets(PatternLabInterface $patternlab) {
     $assets = new AssetDirectory($patternlab, $this->assetsDirectory);
     $this->assets = $assets->getAssets();
+  }
+
+  protected function getGlobalData() {
+    if (!isset($this->globalData)) $this->globalData = $this->patternlab->getGlobalData();
+    return $this->globalData;
   }
 
   /**
@@ -406,7 +443,9 @@ class Styleguide implements StyleguideInterface {
   }
 
   protected function makeAnnotationsFile() {
-    $this->addFile(new AnnotationsFile());
+    if ($path = $this->patternlab->getAnnotationsFile()) {
+      $this->addFile(new AnnotationsFile($path));
+    }
   }
 
   protected function makeAssetFiles(PatternLabInterface $patternlab) {

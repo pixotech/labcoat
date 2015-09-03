@@ -13,6 +13,9 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $partial;
   protected $path;
   protected $state;
+  protected $subtype;
+  protected $template;
+  protected $type;
 
   public function __construct(SourcePatternInterface $pattern) {
     $this->file = $pattern->getFile();
@@ -21,7 +24,14 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->partial = $pattern->getPartial();
     $this->path = $pattern->getPath();
     $this->state = $pattern->getState();
+    $this->subtype = $pattern->hasSubType() ? $pattern->getSubTypeId() : null;
+    $this->template = $pattern->getTemplate();
+    $this->type = $pattern->getTypeId();
     #$this->includes = $pattern->getIncludedPatterns();
+  }
+
+  public function getId() {
+    return $this->id;
   }
 
   public function getName() {
@@ -39,6 +49,13 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public function getPath() {
     return $this->path;
+  }
+
+  /**
+   * @return string
+   */
+  public function getTemplate() {
+    return $this->template;
   }
 
   public function jsonSerialize() {
@@ -106,8 +123,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLink() {
-    $nav = new \Labcoat\Styleguide\Navigation\Pattern($this->pattern);
-    return $nav->getPath();
+    return $this->getPath();
   }
 
   public function patternName() {
@@ -131,7 +147,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   protected function getBreadcrumb() {
     $crumb = [$this->type];
-    if ($this->pattern->hasSubType()) $crumb[] = $this->pattern->getSubType();
+    if ($this->subtype) $crumb[] = $this->subtype;
     return implode(' &gt; ', $crumb);
   }
 }

@@ -60,6 +60,10 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getSubTypeId();
   }
 
+  public function getTemplate() {
+    return $this->pattern->getTemplate();
+  }
+
   public function getTime() {
     $patternTime = $this->pattern->getTime();
     $dataTime = filemtime($this->data->getFile());

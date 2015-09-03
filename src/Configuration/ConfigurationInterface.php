@@ -6,6 +6,7 @@ interface ConfigurationInterface {
   public function addAssetDirectory($path);
   public function addGlobalData($path);
   public function addListItems($path);
+  public function getAnnotationsFile();
   public function getAssetDirectories();
   public function getExposedOptions();
   public function getGlobalDataFiles();
@@ -20,6 +21,7 @@ interface ConfigurationInterface {
   public function getStyleguideHeader();
   public function getStyleguideTemplatesDirectory();
   public function getTwigOptions();
+  public function setAnnotationsFile($path);
   public function setIgnoredDirectories(array $directories);
   public function setIgnoredExtensions(array $extensions);
   public function setPatternsDirectory($path);

@@ -4,6 +4,8 @@ namespace Labcoat;
 
 interface PatternLabInterface {
 
+  public function getAnnotationsFile();
+
   /**
    * @return \Labcoat\Assets\AssetInterface[]
    */
@@ -13,6 +15,11 @@ interface PatternLabInterface {
    * @return array
    */
   public function getExposedOptions();
+
+  /**
+   * @return array
+   */
+  public function getGlobalData();
 
   /**
    * @return array

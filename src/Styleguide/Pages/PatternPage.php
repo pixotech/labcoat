@@ -15,8 +15,8 @@ class PatternPage extends Page implements PatternPageInterface {
     $this->pattern = new Pattern($pattern);
   }
 
-  public function getContent() {
-    return $this->styleguide->getPatternExample($this->pattern);
+  public function getContent(StyleguideInterface $styleguide) {
+    return $styleguide->renderPattern($this->pattern);
   }
 
   public function getPath() {
@@ -27,12 +27,14 @@ class PatternPage extends Page implements PatternPageInterface {
     return $this->pattern;
   }
 
-  protected function getFooterVariables() {
-    return array_merge(parent::getFooterVariables(), $this->pattern->getData());
+  protected function getFooterVariables(StyleguideInterface $styleguide) {
+    $data = $styleguide->getPatternData($this->pattern);
+    return array_merge(parent::getFooterVariables($styleguide), $data);
   }
 
-  protected function getHeaderVariables() {
-    return array_merge(parent::getHeaderVariables(), $this->pattern->getData());
+  protected function getHeaderVariables(StyleguideInterface $styleguide) {
+    $data = $styleguide->getPatternData($this->pattern);
+    return array_merge(parent::getHeaderVariables($styleguide), $data);
   }
 
   protected function getPatternData() {
