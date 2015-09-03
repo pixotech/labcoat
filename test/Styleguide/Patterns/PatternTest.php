@@ -2,11 +2,71 @@
 
 namespace Labcoat\Styleguide\Patterns;
 
-use Labcoat\Mocks\PatternLab;
 use Labcoat\Mocks\Patterns\Pattern as SourcePattern;
-use Labcoat\Mocks\Styleguide\Styleguide;
+use Labcoat\Mocks\Patterns\PseudoPattern;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {
+
+  public function testId() {
+    $source = $this->makeSourcePattern();
+    $source->id = 'id';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->id, $pattern->getId());
+  }
+
+  public function testName() {
+    $source = $this->makeSourcePattern();
+    $source->name = 'name';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->name, $pattern->getName());
+  }
+
+  public function testFile() {
+    $source = $this->makeSourcePattern();
+    $source->file = 'file';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->file, $pattern->getFile());
+  }
+
+  public function testParentId() {
+    $source = $this->makePseudoPattern();
+    $source->pattern->id = 'parent id';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->pattern->id, $pattern->getParentId());
+  }
+
+  public function testPath() {
+    $source = $this->makeSourcePattern();
+    $source->path = 'path';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->path, $pattern->getPath());
+  }
+
+  public function testTemplate() {
+    $source = $this->makeSourcePattern();
+    $source->template = 'template';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->template, $pattern->getTemplate());
+  }
+
+  public function testVariantName() {
+    $source = $this->makePseudoPattern();
+    $source->variantName = 'variant';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->variantName, $pattern->getVariantName());
+  }
+
+  public function testIsPseudo() {
+    $source = $this->makePseudoPattern();
+    $pattern = new Pattern($source);
+    $this->assertTrue($pattern->isPseudo());
+  }
+
+  public function testIsNotPseudo() {
+    $source = $this->makeSourcePattern();
+    $pattern = new Pattern($source);
+    $this->assertFalse($pattern->isPseudo());
+  }
 
   public function testPatternCss() {
     $source = $this->makeSourcePattern();
@@ -121,6 +181,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $source = $this->makeSourcePattern();
     $pattern = new Pattern($source);
     $this->assertFalse($pattern->patternSectionSubtype());
+  }
+
+  protected function makePseudoPattern() {
+    return new PseudoPattern();
   }
 
   protected function makeSourcePattern() {

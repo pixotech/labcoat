@@ -30,4 +30,5 @@ interface PatternInterface {
   public function patternPartialCode();
   public function patternPartialCodeE();
   public function patternSectionSubtype();
+  public function setContent($content);
 }

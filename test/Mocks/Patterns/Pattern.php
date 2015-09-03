@@ -14,6 +14,7 @@ class Pattern implements PatternInterface {
   public $partial;
   public $state;
   public $subtype;
+  public $template;
   public $type;
 
   public function getData() {
@@ -57,7 +58,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getTemplate() {
-    // TODO: Implement getTemplate() method.
+    return $this->template;
   }
 
   public function getTemplateContent() {
