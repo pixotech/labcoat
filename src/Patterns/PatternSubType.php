@@ -24,7 +24,11 @@ class PatternSubType extends PatternSection implements PatternSubTypeInterface {
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[PatternLab::stripDigits($name)];
+    $n = PatternLab::stripDigits($name);
+    foreach ($this->getPatterns() as $patternName => $pattern) {
+      if (PatternLab::stripDigits($patternName) == $n) return $pattern;
+    }
+    throw new \OutOfBoundsException("Unknown pattern: $name");
   }
 
   public function getAllPatterns() {
