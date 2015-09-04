@@ -3,6 +3,8 @@
 namespace Labcoat\Styleguide\Patterns;
 
 interface PatternInterface {
+  public function getContent();
+  public function getData();
   public function getId();
   public function getName();
   public function getFile();
@@ -30,5 +32,4 @@ interface PatternInterface {
   public function patternPartialCode();
   public function patternPartialCodeE();
   public function patternSectionSubtype();
-  public function setContent($content);
 }

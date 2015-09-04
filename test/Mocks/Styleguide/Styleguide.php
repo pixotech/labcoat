@@ -7,10 +7,13 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class Styleguide implements StyleguideInterface {
 
+  public $globalData = [];
   public $patternlab;
+  public $patterns;
+  public $rendered = [];
 
   public function getGlobalData() {
-    // TODO: Implement getGlobalData() method.
+    return $this->globalData;
   }
 
   public function getPatternLab() {
@@ -37,6 +40,10 @@ class Styleguide implements StyleguideInterface {
     // TODO: Implement getIndexPaths() method.
   }
 
+  public function getPattern($id) {
+    return $this->patterns[$id];
+  }
+
   public function getPatternData(PatternInterface $pattern) {
     // TODO: Implement getPatternData() method.
   }
@@ -53,7 +60,7 @@ class Styleguide implements StyleguideInterface {
     // TODO: Implement getTwig() method.
   }
 
-  public function renderPattern(PatternInterface $pattern) {
-    // TODO: Implement renderPattern() method.
+  public function renderPattern(PatternInterface $pattern, array $data = []) {
+    return $this->rendered[$pattern->getId()];
   }
 }

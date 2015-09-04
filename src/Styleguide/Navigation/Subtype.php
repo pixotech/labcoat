@@ -41,9 +41,6 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
 
   public function addPattern(\Labcoat\Patterns\PatternInterface $pattern) {
     $this->patterns[] = new Pattern($pattern);
-    foreach ($pattern->getPseudoPatterns() as $pseudo) {
-      $this->patterns[] = new Pattern($pseudo);
-    }
   }
 
   public function getLowercaseName() {

@@ -7,6 +7,7 @@ use Labcoat\Patterns\PseudoPatternInterface;
 
 class Pattern implements PatternInterface {
 
+  public $data = [];
   public $file;
   public $id;
   public $name;
@@ -18,7 +19,7 @@ class Pattern implements PatternInterface {
   public $type;
 
   public function getData() {
-    // TODO: Implement getData() method.
+    return $this->data;
   }
 
   public function getFile() {

@@ -7,6 +7,7 @@ use Labcoat\PatternLabInterface;
 class PatternLab implements PatternLabInterface {
 
   public $ignoredExtensions = [];
+  public $patterns = [];
   public $render;
 
   public function getIgnoredExtensions() {
@@ -42,7 +43,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getPattern($name) {
-    // TODO: Implement getPattern() method.
+    return $this->patterns[$name];
   }
 
   public function hasLayout($name) {

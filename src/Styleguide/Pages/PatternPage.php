@@ -2,8 +2,7 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-use Labcoat\Patterns\PatternInterface;
-use Labcoat\Styleguide\Patterns\Pattern;
+use Labcoat\Styleguide\Patterns\PatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class PatternPage extends Page implements PatternPageInterface {
@@ -11,19 +10,19 @@ class PatternPage extends Page implements PatternPageInterface {
   protected $pattern;
 
   public function __construct(PatternInterface $pattern) {
-    $this->pattern = new Pattern($pattern);
+    $this->pattern = $pattern;
   }
 
   public function getContent(StyleguideInterface $styleguide) {
-    return $styleguide->renderPattern($this->pattern);
+    return $this->pattern->getContent();
   }
 
   public function getFooterVariables(StyleguideInterface $styleguide) {
-    return $styleguide->getPatternData($this->pattern);
+    return $this->pattern->getData();
   }
 
   public function getHeaderVariables(StyleguideInterface $styleguide) {
-    return $styleguide->getPatternData($this->pattern);
+    return $this->pattern->getData();
   }
 
   public function getPath() {

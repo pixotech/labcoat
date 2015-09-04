@@ -25,6 +25,7 @@ use Labcoat\Styleguide\Pages\PatternPageInterface;
 use Labcoat\Styleguide\Pages\StyleguideIndexPage;
 use Labcoat\Styleguide\Pages\SubTypeIndexPage;
 use Labcoat\Styleguide\Pages\TypeIndexPage;
+use Labcoat\Styleguide\Patterns\Pattern;
 
 class Styleguide implements StyleguideInterface {
 
@@ -178,6 +179,11 @@ class Styleguide implements StyleguideInterface {
     return $this->files;
   }
 
+  public function getGlobalData() {
+    if (!isset($this->globalData)) $this->globalData = $this->patternlab->getGlobalData();
+    return $this->globalData;
+  }
+
   /**
    * @return array
    */
@@ -192,25 +198,16 @@ class Styleguide implements StyleguideInterface {
     return $this->navigation;
   }
 
-  public function getPatternData(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
-    $id = $pattern->getId();
-    if (!isset($this->patternData[$id])) {
-      if ($pattern->isPseudo()) {
-        $parent = $this->patternlab->getPattern($pattern->getParentId());
-        $source = $parent->getPseudoPatterns()[$pattern->getVariantName()];
-        $data = $this->patternData[$pattern->getParentId()];
-        $data = array_replace_recursive($data, $source->getData()->getData());
-      }
-      else {
-        $data = $this->getGlobalData();
-        $source = $this->patternlab->getPattern($pattern->getId());
-        foreach ($source->getData() as $patternData) {
-          $data = array_replace_recursive($data, $patternData->getData());
-        }
-      }
-      $this->patternData[$id] = $data;
-    }
-    return $this->patternData[$id];
+  /**
+   * @param $id
+   * @return \Labcoat\Styleguide\Patterns\PatternInterface
+   */
+  public function getPattern($id) {
+    return $this->patterns[$id];
+  }
+
+  public function getPatternLab() {
+    return $this->patternlab;
   }
 
   /**
@@ -235,14 +232,8 @@ class Styleguide implements StyleguideInterface {
     return $this->twig;
   }
 
-  public function renderPattern(\Labcoat\Styleguide\Patterns\PatternInterface $pattern) {
-    $id = $pattern->getId();
-    if (!isset($this->patterns[$id])) {
-      $template = $pattern->getTemplate();
-      $data = $this->getPatternData($pattern);
-      $this->patterns[$id] = $this->patternlab->render($template, $data);
-    }
-    return $this->patterns[$id];
+  public function renderPattern(\Labcoat\Styleguide\Patterns\PatternInterface $pattern, array $data = []) {
+    return $this->patternlab->render($pattern->getTemplate(), $data);
   }
 
   /**
@@ -256,13 +247,15 @@ class Styleguide implements StyleguideInterface {
    * @param PatternInterface $pattern
    */
   protected function addPattern(PatternInterface $pattern) {
-    $this->pages[$pattern->getId()] = new PatternPage($pattern);
-    $this->getIndexPage()->addPattern($pattern);
+    $id = $pattern->getId();
+    $this->patterns[$id] = new Pattern($this, $pattern);
+    $this->pages[$pattern->getId()] = new PatternPage($this->patterns[$id]);
+    $this->getIndexPage()->addPattern($this->patterns[$id]);
     if (isset($this->pages[$pattern->getTypeId()])) {
-      $this->getTypePage($pattern->getTypeId())->addPattern($pattern);
+      $this->getTypePage($pattern->getTypeId())->addPattern($this->patterns[$id]);
     }
     if ($pattern->hasSubType()) {
-      $this->getSubtypePage($pattern->getSubTypeId())->addPattern($pattern);
+      $this->getSubtypePage($pattern->getSubTypeId())->addPattern($this->patterns[$id]);
     }
     $this->navigation->addPattern($pattern);
     $this->addPatternPath($pattern);
@@ -347,11 +340,6 @@ class Styleguide implements StyleguideInterface {
   protected function findAssets(PatternLabInterface $patternlab) {
     $assets = new AssetDirectory($patternlab, $this->assetsDirectory);
     $this->assets = $assets->getAssets();
-  }
-
-  protected function getGlobalData() {
-    if (!isset($this->globalData)) $this->globalData = $this->patternlab->getGlobalData();
-    return $this->globalData;
   }
 
   /**

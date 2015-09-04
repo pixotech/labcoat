@@ -29,12 +29,23 @@ interface StyleguideInterface {
   /**
    * @return array
    */
-  public function getIndexPaths();
+  public function getGlobalData();
 
   /**
    * @return array
    */
-  public function getPatternData(PatternInterface $pattern);
+  public function getIndexPaths();
+
+  /**
+   * @param $id
+   * @return PatternInterface
+   */
+  public function getPattern($id);
+
+  /**
+   * @return \Labcoat\PatternLabInterface
+   */
+  public function getPatternLab();
 
   /**
    * @return array
@@ -54,5 +65,5 @@ interface StyleguideInterface {
   /**
    * @return string
    */
-  public function renderPattern(PatternInterface $pattern);
+  public function renderPattern(PatternInterface $pattern, array $data = []);
 }

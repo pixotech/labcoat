@@ -4,6 +4,7 @@ namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Patterns\PseudoPatternInterface;
+use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
 
@@ -22,7 +23,8 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $type;
   protected $variant;
 
-  public function __construct(SourcePatternInterface $pattern) {
+  public function __construct(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
+    $this->styleguide = $styleguide;
     $this->file = $pattern->getFile();
     $this->id = $pattern->getId();
     $this->name = $pattern->getName();
@@ -40,6 +42,33 @@ class Pattern implements \JsonSerializable, PatternInterface {
     }
 
     #$this->includes = $pattern->getIncludedPatterns();
+  }
+
+  public function getContent() {
+    if (!isset($this->content)) {
+      $this->content = $this->styleguide->renderPattern($this, $this->getData());
+    }
+    return $this->content;
+  }
+
+  public function getData() {
+    if (!isset($this->data)) {
+      if ($this->isPseudo()) {
+        $parent = $this->getPatternLab()->getPattern($this->getParentId());
+        $source = $parent->getPseudoPatterns()[$this->getVariantName()];
+        $data = $this->styleguide->getPattern($this->getParentId())->getData();
+        $data = array_replace_recursive($data, $source->getData()->getData());
+      }
+      else {
+        $data = $this->styleguide->getGlobalData();
+        $source = $this->getPatternLab()->getPattern($this->getId());
+        foreach ($source->getData() as $patternData) {
+          $data = array_replace_recursive($data, $patternData->getData());
+        }
+      }
+      $this->data = $data;
+    }
+    return $this->data;
   }
 
   public function getId() {
@@ -162,7 +191,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternPartialCode() {
-    return $this->content;
+    return $this->getContent();
   }
 
   public function patternPartialCodeE() {
@@ -173,13 +202,16 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return false;
   }
 
-  public function setContent($content) {
-    $this->content = $content;
-  }
-
   protected function getBreadcrumb() {
     $crumb = [$this->type];
     if ($this->subtype) $crumb[] = $this->subtype;
     return implode(' &gt; ', $crumb);
+  }
+
+  /**
+   * @return \Labcoat\PatternLabInterface
+   */
+  protected function getPatternLab() {
+    return $this->styleguide->getPatternLab();
   }
 }

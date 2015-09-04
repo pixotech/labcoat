@@ -70,6 +70,9 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
     return $this->id;
   }
 
+  /**
+   * @return PseudoPatternInterface
+   */
   public function getPseudoPatterns() {
     if (!isset($this->pseudoPatterns)) $this->findData();
     return $this->pseudoPatterns;
