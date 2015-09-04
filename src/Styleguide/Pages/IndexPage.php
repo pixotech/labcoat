@@ -10,10 +10,6 @@ abstract class IndexPage extends Page implements IndexPageInterface {
 
   protected $patterns = [];
 
-  public function __construct(StyleguideInterface $styleguide) {
-    parent::__construct($styleguide);
-  }
-
   public function addPattern(PatternInterface $pattern) {
     $this->patterns[] = new Pattern($pattern);
   }
@@ -30,6 +26,9 @@ abstract class IndexPage extends Page implements IndexPageInterface {
     return $styleguide->getTwig()->render('viewall', $variables);
   }
 
+  /**
+   * @return \Labcoat\Styleguide\Patterns\PatternInterface[]
+   */
   public function getPatterns() {
     return $this->patterns;
   }

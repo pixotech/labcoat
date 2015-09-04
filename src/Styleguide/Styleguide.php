@@ -256,7 +256,7 @@ class Styleguide implements StyleguideInterface {
    * @param PatternInterface $pattern
    */
   protected function addPattern(PatternInterface $pattern) {
-    $this->pages[$pattern->getId()] = new PatternPage($this, $pattern);
+    $this->pages[$pattern->getId()] = new PatternPage($pattern);
     $this->getIndexPage()->addPattern($pattern);
     if (isset($this->pages[$pattern->getTypeId()])) {
       $this->getTypePage($pattern->getTypeId())->addPattern($pattern);
@@ -301,7 +301,7 @@ class Styleguide implements StyleguideInterface {
    * @param PatternSubTypeInterface $subtype
    */
   protected function addSubtype(PatternSubTypeInterface $subtype) {
-    $this->pages[$subtype->getId()] = new SubTypeIndexPage($this, $subtype);
+    $this->pages[$subtype->getId()] = new SubTypeIndexPage($subtype);
     $this->navigation->addSubtype($subtype);
     $this->addSubtypeIndexPath($subtype);
   }
@@ -324,7 +324,7 @@ class Styleguide implements StyleguideInterface {
    */
   protected function addType(PatternTypeInterface $type) {
     if ($type->hasSubtypes()) {
-      $this->pages[$type->getId()] = new TypeIndexPage($this, $type);
+      $this->pages[$type->getId()] = new TypeIndexPage($type);
     }
     $this->navigation->addType($type);
   }
@@ -381,22 +381,6 @@ class Styleguide implements StyleguideInterface {
 
   /**
    * @param string $id
-   * @return \Labcoat\Styleguide\Pages\SubTypeIndexPageInterface
-   */
-  protected function getSubtypePage($id) {
-    return $this->getPage($id);
-  }
-
-  /**
-   * @param string $id
-   * @return \Labcoat\Styleguide\Pages\TypeIndexPageInterface
-   */
-  protected function getTypePage($id) {
-    return $this->getPage($id);
-  }
-
-  /**
-   * @param string $id
    * @return \Labcoat\Styleguide\Pages\PageInterface
    */
   protected function getPage($id) {
@@ -438,6 +422,22 @@ class Styleguide implements StyleguideInterface {
    */
   protected function getStylesheets() {
     return [];
+  }
+
+  /**
+   * @param string $id
+   * @return \Labcoat\Styleguide\Pages\SubTypeIndexPageInterface
+   */
+  protected function getSubtypePage($id) {
+    return $this->getPage($id);
+  }
+
+  /**
+   * @param string $id
+   * @return \Labcoat\Styleguide\Pages\TypeIndexPageInterface
+   */
+  protected function getTypePage($id) {
+    return $this->getPage($id);
   }
 
   /**

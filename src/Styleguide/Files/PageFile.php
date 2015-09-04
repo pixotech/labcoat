@@ -17,7 +17,9 @@ class PageFile extends File {
   }
 
   public function put(StyleguideInterface $styleguide, $path) {
-    $contents = $this->page->render($styleguide);
+    $contents  = $this->makeHeader($styleguide);
+    $contents .= $this->page->getContent($styleguide);
+    $contents .= $this->makeFooter($styleguide);
     file_put_contents($path, $contents);
   }
 
@@ -28,5 +30,46 @@ class PageFile extends File {
 
   public function getTime() {
     return $this->page->getTime();
+  }
+
+  protected function getFooterVariables(StyleguideInterface $styleguide) {
+    $vars = $this->page->getFooterVariables($styleguide);
+    $vars += [
+      'cacheBuster' => $styleguide->getCacheBuster(),
+      'patternLabFoot' => $this->getPatternLabFooterContent($styleguide),
+    ];
+    return $vars;
+  }
+
+  protected function getHeaderVariables(StyleguideInterface $styleguide) {
+    $vars = $this->page->getHeaderVariables($styleguide);
+    $vars += [
+      'cacheBuster' => $styleguide->getCacheBuster(),
+      'patternLabHead' => $this->getPatternLabHeaderContent($styleguide),
+    ];
+    return $vars;
+  }
+
+  protected function getPatternLabFooterContent(StyleguideInterface $styleguide) {
+    $data = [
+      'cacheBuster' => $styleguide->getCacheBuster(),
+      'patternData' => json_encode($this->page->getPatternData()),
+    ];
+    return $styleguide->getTwig()->render('partials/general-footer', $data);
+  }
+
+  protected function getPatternLabHeaderContent(StyleguideInterface $styleguide) {
+    $data = [
+      'cacheBuster' => $styleguide->getCacheBuster(),
+    ];
+    return $styleguide->getTwig()->render('partials/general-header', $data);
+  }
+
+  protected function makeFooter(StyleguideInterface $styleguide) {
+    return $styleguide->getTwig()->render('patternLabFoot', $this->getFooterVariables($styleguide));
+  }
+
+  protected function makeHeader(StyleguideInterface $styleguide) {
+    return $styleguide->getTwig()->render('patternLabHead', $this->getHeaderVariables($styleguide));
   }
 }

@@ -4,7 +4,6 @@ namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Patterns\PseudoPatternInterface;
-use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
 

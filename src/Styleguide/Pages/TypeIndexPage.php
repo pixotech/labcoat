@@ -4,14 +4,12 @@ namespace Labcoat\Styleguide\Pages;
 
 use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternTypeInterface;
-use Labcoat\Styleguide\StyleguideInterface;
 
 class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
 
   protected $typeName;
 
-  public function __construct(StyleguideInterface $styleguide, PatternTypeInterface $type) {
-    parent::__construct($styleguide);
+  public function __construct(PatternTypeInterface $type) {
     $this->typeName = $type->getName();
   }
 
@@ -19,8 +17,12 @@ class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
     return ['patterns', $this->typeName, 'index.html'];
   }
 
-  protected function getPatternData() {
+  public function getPatternData() {
     $name = PatternLab::stripDigits($this->typeName);
     return ['patternPartial' => "viewall-{$name}-all"];
+  }
+
+  public function getTime() {
+
   }
 }
