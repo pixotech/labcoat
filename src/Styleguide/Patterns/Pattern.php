@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Patterns;
 
+use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Patterns\PseudoPatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
@@ -12,6 +13,9 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $data;
   protected $file;
   protected $id;
+  protected $includedPatterns = [];
+  protected $includingPatterns = [];
+  protected $includes;
   protected $isPseudo = false;
   protected $name;
   protected $parentId;
@@ -41,7 +45,15 @@ class Pattern implements \JsonSerializable, PatternInterface {
       $this->variant = $pattern->getVariantName();
     }
 
-    #$this->includes = $pattern->getIncludedPatterns();
+    $this->includes = $pattern->getIncludedPatterns();
+  }
+
+  public function addIncludedPattern(Pattern $pattern) {
+    $this->includedPatterns[$pattern->getId()] = $pattern;
+  }
+
+  public function addIncludingPattern(Pattern $pattern) {
+    $this->includingPatterns[$pattern->getId()] = $pattern;
   }
 
   public function getContent() {
@@ -75,6 +87,17 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return $this->id;
   }
 
+  public function getIncludedPatterns() {
+    return $this->includes;
+  }
+
+  public function getLineagePath() {
+    $path = $this->getFilePath('html');
+    array_unshift($path, '..');
+    array_unshift($path, '..');
+    return PatternLab::makePath($path);
+  }
+
   public function getName() {
     return $this->name;
   }
@@ -90,6 +113,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public function getParentId() {
     return $this->parentId;
+  }
+
+  public function getPartial() {
+    return $this->partial;
   }
 
   public function getPath() {
@@ -159,7 +186,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLineageExists() {
-    return false;
+    return !empty($this->includedPatterns);
   }
 
   public function patternLineageEExists() {
@@ -167,15 +194,29 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLineageRExists() {
-    return false;
+    return !empty($this->includingPatterns);
   }
 
   public function patternLineages() {
-    return [];
+    $patterns = [];
+    foreach ($this->includedPatterns as $pattern) {
+      $patterns[] = [
+        'lineagePattern' => $pattern->getPartial(),
+        'lineagePath' => $pattern->getLineagePath(),
+      ];
+    }
+    return $patterns;
   }
 
   public function patternLineagesR() {
-    return [];
+    $patterns = [];
+    foreach ($this->includingPatterns as $pattern) {
+      $patterns[] = [
+        'lineagePattern' => $pattern->getPartial(),
+        'lineagePath' => $pattern->getLineagePath(),
+      ];
+    }
+    return $patterns;
   }
 
   public function patternLink() {

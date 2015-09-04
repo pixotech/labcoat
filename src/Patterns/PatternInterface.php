@@ -20,6 +20,11 @@ interface PatternInterface {
   public function getId();
 
   /**
+   * @return array
+   */
+  public function getIncludedPatterns();
+
+  /**
    * @return string
    */
   public function getName();

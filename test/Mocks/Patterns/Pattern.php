@@ -30,6 +30,10 @@ class Pattern implements PatternInterface {
     return $this->id;
   }
 
+  public function getIncludedPatterns() {
+    // TODO: Implement getIncludedPatterns() method.
+  }
+
   public function getName() {
     return $this->name;
   }

@@ -6,6 +6,7 @@ interface PatternInterface {
   public function getContent();
   public function getData();
   public function getId();
+  public function getIncludedPatterns();
   public function getName();
   public function getFile();
   public function getFilePath($extension);

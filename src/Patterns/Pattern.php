@@ -143,7 +143,9 @@ class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
       while (!$tokens->isEOF()) {
         $token = $tokens->next();
         if ($token->getType() == \Twig_Token::NAME_TYPE && in_array($token->getValue(), ['include', 'extend'])) {
-          $this->includedPatterns[] = $tokens->next()->getValue();
+          $next = $tokens->next()->getValue();
+          if ($next == '(') $next = $tokens->next()->getValue();
+          $this->includedPatterns[] = $next;
         }
       }
     }

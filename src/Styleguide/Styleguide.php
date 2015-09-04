@@ -87,6 +87,11 @@ class Styleguide implements StyleguideInterface {
   protected $indexPaths = [];
 
   /**
+   * @var array
+   */
+  protected $lineages;
+
+  /**
    * @var Navigation
    */
   protected $navigation;
@@ -112,7 +117,7 @@ class Styleguide implements StyleguideInterface {
   protected $patternPaths = [];
 
   /**
-   * @var array
+   * @var \Labcoat\Styleguide\Patterns\PatternInterface[]
    */
   protected $patterns = [];
 
@@ -288,6 +293,7 @@ class Styleguide implements StyleguideInterface {
         $this->addPattern($item);
       }
     }
+    $this->findPatternLineages();
   }
 
   /**
@@ -340,6 +346,22 @@ class Styleguide implements StyleguideInterface {
   protected function findAssets(PatternLabInterface $patternlab) {
     $assets = new AssetDirectory($patternlab, $this->assetsDirectory);
     $this->assets = $assets->getAssets();
+  }
+
+  protected function findPatternLineages() {
+    $this->lineages = [];
+    $includes = [];
+    foreach ($this->patterns as $id => $pattern) {
+      foreach ($pattern->getIncludedPatterns() as $included) {
+        if (!isset($includes[$included])) {
+          $includedPattern = $this->patternlab->getPattern($included);
+          $includes[$included] = $includedPattern->getId();
+        }
+        $includeId = $includes[$included];
+        $pattern->addIncludedPattern($this->patterns[$includeId]);
+        $this->patterns[$includeId]->addIncludingPattern($pattern);
+      }
+    }
   }
 
   /**
