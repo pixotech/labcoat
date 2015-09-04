@@ -5,9 +5,8 @@ namespace Labcoat\Patterns;
 use Labcoat\PatternLab;
 use Labcoat\Patterns\Filters\PatternFilterIterator;
 use Labcoat\Patterns\Filters\SubTypeFilterIterator;
-use RecursiveIterator;
 
-class PatternType extends PatternSection implements \RecursiveIterator, PatternTypeInterface {
+class PatternType extends PatternSection implements PatternTypeInterface {
 
   protected $name;
 

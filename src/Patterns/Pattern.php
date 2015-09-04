@@ -2,10 +2,13 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\HasItemsInterface;
+use Labcoat\HasItemsTrait;
 use Labcoat\PatternLab;
 
-class Pattern implements \Countable, \RecursiveIterator, PatternInterface {
-  use HasChildItems;
+class Pattern implements \Countable, HasItemsInterface, PatternInterface {
+
+  use HasItemsTrait;
 
   /**
    * @var PatternDataInterface[]

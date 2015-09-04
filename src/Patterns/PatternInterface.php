@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\HasItemsInterface;
+
 interface PatternInterface {
 
   /**

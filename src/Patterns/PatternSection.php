@@ -2,32 +2,21 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\PatternLab;
+use Labcoat\HasItemsInterface;
+use Labcoat\HasItemsTrait;
 
-abstract class PatternSection implements \Countable, \RecursiveIterator {
+abstract class PatternSection implements \Countable, HasItemsInterface {
 
-  protected $items = [];
-  protected $iteratorPosition = 0;
+  use HasItemsTrait;
+
   protected $time;
 
   abstract public function add(PatternInterface $pattern);
-
-  public function count() {
-    return count($this->items);
-  }
-
-  public function current() {
-    return $this->items[$this->getIteratorKey()];
-  }
 
   /**
    * @return PatternInterface[]
    */
   abstract public function getAllPatterns();
-
-  public function getChildren() {
-    return $this->current();
-  }
 
   public function getTime() {
     if (!isset($this->time)) {
@@ -40,27 +29,6 @@ abstract class PatternSection implements \Countable, \RecursiveIterator {
     return $this->time;
   }
 
-  public function hasChildren() {
-    if (!($this->current() instanceof \RecursiveIterator)) return false;
-    return count($this->current()) > 0;
-  }
-
-  public function key() {
-    return PatternLab::stripDigits($this->getIteratorKey());
-  }
-
-  public function next() {
-    ++$this->iteratorPosition;
-  }
-
-  public function rewind() {
-    $this->iteratorPosition = 0;
-  }
-
-  public function valid() {
-    return $this->iteratorPosition < $this->count();
-  }
-
   protected function addItem($key, $item) {
     $this->items[$key] = $item;
     ksort($this->items, SORT_NATURAL);
@@ -68,9 +36,5 @@ abstract class PatternSection implements \Countable, \RecursiveIterator {
 
   protected function addPattern(PatternInterface $pattern) {
     $this->addItem($pattern->getName(), $pattern);
-  }
-
-  protected function getIteratorKey() {
-    return array_keys($this->items)[$this->iteratorPosition];
   }
 }

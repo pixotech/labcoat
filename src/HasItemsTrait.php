@@ -1,10 +1,8 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat;
 
-use Labcoat\PatternLab;
-
-trait HasChildItems {
+trait HasItemsTrait {
 
   protected $items = [];
   protected $iteratorPosition = 0;
@@ -13,6 +11,9 @@ trait HasChildItems {
     return count($this->items);
   }
 
+  /**
+   * @return mixed
+   */
   public function current() {
     return $this->items[$this->getIteratorKey()];
   }
@@ -22,8 +23,7 @@ trait HasChildItems {
   }
 
   public function hasChildren() {
-    if (!($this->current() instanceof \RecursiveIterator)) return false;
-    return count($this->current()) > 0;
+    return ($this->current() instanceof HasItemsInterface) ? ($this->current()->count() > 0) : false;
   }
 
   public function key() {
