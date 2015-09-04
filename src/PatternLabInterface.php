@@ -69,7 +69,7 @@ interface PatternLabInterface {
   public function getTwig();
 
   /**
-   * @return \Labcoat\Patterns\PatternType
+   * @return \Labcoat\Patterns\Type
    */
   public function getTypes();
 

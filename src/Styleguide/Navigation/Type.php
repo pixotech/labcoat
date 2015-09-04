@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\PatternTypeInterface;
+use Labcoat\Patterns\TypeInterface as SourceTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
 
@@ -12,11 +12,11 @@ class Type implements \JsonSerializable, TypeInterface {
   protected $subtypes = [];
 
   /**
-   * @var PatternTypeInterface
+   * @var TypeInterface
    */
   protected $type;
 
-  public function __construct(PatternTypeInterface $type) {
+  public function __construct(SourceTypeInterface $type) {
     #$this->type = $type;
     $this->name = $type->getName();
   }

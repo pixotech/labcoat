@@ -2,7 +2,7 @@
 
 namespace Labcoat\Patterns;
 
-interface PatternTypeInterface {
+interface TypeInterface extends PatternSectionInterface {
 
   /**
    * @return string

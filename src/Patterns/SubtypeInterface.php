@@ -2,7 +2,7 @@
 
 namespace Labcoat\Patterns;
 
-interface PatternSubTypeInterface {
+interface SubtypeInterface extends PatternSectionInterface {
 
   /**
    * @return string
@@ -15,7 +15,7 @@ interface PatternSubTypeInterface {
   public function getName();
 
   /**
-   * @return PatternTypeInterface
+   * @return TypeInterface
    */
   public function getType();
 

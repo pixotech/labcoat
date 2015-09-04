@@ -4,12 +4,12 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLab;
 
-class PatternSubType extends PatternSection implements PatternSubTypeInterface {
+class Subtype extends PatternSection implements SubtypeInterface {
 
   protected $name;
   protected $type;
 
-  public function __construct(PatternTypeInterface $type, $name) {
+  public function __construct(TypeInterface $type, $name) {
     $this->type = $type;
     $this->name = $name;
   }

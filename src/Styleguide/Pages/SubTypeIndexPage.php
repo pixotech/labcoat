@@ -3,14 +3,14 @@
 namespace Labcoat\Styleguide\Pages;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\PatternSubTypeInterface;
+use Labcoat\Patterns\SubtypeInterface;
 
 class SubTypeIndexPage extends IndexPage implements SubTypeIndexPageInterface {
 
   protected $subtypeName;
   protected $typeName;
 
-  public function __construct(PatternSubTypeInterface $subType) {
+  public function __construct(SubtypeInterface $subType) {
     $this->subtypeName = $subType->getName();
     $this->typeName = $subType->getType()->getName();
   }

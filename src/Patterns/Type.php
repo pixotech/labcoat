@@ -6,7 +6,7 @@ use Labcoat\PatternLab;
 use Labcoat\Patterns\Filters\PatternFilterIterator;
 use Labcoat\Patterns\Filters\SubTypeFilterIterator;
 
-class PatternType extends PatternSection implements PatternTypeInterface {
+class Type extends PatternSection implements TypeInterface {
 
   protected $name;
 
@@ -37,7 +37,7 @@ class PatternType extends PatternSection implements PatternTypeInterface {
 
   /**
    * @param $name
-   * @return PatternSubTypeInterface
+   * @return SubtypeInterface
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
@@ -46,7 +46,7 @@ class PatternType extends PatternSection implements PatternTypeInterface {
 
   /**
    * @param $name
-   * @return PatternSubTypeInterface
+   * @return SubtypeInterface
    * @throws \OutOfBoundsException
    */
   public function findSubType($name) {
@@ -86,14 +86,14 @@ class PatternType extends PatternSection implements PatternTypeInterface {
 
   /**
    * @param $name
-   * @return PatternSubTypeInterface
+   * @return SubtypeInterface
    */
   public function getSubType($name) {
     return $this->items[$name];
   }
 
   /**
-   * @return PatternSubTypeInterface[]
+   * @return SubtypeInterface[]
    */
   public function getSubTypes() {
     return iterator_to_array($this->getSubTypesIterator());
@@ -108,7 +108,7 @@ class PatternType extends PatternSection implements PatternTypeInterface {
   }
 
   protected function ensureSubType($name) {
-    if (!isset($this->items[$name])) $this->addItem($name, new PatternSubType($this, $name));
+    if (!isset($this->items[$name])) $this->addItem($name, new Subtype($this, $name));
   }
 
   protected function getAllPatternsIterator() {

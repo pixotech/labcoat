@@ -194,14 +194,14 @@ class PatternLab implements PatternLabInterface {
 
   /**
    * @param string $name
-   * @return Patterns\PatternTypeInterface
+   * @return Patterns\TypeInterface
    */
   public function getType($name) {
     return $this->getPatterns()->getType($name);
   }
 
   /**
-   * @return \Labcoat\Patterns\PatternTypeInterface[]
+   * @return \Labcoat\Patterns\TypeInterface[]
    */
   public function getTypes() {
     return $this->getPatterns()->getTypes();

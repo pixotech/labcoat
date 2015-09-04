@@ -7,8 +7,8 @@ use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\PatternCollection;
 use Labcoat\Patterns\PatternInterface;
-use Labcoat\Patterns\PatternSubTypeInterface;
-use Labcoat\Patterns\PatternTypeInterface;
+use Labcoat\Patterns\SubtypeInterface;
+use Labcoat\Patterns\TypeInterface;
 use Labcoat\Styleguide\Files\AnnotationsFile;
 use Labcoat\Styleguide\Files\AssetFile;
 use Labcoat\Styleguide\Files\DataFile;
@@ -283,10 +283,10 @@ class Styleguide implements StyleguideInterface {
     $this->navigation = new Navigation();
     $items = new \RecursiveIteratorIterator($patterns, \RecursiveIteratorIterator::SELF_FIRST);
     foreach ($items as $item) {
-      if ($item instanceof PatternTypeInterface) {
+      if ($item instanceof TypeInterface) {
         $this->addType($item);
       }
-      elseif ($item instanceof PatternSubTypeInterface) {
+      elseif ($item instanceof SubtypeInterface) {
         $this->addSubtype($item);
       }
       elseif ($item instanceof PatternInterface) {
@@ -297,18 +297,18 @@ class Styleguide implements StyleguideInterface {
   }
 
   /**
-   * @param PatternSubTypeInterface $subtype
+   * @param SubtypeInterface $subtype
    */
-  protected function addSubtype(PatternSubTypeInterface $subtype) {
+  protected function addSubtype(SubtypeInterface $subtype) {
     $this->pages[$subtype->getId()] = new SubTypeIndexPage($subtype);
     $this->navigation->addSubtype($subtype);
     $this->addSubtypeIndexPath($subtype);
   }
 
   /**
-   * @param PatternSubTypeInterface $subtype
+   * @param SubtypeInterface $subtype
    */
-  protected function addSubtypeIndexPath(PatternSubTypeInterface $subtype) {
+  protected function addSubtypeIndexPath(SubtypeInterface $subtype) {
     $type = $subtype->getType();
     $typeName = PatternLab::stripDigits($type->getName());
     $subtypeName = PatternLab::stripDigits($subtype->getName());
@@ -319,9 +319,9 @@ class Styleguide implements StyleguideInterface {
   }
 
   /**
-   * @param PatternTypeInterface $type
+   * @param TypeInterface $type
    */
-  protected function addType(PatternTypeInterface $type) {
+  protected function addType(TypeInterface $type) {
     if ($type->hasSubtypes()) {
       $this->pages[$type->getId()] = new TypeIndexPage($type);
     }

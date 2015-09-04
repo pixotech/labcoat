@@ -2,10 +2,9 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\HasItemsInterface;
 use Labcoat\HasItemsTrait;
 
-abstract class PatternSection implements \Countable, HasItemsInterface {
+abstract class PatternSection implements \Countable, PatternSectionInterface {
 
   use HasItemsTrait;
 

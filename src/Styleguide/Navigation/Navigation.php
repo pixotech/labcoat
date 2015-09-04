@@ -3,8 +3,8 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\Patterns\PatternInterface;
-use Labcoat\Patterns\PatternSubTypeInterface;
-use Labcoat\Patterns\PatternTypeInterface;
+use Labcoat\Patterns\SubtypeInterface;
+use Labcoat\Patterns\TypeInterface;
 
 class Navigation implements \JsonSerializable {
 
@@ -24,11 +24,11 @@ class Navigation implements \JsonSerializable {
     $this->types[$type]->addPattern($pattern);
   }
 
-  public function addSubtype(PatternSubTypeInterface $subtype) {
+  public function addSubtype(SubtypeInterface $subtype) {
     $this->types[$subtype->getType()->getName()]->addSubtype(new Subtype($subtype));
   }
 
-  public function addType(PatternTypeInterface $type) {
+  public function addType(TypeInterface $type) {
     $this->types[$type->getName()] = new Type($type);
   }
 }

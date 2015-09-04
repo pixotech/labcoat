@@ -2,15 +2,15 @@
 
 namespace Labcoat\Patterns;
 
-class PatternTypeTest extends \PHPUnit_Framework_TestCase {
+class TypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
-    $type = new PatternType('one');
+    $type = new Type('one');
     $this->assertEquals('one', $type->getName());
   }
 
   public function testNameHasDigits() {
-    $type = new PatternType('01-one');
+    $type = new Type('01-one');
     $this->assertEquals('01-one', $type->getName());
   }
 }

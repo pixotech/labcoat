@@ -3,13 +3,13 @@
 namespace Labcoat\Styleguide\Pages;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\PatternTypeInterface;
+use Labcoat\Patterns\TypeInterface;
 
 class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
 
   protected $typeName;
 
-  public function __construct(PatternTypeInterface $type) {
+  public function __construct(TypeInterface $type) {
     $this->typeName = $type->getName();
   }
 

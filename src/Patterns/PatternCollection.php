@@ -19,7 +19,7 @@ class PatternCollection extends PatternSection implements PatternCollectionInter
 
   /**
    * @param $name
-   * @return PatternType
+   * @return Type
    * @throws \OutOfBoundsException
    */
   public function findType($name) {
@@ -59,7 +59,7 @@ class PatternCollection extends PatternSection implements PatternCollectionInter
 
   /**
    * @param $name
-   * @return PatternType
+   * @return Type
    */
   public function getType($name) {
     return $this->items[$name];
@@ -103,10 +103,10 @@ class PatternCollection extends PatternSection implements PatternCollectionInter
 
   /**
    * @param $name
-   * @return PatternType
+   * @return Type
    */
   protected function addType($name) {
-    $this->addItem($name, new PatternType($name));
+    $this->addItem($name, new Type($name));
   }
 
   protected function ensureType($name) {

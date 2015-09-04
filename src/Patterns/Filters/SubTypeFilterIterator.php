@@ -2,7 +2,7 @@
 
 namespace Labcoat\Patterns\Filters;
 
-use Labcoat\Patterns\PatternSubType;
+use Labcoat\Patterns\Subtype;
 
 class SubTypeFilterIterator extends \FilterIterator {
 
@@ -13,6 +13,6 @@ class SubTypeFilterIterator extends \FilterIterator {
   }
 
   public function accept() {
-    return $this->getInnerIterator()->current() instanceof PatternSubType;
+    return $this->getInnerIterator()->current() instanceof Subtype;
   }
 }

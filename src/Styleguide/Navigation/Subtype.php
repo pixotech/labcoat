@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\PatternSubTypeInterface;
+use Labcoat\Patterns\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
 
@@ -11,7 +11,7 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   protected $subtype;
   protected $type;
 
-  public function __construct(PatternSubTypeInterface $subtype) {
+  public function __construct(SourceInterface $subtype) {
     #$this->subtype = $subtype;
     $this->name = $subtype->getName();
     $this->type = $subtype->getTypeId();
