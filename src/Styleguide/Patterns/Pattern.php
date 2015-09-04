@@ -48,11 +48,11 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->includes = $pattern->getIncludedPatterns();
   }
 
-  public function addIncludedPattern(Pattern $pattern) {
+  public function addIncludedPattern(PatternInterface $pattern) {
     $this->includedPatterns[$pattern->getId()] = $pattern;
   }
 
-  public function addIncludingPattern(Pattern $pattern) {
+  public function addIncludingPattern(PatternInterface $pattern) {
     $this->includingPatterns[$pattern->getId()] = $pattern;
   }
 

@@ -3,6 +3,8 @@
 namespace Labcoat\Styleguide\Patterns;
 
 interface PatternInterface {
+  public function addIncludedPattern(PatternInterface $pattern);
+  public function addIncludingPattern(PatternInterface $pattern);
   public function getContent();
   public function getData();
   public function getId();
@@ -10,7 +12,9 @@ interface PatternInterface {
   public function getName();
   public function getFile();
   public function getFilePath($extension);
+  public function getLineagePath();
   public function getParentId();
+  public function getPartial();
   public function getPath();
   public function getTemplate();
   public function getVariantName();
