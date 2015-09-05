@@ -4,7 +4,6 @@ namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
-use Labcoat\Patterns\PseudoPatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
@@ -13,37 +12,53 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $data;
   protected $file;
   protected $id;
+
+  /**
+   * @var PatternInterface[]
+   */
   protected $includedPatterns = [];
+
+  /**
+   * @var PatternInterface[]
+   */
   protected $includingPatterns = [];
+
   protected $includes;
-  protected $isPseudo = false;
+  protected $lineagePath;
   protected $name;
-  protected $parentId;
   protected $partial;
+  protected $pagePath;
   protected $path;
+  protected $sourcePath;
   protected $state;
-  protected $subtype;
   protected $template;
+  protected $templatePath;
   protected $type;
-  protected $variant;
+
+  public static function makeBreadcrumb($path) {
+    $func = function ($segment) {
+      return str_replace('-', ' ', PatternLab::stripDigits($segment));
+    };
+    $segments = array_map($func, explode('/', $path));
+    return implode(' &gt; ', array_slice($segments, 0, -1));
+  }
+
+  public static function makeName($name) {
+    return ucwords(str_replace('-', ' ', $name));
+  }
 
   public function __construct(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
     $this->styleguide = $styleguide;
     $this->file = $pattern->getFile();
     $this->id = $pattern->getId();
-    $this->name = $pattern->getName();
     $this->partial = $pattern->getPartial();
-    $this->path = $pattern->getPath();
     $this->state = $pattern->getState();
-    $this->subtype = $pattern->hasSubType() ? $pattern->getSubTypeId() : null;
     $this->template = $pattern->getTemplate();
-    $this->type = $pattern->getTypeId();
 
-    if ($pattern instanceof PseudoPatternInterface) {
-      $this->isPseudo = true;
-      $this->parentId = $pattern->getPattern()->getId();
-      $this->variant = $pattern->getVariantName();
-    }
+    $this->name = self::makeName($pattern->getName());
+    $this->breadcrumb = self::makeBreadcrumb($pattern->getPath());
+
+    $this->makePaths($pattern);
 
     $this->includes = $pattern->getIncludedPatterns();
   }
@@ -56,6 +71,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->includingPatterns[$pattern->getId()] = $pattern;
   }
 
+  public function getBreadcrumb() {
+    return $this->breadcrumb;
+  }
+
   public function getContent() {
     if (!isset($this->content)) {
       $this->content = $this->styleguide->renderPattern($this, $this->getData());
@@ -64,22 +83,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function getData() {
-    if (!isset($this->data)) {
-      if ($this->isPseudo()) {
-        $parent = $this->getPatternLab()->getPattern($this->getParentId());
-        $source = $parent->getPseudoPatterns()[$this->getVariantName()];
-        $data = $this->styleguide->getPattern($this->getParentId())->getData();
-        $data = array_replace_recursive($data, $source->getData()->getData());
-      }
-      else {
-        $data = $this->styleguide->getGlobalData();
-        $source = $this->getPatternLab()->getPattern($this->getId());
-        foreach ($source->getData() as $patternData) {
-          $data = array_replace_recursive($data, $patternData->getData());
-        }
-      }
-      $this->data = $data;
-    }
+    if (!isset($this->data)) $this->makeData();
     return $this->data;
   }
 
@@ -92,10 +96,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function getLineagePath() {
-    $path = $this->getFilePath('html');
-    array_unshift($path, '..');
-    array_unshift($path, '..');
-    return PatternLab::makePath($path);
+    return $this->lineagePath;
   }
 
   public function getName() {
@@ -106,21 +107,26 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return $this->file;
   }
 
-  public function getFilePath($extension) {
-    $path = str_replace('/', '-', $this->getPath());
-    return ['patterns', $path, "$path.$extension"];
-  }
-
-  public function getParentId() {
-    return $this->parentId;
+  public function getPagePath() {
+    return $this->pagePath;
   }
 
   public function getPartial() {
     return $this->partial;
   }
 
+  /**
+   * @return mixed
+   */
   public function getPath() {
     return $this->path;
+  }
+
+  /**
+   * @return string
+   */
+  public function getSourcePath() {
+    return $this->sourcePath;
   }
 
   /**
@@ -133,12 +139,12 @@ class Pattern implements \JsonSerializable, PatternInterface {
   /**
    * @return string
    */
-  public function getVariantName() {
-    return $this->variant;
+  public function getTemplatePath() {
+    return $this->templatePath;
   }
 
   public function isPseudo() {
-    return $this->isPseudo;
+    return false;
   }
 
   public function jsonSerialize() {
@@ -149,8 +155,8 @@ class Pattern implements \JsonSerializable, PatternInterface {
       'patternBreadcrumb' => $this->getBreadcrumb(),
       'patternDesc' => $this->patternDesc(),
       'patternExtension' => 'twig',
-      'patternName' => $this->patternName(),
-      'patternPartial' => $this->patternPartial(),
+      'patternName' => $this->name,
+      'patternPartial' => $this->partial,
       'patternState' => $this->state,
       'extraOutput' => [],
     ];
@@ -220,11 +226,11 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLink() {
-    return $this->name . DIRECTORY_SEPARATOR . $this->name . '.html';
+    return $this->path;
   }
 
   public function patternName() {
-    return ucwords(str_replace('-', ' ', $this->name));
+    return $this->name;
   }
 
   public function patternPartial() {
@@ -243,16 +249,28 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return false;
   }
 
-  protected function getBreadcrumb() {
-    $crumb = [$this->type];
-    if ($this->subtype) $crumb[] = $this->subtype;
-    return implode(' &gt; ', $crumb);
-  }
-
   /**
    * @return \Labcoat\PatternLabInterface
    */
   protected function getPatternLab() {
     return $this->styleguide->getPatternLab();
+  }
+
+  protected function makeData() {
+    $data = $this->styleguide->getGlobalData();
+    $source = $this->getPatternLab()->getPattern($this->getId());
+    foreach ($source->getData() as $patternData) {
+      $data = array_replace_recursive($data, $patternData->getData());
+    }
+    $this->data = $data;
+  }
+
+  protected function makePaths(SourcePatternInterface $pattern) {
+    $path = str_replace('/', '-', $pattern->getPath());
+    $this->path = PatternLab::makePath([$path, "$path.html"]);
+    $this->pagePath = PatternLab::makePath(['patterns', $this->path]);
+    $this->sourcePath = PatternLab::makePath(['patterns', $path, "$path.escaped.html"]);
+    $this->templatePath = PatternLab::makePath(['patterns', $path, "$path.twig"]);
+    $this->lineagePath = PatternLab::makePath(['..', '..', $this->pagePath]);
   }
 }

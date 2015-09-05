@@ -20,7 +20,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $source = $this->makeSourcePattern();
     $source->name = 'name';
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals($source->name, $pattern->getName());
+    $this->assertEquals("Name", $pattern->getName());
   }
 
   public function testFile() {
@@ -30,18 +30,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($source->file, $pattern->getFile());
   }
 
-  public function testParentId() {
-    $source = $this->makePseudoPattern();
-    $source->pattern->id = 'parent id';
-    $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals($source->pattern->id, $pattern->getParentId());
-  }
-
   public function testPath() {
     $source = $this->makeSourcePattern();
-    $source->path = 'path';
+    $source->path = 'one/two/three';
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals($source->path, $pattern->getPath());
+    $path = 'one-two-three' . DIRECTORY_SEPARATOR . "one-two-three.html";
+    $this->assertEquals($path, $pattern->getPath());
   }
 
   public function testTemplate() {
@@ -49,25 +43,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $source->template = 'template';
     $pattern = new Pattern($this->makeStyleguide(), $source);
     $this->assertEquals($source->template, $pattern->getTemplate());
-  }
-
-  public function testVariantName() {
-    $source = $this->makePseudoPattern();
-    $source->variantName = 'variant';
-    $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals($source->variantName, $pattern->getVariantName());
-  }
-
-  public function testIsPseudo() {
-    $source = $this->makePseudoPattern();
-    $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertTrue($pattern->isPseudo());
-  }
-
-  public function testIsNotPseudo() {
-    $source = $this->makeSourcePattern();
-    $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertFalse($pattern->isPseudo());
   }
 
   public function testPatternCss() {
@@ -143,11 +118,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testPatternLink() {
-    $path = 'type-subtype-name';
     $source = $this->makeSourcePattern();
-    $source->name = $path;
+    $source->path = 'type/subtype/name';
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $link = $path . DIRECTORY_SEPARATOR . $path . '.html';
+    $link = 'type-subtype-name' . DIRECTORY_SEPARATOR . 'type-subtype-name.html';
     $this->assertEquals($link, $pattern->patternLink());
   }
 
