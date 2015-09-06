@@ -2,27 +2,20 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-use Labcoat\PatternLab;
-use Labcoat\Patterns\TypeInterface;
+use Labcoat\Sections\TypeInterface;
 
 class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
 
-  protected $typeName;
-
   public function __construct(TypeInterface $type) {
-    $this->typeName = $type->getName();
+    $this->partial = $type->getSlug() . '-all';
+    $this->path = $type->getPath();
   }
 
   public function getPath() {
-    return ['patterns', $this->typeName, 'index.html'];
+    return ['patterns', $this->path, 'index.html'];
   }
 
   public function getPatternData() {
-    $name = PatternLab::stripDigits($this->typeName);
-    return ['patternPartial' => "viewall-{$name}-all"];
-  }
-
-  public function getTime() {
-
+    return ['patternPartial' => "viewall-{$this->partial}"];
   }
 }

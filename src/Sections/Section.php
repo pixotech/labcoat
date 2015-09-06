@@ -1,16 +1,21 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\Sections;
 
+use Labcoat\HasItemsInterface;
 use Labcoat\HasItemsTrait;
+use Labcoat\Item;
+use Labcoat\Patterns\PatternInterface;
 
-abstract class PatternSection implements \Countable, PatternSectionInterface {
+abstract class Section extends Item implements \Countable, HasItemsInterface, SectionInterface {
 
   use HasItemsTrait;
 
   protected $time;
 
-  abstract public function add(PatternInterface $pattern);
+  public function addPattern(PatternInterface $pattern) {
+    $this->items[$pattern->getSlug()] = $pattern;
+  }
 
   /**
    * @return PatternInterface[]
@@ -26,14 +31,5 @@ abstract class PatternSection implements \Countable, PatternSectionInterface {
       }
     }
     return $this->time;
-  }
-
-  protected function addItem($key, $item) {
-    $this->items[$key] = $item;
-    ksort($this->items, SORT_NATURAL);
-  }
-
-  protected function addPattern(PatternInterface $pattern) {
-    $this->addItem($pattern->getName(), $pattern);
   }
 }

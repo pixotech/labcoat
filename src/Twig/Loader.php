@@ -2,14 +2,19 @@
 
 namespace Labcoat\Twig;
 
+use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 
 class Loader implements \Twig_LoaderInterface {
 
-  protected $patternlab;
+  protected $index;
+
+  public static function isPath($selector) {
+    return strpbrk($selector, DIRECTORY_SEPARATOR . '/') !== false;
+  }
 
   public function __construct(PatternLabInterface $patternlab) {
-    $this->patternlab = $patternlab;
+    $this->makeIndex($patternlab);
   }
 
   public function getSource($name) {
@@ -30,11 +35,19 @@ class Loader implements \Twig_LoaderInterface {
    * @throws \Twig_Error_Loader
    */
   protected function getFile($name) {
-    try {
-      return $this->patternlab->getPattern($name)->getFile();
-    }
-    catch (\OutOfBoundsException $e) {
-      throw new \Twig_Error_Loader($e->getMessage());
+    $key = $this->isPath($name) ? PatternLab::normalizePath($name) : $name;
+    if (isset($this->index[$key])) return $this->index[$key];
+    throw new \Twig_Error_Loader("Unknown pattern: $name");
+  }
+
+  protected function makeIndex(PatternLabInterface $patternlab) {
+    $this->index = [];
+    foreach ($patternlab->getPatterns() as $pattern) {
+      $file = $pattern->getFile();
+      $partial = $pattern->getPartial();
+      $path = PatternLab::normalizePath($pattern->getPath());
+      $this->index[$partial] = $file;
+      $this->index[$path] = $file;
     }
   }
 }

@@ -2,9 +2,9 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\HasItemsInterface;
+use Labcoat\ItemInterface;
 
-interface PatternInterface {
+interface PatternInterface extends ItemInterface {
 
   /**
    * @return PatternData
@@ -54,35 +54,10 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getSubType();
-
-  /**
-   * @return string
-   */
-  public function getSubTypeId();
-
-  /**
-   * @return string
-   */
   public function getTemplate();
 
   /**
    * @return int
    */
   public function getTime();
-
-  /**
-   * @return string
-   */
-  public function getType();
-
-  /**
-   * @return string
-   */
-  public function getTypeId();
-
-  /**
-   * @return bool
-   */
-  public function hasSubType();
 }

@@ -1,8 +1,12 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\Sections;
 
-interface TypeInterface extends PatternSectionInterface {
+use Labcoat\Patterns\PatternInterface;
+
+interface TypeInterface extends SectionInterface {
+
+  public function addPattern(PatternInterface $pattern);
 
   /**
    * @return string

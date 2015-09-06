@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Sections\Type;
+
 class TypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {

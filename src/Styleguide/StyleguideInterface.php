@@ -19,22 +19,7 @@ interface StyleguideInterface {
   /**
    * @return array
    */
-  public function getConfig();
-
-  /**
-   * @return array
-   */
-  public function getControls();
-
-  /**
-   * @return array
-   */
   public function getGlobalData();
-
-  /**
-   * @return array
-   */
-  public function getIndexPaths();
 
   /**
    * @param $id
@@ -46,16 +31,6 @@ interface StyleguideInterface {
    * @return \Labcoat\PatternLabInterface
    */
   public function getPatternLab();
-
-  /**
-   * @return array
-   */
-  public function getPatternPaths();
-
-  /**
-   * @return array
-   */
-  public function getPlugins();
 
   /**
    * @return \Twig_Environment

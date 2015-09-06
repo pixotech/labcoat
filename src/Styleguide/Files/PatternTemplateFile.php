@@ -12,7 +12,7 @@ class PatternTemplateFile extends PatternFile implements PatternTemplateFileInte
   }
 
   public function getPath() {
-    return $this->makePath($this->pattern->getFilePath($this->getTemplateExtension()));
+    return $this->pattern->getTemplatePath();
   }
 
   protected function getTemplateContent() {

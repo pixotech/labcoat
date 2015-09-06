@@ -1,34 +1,33 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\Sections;
 
+use Labcoat\ItemInterface;
 use Labcoat\PatternLab;
-use Labcoat\Patterns\Filters\PatternFilterIterator;
-use Labcoat\Patterns\Filters\SubTypeFilterIterator;
+use Labcoat\Filters\PatternFilterIterator;
+use Labcoat\Filters\SubtypeFilterIterator;
+use Labcoat\Patterns\PatternInterface;
 
-class Type extends PatternSection implements TypeInterface {
+class Type extends Section implements ItemInterface, TypeInterface {
 
-  protected $name;
-
-  /**
-   * @var Pattern[]
-   */
-  protected $patterns;
-
-  public function __construct($name) {
-    $this->name = $name;
+  public function __construct($path) {
+    $this->id = $path;
+    $this->path = $path;
   }
 
-  public function add(PatternInterface $pattern) {
-    if ($pattern->hasSubType()) {
-      $this->ensureSubType($pattern->getSubType());
-      $this->getSubType($pattern->getSubType())->add($pattern);
+  public function addPattern(PatternInterface $pattern) {
+    $keys = explode('/', $pattern->getNormalizedPath());
+    switch (count($keys)) {
+      case 3:
+        $subtype = dirname($pattern->getPath());
+        $this->getOrCreateSubtype($subtype)->addPattern($pattern);
+        break;
+      case 2:
+        $this->items[$keys[1]] = $pattern;
+        break;
+      default:
+        throw new \InvalidArgumentException("Invalid path");
     }
-    else {
-      $this->addPattern($pattern);
-    }
-    $this->patterns[$pattern->getName()] = $pattern;
-    ksort($this->patterns, SORT_NATURAL);
   }
 
   public function findAnyPattern($name) {
@@ -57,26 +56,6 @@ class Type extends PatternSection implements TypeInterface {
     return iterator_to_array($this->getAllPatternsIterator());
   }
 
-  public function getId() {
-    return $this->name;
-  }
-
-  public function getLowercaseName() {
-    return str_replace('-', ' ', $this->getNameWithoutDigits());
-  }
-
-  public function getName() {
-    return $this->name;
-  }
-
-  public function getNameWithoutDigits() {
-    return PatternLab::stripDigits($this->getName());
-  }
-
-  public function getPath() {
-    return $this->getName();
-  }
-
   /**
    * @return PatternInterface[]
    */
@@ -88,7 +67,7 @@ class Type extends PatternSection implements TypeInterface {
    * @param $name
    * @return SubtypeInterface
    */
-  public function getSubType($name) {
+  public function getSubtype($name) {
     return $this->items[$name];
   }
 
@@ -99,16 +78,8 @@ class Type extends PatternSection implements TypeInterface {
     return iterator_to_array($this->getSubTypesIterator());
   }
 
-  public function getUppercaseName() {
-    return ucwords($this->getLowercaseName());
-  }
-
   public function hasSubtypes() {
     return count($this->getSubTypes()) > 0;
-  }
-
-  protected function ensureSubType($name) {
-    if (!isset($this->items[$name])) $this->addItem($name, new Subtype($this, $name));
   }
 
   protected function getAllPatternsIterator() {
@@ -120,7 +91,17 @@ class Type extends PatternSection implements TypeInterface {
     return new PatternFilterIterator($this);
   }
 
+  /**
+   * @param $path
+   * @return SubtypeInterface
+   */
+  protected function getOrCreateSubtype($path) {
+    list(, $key) = explode('/', PatternLab::normalizePath($path));
+    if (!isset($this->items[$key])) $this->items[$key] = new Subtype($path);
+    return $this->items[$key];
+  }
+
   protected function getSubTypesIterator() {
-    return new SubTypeFilterIterator($this);
+    return new SubtypeFilterIterator($this);
   }
 }

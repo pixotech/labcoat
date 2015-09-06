@@ -4,56 +4,41 @@ namespace Labcoat\Patterns;
 
 use Labcoat\HasItemsInterface;
 use Labcoat\HasItemsTrait;
-use Labcoat\PatternLab;
+use Labcoat\Item;
+use Labcoat\ItemInterface;
 
-class Pattern implements \Countable, HasItemsInterface, PatternInterface {
+class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInterface, PatternInterface {
 
+  use HasDataTrait;
   use HasItemsTrait;
 
-  /**
-   * @var PatternDataInterface[]
-   */
-  protected $data;
-
-  protected $dataFiles;
-
   protected $file;
-  protected $id;
   protected $includedPatterns;
-  protected $name;
-  protected $nameWithDashes;
-  protected $nameWithDashesWithoutDigits;
   protected $partial;
   protected $pseudoPatterns;
   protected $state;
-  protected $subType;
-  protected $type;
+  protected $time;
 
-  public function __construct($id, $file) {
-    $this->id = $id;
+  public function __construct($path, $file) {
+    $this->path = $path;
     $this->file = $file;
-    list($this->type, $this->subType, $this->name) = PatternLab::splitPath($id);
-    $this->extractState();
+    $this->id = $path;
     $this->makePartial();
+    $this->extractState();
     $this->findData();
   }
 
-  public function getData() {
-    if (!isset($this->data)) $this->findData();
-    return $this->data;
-  }
-
-  public function getDataFiles() {
-    if (!isset($this->dataFiles)) $this->findData();
-    return $this->dataFiles;
+  public function add(ItemInterface $item) {
+    if ($item instanceof PseudoPatternInterface) {
+      $this->items[$item->getVariantName()] = $item;
+    }
+    else {
+      throw new \InvalidArgumentException();
+    }
   }
 
   public function getFile() {
     return $this->file;
-  }
-
-  public function getId() {
-    return $this->id;
   }
 
   public function getIncludedPatterns() {
@@ -61,36 +46,19 @@ class Pattern implements \Countable, HasItemsInterface, PatternInterface {
     return $this->includedPatterns;
   }
 
-  public function getName() {
-    return $this->name;
-  }
-
   public function getPartial() {
     return $this->partial;
-  }
-
-  public function getPath() {
-    return $this->id;
   }
 
   /**
    * @return PseudoPatternInterface
    */
   public function getPseudoPatterns() {
-    if (!isset($this->pseudoPatterns)) $this->findData();
-    return $this->pseudoPatterns;
+    return $this->items;
   }
 
   public function getState() {
     return $this->state ?: '';
-  }
-
-  public function getSubType() {
-    return $this->subType;
-  }
-
-  public function getSubTypeId() {
-    return $this->type . '/' . $this->subType;
   }
 
   public function getTemplate() {
@@ -98,43 +66,27 @@ class Pattern implements \Countable, HasItemsInterface, PatternInterface {
   }
 
   public function getTime() {
-    $time = filemtime($this->file);
-    // Check data file
-    return $time;
-  }
-
-  public function getType() {
-    return $this->type;
-  }
-
-  public function getTypeId() {
-    return $this->type;
-  }
-
-  public function hasSubType() {
-    return !empty($this->subType);
+    if (!isset($this->time)) {
+      $this->time = max(filemtime($this->file), $this->getDataTime());
+    }
+    return $this->time;
   }
 
   protected function extractState() {
-    if (false !== strpos($this->name, '@')) {
-      list($this->name, $this->state) = explode('@', $this->name, 2);
+    if (false !== strpos($this->path, '@')) {
+      list($this->path, $this->state) = explode('@', $this->path, 2);
     }
   }
 
   protected function findData() {
-    $this->data = [];
-    $this->dataFiles = [];
-    $this->pseudoPatterns = [];
     foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
-        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
-        $this->items[$pseudoPattern] = $this->pseudoPatterns[$pseudoPattern];
+        $this->items[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
         $this->dataFiles[] = $path;
-        $this->data[] = new PatternData($path);
       }
     }
   }
@@ -158,7 +110,7 @@ class Pattern implements \Countable, HasItemsInterface, PatternInterface {
   }
 
   protected function getDataFilePattern() {
-    return dirname($this->file) . DIRECTORY_SEPARATOR . $this->name . '*.json';
+    return dirname($this->file) . DIRECTORY_SEPARATOR . basename($this->path) . '*.json';
   }
 
   /**
@@ -172,6 +124,7 @@ class Pattern implements \Countable, HasItemsInterface, PatternInterface {
   }
 
   protected function makePartial() {
-    $this->partial = PatternLab::stripDigits($this->type) . '-' . PatternLab::stripDigits($this->name);
+    $parts = explode('/', $this->getNormalizedPath());
+    $this->partial = implode('-', [array_shift($parts), array_pop($parts)]);
   }
 }

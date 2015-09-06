@@ -2,59 +2,56 @@
 
 namespace Labcoat\Mocks\Patterns;
 
-use Labcoat\Patterns\SubtypeInterface;
-use RecursiveIterator;
+use Labcoat\Patterns\PatternInterface;
+use Labcoat\Sections\SubtypeInterface;
 
 class Subtype implements SubtypeInterface {
 
-  public $name;
-  public $type;
-
-  public function getName() {
-    return $this->name;
+  public function actsLikePattern() {
+    return false;
   }
 
-  public function getType() {
-    return $this->type;
+  public function actsLikeSection() {
+    return true;
   }
 
   public function getId() {
     // TODO: Implement getId() method.
   }
 
-  public function getTypeId() {
-    // TODO: Implement getTypeId() method.
+  public function getName() {
+    // TODO: Implement getName() method.
   }
 
-  public function current() {
-    // TODO: Implement current() method.
+  public function getNormalizedPath() {
+    // TODO: Implement getNormalizedPath() method.
   }
 
-  public function next() {
-    // TODO: Implement next() method.
+  public function getPath() {
+    // TODO: Implement getPath() method.
   }
 
-  public function key() {
-    // TODO: Implement key() method.
+  public function getSlug() {
+    // TODO: Implement getSlug() method.
   }
 
-  public function valid() {
-    // TODO: Implement valid() method.
+  public function isPattern() {
+    return false;
   }
 
-  public function rewind() {
-    // TODO: Implement rewind() method.
+  public function isPseudoPattern() {
+    return false;
   }
 
-  public function count() {
-    // TODO: Implement count() method.
+  public function isSubtype() {
+    return true;
   }
 
-  public function hasChildren() {
-    // TODO: Implement hasChildren() method.
+  public function isType() {
+    return false;
   }
 
-  public function getChildren() {
-    // TODO: Implement getChildren() method.
+  public function addPattern(PatternInterface $pattern) {
+    // TODO: Implement addPattern() method.
   }
 }

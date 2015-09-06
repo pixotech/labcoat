@@ -5,11 +5,17 @@ namespace Labcoat;
 use Labcoat\Assets\AssetDirectory;
 use Labcoat\Configuration\Configuration;
 use Labcoat\Configuration\ConfigurationInterface;
+use Labcoat\Filters\PatternFilterIterator;
+use Labcoat\Filters\PatternSelectorFilterIterator;
 use Labcoat\Html\Document;
+use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternCollection;
+use Labcoat\Sections\Type;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
+
+  use HasItemsTrait;
 
   protected $assetsDirectory;
 
@@ -38,8 +44,12 @@ class PatternLab implements PatternLabInterface {
    */
   protected $twig;
 
-  public static function makePath(array $segments) {
-    return implode(DIRECTORY_SEPARATOR, $segments);
+  public static function isPartialName($name) {
+    return false === strpos($name, '/');
+  }
+
+  public static function isPathName($name) {
+    return false !== strpos($name, '/');
   }
 
   public static function loadData($path) {
@@ -51,19 +61,13 @@ class PatternLab implements PatternLabInterface {
     return new PatternLab($config);
   }
 
-  public static function isPartialName($name) {
-    return FALSE === strpos($name, '/');
+  public static function makePath(array $segments) {
+    return implode(DIRECTORY_SEPARATOR, $segments);
   }
 
-  public static function splitPartial($partial) {
-    return explode('-', $partial, 2);
-  }
-
-  public static function splitPath($path) {
-    $parts = explode('/', $path);
-    if (count($parts) == 3) return $parts;
-    if (count($parts) == 2) return [$parts[0], NULL, $parts[1]];
-    throw new \InvalidArgumentException("Invalid path: $path");
+  public static function normalizePath($path) {
+    $stripDigits = ['Labcoat\\PatternLab', 'stripDigits'];
+    return implode('/', array_map($stripDigits, explode(DIRECTORY_SEPARATOR, $path)));
   }
 
   public static function stripDigits($str) {
@@ -73,6 +77,16 @@ class PatternLab implements PatternLabInterface {
 
   public function __construct(ConfigurationInterface $config) {
     $this->config = $config;
+    $this->findPatterns();
+  }
+
+  public function __toString() {
+    $str = '';
+    foreach (new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST) as $item) {
+      $depth = count(preg_split('/[\/~]/', $item->getPath())) - 1;
+      $str .= str_repeat('- ', $depth) . $item->getPath() . "\n";
+    }
+    return $str;
   }
 
   public function getAnnotationsFile() {
@@ -141,8 +155,12 @@ class PatternLab implements PatternLabInterface {
    * @see http://patternlab.io/docs/pattern-including.html "Including Patterns"
    */
   public function getPattern($name) {
-    $name = $this->stripPatternExtensionFromPath($name);
-    if ($pattern = $this->getPatterns()->getPattern($name)) return $pattern;
+    if ($this->isPathName($name)) {
+      $name = $this->normalizePath($this->stripPatternExtensionFromPath($name));
+    }
+    $patterns = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
+    $filter = new PatternSelectorFilterIterator($patterns, $name);
+    foreach ($filter as $pattern) return $pattern;
     throw new \OutOfBoundsException("Unknown pattern: $name");
   }
 
@@ -194,14 +212,14 @@ class PatternLab implements PatternLabInterface {
 
   /**
    * @param string $name
-   * @return Patterns\TypeInterface
+   * @return \Labcoat\Sections\TypeInterface
    */
   public function getType($name) {
     return $this->getPatterns()->getType($name);
   }
 
   /**
-   * @return \Labcoat\Patterns\TypeInterface[]
+   * @return \Labcoat\Sections\TypeInterface[]
    */
   public function getTypes() {
     return $this->getPatterns()->getTypes();
@@ -210,6 +228,10 @@ class PatternLab implements PatternLabInterface {
   public function hasIgnoredExtension($path) {
     $ext = pathinfo($path, PATHINFO_EXTENSION);
     return in_array($ext, $this->getIgnoredExtensions());
+  }
+
+  public function hasType($name) {
+    return !empty($this->items[$name]);
   }
 
   public function isHiddenFile($path) {
@@ -254,6 +276,30 @@ class PatternLab implements PatternLabInterface {
       $dir = new AssetDirectory($this, $dir);
       $this->assets += $dir->getAssets();
     }
+  }
+
+  protected function findPatterns() {
+    $dir = $this->getPatternsDirectory();
+    $ext = $this->getPatternExtension();
+    $flags = \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS;
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+    $pattern = '|\.' . preg_quote($ext) . '$|';
+    $matches = new \RegexIterator($files, $pattern, \RegexIterator::MATCH);
+    foreach ($matches as $match) {
+      $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
+      list($type) = explode(DIRECTORY_SEPARATOR, $path);
+      $this->getOrCreateType($type)->addPattern(new Pattern($path, $match));
+    }
+  }
+
+  /**
+   * @param $path
+   * @return \Labcoat\Sections\TypeInterface
+   */
+  protected function getOrCreateType($path) {
+    list($key) = explode('/', $this->normalizePath($path));
+    if (!isset($this->items[$key])) $this->items[$key] = new Type($path);
+    return $this->items[$key];
   }
 
   protected function getPatternsIterator() {

@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\TypeInterface as SourceTypeInterface;
+use Labcoat\Sections\TypeInterface as SourceTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
 
@@ -18,7 +18,7 @@ class Type implements \JsonSerializable, TypeInterface {
 
   public function __construct(SourceTypeInterface $type) {
     #$this->type = $type;
-    $this->name = $type->getName();
+    $this->name = $type->getPath();
   }
 
   public function getLowercaseName() {
@@ -60,19 +60,21 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function addPattern(\Labcoat\Patterns\PatternInterface $pattern) {
-    if ($pattern->hasSubtype()) {
-      $this->getSubtype($pattern->getSubType())->addPattern($pattern);
+    $path = explode('/', $pattern->getPath());
+    if (count($path) > 2) {
+      $this->getSubtype($path[1])->addPattern($pattern);
     }
     else {
-      $this->patterns[$pattern->getName()] = new Pattern($pattern);
+      $this->patterns[$pattern->getSlug()] = new Pattern($pattern);
       foreach ($pattern->getPseudoPatterns() as $pseudo) {
-        $this->patterns[$pseudo->getName()] = new Pattern($pseudo);
+        $this->patterns[$pseudo->getSlug()] = new Pattern($pseudo);
       }
     }
   }
 
-  public function addSubtype(SubtypeInterface $subtype) {
-    $this->subtypes[$subtype->getName()] = $subtype;
+  public function addSubtype(\Labcoat\Sections\SubtypeInterface $subtype) {
+    $name = array_pop(explode('/', $subtype->getPath()));
+    $this->subtypes[$name] = new Subtype($subtype);
   }
 
   /**

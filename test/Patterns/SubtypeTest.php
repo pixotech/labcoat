@@ -3,6 +3,7 @@
 namespace Labcoat\Patterns;
 
 use Labcoat\Mocks\Patterns\Type;
+use Labcoat\Sections\Subtype;
 
 class SubtypeTest extends \PHPUnit_Framework_TestCase {
 
@@ -16,11 +17,5 @@ class SubtypeTest extends \PHPUnit_Framework_TestCase {
     $type = new Type();
     $subtype = new Subtype($type, '01-one');
     $this->assertEquals('01-one', $subtype->getName());
-  }
-
-  public function testType() {
-    $type = new Type();
-    $subtype = new Subtype($type, 'one');
-    $this->assertEquals($type, $subtype->getType());
   }
 }

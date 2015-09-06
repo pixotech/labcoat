@@ -2,46 +2,39 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\PatternLab;
+use Labcoat\Item;
 
-class PseudoPattern implements PseudoPatternInterface {
+class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInterface {
 
-  protected $data;
-  protected $name;
+  use HasDataTrait;
+
   protected $pattern;
+  protected $time;
+  protected $variant;
 
-  public function __construct(PatternInterface $pattern, $name, $path) {
+  public function __construct(PatternInterface $pattern, $variant, $dataFile) {
     $this->pattern = $pattern;
-    $this->name = $name;
-    $this->data = new PatternData($path);
-  }
-
-  public function getData() {
-    return $this->data;
+    $this->variant = $variant;
+    $this->path = $pattern->getPath() . "~{$variant}";
+    $this->id = $this->path;
+    $this->name = str_replace('-', ' ', $variant);
+    $this->dataFiles = [$dataFile];
   }
 
   public function getFile() {
     return $this->pattern->getFile();
   }
 
-  public function getId() {
-    return $this->pattern->getId() . '~' . $this->getVariantName();
-  }
-
   public function getIncludedPatterns() {
     return $this->pattern->getIncludedPatterns();
   }
 
-  public function getName() {
-    return $this->pattern->getName() . '-' . $this->getVariantName();
-  }
-
   public function getPartial() {
-    return $this->pattern->getPartial() . '-' . $this->getVariantName();
+    return $this->pattern->getPartial();
   }
 
-  public function getPath() {
-    return $this->pattern->getPath() . '-' . $this->getVariantName();
+  public function getPattern() {
+    return $this->pattern;
   }
 
   public function getPseudoPatterns() {
@@ -52,41 +45,18 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->pattern->getState();
   }
 
-  public function getSubType() {
-    return $this->pattern->getSubType();
-  }
-
-  public function getSubTypeId() {
-    return $this->pattern->getSubTypeId();
-  }
-
   public function getTemplate() {
     return $this->pattern->getTemplate();
   }
 
   public function getTime() {
-    $patternTime = $this->pattern->getTime();
-    $dataTime = filemtime($this->data->getFile());
-    return max($patternTime, $dataTime);
-  }
-
-  public function getType() {
-    return $this->pattern->getType();
-  }
-
-  public function getTypeId() {
-    return $this->pattern->getTypeId();
-  }
-
-  public function hasSubType() {
-    return $this->pattern->hasSubType();
-  }
-
-  public function getPattern() {
-    return $this->pattern;
+    if (!isset($this->time)) {
+      $this->time = max($this->pattern->getTime(), $this->getDataTime());
+    }
+    return $this->time;
   }
 
   public function getVariantName() {
-    return $this->name;
+    return $this->variant;
   }
 }

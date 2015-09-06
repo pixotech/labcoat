@@ -2,55 +2,60 @@
 
 namespace Labcoat\Mocks\Patterns;
 
-use Labcoat\Patterns\TypeInterface;
+use Labcoat\Patterns\PatternInterface;
+use Labcoat\Sections\TypeInterface;
 
 class Type implements TypeInterface {
 
-  public $id;
-  public $name;
-  public $subtypes;
+  public function actsLikePattern() {
+    return false;
+  }
 
-  public function getName() {
-    return $this->name;
+  public function actsLikeSection() {
+    return true;
+  }
+
+  public function getNormalizedPath() {
+    // TODO: Implement getNormalizedPath() method.
+  }
+
+  public function getPath() {
+    // TODO: Implement getPath() method.
+  }
+
+  public function getSlug() {
+    // TODO: Implement getSlug() method.
+  }
+
+  public function isPattern() {
+    return false;
+  }
+
+  public function isPseudoPattern() {
+    return false;
+  }
+
+  public function isSubtype() {
+    return false;
+  }
+
+  public function isType() {
+    return true;
+  }
+
+  public function addPattern(PatternInterface $pattern) {
+    // TODO: Implement addPattern() method.
   }
 
   public function getId() {
-    return $this->id;
+    // TODO: Implement getId() method.
+  }
+
+  public function getName() {
+    // TODO: Implement getName() method.
   }
 
   public function hasSubtypes() {
-    return !empty($this->subtypes);
-  }
-
-  public function current() {
-    // TODO: Implement current() method.
-  }
-
-  public function next() {
-    // TODO: Implement next() method.
-  }
-
-  public function key() {
-    // TODO: Implement key() method.
-  }
-
-  public function valid() {
-    // TODO: Implement valid() method.
-  }
-
-  public function rewind() {
-    // TODO: Implement rewind() method.
-  }
-
-  public function count() {
-    // TODO: Implement count() method.
-  }
-
-  public function hasChildren() {
-    // TODO: Implement hasChildren() method.
-  }
-
-  public function getChildren() {
-    // TODO: Implement getChildren() method.
+    // TODO: Implement hasSubtypes() method.
   }
 }

@@ -27,40 +27,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('03-three', $pattern->getName());
   }
 
-  # Type
-
-  public function testType() {
-    $pattern = new Pattern('one/two/three', __FILE__);
-    $this->assertEquals('one', $pattern->getType());
-  }
-
-  public function testTypeHasDigits() {
-    $pattern = new Pattern('01-one/02-two/03-three', __FILE__);
-    $this->assertEquals('01-one', $pattern->getType());
-  }
-
-  # Subtype
-
-  public function testHasSubType() {
-    $pattern = new Pattern('one/two/three', __FILE__);
-    $this->assertTrue($pattern->hasSubType());
-  }
-
-  public function testDoesntHaveSubType() {
-    $pattern = new Pattern('one/two', __FILE__);
-    $this->assertFalse($pattern->hasSubType());
-  }
-
-  public function testSubType() {
-    $pattern = new Pattern('one/two/three', __FILE__);
-    $this->assertEquals('two', $pattern->getSubType());
-  }
-
-  public function testSubTypeHasDigits() {
-    $pattern = new Pattern('01-one/02-two/03-three', __FILE__);
-    $this->assertEquals('02-two', $pattern->getSubType());
-  }
-
   # Partial
 
   public function testPartial() {

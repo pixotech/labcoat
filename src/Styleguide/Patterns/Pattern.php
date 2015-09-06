@@ -33,6 +33,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $state;
   protected $template;
   protected $templatePath;
+  protected $time;
   protected $type;
 
   public static function makeBreadcrumb($path) {
@@ -54,6 +55,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->partial = $pattern->getPartial();
     $this->state = $pattern->getState();
     $this->template = $pattern->getTemplate();
+    $this->time = $pattern->getTime();
 
     $this->name = self::makeName($pattern->getName());
     $this->breadcrumb = self::makeBreadcrumb($pattern->getPath());
@@ -143,8 +145,8 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return $this->templatePath;
   }
 
-  public function isPseudo() {
-    return false;
+  public function getTime() {
+    return $this->time;
   }
 
   public function jsonSerialize() {
@@ -266,7 +268,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   protected function makePaths(SourcePatternInterface $pattern) {
-    $path = str_replace('/', '-', $pattern->getPath());
+    $path = preg_replace('|[/~]|', '-', $pattern->getPath());
     $this->path = PatternLab::makePath([$path, "$path.html"]);
     $this->pagePath = PatternLab::makePath(['patterns', $this->path]);
     $this->sourcePath = PatternLab::makePath(['patterns', $path, "$path.escaped.html"]);

@@ -2,22 +2,27 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
+use Labcoat\PatternLab;
+use Labcoat\Patterns\PatternInterface as SourcePattern;
+
 class Pattern implements \JsonSerializable, PatternInterface {
 
   protected $name;
   protected $path;
   protected $partial;
+  protected $sourcePath;
   protected $state;
 
-  public function __construct(\Labcoat\Patterns\PatternInterface $pattern) {
-    $this->name = $pattern->getName();
-    $this->path = $pattern->getPath();
-    $this->partial = $pattern->getPartial();
+  public function __construct(SourcePattern $pattern) {
+    $this->name = $this->makeName($pattern);
+    $this->path = $this->makePath($pattern);
+    $this->partial = $this->makePartial($pattern);
+    $this->sourcePath = str_replace('~', '-', $pattern->getPath());
     $this->state = $pattern->getState();
   }
 
   public function getName() {
-    return ucwords(str_replace('-', ' ', $this->name));
+    return $this->name;
   }
 
   public function getPartial() {
@@ -25,12 +30,11 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function getPath() {
-    $path = str_replace('/', '-', $this->path);
-    return $path . DIRECTORY_SEPARATOR . $path . '.html';
+    return $this->path;
   }
 
   public function getSourcePath() {
-    return $this->path;
+    return $this->sourcePath;
   }
 
   public function getState() {
@@ -45,5 +49,21 @@ class Pattern implements \JsonSerializable, PatternInterface {
       'patternState' => $this->getState(),
       'patternPartial' => $this->getPartial(),
     ];
+  }
+
+  public function makeName(SourcePattern $pattern) {
+    return ucwords(preg_replace('|[-~]|', ' ', $pattern->getSlug()));
+  }
+
+  public function makePartial(SourcePattern $pattern) {
+    $path = explode('/', $pattern->getNormalizedPath());
+    $type = array_shift($path);
+    $name = Navigation::escapePath(array_pop($path));
+    return implode('-', [$type, $name]);
+  }
+
+  public function makePath(SourcePattern $pattern) {
+    $path = Navigation::escapePath($pattern->getPath());
+    return PatternLab::makePath([$path, "$path.html"]);
   }
 }

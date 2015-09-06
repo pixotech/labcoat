@@ -29,37 +29,6 @@ class PseudoPatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern-variant', $pseudo->getName());
   }
 
-  # Type
-
-  public function testType() {
-    $pattern = new Pattern();
-    $pattern->type = 'type';
-    $pseudo = new PseudoPattern($pattern, 'variant', __FILE__);
-    $this->assertEquals($pattern->type, $pseudo->getType());
-  }
-
-  # Subtype
-
-  public function testHasSubType() {
-    $pattern = new Pattern();
-    $pattern->subtype = 'subtype';
-    $pseudo = new PseudoPattern($pattern, 'variant', __FILE__);
-    $this->assertTrue($pseudo->hasSubType());
-  }
-
-  public function testDoesntHaveSubType() {
-    $pattern = new Pattern();
-    $pseudo = new PseudoPattern($pattern, 'variant', __FILE__);
-    $this->assertFalse($pseudo->hasSubType());
-  }
-
-  public function testSubType() {
-    $pattern = new Pattern();
-    $pattern->subtype = 'subtype';
-    $pseudo = new PseudoPattern($pattern, 'variant', __FILE__);
-    $this->assertEquals($pattern->subtype, $pseudo->getSubType());
-  }
-
   # Partial
 
   public function testPartial() {

@@ -11,6 +11,6 @@ class PatternSourceFile extends PatternFile implements PatternSourceFileInterfac
   }
 
   public function getPath() {
-    return $this->makePath($this->pattern->getFilePath('escaped.html'));
+    return $this->pattern->getSourcePath();
   }
 }

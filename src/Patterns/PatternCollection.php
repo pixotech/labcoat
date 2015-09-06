@@ -4,8 +4,10 @@ namespace Labcoat\Patterns;
 
 use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
+use Labcoat\Sections\Section;
+use Labcoat\Sections\Type;
 
-class PatternCollection extends PatternSection implements PatternCollectionInterface {
+class PatternCollection extends Section implements PatternCollectionInterface {
 
   public function __construct(PatternLabInterface $patternlab) {
     $this->findPatterns($patternlab);
@@ -111,5 +113,16 @@ class PatternCollection extends PatternSection implements PatternCollectionInter
 
   protected function ensureType($name) {
     if (!$this->hasType($name)) $this->addType($name);
+  }
+
+  protected function getOrCreateSection($path) {
+    if (!is_array($path)) $path = explode(DIRECTORY_SEPARATOR, $path);
+    if (count($path) > 2) throw new \InvalidArgumentException("Invalid depth");
+    if (count($path) > 1) {
+
+    }
+    else {
+
+    }
   }
 }

@@ -26,7 +26,7 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getPath() {
-    return $this->pattern->getFilePath('html');
+    return $this->pattern->getPagePath();
   }
 
   public function getPattern() {
@@ -38,6 +38,6 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getTime() {
-
+    return $this->pattern->getTime();
   }
 }

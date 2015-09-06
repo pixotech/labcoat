@@ -19,7 +19,6 @@ interface PatternInterface {
   public function getSourcePath();
   public function getTemplate();
   public function getTemplatePath();
-  public function isPseudo();
   public function patternCSS();
   public function patternCSSExists();
   public function patternDesc();

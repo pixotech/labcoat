@@ -27,10 +27,6 @@ class PseudoPattern extends Pattern implements PseudoPatternInterface {
     return $this->variant;
   }
 
-  public function isPseudo() {
-    return true;
-  }
-
   protected function makeData() {
     $parent = $this->getPatternLab()->getPattern($this->getParentId());
     $source = $parent->getPseudoPatterns()[$this->getVariantName()];

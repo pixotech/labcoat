@@ -3,31 +3,31 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\SubtypeInterface as SourceInterface;
+use Labcoat\Sections\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
 
+  protected $partial;
+  protected $path;
   protected $patterns = [];
   protected $subtype;
   protected $type;
 
   public function __construct(SourceInterface $subtype) {
-    #$this->subtype = $subtype;
-    $this->name = $subtype->getName();
-    $this->type = $subtype->getTypeId();
+    list ($this->type, $this->subtype) = explode('/', $subtype->getPath());
+    $this->partial = Navigation::escapePath($subtype->getNormalizedPath());
+    $this->path = Navigation::escapePath($subtype->getPath());
   }
 
   public function jsonSerialize() {
     $items = array_values($this->patterns);
     if (!empty($items)) {
-      $type = PatternLab::stripDigits($this->type);
-      $subtype = PatternLab::stripDigits($this->name);
       $items[] = [
-        "patternPath" => "{$this->type}-{$this->name}/index.html",
+        "patternPath" => "{$this->path}/index.html",
         "patternName" => "View All",
         "patternType" => $this->type,
-        "patternSubtype" => $this->name,
-        "patternPartial" => "viewall-{$type}-{$subtype}",
+        "patternSubtype" => $this->subtype,
+        "patternPartial" => "viewall-{$this->partial}",
       ];
     }
     return [
@@ -48,7 +48,7 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   }
 
   public function getName() {
-    return $this->name;
+    return $this->subtype;
   }
 
   public function getNameWithDashes() {

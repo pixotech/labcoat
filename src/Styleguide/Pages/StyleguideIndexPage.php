@@ -11,8 +11,4 @@ class StyleguideIndexPage extends IndexPage implements StyleguideIndexPageInterf
   public function getPatternData() {
     return [];
   }
-
-  public function getTime() {
-
-  }
 }

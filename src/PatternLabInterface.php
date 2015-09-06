@@ -2,7 +2,7 @@
 
 namespace Labcoat;
 
-interface PatternLabInterface {
+interface PatternLabInterface extends HasItemsInterface {
 
   public function getAnnotationsFile();
 
@@ -69,9 +69,11 @@ interface PatternLabInterface {
   public function getTwig();
 
   /**
-   * @return \Labcoat\Patterns\Type
+   * @return \Labcoat\Sections\Type
    */
   public function getTypes();
+
+  public function hasType($name);
 
   /**
    * @return bool
