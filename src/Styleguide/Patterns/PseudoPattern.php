@@ -31,6 +31,6 @@ class PseudoPattern extends Pattern implements PseudoPatternInterface {
     $parent = $this->getPatternLab()->getPattern($this->getParentId());
     $source = $parent->getPseudoPatterns()[$this->getVariantName()];
     $data = $this->styleguide->getPattern($this->getParentId())->getData();
-    $this->data = array_replace_recursive($data, $source->getData()->getData());
+    $this->data = array_replace_recursive($data, $source->getData());
   }
 }

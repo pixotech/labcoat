@@ -9,7 +9,6 @@ use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
 use Labcoat\Html\Document;
 use Labcoat\Patterns\Pattern;
-use Labcoat\Patterns\PatternCollection;
 use Labcoat\Sections\Type;
 use Labcoat\Twig\Environment;
 
@@ -33,11 +32,6 @@ class PatternLab implements PatternLabInterface {
    * @var array|null
    */
   protected $globalData;
-
-  /**
-   * @var \Labcoat\Patterns\PatternCollection
-   */
-  protected $patterns;
 
   /**
    * @var \Labcoat\Twig\Environment
@@ -176,8 +170,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getPatterns() {
-    if (!isset($this->patterns)) $this->patterns = new PatternCollection($this);
-    return $this->patterns;
+    return iterator_to_array($this->getPatternsIterator(), false);
   }
 
   public function getPatternsDirectory() {
@@ -303,7 +296,8 @@ class PatternLab implements PatternLabInterface {
   }
 
   protected function getPatternsIterator() {
-    return new \ArrayIterator($this->getPatterns());
+    $items = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
+    return new PatternFilterIterator($items);
   }
 
   protected function getTwigOptions() {

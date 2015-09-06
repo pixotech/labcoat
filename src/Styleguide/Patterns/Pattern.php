@@ -36,6 +36,11 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $time;
   protected $type;
 
+  public static function cast(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
+    if ($pattern->isPseudoPattern()) return new PseudoPattern($styleguide, $pattern);
+    return new Pattern($styleguide, $pattern);
+  }
+
   public static function makeBreadcrumb($path) {
     $func = function ($segment) {
       return str_replace('-', ' ', PatternLab::stripDigits($segment));
@@ -261,8 +266,9 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected function makeData() {
     $data = $this->styleguide->getGlobalData();
     $source = $this->getPatternLab()->getPattern($this->getId());
-    foreach ($source->getData() as $patternData) {
-      $data = array_replace_recursive($data, $patternData->getData());
+    foreach ($source->getDataFiles() as $file) {
+      $json = json_decode(file_get_contents($file), true);
+      $data = array_replace_recursive($data, $json);
     }
     $this->data = $data;
   }

@@ -7,6 +7,7 @@ use Labcoat\PatternLabInterface;
 
 class Loader implements \Twig_LoaderInterface {
 
+  protected $extension;
   protected $index;
 
   public static function isPath($selector) {
@@ -14,6 +15,7 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   public function __construct(PatternLabInterface $patternlab) {
+    $this->extension = $patternlab->getPatternExtension();
     $this->makeIndex($patternlab);
   }
 
@@ -35,7 +37,7 @@ class Loader implements \Twig_LoaderInterface {
    * @throws \Twig_Error_Loader
    */
   protected function getFile($name) {
-    $key = $this->isPath($name) ? PatternLab::normalizePath($name) : $name;
+    $key = $this->isPath($name) ? PatternLab::normalizePath($this->stripExtension($name)) : $name;
     if (isset($this->index[$key])) return $this->index[$key];
     throw new \Twig_Error_Loader("Unknown pattern: $name");
   }
@@ -49,5 +51,11 @@ class Loader implements \Twig_LoaderInterface {
       $this->index[$partial] = $file;
       $this->index[$path] = $file;
     }
+  }
+
+  protected function stripExtension($path) {
+    $ext = '.' . $this->extension;
+    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
+    return $path;
   }
 }

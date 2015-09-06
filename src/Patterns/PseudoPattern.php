@@ -17,7 +17,7 @@ class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInter
     $this->variant = $variant;
     $this->path = $pattern->getPath() . "~{$variant}";
     $this->id = $this->path;
-    $this->name = str_replace('-', ' ', $variant);
+    $this->name = $pattern->getName() . ' ' . str_replace('-', ' ', $variant);
     $this->dataFiles = [$dataFile];
   }
 
@@ -30,7 +30,7 @@ class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInter
   }
 
   public function getPartial() {
-    return $this->pattern->getPartial();
+    return $this->pattern->getPartial() . '-' . $this->getVariantName();
   }
 
   public function getPattern() {

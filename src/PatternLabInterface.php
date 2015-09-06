@@ -31,17 +31,17 @@ interface PatternLabInterface extends HasItemsInterface {
 
   /**
    * @param $name
-   * @return \Labcoat\Patterns\Pattern
+   * @return \Labcoat\Patterns\PatternInterface
    */
   public function getPattern($name);
   public function getPatternExtension();
 
+  public function getPatternsDirectory();
+
   /**
-   * @return \Labcoat\Patterns\PatternCollection
+   * @return \Labcoat\Patterns\PatternInterface[]
    */
   public function getPatterns();
-
-  public function getPatternsDirectory();
 
   /**
    * @return string
@@ -69,7 +69,7 @@ interface PatternLabInterface extends HasItemsInterface {
   public function getTwig();
 
   /**
-   * @return \Labcoat\Sections\Type
+   * @return \Labcoat\Sections\TypeInterface[]
    */
   public function getTypes();
 

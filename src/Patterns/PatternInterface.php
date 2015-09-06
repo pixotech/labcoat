@@ -7,11 +7,6 @@ use Labcoat\ItemInterface;
 interface PatternInterface extends ItemInterface {
 
   /**
-   * @return PatternData
-   */
-  public function getData();
-
-  /**
    * @return string
    */
   public function getFile();

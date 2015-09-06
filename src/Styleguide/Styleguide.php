@@ -30,11 +30,6 @@ class Styleguide implements StyleguideInterface {
   protected $cacheBuster;
 
   /**
-   * @var string
-   */
-  protected $destinationPath;
-
-  /**
    * @var \Labcoat\Styleguide\Files\FileInterface[]
    */
   protected $files = [];
@@ -48,11 +43,6 @@ class Styleguide implements StyleguideInterface {
    * @var array
    */
   protected $lineages;
-
-  /**
-   * @var array
-   */
-  protected $patternData = [];
 
   /**
    * @var \Labcoat\PatternLabInterface
@@ -252,7 +242,7 @@ class Styleguide implements StyleguideInterface {
     foreach ($items as $item) {
       $id = $item->getId();
       if ($item->actsLikePattern()) {
-        $this->patterns[$id] = new Pattern($this, $item);
+        $this->patterns[$id] = Pattern::cast($this, $item);
         $pages[$id] = new PatternPage($this->patterns[$id]);
         $index->addPattern($this->patterns[$id]);
         $path = dirname($item->getPath());
