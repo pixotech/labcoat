@@ -175,7 +175,6 @@ class Styleguide implements StyleguideInterface {
         $this->patterns[$includeId]->addIncludingPattern($pattern);
       }
     }
-    print_r($includes);
   }
 
   /**
