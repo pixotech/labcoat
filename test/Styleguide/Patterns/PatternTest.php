@@ -139,7 +139,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($source->partial, $pattern->patternPartial());
   }
 
-  public function testPatternPartialCode() {
+  public function _testPatternPartialCode() {
     $rendered = 'RENDERED';
     $source = $this->makeSourcePattern();
     $source->id = 'pattern-id';

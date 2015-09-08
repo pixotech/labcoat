@@ -4,9 +4,9 @@ namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\ItemInterface;
 use Labcoat\PatternLabInterface;
-use Labcoat\Patterns\PatternInterface;
-use Labcoat\Sections\SubtypeInterface;
-use Labcoat\Sections\TypeInterface;
+use Labcoat\Patterns\PatternInterface as SourcePattern;
+use Labcoat\Sections\SubtypeInterface as SourceSubtype;
+use Labcoat\Sections\TypeInterface as SourceType;
 
 class Navigation implements \JsonSerializable {
 
@@ -42,19 +42,19 @@ class Navigation implements \JsonSerializable {
     }
   }
 
-  public function addPattern(PatternInterface $pattern) {
+  public function addPattern(SourcePattern $pattern) {
     $type = $this->getTypeFromPath($pattern->getPath());
     $this->types[$type]->addPattern($pattern);
     $this->addPatternPath($pattern);
   }
 
-  public function addSubtype(SubtypeInterface $subtype) {
+  public function addSubtype(SourceSubtype $subtype) {
     $type = $this->getTypeFromPath($subtype->getPath());
     $this->types[$type]->addSubtype($subtype);
     $this->addSubtypeIndexPath($subtype);
   }
 
-  public function addType(TypeInterface $type) {
+  public function addType(SourceType $type) {
     $name = $this->getTypeFromPath($type->getPath());
     $this->types[$name] = new Type($type);
   }
@@ -76,7 +76,7 @@ class Navigation implements \JsonSerializable {
   /**
    * @param PatternInterface $pattern
    */
-  protected function addPatternPath(PatternInterface $pattern) {
+  protected function addPatternPath(SourcePattern $pattern) {
     $path = explode('/', $pattern->getNormalizedPath());
     $type = array_shift($path);
     $name = $this->escapePath(array_pop($path));
@@ -86,7 +86,7 @@ class Navigation implements \JsonSerializable {
   /**
    * @param SubtypeInterface $subtype
    */
-  protected function addSubtypeIndexPath(SubtypeInterface $subtype) {
+  protected function addSubtypeIndexPath(SourceSubtype $subtype) {
     $names = explode('/', $subtype->getNormalizedPath());
     list($type, $name) = $names;
     if (!isset($this->indexPaths[$type])) {
