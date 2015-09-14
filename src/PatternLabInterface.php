@@ -44,9 +44,9 @@ interface PatternLabInterface extends HasItemsInterface {
   public function getPatterns();
 
   /**
-   * @return string
+   * @return array
    */
-  public function getStyleguideAssetsDirectory();
+  public function getStyleguideAssetDirectories();
 
   /**
    * @return string

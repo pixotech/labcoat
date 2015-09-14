@@ -3,8 +3,9 @@
 namespace Labcoat;
 
 use Labcoat\Assets\AssetDirectory;
-use Labcoat\Configuration\Configuration;
 use Labcoat\Configuration\ConfigurationInterface;
+use Labcoat\Configuration\LabcoatConfiguration;
+use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
 use Labcoat\Html\Document;
@@ -46,12 +47,17 @@ class PatternLab implements PatternLabInterface {
     return false !== strpos($name, '/');
   }
 
+  public static function load($dir) {
+    $config = new LabcoatConfiguration($dir);
+    return new PatternLab($config);
+  }
+
   public static function loadData($path) {
     return json_decode(file_get_contents($path), true);
   }
 
   public static function loadStandardEdition($dir) {
-    $config = Configuration::fromStandardEdition($dir);
+    $config = new StandardEditionConfiguration($dir);
     return new PatternLab($config);
   }
 
@@ -177,8 +183,8 @@ class PatternLab implements PatternLabInterface {
     return $this->config->getPatternsDirectory();
   }
 
-  public function getStyleguideAssetsDirectory() {
-    return $this->config->getStyleguideAssetsDirectory();
+  public function getStyleguideAssetDirectories() {
+    return $this->config->getStyleguideAssetDirectories();
   }
 
   public function getStyleguideFooter() {
@@ -190,7 +196,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getStyleguideTemplatesDirectory() {
-    return $this->config->getStyleguideTemplatesDirectory();
+    return $this->config->getStyleguideTemplatesDirectories();
   }
 
   /**
