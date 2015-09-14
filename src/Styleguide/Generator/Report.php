@@ -13,31 +13,7 @@ class Report implements \IteratorAggregate {
   }
 
   public function __toString() {
-    $str = '';
-    foreach ($this->events as $event) {
-      if ($event instanceof FileEvent) {
-        $str .= $event->getPath() . "\n";
-        switch (true) {
-          case $event->wasDeleted():
-            $str .= "  Removed\n";
-            break;
-          case $event->wasSkipped():
-            $str .= "  Skipped\n";
-            break;
-          case $event->wasUpdated():
-            $ms = $event->getDuration() * 1000;
-            $str .= sprintf("  Updated (%s ms)\n", number_format($ms, 2));
-            break;
-        }
-      }
-    }
-    if (!empty($str)) $str .= "\n";
-    $updated = $this->getUpdatedCount();
-    $skipped = $this->getSkippedCount();
-    $deleted = $this->getDeletedCount();
-    $str .= sprintf("%d files updated, %d skipped, %d removed\n", $updated, $skipped, $deleted);
-    $str .= sprintf("Generated in %f seconds\n", $this->getDuration());
-    return $str;
+    return $this->summary();
   }
 
   public function addEvent(EventInterface $event) {
@@ -70,6 +46,39 @@ class Report implements \IteratorAggregate {
 
   public function stop() {
     $this->stopTime = microtime(true);
+  }
+
+  public function summary() {
+    $updated = $this->getUpdatedCount();
+    $skipped = $this->getSkippedCount();
+    $deleted = $this->getDeletedCount();
+    $str  = sprintf("%d files updated, %d skipped, %d removed\n", $updated, $skipped, $deleted);
+    $str .= sprintf("Generated in %f seconds\n", $this->getDuration());
+    return $str;
+  }
+
+  public function verbose() {
+    $str = '';
+    foreach ($this->events as $event) {
+      if ($event instanceof FileEvent) {
+        $str .= $event->getPath() . "\n";
+        switch (true) {
+          case $event->wasDeleted():
+            $str .= "  Removed\n";
+            break;
+          case $event->wasSkipped():
+            $str .= "  Skipped\n";
+            break;
+          case $event->wasUpdated():
+            $ms = $event->getDuration() * 1000;
+            $str .= sprintf("  Updated (%s ms)\n", number_format($ms, 2));
+            break;
+        }
+      }
+    }
+    if (!empty($str)) $str .= "\n";
+    $str .= $this->summary();
+    return $str;
   }
 
   protected function getFilteredEventCount(callable $filter) {

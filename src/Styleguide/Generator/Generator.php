@@ -8,6 +8,7 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class Generator implements GeneratorInterface {
 
+  protected $clean = false;
   protected $force = true;
   protected $path;
   protected $styleguide;
@@ -28,7 +29,14 @@ class Generator implements GeneratorInterface {
       }
     }
     foreach ($paths as $path) {
-      $report->addEvent($this->deleteFile($path));
+      if ($this->clean) {
+        $report->addEvent($this->deleteFile($path));
+      }
+      else {
+        $event = new FileEvent($path);
+        $event->stop(FileEvent::SKIPPED);
+        $report->addEvent($event);
+      }
     }
     $report->stop();
     return $report;
