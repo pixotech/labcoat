@@ -1,77 +1,129 @@
-# Labcoat
+# Labcoat: Pattern Lab for Production
 
-Labcoat is a PHP library for interacting with [Pattern Lab][patternlab] installations which use the [Twig PatternEngine](https://github.com/pattern-lab/patternengine-php-twig). It is designed to allow Pattern Lab contents to be used in production environments.
+Labcoat is a library for using Pattern Lab content in live site environments. It provides the ability to:
 
-Labcoat's PatternLab class represents a single Pattern Lab installation.
+* [Render pattern templates](#rendering-pattern-templates)
+* [Generate style guides using the Pattern Lab UI](#generating-style-guides)
+* [Validate template content](#testing-content)
 
-```php
-$labcoat = new \Labcoat\PatternLab("/path/to/patternlab");
-```
+## Basic usage
 
-It can also take an array of options to be used when creating the Twig parser.
+Include the Labcoat library using [Composer](https://getcomposer.org/):
 
-```php
-$twigOptions = [
-  "cache" => "/path/to/twig/cache"
-];
-$labcoat = new \Labcoat\PatternLab("/path/to/patternlab", $twigOptions);
-```
-
-## Rendering templates
-
-Labcoat supports these methods of [including patterns](http://patternlab.io/docs/pattern-including.html):
-
-* **Shorthand**, e.g. `atoms-button` or `pages-contact`. Fuzzy matching is not supported. 
-* **Path**, relative to the `source/_patterns` directory, without the template extension. Ordering prefixes are disregarded.
-
-Labcoat does not support these Twig features:
-
-* Macros
-* Custom filters
-* Custom functions
-* Custom tags
-* Custom tests
-
-The `render()` method takes a pattern name (shorthand or path) and an array of template variables.
-
-```php
-print $labcoat->render("templates-calendar", ['events' => $events]);
-```
-
-If an object is passed instead of an array, Labcoat will use the public properties of the object as template variables.
-
-```php
-class Calendar {
-  public $events;
-  
-  public function __construct() {
-    $this->events = $this->getEvents();
+```json
+{
+  "require": {
+    "pixo/labcoat": "dev-master"
   }
 }
-
-$calendar = new Calendar();
-print $labcoat->render("templates-calendar", $calendar);
 ```
 
-Labcoat's `makeDocument()` method creates complete HTML documents from patterns.
+The PatternLab class represents a Pattern Lab installation. For [Standard Edition installations][standard edition], Labcoat needs the path to the installation root (containing `config` and `source` directories):
 
 ```php
-$homepage = $labcoat->makeDocument("pages-home");
-$homepage->setTitle("Welcome");
-$homepage->includeStylesheet("/css/styles.css");
-$homepage->includeScript("/js/scripts.css");
-print $homepage;
+$labcoat = \Labcoat\PatternLab::loadStandardEdition('/path/to/patternlab');
 ```
 
-## Copying assets
+For an installation that uses Labcoat's default structure:
 
-Labcoat provides a command-line utility for copying asset files from Pattern Lab to another directory. The `copy-assets.php` script is found in the root of the Labcoat library.
-
-```bash
-php copy-assets.php /path/to/patternlab /path/to/production
+```php
+$labcoat = \Labcoat\PatternLab::load('/path/to/patternlab');
 ```
 
-## Validating data classes
+For custom configurations, create a new Configuration object and use it as a constructor argument:
+
+```php
+$config = new \Labcoat\Configuration\Configuration();
+$config->setPatternsPath('/path/to/pattern/templates');
+$labcoat = new \Labcoat\PatternLab($config);
+```
+
+## Rendering pattern templates
+
+Labcoat contains a [Twig loader][Twig loaders] class for using pattern templates in other applications.
+
+```php
+$loader = new Labcoat\Twig\Loader($labcoat);
+$twig = new Twig_Environment($loader, ['cache' => '/path/to/twig/cache']);
+```
+
+The loader supports two methods of [including patterns][including patterns]:
+
+* **Partial syntax**, i.e. `type-name`. Fuzzy matching is _not_ supported.
+* **Path**, relative to the patterns directory. The file extension and any [ordering digits][ordering digits] are ignored.
+
+```php
+# These will all render the template "00-atoms/01-icons/email.twig"
+print $twig->render('atoms-email');
+print $twig->render('atoms/icons/email');
+print $twig->render('00-atoms/01-icons/email');
+print $twig->render('00-atoms/01-icons/email.twig');
+print $twig->render('123-atoms/456-icons/email.twig');
+
+# Fuzzy matching isn't supported, so this won't work
+print $twig->render('atoms-em');
+```
+
+### Caching the loader
+
+Once created, the loader class can be stored in a cache to save time during the next request. If Memcache is available:
+
+```php
+$makeLoaderIfNotInCache = function ($cache, $key, &$loader) {
+  $labcoat = Labcoat\PatternLab::load('/path/to/patternlab');
+  $loader = new Labcoat\Twig\Loader($labcoat);
+};
+$loader = $memcache->get('labcoat_loader', $makeLoaderIfNotInCache);
+$twig = new Twig_Environment($loader);
+```
+
+If [Stash][Stash] is being used:
+
+```php
+$item = $stash->getItem('labcoat/loader');
+$loader = $item->get();
+if ($item->isMiss()) {
+  $item->lock();
+  $labcoat = Labcoat\PatternLab::load('/path/to/patternlab');
+  $loader = new Labcoat\Twig\Loader($labcoat);
+  $item->set($loader);
+}
+$twig = new Twig_Environment($loader);
+```
+
+### Combining with other loaders
+
+The Labcoat loader can be chained with other loaders:
+
+```php
+$loader = new Twig_Loader_Chain([
+  new Labcoat\Twig\Loader($labcoat),
+  new Twig_Loader_Filesystem('/path/to/more/templates'),
+]);
+$twig = new Twig_Environment($loader);
+```
+
+### Creating HTML documents
+
+The Document class makes full HTML pages from patterns:
+
+```php
+$doc = new Labcoat\Html\Document($twig->render('pages-about'));
+$doc->setTitle('About Us');
+$doc->includeStylesheet('/css/styles.min.css');
+$doc->includeScript('/js/script.min.js');
+print $doc;
+```
+
+## Generating style guides
+
+```php
+$labcoat = new Labcoat\PatternLab('/path/to/patternlab');
+$styleguide = new Labcoat\Styleguide\Styleguide($labcoat);
+$styleguide->generate('/path/to/styleguide');
+```
+
+## Testing content
 
 Labcoat can use [pattern data files](http://patternlab.io/docs/data-pattern-specific.html) to validate classes that will represent live content in production environments.
 
@@ -161,4 +213,8 @@ $this->assertPatternData($pattern, [
 ]);
 ```
 
-[patternlab]: http://patternlab.io/ "Pattern Lab website"
+[standard edition]: https://github.com/pattern-lab/edition-php-twig-standard
+[Twig loaders]: http://twig.sensiolabs.org/doc/api.html#loaders
+[including patterns]: http://patternlab.io/docs/pattern-including.html
+[ordering digits]: http://patternlab.io/docs/pattern-reorganizing.html
+[Stash]: http://www.stashphp.com/
