@@ -14,6 +14,8 @@ use Labcoat\Styleguide\Files\PageFile;
 use Labcoat\Styleguide\Files\PatternSourceFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Files\StyleguideAssetFile;
+use Labcoat\Styleguide\Generator\Generator;
+use Labcoat\Styleguide\Generator\Simulator;
 use Labcoat\Styleguide\Pages\PatternPage;
 use Labcoat\Styleguide\Pages\PatternPageInterface;
 use Labcoat\Styleguide\Pages\StyleguideIndexPage;
@@ -22,7 +24,7 @@ use Labcoat\Styleguide\Pages\TypeIndexPage;
 use Labcoat\Styleguide\Patterns\Pattern;
 use Labcoat\Styleguide\Patterns\PatternInterface;
 
-class Styleguide implements StyleguideInterface {
+class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   /**
    * @var int
@@ -83,11 +85,8 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function generate($directory) {
-    foreach ($this->files as $path => $file) {
-      $destination = PatternLab::makePath([$directory, $path]);
-      $this->ensurePathDirectory($destination);
-      $file->put($this, $destination);
-    }
+    $generator = new Generator($this, $directory);
+    return $generator->__invoke();
   }
 
   /**
@@ -104,6 +103,10 @@ class Styleguide implements StyleguideInterface {
   public function getGlobalData() {
     if (!isset($this->globalData)) $this->globalData = $this->patternlab->getGlobalData();
     return $this->globalData;
+  }
+
+  public function getIterator() {
+    return new \ArrayIterator($this->getFiles());
   }
 
   /**
@@ -130,25 +133,16 @@ class Styleguide implements StyleguideInterface {
     return $this->patternlab->render($pattern->getTemplate(), $data);
   }
 
+  public function simulate($directory) {
+    $simulator = new Simulator($this, $directory);
+    return $simulator->__invoke();
+  }
+
   /**
    * @param FileInterface $file
    */
   protected function addFile(FileInterface $file) {
     $this->files[$file->getPath()] = $file;
-  }
-
-  /**
-   * @param $path
-   */
-  protected function ensureDirectory($path) {
-    if (!is_dir($path)) mkdir($path, 0777, true);
-  }
-
-  /**
-   * @param $path
-   */
-  protected function ensurePathDirectory($path) {
-    $this->ensureDirectory(dirname($path));
   }
 
   protected function findPatternLineages() {
@@ -272,10 +266,11 @@ class Styleguide implements StyleguideInterface {
   }
 
   protected function makeStyleguideAssetFiles() {
-    $dir = $this->patternlab->getStyleguideAssetsDirectory();
-    $assets = new AssetDirectory($this->patternlab, $dir);
-    foreach ($assets->getAssets() as $asset) {
-      $this->addFile(new StyleguideAssetFile($asset));
+    foreach ($this->patternlab->getStyleguideAssetDirectories() as $dir) {
+      $assets = new AssetDirectory($this->patternlab, $dir);
+      foreach ($assets->getAssets() as $asset) {
+        $this->addFile(new StyleguideAssetFile($asset));
+      }
     }
   }
 
