@@ -38,6 +38,8 @@ $config->setPatternsPath('/path/to/pattern/templates');
 $labcoat = new \Labcoat\PatternLab($config);
 ```
 
+* [More about Labcoat configuration](src/Configuration)
+
 ## Rendering pattern templates
 
 Labcoat contains a [Twig loader][Twig loaders] class for using pattern templates in other applications.
