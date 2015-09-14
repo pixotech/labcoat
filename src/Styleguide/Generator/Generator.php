@@ -35,6 +35,8 @@ class Generator implements GeneratorInterface {
   }
 
   protected function deleteFile($path) {
+    $destination = $this->makePath($path);
+    if (is_file($destination)) unlink($destination);
     $event = new FileEvent($path);
     $event->stop(FileEvent::DELETED);
     return $event;
