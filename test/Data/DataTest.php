@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Data;
+namespace Labcoat\Testing;
 
 class DataTest extends \PHPUnit_Framework_TestCase {
 

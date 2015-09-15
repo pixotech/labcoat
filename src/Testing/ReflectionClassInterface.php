@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Data;
+namespace Labcoat\Testing;
 
 interface ReflectionClassInterface extends \Reflector {
   public function getGetterMethodName($property);

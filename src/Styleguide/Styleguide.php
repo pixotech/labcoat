@@ -287,13 +287,4 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $loader = new \Twig_Loader_Array($templates);
     $this->twig = new \Twig_Environment($loader, ['cache' => false]);
   }
-
-  /**
-   * @param $path
-   * @param $content
-   */
-  protected function writeFile($path, $content) {
-    $this->ensurePathDirectory($path);
-    file_put_contents($path, $content);
-  }
 }

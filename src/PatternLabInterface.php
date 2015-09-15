@@ -34,6 +34,7 @@ interface PatternLabInterface extends HasItemsInterface {
    * @return \Labcoat\Patterns\PatternInterface
    */
   public function getPattern($name);
+
   public function getPatternExtension();
 
   public function getPatternsDirectory();

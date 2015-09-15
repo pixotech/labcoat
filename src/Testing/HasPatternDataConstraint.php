@@ -1,16 +1,36 @@
 <?php
 
-namespace Labcoat\Data;
+namespace Labcoat\Testing;
 
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLabInterface;
 
 class HasPatternDataConstraint extends \PHPUnit_Framework_Constraint {
 
-  protected $pattern;
+  protected $globalData;
 
-  public function __construct(PatternInterface $pattern) {
+  protected $patternlab;
+
+  public static function explodeSelector($selector) {
+    return array_pad(explode('#', $selector, 2), 2, null);
+  }
+
+  public static function getDataVariable($data, $variable) {
+    foreach (explode('.', $variable) as $v) {
+      if (!isset($data[$v])) return null;
+      $data = $data[$v];
+    }
+    return $data;
+  }
+
+  public static function makeVariableSelector($selector, $variable) {
+    list($pattern, $parentVariable) = self::explodeSelector($selector);
+    $variable = $parentVariable ? ($parentVariable . '.' . $variable) : $variable;
+    return $pattern . '#' . $variable;
+  }
+
+  public function __construct(PatternLabInterface $patternlab) {
     parent::__construct();
-    $this->pattern = $pattern;
+    $this->patternlab = $patternlab;
   }
 
   public function toString() {
@@ -20,7 +40,7 @@ class HasPatternDataConstraint extends \PHPUnit_Framework_Constraint {
   public function matches(array $dataClasses) {
     foreach ($dataClasses as $selector => $dataClassName) {
       $reflection = new ReflectionClass($dataClassName);
-      foreach ($this->getPatternVariableNames($selector) as $name) {
+      foreach ($this->getVariableNames($selector) as $name) {
         if (!$reflection->hasTemplateVariable($name)) return false;
       }
     }
@@ -29,13 +49,10 @@ class HasPatternDataConstraint extends \PHPUnit_Framework_Constraint {
 
   protected function additionalFailureDescription($dataClasses) {
     $description = "\n";
-    $description .= sprintf("Pattern: %s\n", $this->pattern->getPath());
-    $description .= sprintf("Template: %s\n", $this->pattern->getFile());
     foreach ($dataClasses as $selector => $dataClassName) {
       $reflection = new ReflectionClass($dataClassName);
-      $description .= "\n";
-      foreach ($this->getPatternVariableNames($selector) as $name) {
-        $description .= sprintf("%s.%s\n", $selector, $name);
+      foreach ($this->getVariableNames($selector) as $name) {
+        $description .= sprintf("%s\n", $this->makeVariableSelector($selector, $name));
         $found = false;
         $location = null;
         $methodName = null;
@@ -66,15 +83,30 @@ class HasPatternDataConstraint extends \PHPUnit_Framework_Constraint {
     return "the data classes " . $this->toString();
   }
 
-  protected function getPatternVariable($selector) {
-    $data = $this->pattern->getData()[$selector];
-    if (is_null($data)) throw new \Exception("Unknown variable: $selector");
-    if (!is_array($data)) throw new \UnexpectedValueException("Invalid variable: $selector");
+  protected function getGlobalData($refresh = false) {
+    if (!isset($this->globalData) || $refresh) $this->globalData = $this->patternlab->getGlobalData();
+    return $this->globalData;
+  }
+
+  protected function getData($selector) {
+    list($pattern, $variable) = $this->explodeSelector($selector);
+    $data = $this->getPatternData($pattern);
+    return $variable ? $this->getDataVariable($data, $variable) : $data;
+  }
+
+  protected function getPatternData($name) {
+    $data = $this->getGlobalData();
+    /** @var \Labcoat\Patterns\HasDataInterface $pattern */
+    $pattern = $this->patternlab->getPattern($name);
+    foreach ($pattern->getDataFiles() as $file) {
+      $json = json_decode(file_get_contents($file), true);
+      $data = array_replace_recursive($data, $json);
+    }
     return $data;
   }
 
-  protected function getPatternVariableNames($selector) {
-    return array_keys($this->getPatternVariable($selector));
+  protected function getVariableNames($selector) {
+    return array_keys($this->getData($selector));
   }
 
   protected function makeMethodSignature(ReflectionClass $reflection, $methodName) {

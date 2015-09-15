@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Data;
+namespace Labcoat\Testing;
 
 use Labcoat\Patterns\PatternInterface;
 
