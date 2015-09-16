@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @package Labcoat
+ * @author Pixo <info@pixotech.com>
+ * @copyright 2015, Pixo
+ * @license http://opensource.org/licenses/NCSA NCSA
+ */
+
 namespace Labcoat;
 
 use Labcoat\Assets\AssetDirectory;
@@ -8,16 +15,12 @@ use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
-use Labcoat\Html\Document;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Sections\Type;
-use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
 
   use HasItemsTrait;
-
-  protected $assetsDirectory;
 
   /**
    * @var \Labcoat\Assets\Asset[]
@@ -35,51 +38,112 @@ class PatternLab implements PatternLabInterface {
   protected $globalData;
 
   /**
-   * @var \Labcoat\Twig\Environment
+   * Is this a partial name?
+   *
+   * Labcoat assumes that a name is a partial if it doesn't contain a slash
+   *
+   * @param string $name The name of the pattern
+   * @return bool True if the name is a path; otherwise, false
    */
-  protected $twig;
-
   public static function isPartialName($name) {
     return false === strpos($name, '/');
   }
 
+  /**
+   * Is this a path?
+   *
+   * Labcoat assumes that a name is a path if it contains a slash
+   *
+   * @param string $name The name of the pattern
+   * @return bool True if the name is a path; otherwise, false
+   */
   public static function isPathName($name) {
     return false !== strpos($name, '/');
   }
 
+  /**
+   * Load a Pattern Lab installation that uses the default Labcoat file structure
+   *
+   * @param string $dir The path to the Pattern Lab installation
+   * @return PatternLab A new PatternLab object
+   */
   public static function load($dir) {
     $config = new LabcoatConfiguration($dir);
     return new PatternLab($config);
   }
 
+  /**
+   * Return the contents of a json-encoded data file
+   *
+   * @param string $path The path to the data fle
+   * @return mixed The parsed content of the file
+   */
   public static function loadData($path) {
     return json_decode(file_get_contents($path), true);
   }
 
+  /**
+   * Load a Pattern Lab installation that uses the Standard Edition file structure
+   *
+   * @param string $dir The path to the Pattern Lab installation
+   * @return PatternLab A new PatternLab object
+   */
   public static function loadStandardEdition($dir) {
     $config = new StandardEditionConfiguration($dir);
     return new PatternLab($config);
   }
 
+  /**
+   * Make a path string from an array of segments
+   *
+   * @param array $segments An array of path segments
+   * @return string A path
+   */
   public static function makePath(array $segments) {
     return implode(DIRECTORY_SEPARATOR, $segments);
   }
 
+  /**
+   * Normalize a template path
+   *
+   * Normalization invokes:
+   * - Removing all ordering digits
+   * - Replace all slashes with a forward slash
+   *
+   * @param string $path The raw path
+   * @return string The normalized path
+   */
   public static function normalizePath($path) {
     $stripDigits = ['Labcoat\\PatternLab', 'stripDigits'];
     return implode('/', array_map($stripDigits, explode(DIRECTORY_SEPARATOR, $path)));
   }
 
+  /**
+   * Remove ordering digits from a path segment
+   *
+   * @param string $str A path segment
+   * @return string The path without any ordering digits
+   */
   public static function stripDigits($str) {
     list($num, $name) = array_pad(explode('-', $str, 2), 2, NULL);
     return is_numeric($num) ? $name : $str;
   }
 
+  /**
+   * Constructor
+   *
+   * @param \Labcoat\Configuration\ConfigurationInterface $config A configuration object
+   */
   public function __construct(ConfigurationInterface $config) {
     $this->config = $config;
     $this->findPatterns();
   }
 
+  /**
+   * Display a text representation of the Pattern Lab
+   *
+   * @return string A list of Pattern Lab contents, indented to show nesting depth
+   */
   public function __toString() {
     $str = '';
     foreach (new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST) as $item) {
@@ -89,70 +153,52 @@ class PatternLab implements PatternLabInterface {
     return $str;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getAnnotationsFile() {
     return $this->config->getAnnotationsFile();
   }
 
   /**
-   * Get an array of Pattern Lab assets
-   *
-   * @return Assets\Asset[]
+   * {@inheritdoc}
    */
   public function getAssets() {
-
-
-
     if (!isset($this->assets)) $this->findAssets();
     return $this->assets;
   }
 
-  public function getExposedOptions() {
-    return [];
-  }
-
+  /**
+   * {@inheritdoc}
+   */
   public function getGlobalData() {
     if (!isset($this->globalData)) $this->loadGlobalData();
     return $this->globalData;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getHiddenControls() {
     return $this->config->getHiddenControls();
   }
 
   /**
-   * Get an array of ignored asset directories
-   *
-   * This list is taken from the configuration file value "id".
-   *
-   * @return array
+   * {@inheritdoc}
    */
   public function getIgnoredDirectories() {
     return $this->config->getIgnoredDirectories();
   }
 
   /**
-   * Get an array of ignored asset extensions
-   *
-   * This list is taken from the configuration file value "ie".
-   *
-   * @return array
+   * {@inheritdoc}
    */
   public function getIgnoredExtensions() {
     return $this->config->getIgnoredExtensions();
   }
 
   /**
-   * Get a pattern by shorthand or path
-   *
-   * Supported pattern selectors:
-   * - Shorthand, e.g. "atoms-button" or "pages-contact". Fuzzy matching is not supported.
-   * - Path, relative to the "source/_patterns" directory, without the template extension.
-   *   Ordering prefixes are disregarded.
-   *
-   * @param string $name The path or shorthand name of a pattern
-   * @return \Labcoat\Patterns\Pattern
-   * @throws \OutOfBoundsException No matching pattern was found
-   * @see http://patternlab.io/docs/pattern-including.html "Including Patterns"
+   * {@inheritdoc}
    */
   public function getPattern($name) {
     if ($this->isPathName($name)) {
@@ -165,110 +211,87 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * Get the pattern template extension
-   *
-   * This value comes from the configuration file value "patternExtension".
-   *
-   * @return string A file extension
+   * {@inheritdoc}
    */
   public function getPatternExtension() {
     return $this->config->getPatternExtension();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getPatterns() {
     return iterator_to_array($this->getPatternsIterator(), false);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getPatternsDirectory() {
     return $this->config->getPatternsDirectory();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getStyleguideAssetDirectories() {
     return $this->config->getStyleguideAssetDirectories();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getStyleguideFooter() {
     return $this->config->getStyleguideFooter();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getStyleguideHeader() {
     return $this->config->getStyleguideHeader();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getStyleguideTemplatesDirectory() {
     return $this->config->getStyleguideTemplatesDirectories();
   }
 
   /**
-   * Get the Twig parser
-   *
-   * @return \Labcoat\Twig\Environment The Twig parser
+   * {@inheritdoc}
    */
-  public function getTwig() {
-    if (!isset($this->twig)) $this->makeTwig();
-    return $this->twig;
-  }
-
-  /**
-   * @param string $name
-   * @return \Labcoat\Sections\TypeInterface
-   */
-  public function getType($name) {
-    return $this->getPatterns()->getType($name);
-  }
-
-  /**
-   * @return \Labcoat\Sections\TypeInterface[]
-   */
-  public function getTypes() {
-    return $this->getPatterns()->getTypes();
-  }
-
   public function hasIgnoredExtension($path) {
     $ext = pathinfo($path, PATHINFO_EXTENSION);
     return in_array($ext, $this->getIgnoredExtensions());
   }
 
-  public function hasType($name) {
-    return !empty($this->items[$name]);
-  }
-
+  /**
+   * {@inheritdoc}
+   */
   public function isHiddenFile($path) {
     return false !== strpos(DIRECTORY_SEPARATOR . $path, DIRECTORY_SEPARATOR . '_');
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function isIgnoredFile($path) {
     return $this->hasIgnoredExtension($path) || $this->isInIgnoredDirectory($path);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function isInIgnoredDirectory($path) {
     $dirs = explode(DIRECTORY_SEPARATOR, dirname($path));
     return count(array_intersect($dirs, $this->getIgnoredDirectories())) > 0;
   }
 
   /**
-   * Create an HTML document from a pattern
-   *
-   * @param string $patternName The name of the pattern to render
-   * @param mixed $variables Variables for the pattern template; can be an array, object, or null
-   * @return \Labcoat\Html\Document
+   * Look in the asset directories for asset files
    */
-  public function makeDocument($patternName, $variables = null) {
-    return new Document($this->render($patternName, $variables));
-  }
-
-  /**
-   * Render a pattern template
-   *
-   * @param string $patternName The name of the pattern to render
-   * @param mixed $variables Variables for the pattern template; can be an array, object, or null
-   * @return string The rendered template
-   */
-  public function render($patternName, $variables = null) {
-    if (is_object($variables)) $variables = get_object_vars($variables);
-    return $this->getTwig()->render($patternName, $variables ?: []);
-  }
-
   protected function findAssets() {
     $this->assets = [];
     foreach ($this->config->getAssetDirectories() as $dir) {
@@ -277,6 +300,9 @@ class PatternLab implements PatternLabInterface {
     }
   }
 
+  /**
+   * Look in the pattern directory for pattern templates
+   */
   protected function findPatterns() {
     $dir = $this->getPatternsDirectory();
     $ext = $this->getPatternExtension();
@@ -292,8 +318,10 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * @param $path
-   * @return \Labcoat\Sections\TypeInterface
+   * Look for a type with the provided path, and create it if it doesn't exist
+   *
+   * @param string $path The type path
+   * @return \Labcoat\Sections\TypeInterface A pattern type object
    */
   protected function getOrCreateType($path) {
     list($key) = explode('/', $this->normalizePath($path));
@@ -301,15 +329,19 @@ class PatternLab implements PatternLabInterface {
     return $this->items[$key];
   }
 
+  /**
+   * Get an iterator for all patterns in the installation
+   *
+   * @return PatternFilterIterator An iterator object
+   */
   protected function getPatternsIterator() {
     $items = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
     return new PatternFilterIterator($items);
   }
 
-  protected function getTwigOptions() {
-    return $this->config->getTwigOptions();
-  }
-
+  /**
+   * Load all global pattern data
+   */
   protected function loadGlobalData() {
     $this->globalData = [];
     foreach ($this->config->getGlobalDataFiles() as $path) {
@@ -318,6 +350,9 @@ class PatternLab implements PatternLabInterface {
     $this->loadListItems();
   }
 
+  /**
+   * Load list items data for patterns
+   */
   protected function loadListItems() {
     $this->globalData['listitems'] = [];
     foreach ($this->config->getListItemFiles() as $path) {
@@ -326,10 +361,12 @@ class PatternLab implements PatternLabInterface {
     shuffle($this->globalData['listitems']);
   }
 
-  protected function makeTwig() {
-    $this->twig = new Environment($this, $this->getTwigOptions());
-  }
-
+  /**
+   * Remove the template extension from a path
+   *
+   * @param string $path The template path with extension
+   * @return string The path with the extension removed
+   */
   protected function stripPatternExtensionFromPath($path) {
     $ext = '.' . $this->getPatternExtension();
     if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));

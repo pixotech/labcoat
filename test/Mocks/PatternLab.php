@@ -79,18 +79,6 @@ class PatternLab implements PatternLabInterface {
     // TODO: Implement getPatternsDirectory() method.
   }
 
-  public function getVendorDirectory() {
-    // TODO: Implement getVendorDirectory() method.
-  }
-
-  public function setPatternsDirectory($path) {
-    // TODO: Implement setPatternsDirectory() method.
-  }
-
-  public function getTypes() {
-    // TODO: Implement getTypes() method.
-  }
-
   public function getAnnotationsFile() {
     // TODO: Implement getAnnotationsFile() method.
   }
@@ -101,10 +89,6 @@ class PatternLab implements PatternLabInterface {
 
   public function getHiddenControls() {
     // TODO: Implement getHiddenControls() method.
-  }
-
-  public function getStyleguideAssetsDirectory() {
-    // TODO: Implement getStyleguideAssetsDirectory() method.
   }
 
   public function getStyleguideFooter() {
@@ -151,15 +135,15 @@ class PatternLab implements PatternLabInterface {
     // TODO: Implement count() method.
   }
 
-  public function hasType($name) {
-    // TODO: Implement hasType() method.
-  }
-
   public function hasChildren() {
     // TODO: Implement hasChildren() method.
   }
 
   public function getChildren() {
     // TODO: Implement getChildren() method.
+  }
+
+  public function getStyleguideAssetDirectories() {
+    // TODO: Implement getStyleguideAssetDirectories() method.
   }
 }

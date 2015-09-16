@@ -112,7 +112,7 @@ class DataFile extends File implements DataFileInterface {
   }
 
   protected function loadConfig() {
-    $this->config = $this->patternlab->getExposedOptions();
+    $this->config = [];
   }
 
   protected function loadControls() {

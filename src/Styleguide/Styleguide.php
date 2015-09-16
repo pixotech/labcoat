@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @package Labcoat
+ * @author Pixo <info@pixotech.com>
+ * @copyright 2015, Pixo
+ * @license http://opensource.org/licenses/NCSA NCSA
+ */
+
 namespace Labcoat\Styleguide;
 
 use Labcoat\Assets\AssetDirectory;
@@ -15,7 +22,6 @@ use Labcoat\Styleguide\Files\PatternSourceFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Files\StyleguideAssetFile;
 use Labcoat\Styleguide\Generator\Generator;
-use Labcoat\Styleguide\Generator\Simulator;
 use Labcoat\Styleguide\Pages\PatternPage;
 use Labcoat\Styleguide\Pages\PatternPageInterface;
 use Labcoat\Styleguide\Pages\StyleguideIndexPage;
@@ -23,6 +29,7 @@ use Labcoat\Styleguide\Pages\SubTypeIndexPage;
 use Labcoat\Styleguide\Pages\TypeIndexPage;
 use Labcoat\Styleguide\Patterns\Pattern;
 use Labcoat\Styleguide\Patterns\PatternInterface;
+use Labcoat\Twig\Loader;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -52,19 +59,19 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $patternlab;
 
   /**
+   * @var \Twig_Environment
+   */
+  protected $patternParser;
+
+  /**
    * @var \Labcoat\Styleguide\Patterns\PatternInterface[]
    */
   protected $patterns = [];
 
   /**
-   * @var int
-   */
-  protected $time = 0;
-
-  /**
    * @var \Twig_Environment
    */
-  protected $twig;
+  protected $templateParser;
 
   /**
    * @param PatternLabInterface $patternlab
@@ -84,67 +91,78 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $str;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function generate($directory) {
     $generator = new Generator($this, $directory);
     return $generator->__invoke();
   }
 
   /**
-   * @return int
+   * {@inheritdoc}
    */
   public function getCacheBuster() {
     return $this->cacheBuster;
   }
 
-  public function getFiles() {
-    return $this->files;
-  }
-
+  /**
+   * {@inheritdoc}
+   */
   public function getGlobalData() {
     if (!isset($this->globalData)) $this->globalData = $this->patternlab->getGlobalData();
     return $this->globalData;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getIterator() {
-    return new \ArrayIterator($this->getFiles());
+    return new \ArrayIterator($this->files);
   }
 
   /**
-   * @param $id
-   * @return \Labcoat\Styleguide\Patterns\PatternInterface
+   * {@inheritdoc}
    */
   public function getPattern($id) {
     return $this->patterns[$id];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getPatternLab() {
     return $this->patternlab;
   }
 
   /**
-   * @return \Twig_Environment
+   * {@inheritdoc}
    */
-  public function getTwig() {
-    if (!isset($this->twig)) $this->makeTwig();
-    return $this->twig;
-  }
-
-  public function renderPattern(PatternInterface $pattern, array $data = []) {
-    return $this->patternlab->render($pattern->getTemplate(), $data);
-  }
-
-  public function simulate($directory) {
-    $simulator = new Simulator($this, $directory);
-    return $simulator->__invoke();
+  public function render($template, array $data = []) {
+    return $this->templateParser->render($template, $data);
   }
 
   /**
-   * @param FileInterface $file
+   * {@inheritdoc}
+   */
+  public function renderPattern(PatternInterface $pattern, array $data = []) {
+    return $this->getPatternParser()->render($pattern->getTemplate(), $data);
+  }
+
+  /**
+   * Add a file to the style guide
+   *
+   * @param FileInterface $file A file object
    */
   protected function addFile(FileInterface $file) {
     $this->files[$file->getPath()] = $file;
   }
 
+  /**
+   * Find pattern lineages
+   *
+   * This method interates through the patterns and determines which templates include which others.
+   */
   protected function findPatternLineages() {
     $this->lineages = [];
     $includes = [];
@@ -162,50 +180,90 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * @return string
+   * Get the path to the style guide footer template
+   *
+   * @return string The template path
    */
   protected function getPatternFooterTemplatePath() {
     return $this->patternlab->getStyleguideFooter();
   }
 
   /**
-   * @return string
+   * Get the path to the style guide header template
+   *
+   * @return string The template path
    */
   protected function getPatternHeaderTemplatePath() {
     return $this->patternlab->getStyleguideHeader();
   }
 
   /**
-   * @param $template
-   * @return string
+   * Get the Twig parser for pattern templates
+   *
+   * @return \Twig_Environment A Twig parser object
+   */
+  protected function getPatternParser() {
+    if (!isset($this->patternParser)) $this->makePatternParser();
+    return $this->patternParser;
+  }
+
+  /**
+   * Get the content of a template
+   *
+   * @param string $template The path to the tempalte
+   * @return string The content of the template
    */
   protected function getStyleguideTemplateContent($template) {
     return file_get_contents($this->getStyleguideTemplatePath($template));
   }
 
   /**
-   * @param $template
-   * @return string
+   * Get the full path to a style guide template
+   *
+   * @param string $template The relative path of the template
+   * @return string The full template path
    */
   protected function getStyleguideTemplatePath($template) {
     return PatternLab::makePath([$this->patternlab->getStyleguideTemplatesDirectory(), $template]);
   }
 
+  /**
+   * Get the Twig parser for style guide templates
+   *
+   * @return \Twig_Environment A Twig parser object
+   */
+  protected function getTemplateParser() {
+    if (!isset($this->templateParser)) $this->makeTemplateParser();
+    return $this->templateParser;
+  }
+
+  /**
+   * Make the annotations file object
+   */
   protected function makeAnnotationsFile() {
     if ($path = $this->patternlab->getAnnotationsFile()) {
       $this->addFile(new AnnotationsFile($path));
     }
   }
 
+  /**
+   * Make asset file objects
+   */
   protected function makeAssetFiles() {
     $this->makePatternLabAssetFiles();
     $this->makeStyleguideAssetFiles();
   }
 
+  /**
+   * Make the Pattern Lab data file object
+   */
   protected function makeDataFile() {
     $this->addFile(new DataFile($this->patternlab));
   }
 
+  /**
+   * Make all file objects
+   */
   protected function makeFiles() {
     $this->makePageFiles($this->makePages());
     $this->makeAssetFiles();
@@ -214,10 +272,18 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->makeLatestChangeFile();
   }
 
+  /**
+   * Make the latest change file object
+   */
   protected function makeLatestChangeFile() {
     $this->addFile(new LatestChangeFile(time()));
   }
 
+  /**
+   * Make file objects for all the style guide pages
+   *
+   * @param \Labcoat\Styleguide\Files\FileInterface[] $pages An array of page file objects
+   */
   protected function makePageFiles(array $pages) {
     foreach ($pages as $page) {
       $this->addFile(new PageFile($page));
@@ -228,6 +294,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     }
   }
 
+  /**
+   * Make the style guide page objects
+   *
+   * @return \Labcoat\Styleguide\Pages\PageInterface[] An array of page objects
+   */
   protected function makePages() {
     /** @var \Labcoat\Styleguide\Pages\IndexPageInterface[] $pages */
     $pages = [];
@@ -255,16 +326,29 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     }
     $this->findPatternLineages();
     $pages[] = $index;
-    $this->time = $index->getTime();
     return $pages;
   }
 
+  /**
+   * Make asset file objects
+   */
   protected function makePatternLabAssetFiles() {
     foreach ($this->patternlab->getAssets() as $asset) {
       $this->addFile(new AssetFile($asset));
     }
   }
 
+  /**
+   * Make the Twig parser for pattern templates
+   */
+  protected function makePatternParser() {
+    $loader = new Loader($this->patternlab);
+    $this->templateParser = new \Twig_Environment($loader);
+  }
+
+  /**
+   * Make all style guide asset file objects
+   */
   protected function makeStyleguideAssetFiles() {
     foreach ($this->patternlab->getStyleguideAssetDirectories() as $dir) {
       $assets = new AssetDirectory($this->patternlab, $dir);
@@ -274,7 +358,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     }
   }
 
-  protected function makeTwig() {
+  /**
+   * Make the Twig parser for style guide template files
+   */
+  protected function makeTemplateParser() {
     $templates = [
       'partials/general-footer' => $this->getStyleguideTemplateContent('partials/general-footer.twig'),
       'partials/general-header' => $this->getStyleguideTemplateContent('partials/general-header.twig'),
@@ -285,6 +372,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $templates['patternLabHead'] = file_get_contents($this->getPatternHeaderTemplatePath());
     $templates['patternLabFoot'] = file_get_contents($this->getPatternFooterTemplatePath());
     $loader = new \Twig_Loader_Array($templates);
-    $this->twig = new \Twig_Environment($loader, ['cache' => false]);
+    $this->templateParser = new \Twig_Environment($loader, ['cache' => false]);
   }
 }
