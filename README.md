@@ -209,9 +209,9 @@ class Event {
 Labcoat provides test methods to ensure that the `Event` class has all the attributes of `event` which are present in the data file.
 
 ```php
-class EventTest extends \Labcoat\Data\TestCase {
+class EventTest extends Labcoat\Testing\TestCase {
   public function testEvent() {
-    $labcoat = new \Labcoat\PatternLab("/path/to/patternlab");
+    $labcoat = new Labcoat\PatternLab("/path/to/patternlab");
     $this->assertPatternData($labcoat, "molecules-event#event", "Event");
   }
 }
