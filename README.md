@@ -119,10 +119,54 @@ print $doc;
 
 ## Generating style guides
 
+Labcoat can generate style guides that use the [Pattern Lab interface](https://github.com/pattern-lab/styleguidekit-assets-default)
+
 ```php
 $labcoat = new Labcoat\PatternLab('/path/to/patternlab');
 $styleguide = new Labcoat\Styleguide\Styleguide($labcoat);
 $styleguide->generate('/path/to/styleguide');
+```
+
+Use PHP's [built-in webserver](http://us1.php.net/manual/en/features.commandline.webserver.php) to browse the style guide locally (at http://localhost:8080, in this example):
+
+```bash
+php -S 0.0.0.0:8080 -t /path/to/styleguide
+```
+
+### Reporting
+
+The `generate()` method returns a report object, which can be printed to obtain a summary of the generation process:
+
+```php
+print $styleguide->generate('/path/to/styleguide');
+```
+
+Which produces something like:
+
+```txt
+443 files updated, 0 skipped, 0 removed
+Generated in 1.432264 seconds
+```
+
+To get a full report of style guide file changes, use the `verbose()` method of the report:
+
+```php
+print $styleguide->generate('/path/to/styleguide')->verbose();
+```
+
+```txt
+...
+index.html
+  Updated (0.60 ms)
+styleguide/data/patternlab-data.js
+  Updated (1.41 ms)
+annotations/annotations.js
+  Updated (0.52 ms)
+latest-change.txt
+  Updated (0.18 ms)
+
+443 files updated, 0 skipped, 0 removed
+Generated in 1.432264 seconds
 ```
 
 ## Testing content
@@ -158,8 +202,7 @@ Labcoat provides test methods to ensure that the `Event` class all the propertie
 class EventTest extends \Labcoat\Data\TestCase {
   public function testEvent() {
     $labcoat = new \Labcoat\PatternLab("/path/to/patternlab");
-    $pattern = $labcoat->getPattern("molecules-event");
-    $this->assertPatternData($pattern, ["event" => "Event"]);
+    $this->assertPatternData($labcoat, ["molecules-event#event" => "Event"]);
   }
 }
 ```
@@ -172,16 +215,13 @@ There was 1 failure:
 1) EventTest::testEvent
 Failed asserting that the data classes contain the required pattern variables.
 
-Pattern: molecules/event
-Template: /path/to/patternlab/source/_patterns/molecules/event.twig
-
-event.name
+molecules-event#event.name
   FOUND: Event::$name
-event.date
+molecules-event#event.date
   FOUND: Event::getDate(), line 15
-event.time
+molecules-event#event.time
   NOT FOUND
-event.private
+molecules-event#event.private
   FOUND: Event::isPrivate(), line 22
 ```
 
@@ -209,9 +249,9 @@ class Location {
 ```
 
 ```php
-$this->assertPatternData($pattern, [
-  "event" => "Event",
-  "event.location" => "Location",
+$this->assertPatternData($labcoat, [
+  "molecules-event#event" => "Event",
+  "molecules-event#event.location" => "Location",
 ]);
 ```
 
