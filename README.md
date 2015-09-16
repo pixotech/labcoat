@@ -4,7 +4,17 @@ Labcoat is a library for using Pattern Lab content in live site environments. It
 
 * [Render pattern templates](#rendering-pattern-templates)
 * [Generate style guides using the Pattern Lab UI](#generating-style-guides)
-* [Validate template content](#testing-content)
+* [Validate template content](#validating-template-content)
+
+Labcoat places the following restrictions on Pattern Lab installations:
+
+* Twig is the only supported templating language
+* Patterns can only be referenced by partial and path syntax
+* Layouts, macros, and other advanced Twig features are not supported
+
+Labcoat was created by [Pixo](http://pixotech.com/), and released under the [NCSA license](https://opensource.org/licenses/NCSA).
+
+Pattern Lab was created by [Brad Frost](http://bradfrostweb.com) and [Dave Olsen](http://dmolsen.com), and released under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Basic usage
 
@@ -21,21 +31,21 @@ Include the Labcoat library using [Composer](https://getcomposer.org/):
 The PatternLab class represents a Pattern Lab installation. For [Standard Edition installations][standard edition], Labcoat needs the path to the installation root (containing `config` and `source` directories):
 
 ```php
-$labcoat = \Labcoat\PatternLab::loadStandardEdition('/path/to/patternlab');
+$labcoat = Labcoat\PatternLab::loadStandardEdition('/path/to/patternlab');
 ```
 
 For an installation that uses Labcoat's default structure:
 
 ```php
-$labcoat = \Labcoat\PatternLab::load('/path/to/patternlab');
+$labcoat = Labcoat\PatternLab::load('/path/to/patternlab');
 ```
 
 For custom configurations, create a new Configuration object and use it as a constructor argument:
 
 ```php
-$config = new \Labcoat\Configuration\Configuration();
+$config = new Labcoat\Configuration\Configuration();
 $config->setPatternsPath('/path/to/pattern/templates');
-$labcoat = new \Labcoat\PatternLab($config);
+$labcoat = new Labcoat\PatternLab($config);
 ```
 
 * [More about Labcoat configuration](src/Configuration)
@@ -169,7 +179,7 @@ latest-change.txt
 Generated in 1.432264 seconds
 ```
 
-## Testing content
+## Validating template content
 
 Labcoat can use [pattern data files](http://patternlab.io/docs/data-pattern-specific.html) to validate classes that will represent live content in production environments.
 
@@ -186,7 +196,7 @@ For example, a template named `molecules-event` could have the following data fi
 }
 ```
 
-In production, the `event` variable will be an instance of the `Event` class.
+In production, the `event` variable will be an instance of the `Event` class. This class has properties and methods that [Twig will treat like attributes of the variable](http://twig.sensiolabs.org/doc/templates.html#variables).
 
 ```php
 class Event {
@@ -196,7 +206,7 @@ class Event {
 }
 ```
 
-Labcoat provides test methods to ensure that the `Event` class all the properties of `event` which are present in the data file.
+Labcoat provides test methods to ensure that the `Event` class has all the attributes of `event` which are present in the data file.
 
 ```php
 class EventTest extends \Labcoat\Data\TestCase {
@@ -223,36 +233,6 @@ molecules-event#event.time
   NOT FOUND
 molecules-event#event.private
   FOUND: Event::isPrivate(), line 22
-```
-
-Labcoat can test nested variables, too.
-
-```json
-{
-  "event": {
-    "name": "Company picnic",
-    "date": "August 25",
-    "time": "1:00pm",
-    "location": {
-      "name": "Maplewood Park",
-      "address": "10 Maplewood Way"
-    }
-  }
-}
-```
-
-```php
-class Location {
-  public function getName() ...
-  public function getAddress() ...
-}
-```
-
-```php
-$this->assertPatternData($labcoat, [
-  "molecules-event#event" => "Event",
-  "molecules-event#event.location" => "Location",
-]);
 ```
 
 [standard edition]: https://github.com/pattern-lab/edition-php-twig-standard
