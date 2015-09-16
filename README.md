@@ -212,7 +212,7 @@ Labcoat provides test methods to ensure that the `Event` class has all the attri
 class EventTest extends \Labcoat\Data\TestCase {
   public function testEvent() {
     $labcoat = new \Labcoat\PatternLab("/path/to/patternlab");
-    $this->assertPatternData($labcoat, ["molecules-event#event" => "Event"]);
+    $this->assertPatternData($labcoat, "molecules-event#event", "Event");
   }
 }
 ```
