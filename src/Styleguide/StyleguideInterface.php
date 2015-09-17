@@ -37,6 +37,20 @@ interface StyleguideInterface {
   public function getGlobalData();
 
   /**
+   * Maximum size for the viewport resizer
+   *
+   * @return int
+   */
+  public function getMaximumWidth();
+
+  /**
+   * Minimum size for the viewport resizer
+   *
+   * @return int
+   */
+  public function getMinimumWidth();
+
+  /**
    * Get the pattern with the provided ID
    *
    * @param string $id A pattern ID

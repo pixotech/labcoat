@@ -124,6 +124,20 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   /**
    * {@inheritdoc}
    */
+  public function getMaximumWidth() {
+    return '240';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMinimumWidth() {
+    return '2600';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPattern($id) {
     return $this->patterns[$id];
   }
@@ -139,7 +153,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * {@inheritdoc}
    */
   public function render($template, array $data = []) {
-    return $this->templateParser->render($template, $data);
+    return $this->getTemplateParser()->render($template, $data);
   }
 
   /**
@@ -343,7 +357,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected function makePatternParser() {
     $loader = new Loader($this->patternlab);
-    $this->templateParser = new \Twig_Environment($loader);
+    $this->patternParser = new \Twig_Environment($loader);
   }
 
   /**

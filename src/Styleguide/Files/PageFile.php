@@ -55,21 +55,21 @@ class PageFile extends File {
       'cacheBuster' => $styleguide->getCacheBuster(),
       'patternData' => json_encode($this->page->getPatternData()),
     ];
-    return $styleguide->getTwig()->render('partials/general-footer', $data);
+    return $styleguide->render('partials/general-footer', $data);
   }
 
   protected function getPatternLabHeaderContent(StyleguideInterface $styleguide) {
     $data = [
       'cacheBuster' => $styleguide->getCacheBuster(),
     ];
-    return $styleguide->getTwig()->render('partials/general-header', $data);
+    return $styleguide->render('partials/general-header', $data);
   }
 
   protected function makeFooter(StyleguideInterface $styleguide) {
-    return $styleguide->getTwig()->render('patternLabFoot', $this->getFooterVariables($styleguide));
+    return $styleguide->render('patternLabFoot', $this->getFooterVariables($styleguide));
   }
 
   protected function makeHeader(StyleguideInterface $styleguide) {
-    return $styleguide->getTwig()->render('patternLabHead', $this->getHeaderVariables($styleguide));
+    return $styleguide->render('patternLabHead', $this->getHeaderVariables($styleguide));
   }
 }

@@ -21,7 +21,7 @@ abstract class IndexPage extends Page implements IndexPageInterface {
       'partials' => $this->getPatterns(),
       'patternPartial' => '',
     ];
-    return $styleguide->getTwig()->render('viewall', $variables);
+    return $styleguide->render('viewall', $variables);
   }
 
   /**

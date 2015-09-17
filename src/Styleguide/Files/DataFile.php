@@ -30,16 +30,20 @@ class DataFile extends File implements DataFileInterface {
 
   public function __construct(PatternLabInterface $patternlab) {
     $this->patternlab = $patternlab;
-    $this->loadConfig();
     $this->loadControls();
     $this->makeNavigation();
   }
 
   /**
+   * @param StyleguideInterface $styleguide
    * @return array
    */
-  public function getConfig() {
-    return $this->config;
+  public function getConfig(StyleguideInterface $styleguide) {
+    return [
+      'cacheBuster' => $styleguide->getCacheBuster(),
+      'ishMaximum' => $styleguide->getMaximumWidth(),
+      'ishMinimum' => $styleguide->getMinimumWidth(),
+    ];
   }
 
   /**
@@ -49,8 +53,8 @@ class DataFile extends File implements DataFileInterface {
     return $this->controls;
   }
 
-  public function getContents() {
-    $contents  = "var config = " . json_encode($this->getConfig()).";";
+  public function getContents(StyleguideInterface $styleguide) {
+    $contents  = "var config = " . json_encode($this->getConfig($styleguide)).";";
     $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
     $contents .= "var navItems = " . json_encode($this->navigation) . ";";
     $contents .= "var patternPaths = " . json_encode($this->navigation->getPatternPaths()) . ";";
@@ -68,13 +72,17 @@ class DataFile extends File implements DataFileInterface {
   }
 
   public function put(StyleguideInterface $styleguide, $path) {
-    file_put_contents($path, $this->getContents());
+    file_put_contents($path, $this->getContents($styleguide));
   }
 
   /**
    * @return array
    */
   protected function getMediaQueries() {
+    return $this->getMediaQueriesFromStylesheet();
+  }
+
+  protected function getMediaQueriesFromStylesheet() {
     $mediaQueries = [];
     foreach ($this->getStylesheets() as $path) {
       $data = file_get_contents($path);
@@ -109,10 +117,6 @@ class DataFile extends File implements DataFileInterface {
       }
     }
     return $this->stylesheets;
-  }
-
-  protected function loadConfig() {
-    $this->config = [];
   }
 
   protected function loadControls() {
