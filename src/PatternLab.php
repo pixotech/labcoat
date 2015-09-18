@@ -306,11 +306,11 @@ class PatternLab implements PatternLabInterface {
   protected function findPatterns() {
     $dir = $this->getPatternsDirectory();
     $ext = $this->getPatternExtension();
-    $flags = \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS;
+    $flags = \FilesystemIterator::SKIP_DOTS;
     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
     $pattern = '|\.' . preg_quote($ext) . '$|';
     $matches = new \RegexIterator($files, $pattern, \RegexIterator::MATCH);
-    foreach ($matches as $match) {
+    foreach ($matches as $match => $file) {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
       list($type) = explode(DIRECTORY_SEPARATOR, $path);
       $this->getOrCreateType($type)->addPattern(new Pattern($path, $match));

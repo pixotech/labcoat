@@ -27,9 +27,9 @@ class AssetDirectory implements \Countable, \IteratorAggregate, AssetDirectoryIn
   }
 
   protected function findAssets(PatternLabInterface $patternlab) {
-    $dir = new \RecursiveDirectoryIterator($this->path, \FilesystemIterator::CURRENT_AS_PATHNAME | \FilesystemIterator::SKIP_DOTS);
+    $dir = new \RecursiveDirectoryIterator($this->path, \FilesystemIterator::SKIP_DOTS);
     $files = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::LEAVES_ONLY);
-    foreach ($files as $file) {
+    foreach ($files as $file => $obj) {
       $path = substr($file, strlen($this->path) + 1);
       if (!$patternlab->isHiddenFile($path) && !$patternlab->isIgnoredFile($path)) {
         $this->assets[$path] = new Asset($path, $file);

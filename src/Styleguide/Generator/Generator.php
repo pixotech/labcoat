@@ -66,11 +66,10 @@ class Generator implements GeneratorInterface {
 
   protected function getExistingPaths() {
     $paths = [];
-    $dirFlags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::CURRENT_AS_PATHNAME;
-    $dir = new \RecursiveDirectoryIterator($this->path, $dirFlags);
+    $dir = new \RecursiveDirectoryIterator($this->path, \FilesystemIterator::SKIP_DOTS);
     $files = new \RecursiveIteratorIterator($dir);
     $pos = strlen($this->path . DIRECTORY_SEPARATOR);
-    foreach ($files as $file) {
+    foreach ($files as $file => $obj) {
       $paths[] = substr($file, $pos);
     }
     return $paths;
