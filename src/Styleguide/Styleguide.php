@@ -125,14 +125,14 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * {@inheritdoc}
    */
   public function getMaximumWidth() {
-    return '240';
+    return '2600';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getMinimumWidth() {
-    return '2600';
+    return '240';
   }
 
   /**
