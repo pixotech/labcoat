@@ -267,7 +267,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $data = $this->styleguide->getGlobalData();
     $source = $this->getPatternLab()->getPattern($this->getId());
     foreach ($source->getDataFiles() as $file) {
-      if (false !== $json = json_decode(file_get_contents($file), true)) $data = array_replace_recursive($data, $json);
+      if (null !== $json = json_decode(file_get_contents($file), true)) $data = array_replace_recursive($data, $json);
     }
     $this->data = (array)$data;
   }
