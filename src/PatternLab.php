@@ -58,7 +58,7 @@ class PatternLab implements PatternLabInterface {
    * @return bool True if the name is a path; otherwise, false
    */
   public static function isPathName($name) {
-    return false !== strpos($name, '/');
+    return false !== strpos($name, DIRECTORY_SEPARATOR);
   }
 
   /**
