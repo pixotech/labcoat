@@ -26,7 +26,7 @@ class Navigation implements \JsonSerializable {
   protected $types = [];
 
   public static function getTypeFromPath($path) {
-    return array_shift(explode('/', $path));
+    return array_shift(explode(DIRECTORY_SEPARATOR, $path));
   }
 
   public static function escapePath($path) {
@@ -77,7 +77,7 @@ class Navigation implements \JsonSerializable {
    * @param PatternInterface $pattern
    */
   protected function addPatternPath(SourcePattern $pattern) {
-    $path = explode('/', $pattern->getNormalizedPath());
+    $path = explode(DIRECTORY_SEPARATOR, $pattern->getNormalizedPath());
     $type = array_shift($path);
     $name = $this->escapePath(array_pop($path));
     $this->patternPaths[$type][$name] = $this->makeItemPath($pattern);
@@ -90,7 +90,7 @@ class Navigation implements \JsonSerializable {
     $names = explode('/', $subtype->getNormalizedPath());
     list($type, $name) = $names;
     if (!isset($this->indexPaths[$type])) {
-      $typePath = array_shift(explode('/', $subtype->getPath()));
+      $typePath = array_shift(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
       $this->indexPaths[$type] = ['all' => $typePath];
     }
     $this->indexPaths[$type][$name] = $this->makeItemPath($subtype);
