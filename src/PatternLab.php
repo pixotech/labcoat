@@ -100,7 +100,7 @@ class PatternLab implements PatternLabInterface {
    * @return string A path
    */
   public static function makePath(array $segments) {
-    return implode(DIRECTORY_SEPARATOR, $segments);
+    return implode('/', $segments);
   }
 
   /**
