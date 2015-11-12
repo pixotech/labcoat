@@ -77,7 +77,7 @@ class Navigation implements \JsonSerializable {
    * @param PatternInterface $pattern
    */
   protected function addPatternPath(SourcePattern $pattern) {
-    $path = explode(DIRECTORY_SEPARATOR, $pattern->getNormalizedPath());
+    $path = explode('/', $pattern->getNormalizedPath());
     $type = array_shift($path);
     $name = $this->escapePath(array_pop($path));
     $this->patternPaths[$type][$name] = $this->makeItemPath($pattern);
