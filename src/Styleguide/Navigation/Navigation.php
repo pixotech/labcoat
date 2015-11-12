@@ -30,7 +30,7 @@ class Navigation implements \JsonSerializable {
   }
 
   public static function escapePath($path) {
-    return preg_replace('|[/~]|', '-', $path);
+    return preg_replace('|[\\\/~]|', '-', $path);
   }
 
   public function __construct(PatternLabInterface $patternlab) {
