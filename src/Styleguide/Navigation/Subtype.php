@@ -14,7 +14,7 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   protected $type;
 
   public function __construct(SourceInterface $subtype) {
-    list ($this->type, $this->subtype) = explode('/', $subtype->getPath());
+    list ($this->type, $this->subtype) = explode(DIRECTORY_SEPARATOR, $subtype->getPath());
     $this->partial = Navigation::escapePath($subtype->getNormalizedPath());
     $this->path = Navigation::escapePath($subtype->getPath());
   }

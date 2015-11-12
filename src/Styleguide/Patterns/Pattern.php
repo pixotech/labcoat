@@ -273,7 +273,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   protected function makePaths(SourcePatternInterface $pattern) {
-    $path = preg_replace('|[/~]|', '-', $pattern->getPath());
+    $path = preg_replace('|[\\\/~]|', '-', $pattern->getPath());
     $this->path = PatternLab::makePath([$path, "$path.html"]);
     $this->pagePath = PatternLab::makePath(['patterns', $this->path]);
     $this->sourcePath = PatternLab::makePath(['patterns', $path, "$path.escaped.html"]);
