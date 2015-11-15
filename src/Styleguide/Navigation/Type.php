@@ -17,7 +17,6 @@ class Type implements \JsonSerializable, TypeInterface {
   protected $type;
 
   public function __construct(SourceTypeInterface $type) {
-    #$this->type = $type;
     $this->name = $type->getPath();
   }
 
@@ -69,12 +68,14 @@ class Type implements \JsonSerializable, TypeInterface {
       foreach ($pattern->getPseudoPatterns() as $pseudo) {
         $this->patterns[$pseudo->getSlug()] = new Pattern($pseudo);
       }
+      ksort($this->patterns);
     }
   }
 
   public function addSubtype(\Labcoat\Sections\SubtypeInterface $subtype) {
     $name = array_pop(explode('/', $subtype->getPath()));
     $this->subtypes[$name] = new Subtype($subtype);
+    ksort($this->subtypes);
   }
 
   /**

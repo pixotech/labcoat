@@ -57,6 +57,7 @@ class Navigation implements \JsonSerializable {
   public function addType(SourceType $type) {
     $name = $this->getTypeFromPath($type->getPath());
     $this->types[$name] = new Type($type);
+    ksort($this->types);
   }
 
   public function getIndexPaths() {
@@ -81,6 +82,7 @@ class Navigation implements \JsonSerializable {
     $type = array_shift($path);
     $name = $this->escapePath(array_pop($path));
     $this->patternPaths[$type][$name] = $this->makeItemPath($pattern);
+    ksort($this->patternPaths[$type]);
   }
 
   /**
@@ -92,8 +94,10 @@ class Navigation implements \JsonSerializable {
     if (!isset($this->indexPaths[$type])) {
       $typePath = array_shift(explode('/', $subtype->getPath()));
       $this->indexPaths[$type] = ['all' => $typePath];
+      ksort($this->indexPaths);
     }
     $this->indexPaths[$type][$name] = $this->makeItemPath($subtype);
+    ksort($this->indexPaths[$type]);
   }
 
   protected function makeItemPath(ItemInterface $item) {
