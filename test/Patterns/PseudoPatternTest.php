@@ -8,7 +8,7 @@ class PseudoPatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testId() {
     $pattern = new Pattern();
-    $pattern->id = 'one/two/three';
+    $pattern->path = 'one/two/three';
     $pseudo = new PseudoPattern($pattern, 'four', __FILE__);
     $this->assertEquals("one/two/three~four", $pseudo->getId());
   }
@@ -26,7 +26,7 @@ class PseudoPatternTest extends \PHPUnit_Framework_TestCase {
     $pattern = new Pattern();
     $pattern->name = 'pattern';
     $pseudo = new PseudoPattern($pattern, 'variant', __FILE__);
-    $this->assertEquals('pattern-variant', $pseudo->getName());
+    $this->assertEquals('pattern variant', $pseudo->getName());
   }
 
   # Partial
@@ -45,7 +45,7 @@ class PseudoPatternTest extends \PHPUnit_Framework_TestCase {
     $pattern = new Pattern();
     $pattern->path = 'one/two/three';
     $pseudo = new PseudoPattern($pattern, 'four', __FILE__);
-    $this->assertEquals('one/two/three-four', $pseudo->getPath());
+    $this->assertEquals('one/two/three~four', $pseudo->getPath());
   }
 
   # State

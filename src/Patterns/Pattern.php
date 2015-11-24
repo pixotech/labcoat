@@ -23,8 +23,8 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     $this->path = $path;
     $this->file = $file;
     $this->id = $path;
-    $this->makePartial();
     $this->extractState();
+    $this->makePartial();
     $this->findData();
   }
 

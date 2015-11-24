@@ -6,16 +6,16 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
     $source = $this->makePattern();
-    $source->name = "one-two";
+    $source->slug = "one-two";
     $pattern = new Pattern($source);
     $this->assertEquals('One Two', $pattern->getName());
   }
 
   public function testPartial() {
     $source = $this->makePattern();
-    $source->partial = "one-two";
+    $source->normalizedPath = "one/two";
     $pattern = new Pattern($source);
-    $this->assertEquals($source->partial, $pattern->getPartial());
+    $this->assertEquals('one-two', $pattern->getPartial());
   }
 
   public function testPath() {
@@ -27,7 +27,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testSourcePath() {
     $source = $this->makePattern();
-    $source->path = "one/two/three";
+    $source->normalizedPath = "one/two/three";
     $pattern = new Pattern($source);
     $this->assertEquals($source->path, $pattern->getSourcePath());
   }

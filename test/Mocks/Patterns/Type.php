@@ -7,6 +7,9 @@ use Labcoat\Sections\TypeInterface;
 
 class Type implements TypeInterface {
 
+  public $name;
+  public $path;
+
   public function actsLikePattern() {
     return false;
   }
@@ -20,7 +23,7 @@ class Type implements TypeInterface {
   }
 
   public function getPath() {
-    // TODO: Implement getPath() method.
+    return $this->path;
   }
 
   public function getSlug() {
@@ -52,7 +55,7 @@ class Type implements TypeInterface {
   }
 
   public function getName() {
-    // TODO: Implement getName() method.
+    return $this->name;
   }
 
   public function hasSubtypes() {

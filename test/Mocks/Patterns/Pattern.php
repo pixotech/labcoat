@@ -2,9 +2,20 @@
 
 namespace Labcoat\Mocks\Patterns;
 
+use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
+
+  public $file;
+  public $id;
+  public $name;
+  public $normalizedPath;
+  public $partial;
+  public $path;
+  public $slug;
+  public $state;
+  public $template;
 
   public function actsLikePattern() {
     return true;
@@ -15,11 +26,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getNormalizedPath() {
-    // TODO: Implement getNormalizedPath() method.
+    return $this->normalizedPath;
   }
 
   public function getSlug() {
-    // TODO: Implement getSlug() method.
+    return $this->slug;
   }
 
   public function isPattern() {
@@ -43,11 +54,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getFile() {
-    // TODO: Implement getFile() method.
+    return $this->file;
   }
 
   public function getId() {
-    // TODO: Implement getId() method.
+    return $this->id;
   }
 
   public function getIncludedPatterns() {
@@ -55,15 +66,15 @@ class Pattern implements PatternInterface {
   }
 
   public function getName() {
-    // TODO: Implement getName() method.
+    return $this->name;
   }
 
   public function getPartial() {
-    // TODO: Implement getPartial() method.
+    return $this->partial;
   }
 
   public function getPath() {
-    // TODO: Implement getPath() method.
+    return $this->path;
   }
 
   public function getPseudoPatterns() {
@@ -71,11 +82,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getState() {
-    // TODO: Implement getState() method.
+    return $this->state;
   }
 
   public function getTemplate() {
-    // TODO: Implement getTemplate() method.
+    return $this->template;
   }
 
   public function getTime() {

@@ -22,9 +22,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('three', $pattern->getName());
   }
 
-  public function testNameHasDigits() {
+  public function testNameDoesntHaveDigits() {
     $pattern = new Pattern('01-one/02-two/03-three', __FILE__);
-    $this->assertEquals('03-three', $pattern->getName());
+    $this->assertEquals('three', $pattern->getName());
   }
 
   # Partial

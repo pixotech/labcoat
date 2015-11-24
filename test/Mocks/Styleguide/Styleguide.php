@@ -63,4 +63,16 @@ class Styleguide implements StyleguideInterface {
   public function renderPattern(PatternInterface $pattern, array $data = []) {
     return $this->rendered[$pattern->getId()];
   }
+
+  public function getMaximumWidth() {
+    // TODO: Implement getMaximumWidth() method.
+  }
+
+  public function getMinimumWidth() {
+    // TODO: Implement getMinimumWidth() method.
+  }
+
+  public function render($template, array $data = []) {
+    // TODO: Implement render() method.
+  }
 }

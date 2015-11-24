@@ -146,4 +146,12 @@ class PatternLab implements PatternLabInterface {
   public function getStyleguideAssetDirectories() {
     // TODO: Implement getStyleguideAssetDirectories() method.
   }
+
+  public function hasIgnoredExtension($path) {
+    // TODO: Implement hasIgnoredExtension() method.
+  }
+
+  public function isInIgnoredDirectory($path) {
+    // TODO: Implement isInIgnoredDirectory() method.
+  }
 }

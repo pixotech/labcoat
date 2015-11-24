@@ -11,8 +11,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('one', $type->getName());
   }
 
-  public function testNameHasDigits() {
+  public function testPathHasDigits() {
     $type = new Type('01-one');
-    $this->assertEquals('01-one', $type->getName());
+    $this->assertEquals('01-one', $type->getPath());
+  }
+
+  public function testNameDoesntHaveDigits() {
+    $type = new Type('01-one');
+    $this->assertEquals('one', $type->getName());
   }
 }

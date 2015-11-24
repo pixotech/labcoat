@@ -7,6 +7,9 @@ use Labcoat\Sections\SubtypeInterface;
 
 class Subtype implements SubtypeInterface {
 
+  public $name;
+  public $path;
+
   public function actsLikePattern() {
     return false;
   }
@@ -20,7 +23,7 @@ class Subtype implements SubtypeInterface {
   }
 
   public function getName() {
-    // TODO: Implement getName() method.
+    return $this->name;
   }
 
   public function getNormalizedPath() {
@@ -28,7 +31,7 @@ class Subtype implements SubtypeInterface {
   }
 
   public function getPath() {
-    // TODO: Implement getPath() method.
+    return $this->path;
   }
 
   public function getSlug() {
