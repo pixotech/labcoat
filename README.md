@@ -23,7 +23,7 @@ Include the Labcoat library using [Composer](https://getcomposer.org/):
 ```json
 {
   "require": {
-    "pixo/labcoat": "dev-master"
+    "pixo/labcoat": "^1.0@beta"
   }
 }
 ```
