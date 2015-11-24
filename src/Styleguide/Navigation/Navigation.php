@@ -26,11 +26,11 @@ class Navigation implements \JsonSerializable {
   protected $types = [];
 
   public static function getTypeFromPath($path) {
-    return array_shift(explode('/', $path));
+    return array_shift(explode(DIRECTORY_SEPARATOR, $path));
   }
 
   public static function escapePath($path) {
-    return preg_replace('|[/~]|', '-', $path);
+    return preg_replace('|[\\\/~]|', '-', $path);
   }
 
   public function __construct(PatternLabInterface $patternlab) {
@@ -92,7 +92,7 @@ class Navigation implements \JsonSerializable {
     $names = explode('/', $subtype->getNormalizedPath());
     list($type, $name) = $names;
     if (!isset($this->indexPaths[$type])) {
-      $typePath = array_shift(explode('/', $subtype->getPath()));
+      $typePath = array_shift(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
       $this->indexPaths[$type] = ['all' => $typePath];
       ksort($this->indexPaths);
     }

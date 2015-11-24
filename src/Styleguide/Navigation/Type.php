@@ -59,7 +59,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function addPattern(\Labcoat\Patterns\PatternInterface $pattern) {
-    $path = explode('/', $pattern->getPath());
+    $path = explode(DIRECTORY_SEPARATOR, $pattern->getPath());
     if (count($path) > 2) {
       $this->getSubtype($path[1])->addPattern($pattern);
     }
@@ -73,7 +73,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function addSubtype(\Labcoat\Sections\SubtypeInterface $subtype) {
-    $name = array_pop(explode('/', $subtype->getPath()));
+    $name = array_pop(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
     $this->subtypes[$name] = new Subtype($subtype);
     ksort($this->subtypes);
   }
