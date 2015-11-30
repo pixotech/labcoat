@@ -41,7 +41,7 @@ class Type implements \JsonSerializable, TypeInterface {
     $items = array_values($this->patterns);
     if (!empty($this->subtypes)) {
       $items[] = [
-        "patternPath" => "{$this->type}/index.html",
+        "patternPath" => "{$this->name}/index.html",
         "patternName" => "View All",
         "patternType" => $this->name,
         "patternSubtype" => "all",
