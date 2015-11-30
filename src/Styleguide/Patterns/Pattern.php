@@ -37,7 +37,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
   protected $type;
 
   public static function cast(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
-    if ($pattern->isPseudoPattern()) return new PseudoPattern($styleguide, $pattern);
+    if ($pattern->isPseudoPattern()) {
+      /** @var \Labcoat\Patterns\PseudoPatternInterface $pattern */
+      return new PseudoPattern($styleguide, $pattern);
+    }
     return new Pattern($styleguide, $pattern);
   }
 

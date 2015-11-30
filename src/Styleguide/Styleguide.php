@@ -296,7 +296,8 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   /**
    * Make file objects for all the style guide pages
    *
-   * @param \Labcoat\Styleguide\Files\FileInterface[] $pages An array of page file objects
+   * @param \Labcoat\Styleguide\Pages\PageInterface[] An array of page objects
+   * @return \Labcoat\Styleguide\Files\FileInterface[] $pages An array of page file objects
    */
   protected function makePageFiles(array $pages) {
     foreach ($pages as $page) {
