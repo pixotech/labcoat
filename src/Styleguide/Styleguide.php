@@ -78,7 +78,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   public function __construct(PatternLabInterface $patternlab) {
     $this->patternlab = $patternlab;
-    $this->cacheBuster = time();
+    $this->makeCacheBuster();
     $this->makeFiles();
   }
 
@@ -266,6 +266,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected function makeAssetFiles() {
     $this->makePatternLabAssetFiles();
     $this->makeStyleguideAssetFiles();
+  }
+
+  /**
+   */
+  protected function makeCacheBuster() {
+    $this->cacheBuster = time();
   }
 
   /**

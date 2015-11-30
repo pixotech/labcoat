@@ -114,8 +114,7 @@ class PatternLab implements PatternLabInterface {
    * @return string The normalized path
    */
   public static function normalizePath($path) {
-    $stripDigits = ['Labcoat\\PatternLab', 'stripDigits'];
-    return implode('/', array_map($stripDigits, explode(DIRECTORY_SEPARATOR, $path)));
+    return implode('/', array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
   }
 
   /**
