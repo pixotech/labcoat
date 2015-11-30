@@ -19,6 +19,7 @@ interface PatternInterface {
   public function getSourcePath();
   public function getTemplate();
   public function getTemplatePath();
+  public function getTime();
   public function patternCSS();
   public function patternCSSExists();
   public function patternDesc();
