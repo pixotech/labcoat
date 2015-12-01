@@ -3,6 +3,7 @@
 namespace Labcoat\Mocks\Patterns;
 
 use Labcoat\PatternLab;
+use Labcoat\Patterns\Configuration\ConfigurationInterface;
 use Labcoat\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
@@ -91,5 +92,13 @@ class Pattern implements PatternInterface {
 
   public function getTime() {
     // TODO: Implement getTime() method.
+  }
+
+  public function getConfiguration() {
+    // TODO: Implement getConfiguration() method.
+  }
+
+  public function setConfiguration(ConfigurationInterface $configurationInterface) {
+    // TODO: Implement setConfiguration() method.
   }
 }

@@ -3,8 +3,14 @@
 namespace Labcoat\Patterns;
 
 use Labcoat\ItemInterface;
+use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
 interface PatternInterface extends ItemInterface {
+
+  /**
+   * @return ConfigurationInterface
+   */
+  public function getConfiguration();
 
   /**
    * @return string
@@ -55,4 +61,9 @@ interface PatternInterface extends ItemInterface {
    * @return int
    */
   public function getTime();
+
+  /**
+   * @param ConfigurationInterface $configurationInterface
+   */
+  public function setConfiguration(ConfigurationInterface $configurationInterface);
 }

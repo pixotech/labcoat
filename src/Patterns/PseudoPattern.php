@@ -3,6 +3,7 @@
 namespace Labcoat\Patterns;
 
 use Labcoat\Item;
+use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
 class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInterface {
 
@@ -19,6 +20,10 @@ class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInter
     $this->id = $this->path;
     $this->name = $pattern->getName() . ' ' . str_replace('-', ' ', $variant);
     $this->dataFiles = [$dataFile];
+  }
+
+  public function getConfiguration() {
+    return $this->pattern->getConfiguration();
   }
 
   public function getFile() {
@@ -58,5 +63,9 @@ class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInter
 
   public function getVariantName() {
     return $this->variant;
+  }
+
+  public function setConfiguration(ConfigurationInterface $configuration) {
+    throw new \BadMethodCallException("Pseudo-patterns cannot have configuration");
   }
 }

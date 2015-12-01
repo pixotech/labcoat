@@ -6,12 +6,15 @@ use Labcoat\HasItemsInterface;
 use Labcoat\HasItemsTrait;
 use Labcoat\Item;
 use Labcoat\ItemInterface;
+use Labcoat\Patterns\Configuration\Configuration;
+use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
 class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInterface, PatternInterface {
 
   use HasDataTrait;
   use HasItemsTrait;
 
+  protected $configuration;
   protected $file;
   protected $includedPatterns;
   protected $partial;
@@ -37,6 +40,11 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     }
   }
 
+  public function getConfiguration() {
+    if (!isset($this->configuration)) $this->makeConfiguration();
+    return $this->configuration;
+  }
+
   public function getFile() {
     return $this->file;
   }
@@ -58,6 +66,7 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
   }
 
   public function getState() {
+    if ($this->getConfiguration()->hasState()) return $this->getConfiguration()->getState();
     return $this->state ?: '';
   }
 
@@ -70,6 +79,10 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
       $this->time = max(filemtime($this->file), $this->getDataTime());
     }
     return $this->time;
+  }
+
+  public function setConfiguration(ConfigurationInterface $configuration) {
+    $this->configuration = $configuration;
   }
 
   protected function extractState() {
@@ -109,6 +122,14 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     }
   }
 
+  protected function getConfigurationData() {
+    return json_decode(file_get_contents($this->getConfigurationPath()), true);
+  }
+
+  protected function getConfigurationPath() {
+    return dirname($this->file) . DIRECTORY_SEPARATOR . basename($this->path) . '.pattern.json';
+  }
+
   protected function getDataFilePattern() {
     return dirname($this->file) . DIRECTORY_SEPARATOR . basename($this->path) . '*.json';
   }
@@ -121,6 +142,15 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     $template = file_get_contents($this->file);
     $lexer = new \Twig_Lexer(new \Twig_Environment());
     return $lexer->tokenize($template);
+  }
+
+  protected function hasConfiguration() {
+    return file_exists($this->getConfigurationPath());
+  }
+
+  protected function makeConfiguration() {
+    $data = $this->hasConfiguration() ? $this->getConfigurationData() : [];
+    $this->configuration = new Configuration($data);
   }
 
   protected function makePartial() {
