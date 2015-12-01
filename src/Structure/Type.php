@@ -2,35 +2,18 @@
 
 namespace Labcoat\Structure;
 
-use Labcoat\Paths\Segment;
-use Labcoat\PatternLab;
-use Labcoat\Filters\PatternFilterIterator;
-use Labcoat\Filters\SubtypeFilterIterator;
-use Labcoat\Paths\Path;
 use Labcoat\Patterns\PatternInterface;
 
 class Type extends Folder implements TypeInterface {
 
-  public function findAnyPattern($name) {
-    return $this->getAllPatterns()[Segment::stripDigits($name)];
-  }
+  protected $subtypes = [];
 
   /**
-   * @param $name
-   * @return SubtypeInterface
-   * @throws \OutOfBoundsException
+   * @param PatternInterface $pattern
    */
-  public function findPattern($name) {
-    return $this->getPatterns()[Segment::stripDigits($name)];
-  }
-
-  /**
-   * @param $name
-   * @return SubtypeInterface
-   * @throws \OutOfBoundsException
-   */
-  public function findSubType($name) {
-    return $this->getSubTypes()[Segment::stripDigits($name)];
+  public function addPattern(PatternInterface $pattern) {
+    if ($pattern->hasSubtype()) $this->getOrCreateSubtype($pattern->getSubtype())->addPattern($pattern);
+    else parent::addPattern($pattern);
   }
 
   /**
@@ -38,40 +21,29 @@ class Type extends Folder implements TypeInterface {
    * @return SubtypeInterface
    */
   public function getSubtype($name) {
-    return $this->items[$name];
+    return $this->subtypes[$name];
   }
 
   /**
    * @return SubtypeInterface[]
    */
   public function getSubTypes() {
-    return iterator_to_array($this->getSubTypesIterator());
-  }
-
-  public function hasSubtypes() {
-    return count($this->getSubTypes()) > 0;
-  }
-
-  protected function getAllPatternsIterator() {
-    $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-    return new PatternFilterIterator($iterator, false);
-  }
-
-  protected function getPatternsIterator() {
-    return new PatternFilterIterator($this);
+    return $this->subtypes;
   }
 
   /**
-   * @param $path
-   * @return SubtypeInterface
+   * @return bool
    */
-  protected function getOrCreateSubtype($path) {
-    list(, $key) = explode('/', PatternLab::normalizePath($path));
-    if (!isset($this->items[$key])) $this->items[$key] = new Subtype($path);
-    return $this->items[$key];
+  public function hasSubtypes() {
+    return count($this->subtypes) > 0;
   }
 
-  protected function getSubTypesIterator() {
-    return new SubtypeFilterIterator($this);
+  /**
+   * @param $name
+   * @return SubtypeInterface
+   */
+  protected function getOrCreateSubtype($name) {
+    if (!isset($this->subtypes[$name])) $this->subtypes[$name] = new Subtype($this, $name);
+    return $this->subtypes[$name];
   }
 }

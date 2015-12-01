@@ -2,9 +2,9 @@
 
 namespace Labcoat\Styleguide\Patterns;
 
-use Labcoat\Paths\Segment;
+use Labcoat\Patterns\Paths\Segment;
 use Labcoat\PatternLab;
-use Labcoat\Paths\Path;
+use Labcoat\Patterns\Paths\Path;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\Lineage\Lineage;
 use Labcoat\Styleguide\Lineage\LineagePattern;

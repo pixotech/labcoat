@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Paths;
+namespace Labcoat\Patterns\Paths;
 
 class SegmentTest extends \PHPUnit_Framework_TestCase {
 

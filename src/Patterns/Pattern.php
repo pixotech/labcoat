@@ -2,7 +2,7 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\Paths\Path;
+use Labcoat\Patterns\Paths\Path;
 use Labcoat\Patterns\Configuration\Configuration;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
@@ -70,6 +70,10 @@ class Pattern implements PatternInterface {
     return $this->path->getState() ?: '';
   }
 
+  public function getSubtype() {
+    return $this->path->getSubtype();
+  }
+
   public function getTemplate() {
     return $this->getPath();
   }
@@ -79,6 +83,18 @@ class Pattern implements PatternInterface {
       $this->time = max(filemtime($this->file), $this->getDataTime());
     }
     return $this->time;
+  }
+
+  public function getType() {
+    return $this->path->getType();
+  }
+
+  public function hasSubtype() {
+    return $this->path->hasSubtype();
+  }
+
+  public function hasType() {
+    return $this->path->hasType();
   }
 
   public function setConfiguration(ConfigurationInterface $configuration) {

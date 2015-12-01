@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Paths;
+namespace Labcoat\Patterns\Paths;
 
 class Segment implements SegmentInterface {
 
@@ -13,11 +13,6 @@ class Segment implements SegmentInterface {
    * @var string
    */
   protected $ordering;
-
-  /**
-   * @var string
-   */
-  protected $segment;
 
   /**
    * Remove ordering digits from a path segment
@@ -34,19 +29,16 @@ class Segment implements SegmentInterface {
    * @param string $segment
    */
   public function __construct($segment) {
-    $this->segment = $segment;
+    $this->name = $segment;
     list($ordering, $name) = array_pad(explode('-', $segment, 2), 2, NULL);
     if (is_numeric($ordering)) {
       $this->ordering = $ordering;
       $this->name = $name;
     }
-    else {
-      $this->name = $segment;
-    }
   }
 
   public function __toString() {
-    return $this->segment;
+    return $this->hasOrdering() ? "{$this->ordering}-{$this->name}" : $this->name;
   }
 
   /**
@@ -61,5 +53,9 @@ class Segment implements SegmentInterface {
    */
   public function getOrdering() {
     return $this->ordering;
+  }
+
+  public function hasOrdering() {
+    return !empty($this->ordering);
   }
 }

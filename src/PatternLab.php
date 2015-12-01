@@ -13,16 +13,11 @@ use Labcoat\Assets\AssetDirectory;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
-use Labcoat\Paths\Path;
-use Labcoat\Paths\Segment;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Structure\Type;
 
 class PatternLab implements PatternLabInterface {
-
-  use HasItemsTrait;
 
   /**
    * @var \Labcoat\Assets\Asset[]
@@ -43,6 +38,11 @@ class PatternLab implements PatternLabInterface {
    * @var \Labcoat\Patterns\PatternInterface[]
    */
   protected $patterns;
+
+  /**
+   * @var \Labcoat\Structure\TypeInterface[]
+   */
+  protected $types;
 
   /**
    * Is this a partial name?
@@ -217,7 +217,7 @@ class PatternLab implements PatternLabInterface {
    * {@inheritdoc}
    */
   public function getPatterns() {
-    return iterator_to_array($this->getPatternsIterator(), false);
+    return $this->patterns;
   }
 
   /**
@@ -254,6 +254,14 @@ class PatternLab implements PatternLabInterface {
   public function getStyleguideTemplatesDirectory() {
     return $this->config->getStyleguideTemplatesDirectories();
   }
+
+  /**
+   * @return Structure\TypeInterface[]
+   */
+  public function getTypes() {
+    return $this->types;
+  }
+
 
   /**
    * {@inheritdoc}
@@ -302,39 +310,32 @@ class PatternLab implements PatternLabInterface {
   protected function findPatterns() {
     $dir = $this->getPatternsDirectory();
     $ext = $this->getPatternExtension();
-    $flags = \FilesystemIterator::SKIP_DOTS;
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
-    $pattern = '|\.' . preg_quote($ext) . '$|';
-    $matches = new \RegexIterator($files, $pattern, \RegexIterator::MATCH);
-    foreach ($matches as $match => $file) {
+    foreach ($this->getPatternFilesIterator() as $match => $file) {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      $this->patterns = new Pattern($path, $match);
-
-      // list($type) = explode(DIRECTORY_SEPARATOR, $path);
-      // $this->getOrCreateType($type)->addPattern(new Pattern($path, $match));
+      $pattern = new Pattern($path, $match);
+      $this->patterns[] = $pattern;
+      if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
     }
   }
 
   /**
    * Look for a type with the provided path, and create it if it doesn't exist
    *
-   * @param string $path The type path
+   * @param string $name The name of the type
    * @return \Labcoat\Structure\TypeInterface A pattern type object
    */
-  protected function getOrCreateType($path) {
-    list($key) = explode('/', $this->normalizePath($path));
-    if (!isset($this->items[$key])) $this->items[$key] = new Type($path);
-    return $this->items[$key];
+  protected function getOrCreateType($name) {
+    if (!isset($this->types[$name])) $this->types[$name] = new Type($name);
+    return $this->types[$name];
   }
 
-  /**
-   * Get an iterator for all patterns in the installation
-   *
-   * @return PatternFilterIterator An iterator object
-   */
-  protected function getPatternsIterator() {
-    $items = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-    return new PatternFilterIterator($items);
+  protected function getPatternFilesIterator() {
+    $dir = $this->getPatternsDirectory();
+    $ext = $this->getPatternExtension();
+    $flags = \FilesystemIterator::SKIP_DOTS;
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+    $regex = '|\.' . preg_quote($ext) . '$|';
+    return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
   }
 
   /**

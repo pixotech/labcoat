@@ -68,4 +68,20 @@ class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInter
   public function setConfiguration(ConfigurationInterface $configuration) {
     throw new \BadMethodCallException("Pseudo-patterns cannot have configuration");
   }
+
+  public function getType() {
+    // TODO: Implement getType() method.
+  }
+
+  public function hasType() {
+    // TODO: Implement hasType() method.
+  }
+
+  public function getSubtype() {
+    // TODO: Implement getSubtype() method.
+  }
+
+  public function hasSubtype() {
+    // TODO: Implement hasSubtype() method.
+  }
 }

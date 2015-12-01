@@ -9,7 +9,7 @@
 
 namespace Labcoat;
 
-interface PatternLabInterface extends HasItemsInterface {
+interface PatternLabInterface {
 
   /**
    * Get the path to the annotations file
@@ -116,6 +116,11 @@ interface PatternLabInterface extends HasItemsInterface {
    * @return string The path to the templates directory
    */
   public function getStyleguideTemplatesDirectory();
+
+  /**
+   * @return \Labcoat\Structure\TypeInterface[]
+   */
+  public function getTypes();
 
   /**
    * Does this asset path have an ignored extension?

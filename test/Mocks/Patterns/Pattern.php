@@ -101,4 +101,20 @@ class Pattern implements PatternInterface {
   public function setConfiguration(ConfigurationInterface $configurationInterface) {
     // TODO: Implement setConfiguration() method.
   }
+
+  public function getType() {
+    // TODO: Implement getType() method.
+  }
+
+  public function hasType() {
+    // TODO: Implement hasType() method.
+  }
+
+  public function getSubtype() {
+    // TODO: Implement getSubtype() method.
+  }
+
+  public function hasSubtype() {
+    // TODO: Implement hasSubtype() method.
+  }
 }

@@ -9,8 +9,8 @@
 
 namespace Labcoat;
 
-use Labcoat\Paths\Path;
-use Labcoat\Paths\Segment;
+use Labcoat\Patterns\Paths\Path;
+use Labcoat\Patterns\Paths\Segment;
 
 trait HasItemsTrait {
 

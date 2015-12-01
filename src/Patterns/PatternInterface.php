@@ -54,12 +54,32 @@ interface PatternInterface {
   /**
    * @return string
    */
+  public function getSubtype();
+
+  /**
+   * @return string
+   */
   public function getTemplate();
 
   /**
    * @return int
    */
   public function getTime();
+
+  /**
+   * @return string
+   */
+  public function getType();
+
+  /**
+   * @return bool
+   */
+  public function hasSubtype();
+
+  /**
+   * @return bool
+   */
+  public function hasType();
 
   /**
    * @param ConfigurationInterface $configurationInterface

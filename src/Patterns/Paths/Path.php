@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Paths;
+namespace Labcoat\Patterns\Paths;
 
 class Path implements \Countable, PathInterface {
 

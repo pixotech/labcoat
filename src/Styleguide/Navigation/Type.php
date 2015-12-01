@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\Paths\Segment;
+use Labcoat\Patterns\Paths\Segment;
 use Labcoat\Structure\TypeInterface as SourceTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
