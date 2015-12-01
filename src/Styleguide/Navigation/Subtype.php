@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\Paths\Path;
+use Labcoat\Paths\Segment;
 use Labcoat\Structure\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
@@ -53,7 +53,7 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   }
 
   public function getNameWithDashes() {
-    return Path::stripDigits($this->getName());
+    return Segment::stripDigits($this->getName());
   }
 
   public function getUppercaseName() {

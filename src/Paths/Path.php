@@ -2,71 +2,58 @@
 
 namespace Labcoat\Paths;
 
-class Path implements PathInterface {
+class Path implements \Countable, PathInterface {
+
+  const DELIMITER = '/';
+
+  /**
+   * @var SegmentInterface[]
+   */
+  protected $segments = [];
 
   /**
    * @var string
    */
-  protected $name;
-
-  /**
-   * @var string
-   */
-  protected $path;
-
   protected $state;
-  protected $subtype;
-  protected $type;
 
-  /**
-   * Remove ordering digits from a path segment
-   *
-   * @param string $str A path segment
-   * @return string The path without any ordering digits
-   */
-  public static function stripDigits($str) {
-    list($num, $name) = array_pad(explode('-', $str, 2), 2, NULL);
-    return is_numeric($num) ? $name : $str;
+  public static function split($path) {
+    return preg_split('|[\\\/]+|', $path, -1, PREG_SPLIT_NO_EMPTY);
   }
 
   public function __construct($path) {
-    $this->path = $path;
-    if (false !== strpos($this->path, '@')) {
-      list($this->path, $this->state) = explode('@', $this->path, 2);
+    if (false !== strpos($path, '@')) {
+      list($path, $this->state) = explode('@', $path, 2);
     }
-    $segments = explode(DIRECTORY_SEPARATOR, $this->path);
-    if (count($segments) > 1) {
-      $this->type = array_shift($segments);
-    }
-    if (count($segments) > 1) {
-      $this->subtype = array_shift($segments);
-    }
-    $this->name = implode('--', $segments);
+    $this->makeSegments($path);
   }
 
   public function __toString() {
-    return (string)$this->path;
+    return implode(self::DELIMITER, $this->segments);
+  }
+
+  public function count() {
+    return count($this->segments);
   }
 
   /**
    * @return string
    */
   public function getPartial() {
-    return !empty($this->type) ? "{$this->type}-{$this->name}" : $this->name;
+    return $this->hasType() ? implode('-', [$this->getType(), $this->getName()]) : $this->getName();
   }
 
   /**
    * @return string
    */
   public function getPath() {
-    return $this->path;
+    return $this->__toString();
   }
 
   /**
    * @return string
    */
   public function getName() {
-    return $this->name;
+    return implode('--', array_slice($this->segments, $this->getNameSegmentIndex()));
   }
 
   /**
@@ -80,13 +67,33 @@ class Path implements PathInterface {
    * @return string|null
    */
   public function getSubtype() {
-    return $this->subtype;
+    return $this->hasSubtype() ? (string)$this->segments[1] : null;
   }
 
   /**
    * @return string|null
    */
   public function getType() {
-    return $this->type;
+    return $this->hasType() ? (string)$this->segments[0] : null;
+  }
+
+  public function hasSubtype() {
+    return $this->count() > 2;
+  }
+
+  public function hasType() {
+    return $this->count() > 1;
+  }
+
+  protected function getNameSegmentIndex() {
+    if ($this->hasSubtype()) return 2;
+    elseif ($this->hasType()) return 1;
+    return 0;
+  }
+
+  protected function makeSegments($path) {
+    foreach (self::split($path) as $segment) {
+      $this->segments[] = new Segment($segment);
+    }
   }
 }

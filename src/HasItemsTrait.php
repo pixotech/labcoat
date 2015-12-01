@@ -10,6 +10,7 @@
 namespace Labcoat;
 
 use Labcoat\Paths\Path;
+use Labcoat\Paths\Segment;
 
 trait HasItemsTrait {
 
@@ -72,7 +73,7 @@ trait HasItemsTrait {
    * @see http://php.net/manual/en/iterator.key.php Iterator::key
    */
   public function key() {
-    return Path::stripDigits($this->getIteratorKey());
+    return Segment::stripDigits($this->getIteratorKey());
   }
 
   /**

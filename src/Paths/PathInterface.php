@@ -9,4 +9,14 @@ interface PathInterface {
   public function getState();
   public function getSubtype();
   public function getType();
+
+  /**
+   * @return bool
+   */
+  public function hasSubtype();
+
+  /**
+   * @return bool
+   */
+  public function hasType();
 }

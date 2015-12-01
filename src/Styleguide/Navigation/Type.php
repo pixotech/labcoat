@@ -2,8 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\PatternLab;
-use Labcoat\Paths\Path;
+use Labcoat\Paths\Segment;
 use Labcoat\Structure\TypeInterface as SourceTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
@@ -30,7 +29,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function getNameWithDashes() {
-    return Path::stripDigits($this->getName());
+    return Segment::stripDigits($this->getName());
   }
 
   public function getUppercaseName() {
@@ -38,7 +37,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function jsonSerialize() {
-    $type = Path::stripDigits($this->name);
+    $type = Segment::stripDigits($this->name);
     $items = array_values($this->patterns);
     if (!empty($this->subtypes)) {
       $items[] = [

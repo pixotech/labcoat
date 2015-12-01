@@ -2,6 +2,7 @@
 
 namespace Labcoat\Structure;
 
+use Labcoat\Paths\Segment;
 use Labcoat\PatternLab;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\SubtypeFilterIterator;
@@ -11,7 +12,7 @@ use Labcoat\Patterns\PatternInterface;
 class Type extends Folder implements TypeInterface {
 
   public function findAnyPattern($name) {
-    return $this->getAllPatterns()[Path::stripDigits($name)];
+    return $this->getAllPatterns()[Segment::stripDigits($name)];
   }
 
   /**
@@ -20,7 +21,7 @@ class Type extends Folder implements TypeInterface {
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[Path::stripDigits($name)];
+    return $this->getPatterns()[Segment::stripDigits($name)];
   }
 
   /**
@@ -29,7 +30,7 @@ class Type extends Folder implements TypeInterface {
    * @throws \OutOfBoundsException
    */
   public function findSubType($name) {
-    return $this->getSubTypes()[Path::stripDigits($name)];
+    return $this->getSubTypes()[Segment::stripDigits($name)];
   }
 
   /**

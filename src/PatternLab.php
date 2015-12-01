@@ -16,6 +16,7 @@ use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
 use Labcoat\Paths\Path;
+use Labcoat\Paths\Segment;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Structure\Type;
 
