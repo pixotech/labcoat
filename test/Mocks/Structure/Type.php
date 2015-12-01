@@ -3,12 +3,15 @@
 namespace Labcoat\Mocks\Structure;
 
 use Labcoat\Patterns\PatternInterface;
+use Labcoat\Structure\SubtypeInterface;
 use Labcoat\Structure\TypeInterface;
 
 class Type implements TypeInterface {
 
   public $name;
   public $path;
+  public $patterns = [];
+  public $subtypes = [];
 
   public function addPattern(PatternInterface $pattern) {
     // TODO: Implement addPattern() method.
@@ -23,10 +26,14 @@ class Type implements TypeInterface {
   }
 
   public function getPatterns() {
-    // TODO: Implement getPatterns() method.
+    return $this->patterns;
   }
 
   public function hasSubtypes() {
     // TODO: Implement hasSubtypes() method.
+  }
+
+  public function getSubtypes() {
+    return $this->subtypes;
   }
 }

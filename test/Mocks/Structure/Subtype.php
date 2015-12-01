@@ -8,6 +8,7 @@ use Labcoat\Structure\SubtypeInterface;
 class Subtype implements SubtypeInterface {
 
   public $name;
+  public $patterns = [];
   public $type;
 
   public function addPattern(PatternInterface $pattern) {
@@ -23,7 +24,7 @@ class Subtype implements SubtypeInterface {
   }
 
   public function getPatterns() {
-    // TODO: Implement getPatterns() method.
+    return $this->patterns;
   }
 
   public function getType() {

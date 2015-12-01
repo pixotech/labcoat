@@ -15,10 +15,6 @@ class PatternLab implements PatternLabInterface {
     return $this->ignoredExtensions;
   }
 
-  public function copyAssetsTo($directoryPath) {
-    // TODO: Implement copyAssetsTo() method.
-  }
-
   public function getIgnoredDirectories() {
     // TODO: Implement getIgnoredDirectories() method.
   }
@@ -153,5 +149,9 @@ class PatternLab implements PatternLabInterface {
 
   public function isInIgnoredDirectory($path) {
     // TODO: Implement isInIgnoredDirectory() method.
+  }
+
+  public function getTypes() {
+    // TODO: Implement getTypes() method.
   }
 }

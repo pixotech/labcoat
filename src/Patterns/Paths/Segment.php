@@ -58,4 +58,10 @@ class Segment implements SegmentInterface {
   public function hasOrdering() {
     return !empty($this->ordering);
   }
+
+  public function normalize() {
+    $normalized = clone $this;
+    $normalized->ordering = null;
+    return $normalized;
+  }
 }

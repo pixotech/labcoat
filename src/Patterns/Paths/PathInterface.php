@@ -10,6 +10,8 @@ interface PathInterface {
   public function getSubtype();
   public function getType();
 
+  public function normalize();
+
   /**
    * @return bool
    */

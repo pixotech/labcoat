@@ -10,4 +10,6 @@ interface SegmentInterface {
    * @return bool
    */
   public function hasOrdering();
+
+  public function normalize();
 }

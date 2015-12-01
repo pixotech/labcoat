@@ -8,7 +8,7 @@ use Labcoat\Patterns\PatternInterface as SourcePattern;
 use Labcoat\Structure\SubtypeInterface as SourceSubtype;
 use Labcoat\Structure\TypeInterface as SourceType;
 
-class Navigation implements \JsonSerializable {
+class Navigation implements NavigationInterface, \JsonSerializable {
 
   /**
    * @var array

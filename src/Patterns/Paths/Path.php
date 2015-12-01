@@ -85,6 +85,14 @@ class Path implements \Countable, PathInterface {
     return $this->count() > 1;
   }
 
+  public function normalize() {
+    $normalized = clone $this;
+    foreach ($normalized->segments as $i => $segment) {
+      $normalized->segments[$i] = $segment->normalize();
+    }
+    return $normalized;
+  }
+
   protected function getNameSegmentIndex() {
     if ($this->hasSubtype()) return 2;
     elseif ($this->hasType()) return 1;

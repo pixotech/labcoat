@@ -6,14 +6,14 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
     $source = $this->makePattern();
-    $source->slug = "one-two";
+    $source->name = "one-two";
     $pattern = new Pattern($source);
     $this->assertEquals('One Two', $pattern->getName());
   }
 
   public function testPartial() {
     $source = $this->makePattern();
-    $source->normalizedPath = "one/two";
+    $source->partial = "one-two";
     $pattern = new Pattern($source);
     $this->assertEquals('one-two', $pattern->getPartial());
   }
