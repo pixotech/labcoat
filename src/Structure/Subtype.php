@@ -2,23 +2,27 @@
 
 namespace Labcoat\Structure;
 
-use Labcoat\Patterns\PatternInterface;
-
 class Subtype extends Folder implements SubtypeInterface {
 
-  public function __construct($path) {
-    $this->path = $path;
-    $this->id = $path;
-  }
+  /**
+   * @var TypeInterface
+   */
+  protected $type;
 
-  public function getAllPatterns() {
-    return $this->getPatterns();
+  /**
+   * @param TypeInterface $type
+   * @param string $name
+   * @param array $patterns
+   */
+  public function __construct(TypeInterface $type, $name, array $patterns = []) {
+    parent::__construct($name, $patterns);
+    $this->type = $type;
   }
 
   /**
-   * @return PatternInterface[]
+   * @return TypeInterface
    */
-  public function getPatterns() {
-    return $this->items;
+  public function getType() {
+    return $this->type;
   }
 }

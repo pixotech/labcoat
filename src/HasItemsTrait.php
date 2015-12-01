@@ -9,7 +9,7 @@
 
 namespace Labcoat;
 
-use Labcoat\Patterns\Path;
+use Labcoat\Paths\Path;
 
 trait HasItemsTrait {
 

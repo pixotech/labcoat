@@ -2,8 +2,11 @@
 
 namespace Labcoat\Structure;
 
-use Labcoat\ItemInterface;
+use Labcoat\Patterns\PatternInterface;
 
-interface FolderInterface extends ItemInterface {
-  
+interface FolderInterface {
+  public function addPattern(PatternInterface $pattern);
+  public function addPatterns(array $patterns);
+  public function getName();
+  public function getPatterns();
 }

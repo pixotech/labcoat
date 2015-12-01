@@ -1,15 +1,19 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\Paths;
 
 class Path implements PathInterface {
 
   /**
    * @var string
    */
+  protected $name;
+
+  /**
+   * @var string
+   */
   protected $path;
 
-  protected $slug;
   protected $state;
   protected $subtype;
   protected $type;
@@ -30,14 +34,14 @@ class Path implements PathInterface {
     if (false !== strpos($this->path, '@')) {
       list($this->path, $this->state) = explode('@', $this->path, 2);
     }
-    $segments = array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $this->path));
+    $segments = explode(DIRECTORY_SEPARATOR, $this->path);
     if (count($segments) > 1) {
       $this->type = array_shift($segments);
     }
     if (count($segments) > 1) {
       $this->subtype = array_shift($segments);
     }
-    $this->slug = implode('--', $segments);
+    $this->name = implode('--', $segments);
   }
 
   public function __toString() {
@@ -48,7 +52,7 @@ class Path implements PathInterface {
    * @return string
    */
   public function getPartial() {
-    return !empty($this->type) ? "{$this->type}-{$this->slug}" : $this->slug;
+    return !empty($this->type) ? "{$this->type}-{$this->name}" : $this->name;
   }
 
   /**
@@ -61,8 +65,8 @@ class Path implements PathInterface {
   /**
    * @return string
    */
-  public function getSlug() {
-    return $this->slug;
+  public function getName() {
+    return $this->name;
   }
 
   /**

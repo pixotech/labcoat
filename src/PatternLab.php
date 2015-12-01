@@ -15,7 +15,7 @@ use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
-use Labcoat\Patterns\Path;
+use Labcoat\Paths\Path;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Structure\Type;
 
@@ -120,7 +120,7 @@ class PatternLab implements PatternLabInterface {
    * @return string The normalized path
    */
   public static function normalizePath($path) {
-    return implode('/', array_map(['Labcoat\\Patterns\\Path', 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
+    return implode('/', array_map(['Labcoat\Paths\Path', 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
   }
 
 

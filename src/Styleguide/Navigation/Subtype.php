@@ -2,8 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\PatternLab;
-use Labcoat\Patterns\Path;
+use Labcoat\Paths\Path;
 use Labcoat\Structure\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
@@ -15,9 +14,10 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   protected $type;
 
   public function __construct(SourceInterface $subtype) {
-    list ($this->type, $this->subtype) = explode(DIRECTORY_SEPARATOR, $subtype->getPath());
-    $this->partial = Navigation::escapePath($subtype->getNormalizedPath());
-    $this->path = Navigation::escapePath($subtype->getPath());
+    $this->type = $subtype->getType()->getName();
+    $this->subtype = $subtype->getName();
+    $this->partial = Navigation::escapePath($subtype->getName());
+    $this->path = Navigation::escapePath($subtype->getName());
   }
 
   public function jsonSerialize() {

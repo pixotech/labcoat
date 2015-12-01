@@ -2,10 +2,9 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\ItemInterface;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
-interface PatternInterface extends ItemInterface {
+interface PatternInterface {
 
   /**
    * @return ConfigurationInterface

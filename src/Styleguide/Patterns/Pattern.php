@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\Path;
+use Labcoat\Paths\Path;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\Lineage\Lineage;
 use Labcoat\Styleguide\Lineage\LineagePattern;

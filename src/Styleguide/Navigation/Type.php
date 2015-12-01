@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\Path;
+use Labcoat\Paths\Path;
 use Labcoat\Structure\TypeInterface as SourceTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
@@ -18,7 +18,7 @@ class Type implements \JsonSerializable, TypeInterface {
   protected $type;
 
   public function __construct(SourceTypeInterface $type) {
-    $this->name = $type->getPath();
+    $this->name = $type->getName();
   }
 
   public function getLowercaseName() {
@@ -74,7 +74,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function addSubtype(\Labcoat\Structure\SubtypeInterface $subtype) {
-    $name = array_pop(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
+    $name = array_pop(explode(DIRECTORY_SEPARATOR, $subtype->getName()));
     $this->subtypes[$name] = new Subtype($subtype);
     ksort($this->subtypes);
   }

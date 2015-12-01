@@ -2,17 +2,13 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\HasItemsInterface;
-use Labcoat\HasItemsTrait;
-use Labcoat\Item;
-use Labcoat\ItemInterface;
+use Labcoat\Paths\Path;
 use Labcoat\Patterns\Configuration\Configuration;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
-class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInterface, PatternInterface {
+class Pattern implements PatternInterface {
 
   use HasDataTrait;
-  use HasItemsTrait;
 
   protected $configuration;
   protected $file;
@@ -28,15 +24,6 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     $this->findData();
   }
 
-  public function add(ItemInterface $item) {
-    if ($item instanceof PseudoPatternInterface) {
-      $this->items[$item->getVariantName()] = $item;
-    }
-    else {
-      throw new \InvalidArgumentException();
-    }
-  }
-
   public function getConfiguration() {
     if (!isset($this->configuration)) $this->makeConfiguration();
     return $this->configuration;
@@ -46,13 +33,25 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     return $this->file;
   }
 
+  public function getId() {
+    return $this->id;
+  }
+
   public function getIncludedPatterns() {
     if (!isset($this->includedPatterns)) $this->findIncludedPatterns();
     return $this->includedPatterns;
   }
 
+  public function getName() {
+    return $this->path->getName();
+  }
+
   public function getPartial() {
     return $this->path->getPartial();
+  }
+
+  public function getPath() {
+    return $this->path->getPath();
   }
 
   /**
@@ -63,7 +62,7 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
   }
 
   public function getSlug() {
-    return $this->path->getSlug();
+    return $this->path->getName();
   }
 
   public function getState() {
