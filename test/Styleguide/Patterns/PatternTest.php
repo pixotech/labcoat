@@ -108,13 +108,13 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
   public function testPatternLineages() {
     $source = $this->makeSourcePattern();
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals([], $pattern->patternLineages());
+    $this->assertEquals([], $pattern->patternLineages()->jsonSerialize());
   }
 
   public function testPatternLineagesR() {
     $source = $this->makeSourcePattern();
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals([], $pattern->patternLineagesR());
+    $this->assertEquals([], $pattern->patternLineagesR()->jsonSerialize());
   }
 
   public function testPatternLink() {
