@@ -7,7 +7,7 @@ use Labcoat\HasItemsTrait;
 use Labcoat\Item;
 use Labcoat\Patterns\PatternInterface;
 
-abstract class Section extends Item implements \Countable, HasItemsInterface, SectionInterface {
+abstract class Folder extends Item implements \Countable, HasItemsInterface, FolderInterface {
 
   use HasItemsTrait;
 

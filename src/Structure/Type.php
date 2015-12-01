@@ -9,7 +9,7 @@ use Labcoat\Filters\SubtypeFilterIterator;
 use Labcoat\Patterns\Path;
 use Labcoat\Patterns\PatternInterface;
 
-class Type extends Section implements ItemInterface, TypeInterface {
+class Type extends Folder implements ItemInterface, TypeInterface {
 
   public function __construct($path) {
     $this->id = $path;

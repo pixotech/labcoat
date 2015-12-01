@@ -4,7 +4,7 @@ namespace Labcoat\Structure;
 
 use Labcoat\Patterns\PatternInterface;
 
-interface TypeInterface extends SectionInterface {
+interface TypeInterface extends FolderInterface {
 
   public function addPattern(PatternInterface $pattern);
 

@@ -3,7 +3,7 @@
 namespace Labcoat;
 
 use Labcoat\Patterns\PatternInterface;
-use Labcoat\Structure\SectionInterface;
+use Labcoat\Structure\FolderInterface;
 use Labcoat\Patterns\PseudoPatternInterface;
 use Labcoat\Structure\SubtypeInterface;
 use Labcoat\Structure\TypeInterface;
@@ -44,7 +44,7 @@ class Item implements ItemInterface {
   }
 
   public function actsLikeSection() {
-    return $this instanceof SectionInterface;
+    return $this instanceof FolderInterface;
   }
 
   public function getId() {

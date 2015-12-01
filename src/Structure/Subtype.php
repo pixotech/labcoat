@@ -4,7 +4,7 @@ namespace Labcoat\Structure;
 
 use Labcoat\Patterns\PatternInterface;
 
-class Subtype extends Section implements SubtypeInterface {
+class Subtype extends Folder implements SubtypeInterface {
 
   public function __construct($path) {
     $this->path = $path;

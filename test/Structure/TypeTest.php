@@ -1,8 +1,6 @@
 <?php
 
-namespace Labcoat\Patterns;
-
-use Labcoat\Structure\Type;
+namespace Labcoat\Structure;
 
 class TypeTest extends \PHPUnit_Framework_TestCase {
 
