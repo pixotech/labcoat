@@ -9,9 +9,9 @@ class SubTypeIndexPage extends IndexPage implements SubTypeIndexPageInterface {
   protected $partial;
   protected $path;
 
-  public function __construct(SubtypeInterface $subType) {
-    $this->partial = str_replace('/', '-', $subType->getNormalizedPath());
-    $this->path = str_replace(DIRECTORY_SEPARATOR, '-', $subType->getPath());
+  public function __construct(SubtypeInterface $subtype) {
+    $this->partial = $subtype->getName();
+    $this->path = str_replace(DIRECTORY_SEPARATOR, '-', $subtype->getName());
   }
 
   public function getPath() {

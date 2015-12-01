@@ -293,6 +293,17 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->makeLatestChangeFile();
   }
 
+  protected function makeIndexPages() {
+    $pages = [new StyleguideIndexPage()];
+    foreach ($this->patternlab->getTypes() as $type) {
+      $pages[] = new TypeIndexPage($type);
+      foreach ($type->getSubtypes() as $subtype) {
+        $pages[] = new SubTypeIndexPage($subtype);
+      }
+    }
+    return $pages;
+  }
+
   /**
    * Make the latest change file object
    */
@@ -323,33 +334,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @return \Labcoat\Styleguide\Pages\PageInterface[] An array of page objects
    */
   protected function makePages() {
-    /** @var \Labcoat\Styleguide\Pages\IndexPageInterface[] $pages */
-    $pages = [];
-    $index = new StyleguideIndexPage();
-    $items = new \RecursiveIteratorIterator($this->patternlab, \RecursiveIteratorIterator::SELF_FIRST);
-    foreach ($items as $item) {
-      $id = $item->getId();
-      if ($item->actsLikePattern()) {
-        $this->patterns[$id] = Pattern::cast($this, $item);
-        $pages[$id] = new PatternPage($this->patterns[$id]);
-        $index->addPattern($this->patterns[$id]);
-        $path = dirname($item->getPath());
-        while ($path && $path != '.') {
-          if (!isset($pages[$path])) break;
-          $pages[$path]->addPattern($this->patterns[$id]);
-          $path = dirname($path);
-        }
-      }
-      elseif ($item->isType()) {
-        $pages[$id] = new TypeIndexPage($item);
-      }
-      elseif ($item->isSubtype()) {
-        $pages[$id] = new SubTypeIndexPage($item);
-      }
-    }
-    $this->findPatternLineages();
-    $pages[] = $index;
-    return $pages;
+    return array_merge($this->makeIndexPages(), $this->makePatternPages());
   }
 
   /**
@@ -359,6 +344,14 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     foreach ($this->patternlab->getAssets() as $asset) {
       $this->addFile(new AssetFile($asset));
     }
+  }
+
+  protected function makePatternPages() {
+    $pages = [];
+    foreach ($this->patternlab->getPatterns() as $pattern) {
+      $pages[] = new PatternPage(new Pattern($this, $pattern));
+    }
+    return $pages;
   }
 
   /**

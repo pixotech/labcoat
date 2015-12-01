@@ -7,8 +7,8 @@ use Labcoat\Structure\TypeInterface;
 class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
 
   public function __construct(TypeInterface $type) {
-    $this->partial = $type->getSlug() . '-all';
-    $this->path = $type->getPath();
+    $this->partial = $type->getName() . '-all';
+    $this->path = $type->getName();
   }
 
   public function getPath() {
