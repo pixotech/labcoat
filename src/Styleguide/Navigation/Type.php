@@ -29,6 +29,20 @@ class Type implements \JsonSerializable, TypeInterface {
     return Segment::stripDigits($this->getName());
   }
 
+  /**
+   * @return PatternInterface[]
+   */
+  public function getPatterns() {
+    return $this->patterns;
+  }
+
+  /**
+   * @return SubtypeInterface[]
+   */
+  public function getSubtypes() {
+    return $this->subtypes;
+  }
+
   public function getUppercaseName() {
     return ucwords($this->getLowercaseName());
   }
@@ -81,5 +95,9 @@ class Type implements \JsonSerializable, TypeInterface {
    */
   public function getSubtype($name) {
     return $this->subtypes[$name];
+  }
+
+  public function hasSubtypes() {
+    return !empty($this->subtypes);
   }
 }

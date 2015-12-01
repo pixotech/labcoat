@@ -8,5 +8,21 @@ interface TypeInterface {
   public function getLowercaseName();
   public function getName();
   public function getNameWithDashes();
+
+  /**
+   * @return PatternInterface[]
+   */
+  public function getPatterns();
+
+  /**
+   * @return SubtypeInterface[]
+   */
+  public function getSubtypes();
+
   public function getUppercaseName();
+
+  /**
+   * @return bool
+   */
+  public function hasSubtypes();
 }

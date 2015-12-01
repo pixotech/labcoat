@@ -37,6 +37,7 @@ class Navigation implements \JsonSerializable {
     foreach ($patternlab->getTypes() as $type) {
       $this->types[] = new Type($type);
     }
+    $this->makePaths();
   }
 
   public function getIndexPaths() {
@@ -81,5 +82,22 @@ class Navigation implements \JsonSerializable {
 
   protected function makeItemPath(ItemInterface $item) {
     return $this->escapePath($item->getPath());
+  }
+
+  protected function makePaths() {
+    foreach ($this->types as $type) {
+      foreach ($type->getSubtypes() as $subtype) {
+        $this->indexPaths[$type->getName()][$subtype->getName()] = $subtype->getPartial();
+        foreach ($subtype->getPatterns() as $pattern) {
+          $this->patternPaths[$type->getName()][$pattern->getName()] = $pattern->getPartial();
+        }
+      }
+      if ($type->hasSubtypes()) {
+        $this->indexPaths[$type->getName()]['all'] = $type->getName();
+      }
+      foreach ($type->getPatterns() as $pattern) {
+        $this->patternPaths[$type->getName()][$pattern->getName()] = $pattern->getPartial();
+      }
+    }
   }
 }
