@@ -8,6 +8,7 @@ interface PatternInterface {
   public function getBreadcrumb();
   public function getContent();
   public function getData();
+  public function getEscapedSourcePath();
   public function getId();
   public function getIncludedPatterns();
   public function getName();

@@ -10,6 +10,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   protected $content;
   protected $data;
+  protected $escapedSourcePath;
   protected $file;
   protected $id;
 
@@ -95,6 +96,13 @@ class Pattern implements \JsonSerializable, PatternInterface {
   public function getData() {
     if (!isset($this->data)) $this->makeData();
     return $this->data;
+  }
+
+  /**
+   * @return string
+   */
+  public function getEscapedSourcePath() {
+    return $this->escapedSourcePath;
   }
 
   public function getId() {
@@ -277,9 +285,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   protected function makePaths(SourcePatternInterface $pattern) {
     $path = preg_replace('|[\\\/~]|', '-', $pattern->getPath());
+    $this->escapedSourcePath = PatternLab::makePath(['patterns', $path, "$path.escaped.html"]);
     $this->path = PatternLab::makePath([$path, "$path.html"]);
     $this->pagePath = PatternLab::makePath(['patterns', $this->path]);
-    $this->sourcePath = PatternLab::makePath(['patterns', $path, "$path.escaped.html"]);
+    $this->sourcePath = PatternLab::makePath(['patterns', $path, "$path.pattern.html"]);
     $this->templatePath = PatternLab::makePath(['patterns', $path, "$path.twig"]);
     $this->lineagePath = PatternLab::makePath(['..', '..', $this->pagePath]);
   }

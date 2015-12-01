@@ -7,7 +7,7 @@ use Labcoat\Styleguide\StyleguideInterface;
 class PatternSourceFile extends PatternFile implements PatternSourceFileInterface {
 
   public function put(StyleguideInterface $styleguide, $path) {
-    file_put_contents($path, htmlentities($this->pattern->getContent()));
+    file_put_contents($path, $this->pattern->getContent());
   }
 
   public function getPath() {

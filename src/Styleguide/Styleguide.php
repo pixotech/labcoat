@@ -18,6 +18,7 @@ use Labcoat\Styleguide\Files\DataFile;
 use Labcoat\Styleguide\Files\FileInterface;
 use Labcoat\Styleguide\Files\LatestChangeFile;
 use Labcoat\Styleguide\Files\PageFile;
+use Labcoat\Styleguide\Files\PatternEscapedSourceFile;
 use Labcoat\Styleguide\Files\PatternSourceFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
 use Labcoat\Styleguide\Files\StyleguideAssetFile;
@@ -310,6 +311,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $this->addFile(new PageFile($page));
       if ($page instanceof PatternPageInterface) {
         $this->addFile(new PatternSourceFile($page->getPattern()));
+        $this->addFile(new PatternEscapedSourceFile($page->getPattern()));
         $this->addFile(new PatternTemplateFile($page->getPattern()));
       }
     }
