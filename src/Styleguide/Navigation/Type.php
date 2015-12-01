@@ -4,7 +4,7 @@ namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
 use Labcoat\Patterns\Path;
-use Labcoat\Sections\TypeInterface as SourceTypeInterface;
+use Labcoat\Structure\TypeInterface as SourceTypeInterface;
 
 class Type implements \JsonSerializable, TypeInterface {
 
@@ -73,7 +73,7 @@ class Type implements \JsonSerializable, TypeInterface {
     }
   }
 
-  public function addSubtype(\Labcoat\Sections\SubtypeInterface $subtype) {
+  public function addSubtype(\Labcoat\Structure\SubtypeInterface $subtype) {
     $name = array_pop(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
     $this->subtypes[$name] = new Subtype($subtype);
     ksort($this->subtypes);

@@ -3,10 +3,10 @@
 namespace Labcoat;
 
 use Labcoat\Patterns\PatternInterface;
-use Labcoat\Sections\SectionInterface;
+use Labcoat\Structure\SectionInterface;
 use Labcoat\Patterns\PseudoPatternInterface;
-use Labcoat\Sections\SubtypeInterface;
-use Labcoat\Sections\TypeInterface;
+use Labcoat\Structure\SubtypeInterface;
+use Labcoat\Structure\TypeInterface;
 
 class Item implements ItemInterface {
 

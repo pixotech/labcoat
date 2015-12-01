@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Sections;
+namespace Labcoat\Structure;
 
 use Labcoat\HasItemsInterface;
 use Labcoat\HasItemsTrait;

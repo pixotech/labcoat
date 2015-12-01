@@ -5,8 +5,8 @@ namespace Labcoat\Styleguide\Navigation;
 use Labcoat\ItemInterface;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\PatternInterface as SourcePattern;
-use Labcoat\Sections\SubtypeInterface as SourceSubtype;
-use Labcoat\Sections\TypeInterface as SourceType;
+use Labcoat\Structure\SubtypeInterface as SourceSubtype;
+use Labcoat\Structure\TypeInterface as SourceType;
 
 class Navigation implements \JsonSerializable {
 

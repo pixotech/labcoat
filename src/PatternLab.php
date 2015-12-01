@@ -17,7 +17,7 @@ use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
 use Labcoat\Patterns\Path;
 use Labcoat\Patterns\Pattern;
-use Labcoat\Sections\Type;
+use Labcoat\Structure\Type;
 
 class PatternLab implements PatternLabInterface {
 
@@ -318,7 +318,7 @@ class PatternLab implements PatternLabInterface {
    * Look for a type with the provided path, and create it if it doesn't exist
    *
    * @param string $path The type path
-   * @return \Labcoat\Sections\TypeInterface A pattern type object
+   * @return \Labcoat\Structure\TypeInterface A pattern type object
    */
   protected function getOrCreateType($path) {
     list($key) = explode('/', $this->normalizePath($path));

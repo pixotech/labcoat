@@ -4,7 +4,7 @@ namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
 use Labcoat\Patterns\Path;
-use Labcoat\Sections\SubtypeInterface as SourceInterface;
+use Labcoat\Structure\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
 

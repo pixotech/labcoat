@@ -3,7 +3,7 @@
 namespace Labcoat\Mocks\Patterns;
 
 use Labcoat\Patterns\PatternInterface;
-use Labcoat\Sections\TypeInterface;
+use Labcoat\Structure\TypeInterface;
 
 class Type implements TypeInterface {
 

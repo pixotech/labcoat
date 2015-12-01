@@ -2,7 +2,7 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\Sections\Type;
+use Labcoat\Structure\Type;
 
 class TypeTest extends \PHPUnit_Framework_TestCase {
 
