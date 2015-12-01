@@ -4,6 +4,9 @@ namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\PatternLab;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
+use Labcoat\Styleguide\Lineage\Lineage;
+use Labcoat\Styleguide\Lineage\LineagePattern;
+use Labcoat\Styleguide\Lineage\ReverseLineage;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
@@ -222,25 +225,19 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function patternLineages() {
-    $patterns = [];
+    $lineage = new Lineage();
     foreach ($this->includedPatterns as $pattern) {
-      $patterns[] = [
-        'lineagePattern' => $pattern->getPartial(),
-        'lineagePath' => $pattern->getLineagePath(),
-      ];
+      $lineage->addPattern($pattern);
     }
-    return $patterns;
+    return $lineage;
   }
 
   public function patternLineagesR() {
-    $patterns = [];
+    $lineage = new ReverseLineage();
     foreach ($this->includingPatterns as $pattern) {
-      $patterns[] = [
-        'lineagePattern' => $pattern->getPartial(),
-        'lineagePath' => $pattern->getLineagePath(),
-      ];
+      $lineage->addPattern($pattern);
     }
-    return $patterns;
+    return $lineage;
   }
 
   public function patternLink() {
