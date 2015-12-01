@@ -86,22 +86,6 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     $this->configuration = $configuration;
   }
 
-  protected function extractPathInfo() {
-    $path = $this->path;
-    if (false !== strpos($path, '@')) {
-      list($path, $this->state) = explode('@', $path, 2);
-    }
-    $segments = array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path));
-    if (count($segments) > 1) {
-      $this->type = array_shift($segments);
-    }
-    if (count($segments) > 1) {
-      $this->subtype = array_shift($segments);
-    }
-    $this->slug = implode('--', $segments);
-    $this->partial = !empty($this->type) ? "{$this->type}-{$this->slug}" : $this->slug;
-  }
-
   protected function findData() {
     foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');

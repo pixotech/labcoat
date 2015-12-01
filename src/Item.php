@@ -53,7 +53,7 @@ class Item implements ItemInterface {
 
   public function getName() {
     if (!isset($this->name)) {
-      $this->name = str_replace('-', ' ', $this->getSlug());
+      $this->name = preg_replace('/[-]+/', ' ', $this->getSlug());
     }
     return $this->name;
   }

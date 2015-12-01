@@ -27,10 +27,10 @@ class Path implements PathInterface {
 
   public function __construct($path) {
     $this->path = $path;
-    if (false !== strpos($path, '@')) {
-      list($path, $this->state) = explode('@', $path, 2);
+    if (false !== strpos($this->path, '@')) {
+      list($this->path, $this->state) = explode('@', $this->path, 2);
     }
-    $segments = array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path));
+    $segments = array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $this->path));
     if (count($segments) > 1) {
       $this->type = array_shift($segments);
     }
