@@ -3,6 +3,7 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLab;
+use Labcoat\Patterns\Path;
 use Labcoat\Sections\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
@@ -52,7 +53,7 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
   }
 
   public function getNameWithDashes() {
-    return PatternLab::stripDigits($this->getName());
+    return Path::stripDigits($this->getName());
   }
 
   public function getUppercaseName() {

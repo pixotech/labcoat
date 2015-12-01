@@ -15,6 +15,7 @@ use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\PatternSelectorFilterIterator;
+use Labcoat\Patterns\Path;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Sections\Type;
 
@@ -36,6 +37,11 @@ class PatternLab implements PatternLabInterface {
    * @var array|null
    */
   protected $globalData;
+
+  /**
+   * @var \Labcoat\Patterns\PatternInterface[]
+   */
+  protected $patterns;
 
   /**
    * Is this a partial name?
@@ -114,19 +120,9 @@ class PatternLab implements PatternLabInterface {
    * @return string The normalized path
    */
   public static function normalizePath($path) {
-    return implode('/', array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
+    return implode('/', array_map(['Labcoat\\Patterns\\Path', 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
   }
 
-  /**
-   * Remove ordering digits from a path segment
-   *
-   * @param string $str A path segment
-   * @return string The path without any ordering digits
-   */
-  public static function stripDigits($str) {
-    list($num, $name) = array_pad(explode('-', $str, 2), 2, NULL);
-    return is_numeric($num) ? $name : $str;
-  }
 
   /**
    * Constructor
@@ -311,8 +307,10 @@ class PatternLab implements PatternLabInterface {
     $matches = new \RegexIterator($files, $pattern, \RegexIterator::MATCH);
     foreach ($matches as $match => $file) {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      list($type) = explode(DIRECTORY_SEPARATOR, $path);
-      $this->getOrCreateType($type)->addPattern(new Pattern($path, $match));
+      $this->patterns = new Pattern($path, $match);
+
+      // list($type) = explode(DIRECTORY_SEPARATOR, $path);
+      // $this->getOrCreateType($type)->addPattern(new Pattern($path, $match));
     }
   }
 

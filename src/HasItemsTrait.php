@@ -9,6 +9,8 @@
 
 namespace Labcoat;
 
+use Labcoat\Patterns\Path;
+
 trait HasItemsTrait {
 
   /**
@@ -70,7 +72,7 @@ trait HasItemsTrait {
    * @see http://php.net/manual/en/iterator.key.php Iterator::key
    */
   public function key() {
-    return PatternLab::stripDigits($this->getIteratorKey());
+    return Path::stripDigits($this->getIteratorKey());
   }
 
   /**

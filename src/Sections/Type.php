@@ -6,6 +6,7 @@ use Labcoat\ItemInterface;
 use Labcoat\PatternLab;
 use Labcoat\Filters\PatternFilterIterator;
 use Labcoat\Filters\SubtypeFilterIterator;
+use Labcoat\Patterns\Path;
 use Labcoat\Patterns\PatternInterface;
 
 class Type extends Section implements ItemInterface, TypeInterface {
@@ -31,7 +32,7 @@ class Type extends Section implements ItemInterface, TypeInterface {
   }
 
   public function findAnyPattern($name) {
-    return $this->getAllPatterns()[PatternLab::stripDigits($name)];
+    return $this->getAllPatterns()[Path::stripDigits($name)];
   }
 
   /**
@@ -40,7 +41,7 @@ class Type extends Section implements ItemInterface, TypeInterface {
    * @throws \OutOfBoundsException
    */
   public function findPattern($name) {
-    return $this->getPatterns()[PatternLab::stripDigits($name)];
+    return $this->getPatterns()[Path::stripDigits($name)];
   }
 
   /**
@@ -49,7 +50,7 @@ class Type extends Section implements ItemInterface, TypeInterface {
    * @throws \OutOfBoundsException
    */
   public function findSubType($name) {
-    return $this->getSubTypes()[PatternLab::stripDigits($name)];
+    return $this->getSubTypes()[Path::stripDigits($name)];
   }
 
   public function getAllPatterns() {

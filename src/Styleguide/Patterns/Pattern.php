@@ -3,6 +3,7 @@
 namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\PatternLab;
+use Labcoat\Patterns\Path;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\Lineage\Lineage;
 use Labcoat\Styleguide\Lineage\LineagePattern;
@@ -50,7 +51,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public static function makeBreadcrumb($path) {
     $func = function ($segment) {
-      return str_replace('-', ' ', PatternLab::stripDigits($segment));
+      return str_replace('-', ' ', Path::stripDigits($segment));
     };
     $segments = array_map($func, explode('/', $path));
     return implode(' &gt; ', array_slice($segments, 0, -1));

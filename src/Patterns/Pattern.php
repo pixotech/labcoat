@@ -17,17 +17,14 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
   protected $configuration;
   protected $file;
   protected $includedPatterns;
-  protected $partial;
+  protected $path;
   protected $pseudoPatterns;
-  protected $state;
   protected $time;
 
   public function __construct($path, $file) {
-    $this->path = $path;
+    $this->path = new Path($path);
     $this->file = $file;
     $this->id = $path;
-    $this->extractState();
-    $this->makePartial();
     $this->findData();
   }
 
@@ -55,7 +52,7 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
   }
 
   public function getPartial() {
-    return $this->partial;
+    return $this->path->getPartial();
   }
 
   /**
@@ -65,9 +62,13 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     return $this->items;
   }
 
+  public function getSlug() {
+    return $this->path->getSlug();
+  }
+
   public function getState() {
     if ($this->getConfiguration()->hasState()) return $this->getConfiguration()->getState();
-    return $this->state ?: '';
+    return $this->path->getState() ?: '';
   }
 
   public function getTemplate() {
@@ -85,10 +86,20 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
     $this->configuration = $configuration;
   }
 
-  protected function extractState() {
-    if (false !== strpos($this->path, '@')) {
-      list($this->path, $this->state) = explode('@', $this->path, 2);
+  protected function extractPathInfo() {
+    $path = $this->path;
+    if (false !== strpos($path, '@')) {
+      list($path, $this->state) = explode('@', $path, 2);
     }
+    $segments = array_map([__CLASS__, 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path));
+    if (count($segments) > 1) {
+      $this->type = array_shift($segments);
+    }
+    if (count($segments) > 1) {
+      $this->subtype = array_shift($segments);
+    }
+    $this->slug = implode('--', $segments);
+    $this->partial = !empty($this->type) ? "{$this->type}-{$this->slug}" : $this->slug;
   }
 
   protected function findData() {
@@ -151,10 +162,5 @@ class Pattern extends Item implements \Countable, HasDataInterface, HasItemsInte
   protected function makeConfiguration() {
     $data = $this->hasConfiguration() ? $this->getConfigurationData() : [];
     $this->configuration = new Configuration($data);
-  }
-
-  protected function makePartial() {
-    $parts = explode('/', $this->getNormalizedPath());
-    $this->partial = implode('-', [array_shift($parts), array_pop($parts)]);
   }
 }
