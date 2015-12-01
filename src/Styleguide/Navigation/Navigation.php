@@ -34,30 +34,9 @@ class Navigation implements \JsonSerializable {
   }
 
   public function __construct(PatternLabInterface $patternlab) {
-    $items = new \RecursiveIteratorIterator($patternlab, \RecursiveIteratorIterator::SELF_FIRST);
-    foreach ($items as $item) {
-      if ($item->actsLikePattern()) $this->addPattern($item);
-      elseif ($item->isSubtype()) $this->addSubtype($item);
-      elseif ($item->isType()) $this->addType($item);
+    foreach ($patternlab->getTypes() as $type) {
+      $this->types[] = new Type($type);
     }
-  }
-
-  public function addPattern(SourcePattern $pattern) {
-    $type = $this->getTypeFromPath($pattern->getPath());
-    $this->types[$type]->addPattern($pattern);
-    $this->addPatternPath($pattern);
-  }
-
-  public function addSubtype(SourceSubtype $subtype) {
-    $type = $this->getTypeFromPath($subtype->getPath());
-    $this->types[$type]->addSubtype($subtype);
-    $this->addSubtypeIndexPath($subtype);
-  }
-
-  public function addType(SourceType $type) {
-    $name = $this->getTypeFromPath($type->getPath());
-    $this->types[$name] = new Type($type);
-    ksort($this->types);
   }
 
   public function getIndexPaths() {

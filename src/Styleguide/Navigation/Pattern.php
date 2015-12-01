@@ -52,14 +52,11 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function makeName(SourcePattern $pattern) {
-    return ucwords(preg_replace('|[-~]|', ' ', $pattern->getSlug()));
+    return ucwords(preg_replace('|[-~]|', ' ', $pattern->getName()));
   }
 
   public function makePartial(SourcePattern $pattern) {
-    $path = explode('/', $pattern->getNormalizedPath());
-    $type = array_shift($path);
-    $name = Navigation::escapePath(array_pop($path));
-    return implode('-', [$type, $name]);
+    return $pattern->getPartial();
   }
 
   public function makePath(SourcePattern $pattern) {

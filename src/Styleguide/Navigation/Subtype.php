@@ -7,28 +7,25 @@ use Labcoat\Structure\SubtypeInterface as SourceInterface;
 
 class Subtype implements \JsonSerializable, SubtypeInterface {
 
-  protected $partial;
-  protected $path;
+  protected $name;
   protected $patterns = [];
-  protected $subtype;
   protected $type;
 
   public function __construct(SourceInterface $subtype) {
     $this->type = $subtype->getType()->getName();
-    $this->subtype = $subtype->getName();
-    $this->partial = Navigation::escapePath($subtype->getName());
-    $this->path = Navigation::escapePath($subtype->getName());
+    $this->name = $subtype->getName();
+    foreach ($subtype->getPatterns() as $pattern) $this->patterns[] = new Pattern($pattern);
   }
 
   public function jsonSerialize() {
     $items = array_values($this->patterns);
     if (!empty($items)) {
       $items[] = [
-        "patternPath" => "{$this->path}/index.html",
+        "patternPath" => $this->getPath() . "/index.html",
         "patternName" => "View All",
         "patternType" => $this->type,
-        "patternSubtype" => $this->subtype,
-        "patternPartial" => "viewall-{$this->partial}",
+        "patternSubtype" => $this->name,
+        "patternPartial" => "viewall-" . $this->getPartial(),
       ];
     }
     return [
@@ -40,20 +37,28 @@ class Subtype implements \JsonSerializable, SubtypeInterface {
     ];
   }
 
-  public function addPattern(\Labcoat\Patterns\PatternInterface $pattern) {
-    $this->patterns[] = new Pattern($pattern);
-  }
-
   public function getLowercaseName() {
     return str_replace('-', ' ', $this->getNameWithDashes());
   }
 
   public function getName() {
-    return $this->subtype;
+    return $this->name;
   }
 
   public function getNameWithDashes() {
     return Segment::stripDigits($this->getName());
+  }
+
+  public function getPartial() {
+    return Navigation::escapePath($this->name);
+  }
+
+  public function getPath() {
+    return Navigation::escapePath($this->name);
+  }
+
+  public function getPatterns() {
+    return $this->patterns;
   }
 
   public function getUppercaseName() {

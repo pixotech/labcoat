@@ -11,13 +11,10 @@ class Type implements \JsonSerializable, TypeInterface {
   protected $patterns = [];
   protected $subtypes = [];
 
-  /**
-   * @var TypeInterface
-   */
-  protected $type;
-
   public function __construct(SourceTypeInterface $type) {
     $this->name = $type->getName();
+    foreach ($type->getSubtypes() as $subtype) $this->subtypes[] = new Subtype($subtype);
+    foreach ($type->getPatterns() as $pattern) $this->patterns[] = new Pattern($pattern);
   }
 
   public function getLowercaseName() {
