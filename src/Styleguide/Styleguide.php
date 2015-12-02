@@ -252,6 +252,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->templateParser;
   }
 
+  protected function hasFolderIndexes() {
+    return true;
+  }
+
   /**
    * Make the annotations file object
    */
@@ -334,7 +338,9 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @return \Labcoat\Styleguide\Pages\PageInterface[] An array of page objects
    */
   protected function makePages() {
-    return array_merge($this->makeIndexPages(), $this->makePatternPages());
+    $pages = $this->makePatternPages();
+    if ($this->hasFolderIndexes()) $pages = array_merge($this->makeIndexPages(), $pages);
+    return $pages;
   }
 
   /**
