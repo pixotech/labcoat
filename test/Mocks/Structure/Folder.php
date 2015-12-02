@@ -6,6 +6,6 @@ use Labcoat\Structure\FolderInterface;
 
 class Folder extends \Labcoat\Structure\Folder implements FolderInterface {
 
-  public $name;
+  public $folder;
   public $patterns = [];
 }

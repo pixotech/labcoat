@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Navigation;
+namespace Labcoat\Styleguide\Navigation\Folders;
 
 use Labcoat\Mocks\Structure\Subtype as SourceSubtype;
 use Labcoat\Mocks\Structure\Type;

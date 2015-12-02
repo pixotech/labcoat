@@ -2,11 +2,11 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-use Labcoat\ItemInterface;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\PatternInterface as SourcePattern;
 use Labcoat\Structure\SubtypeInterface as SourceSubtype;
-use Labcoat\Structure\TypeInterface as SourceType;
+use Labcoat\Styleguide\Navigation\Folders\SubtypeInterface;
+use Labcoat\Styleguide\Navigation\Folders\Type;
 
 class Navigation implements NavigationInterface, \JsonSerializable {
 

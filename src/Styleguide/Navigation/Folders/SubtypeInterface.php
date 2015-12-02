@@ -1,8 +1,10 @@
 <?php
 
-namespace Labcoat\Styleguide\Navigation;
+namespace Labcoat\Styleguide\Navigation\Folders;
 
-interface SubtypeInterface {
+use Labcoat\Styleguide\Navigation\PatternInterface;
+
+interface SubtypeInterface extends FolderInterface {
 
   /**
    * @return string
