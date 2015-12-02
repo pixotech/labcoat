@@ -15,11 +15,15 @@ class Name implements NameInterface {
   }
 
   public function capitalized() {
-    return ucwords(implode(' ', $this->words()));
+    return ucwords($this->join(' '));
+  }
+
+  public function join($delimiter) {
+    return implode($delimiter, $this->words());
   }
 
   public function lowercase() {
-    return strtolower(implode(' ', $this->words()));
+    return strtolower($this->join(' '));
   }
 
   public function words() {

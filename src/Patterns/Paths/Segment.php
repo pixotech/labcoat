@@ -5,7 +5,7 @@ namespace Labcoat\Patterns\Paths;
 class Segment implements SegmentInterface {
 
   /**
-   * @var string
+   * @var Name
    */
   protected $name;
 
@@ -44,7 +44,7 @@ class Segment implements SegmentInterface {
   }
 
   /**
-   * @return string
+   * @return Name
    */
   public function getName() {
     return $this->name;

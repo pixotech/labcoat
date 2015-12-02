@@ -44,38 +44,53 @@ class Path implements \Countable, PathInterface {
   }
 
   /**
-   * @return string
+   * @return Name
    */
   public function getName() {
-    return implode('-', array_slice($this->segments, $this->getNameSegmentIndex()));
+    return new Name(implode('-', $this->getNameSegments()));
   }
 
   /**
-   * @return string|null
+   * @return Segment
    */
   public function getSubtype() {
-    return $this->hasSubtype() ? (string)$this->segments[1] : null;
+    if (!$this->hasSubtype()) throw new \BadMethodCallException("Path does not have subtype");
+    return $this->segments[1];
   }
 
   /**
-   * @return string|null
+   * @return Segment
    */
   public function getType() {
-    return $this->hasType() ? (string)$this->segments[0] : null;
+    if (!$this->hasType()) throw new \BadMethodCallException("Path does not have type");
+    return $this->segments[0];
   }
 
+  /**
+   * @return bool
+   */
   public function hasSubtype() {
     return $this->count() > 2;
   }
 
+  /**
+   * @return bool
+   */
   public function hasType() {
     return $this->count() > 1;
   }
 
+  /**
+   * @param string $delimiter
+   * @return string
+   */
   public function join($delimiter) {
     return implode($delimiter, $this->segments);
   }
 
+  /**
+   * @return Path
+   */
   public function normalize() {
     $normalized = clone $this;
     foreach ($normalized->segments as $i => $segment) {
@@ -88,6 +103,10 @@ class Path implements \Countable, PathInterface {
     if ($this->hasSubtype()) return 2;
     elseif ($this->hasType()) return 1;
     return 0;
+  }
+
+  protected function getNameSegments() {
+    return array_slice($this->segments, $this->getNameSegmentIndex());
   }
 
   protected function makeSegments($path) {

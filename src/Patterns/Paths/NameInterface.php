@@ -10,6 +10,12 @@ interface NameInterface {
   public function capitalized();
 
   /**
+   * @param string $delimiter
+   * @return string
+   */
+  public function join($delimiter);
+
+  /**
    * @return string
    */
   public function lowercase();
