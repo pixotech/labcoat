@@ -17,6 +17,10 @@ class Type extends Folder implements TypeInterface {
     else parent::addPattern($pattern);
   }
 
+  public function getId() {
+    return $this->name;
+  }
+
   /**
    * @param $name
    * @return SubtypeInterface

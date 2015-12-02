@@ -34,4 +34,16 @@ class Subtype implements SubtypeInterface {
   public function getType() {
     return $this->type;
   }
+
+  public function getId() {
+    // TODO: Implement getId() method.
+  }
+
+  public function getLabel() {
+    // TODO: Implement getLabel() method.
+  }
+
+  public function getPagePath() {
+    // TODO: Implement getPagePath() method.
+  }
 }

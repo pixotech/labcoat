@@ -19,7 +19,22 @@ interface FolderInterface {
   /**
    * @return string
    */
+  public function getId();
+
+  /**
+   * @return string
+   */
+  public function getLabel();
+
+  /**
+   * @return string
+   */
   public function getName();
+
+  /**
+   * @return string
+   */
+  public function getPagePath();
 
   /**
    * @return PatternInterface[]

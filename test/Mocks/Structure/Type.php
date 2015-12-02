@@ -35,4 +35,16 @@ class Type implements TypeInterface {
   public function getSubtypes() {
     return $this->subtypes;
   }
+
+  public function getId() {
+    // TODO: Implement getId() method.
+  }
+
+  public function getLabel() {
+    // TODO: Implement getLabel() method.
+  }
+
+  public function getPagePath() {
+    // TODO: Implement getPagePath() method.
+  }
 }

@@ -19,6 +19,18 @@ class Subtype extends Folder implements SubtypeInterface {
     $this->type = $type;
   }
 
+  public function getId() {
+    return implode('-', [$this->type->getId(), $this->name]);
+  }
+
+  public function getLabel() {
+    // TODO: Implement getLabel() method.
+  }
+
+  public function getPagePath() {
+    // TODO: Implement getPagePath() method.
+  }
+
   public function getPartial() {
     return implode('-', [$this->type, $this->name]);
   }
