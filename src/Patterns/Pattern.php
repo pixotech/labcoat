@@ -58,7 +58,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getPartial() {
-    return $this->path->getPartial();
+    return $this->path->normalize()->getPartial();
   }
 
   public function getPath() {

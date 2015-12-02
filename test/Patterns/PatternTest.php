@@ -112,6 +112,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('one-three', $pattern->getPartial());
   }
 
+  public function testPartialDoesntHaveOrdering() {
+    $pattern = new Pattern('01-one/02-two/03-three', __FILE__);
+    $this->assertEquals('one-three', $pattern->getPartial());
+  }
+
   # Path
 
   public function testPath() {
