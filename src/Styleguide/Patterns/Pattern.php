@@ -4,10 +4,8 @@ namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\Patterns\Paths\Segment;
 use Labcoat\PatternLab;
-use Labcoat\Patterns\Paths\Path;
 use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\Lineage\Lineage;
-use Labcoat\Styleguide\Lineage\LineagePattern;
 use Labcoat\Styleguide\Lineage\ReverseLineage;
 use Labcoat\Styleguide\StyleguideInterface;
 
@@ -186,44 +184,8 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return $data;
   }
 
-  public function patternCSS() {
-    return null;
-  }
-
-  public function patternCSSExists() {
-    return false;
-  }
-
   public function patternDesc() {
     return "";
-  }
-
-  public function patternDescAdditions() {
-    return [];
-  }
-
-  public function patternDescExists() {
-    return false;
-  }
-
-  public function patternEngineName() {
-    return "Twig";
-  }
-
-  public function patternExampleAdditions() {
-    return [];
-  }
-
-  public function patternLineageExists() {
-    return !empty($this->includedPatterns);
-  }
-
-  public function patternLineageEExists() {
-    return false;
-  }
-
-  public function patternLineageRExists() {
-    return !empty($this->includingPatterns);
   }
 
   public function patternLineages() {
@@ -240,30 +202,6 @@ class Pattern implements \JsonSerializable, PatternInterface {
       $lineage->addPattern($pattern);
     }
     return $lineage;
-  }
-
-  public function patternLink() {
-    return $this->path;
-  }
-
-  public function patternName() {
-    return $this->name;
-  }
-
-  public function patternPartial() {
-    return $this->partial;
-  }
-
-  public function patternPartialCode() {
-    return $this->getContent();
-  }
-
-  public function patternPartialCodeE() {
-    return '';
-  }
-
-  public function patternSectionSubtype() {
-    return false;
   }
 
   /**
