@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation\Folders;
 
-use Labcoat\Styleguide\Navigation\PatternInterface;
+use Labcoat\Styleguide\Navigation\Items\PatternItemInterface;
 
 interface SubtypeInterface extends FolderInterface {
 
@@ -17,7 +17,7 @@ interface SubtypeInterface extends FolderInterface {
   public function getPartial();
 
   /**
-   * @return PatternInterface[]
+   * @return PatternItemInterface[]
    */
   public function getPatterns();
 }

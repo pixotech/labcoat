@@ -4,14 +4,14 @@ namespace Labcoat\Styleguide\Navigation\Folders;
 
 use Labcoat\Structure\SubtypeInterface as SourceInterface;
 use Labcoat\Styleguide\Navigation\Navigation;
-use Labcoat\Styleguide\Navigation\Pattern;
-use Labcoat\Styleguide\Navigation\TypeItem;
+use Labcoat\Styleguide\Navigation\Items\PatternItem;
+use Labcoat\Styleguide\Navigation\Items\TypeItem;
 
 class Subtype extends Folder implements \JsonSerializable, SubtypeInterface {
 
   public function __construct(SourceInterface $subtype) {
     parent::__construct($subtype);
-    foreach ($subtype->getPatterns() as $pattern) $this->items[] = new Pattern($pattern);
+    foreach ($subtype->getPatterns() as $pattern) $this->items[] = new PatternItem($pattern);
   }
 
   public function jsonSerialize() {

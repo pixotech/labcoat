@@ -1,10 +1,12 @@
 <?php
 
-namespace Labcoat\Styleguide\Navigation;
+namespace Labcoat\Styleguide\Navigation\Items;
 
 use Labcoat\Patterns\PatternInterface as SourcePattern;
+use Labcoat\Styleguide\Navigation\Items\Item;
+use Labcoat\Styleguide\Navigation\Items\PatternItemInterface;
 
-class Pattern extends Item implements \JsonSerializable, PatternInterface {
+class PatternItem extends Item implements \JsonSerializable, PatternItemInterface {
 
   /**
    * @var SourcePattern

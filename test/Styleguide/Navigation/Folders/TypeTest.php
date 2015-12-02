@@ -13,7 +13,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
     $type = new Type($source);
     $items = $type->getItems();
     $this->assertEquals(1, count($items));
-    $this->assertInstanceOf('Labcoat\\Styleguide\\Navigation\\Pattern', $items[0]);
+    $this->assertInstanceOf('Labcoat\\Styleguide\\Navigation\\Items\\PatternItemInterface', $items[0]);
   }
 
   protected function makeSource($name) {

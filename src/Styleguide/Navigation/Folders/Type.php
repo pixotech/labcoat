@@ -3,15 +3,15 @@
 namespace Labcoat\Styleguide\Navigation\Folders;
 
 use Labcoat\Structure\TypeInterface as SourceTypeInterface;
-use Labcoat\Styleguide\Navigation\Pattern;
-use Labcoat\Styleguide\Navigation\TypeItem;
+use Labcoat\Styleguide\Navigation\Items\PatternItem;
+use Labcoat\Styleguide\Navigation\Items\TypeItem;
 
 class Type extends Folder implements \JsonSerializable, TypeInterface {
 
   public function __construct(SourceTypeInterface $type) {
     parent::__construct($type);
     foreach ($type->getSubtypes() as $subtype) $this->typeItems[] = new Subtype($subtype);
-    foreach ($type->getPatterns() as $pattern) $this->items[] = new Pattern($pattern);
+    foreach ($type->getPatterns() as $pattern) $this->items[] = new PatternItem($pattern);
   }
 
   public function getItems() {

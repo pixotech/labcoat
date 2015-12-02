@@ -1,9 +1,11 @@
 <?php
 
-namespace Labcoat\Styleguide\Navigation;
+namespace Labcoat\Styleguide\Navigation\Items;
 
 use Labcoat\Styleguide\Navigation\Folders\FolderInterface;
 use Labcoat\Styleguide\Navigation\Folders\SubtypeInterface;
+use Labcoat\Styleguide\Navigation\Items\Item;
+use Labcoat\Styleguide\Navigation\Items\TypeItemInterface;
 
 class TypeItem extends Item implements TypeItemInterface {
 

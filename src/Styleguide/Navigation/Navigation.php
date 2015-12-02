@@ -7,6 +7,8 @@ use Labcoat\Patterns\PatternInterface as SourcePattern;
 use Labcoat\Structure\SubtypeInterface as SourceSubtype;
 use Labcoat\Styleguide\Navigation\Folders\SubtypeInterface;
 use Labcoat\Styleguide\Navigation\Folders\Type;
+use Labcoat\Styleguide\Navigation\Items\ItemInterface;
+use Labcoat\Styleguide\Navigation\Items\PatternItemInterface;
 
 class Navigation implements NavigationInterface, \JsonSerializable {
 
@@ -55,7 +57,7 @@ class Navigation implements NavigationInterface, \JsonSerializable {
   }
 
   /**
-   * @param PatternInterface $pattern
+   * @param PatternItemInterface $pattern
    */
   protected function addPatternPath(SourcePattern $pattern) {
     $path = explode('/', $pattern->getNormalizedPath());

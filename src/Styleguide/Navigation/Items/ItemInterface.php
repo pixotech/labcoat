@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Navigation;
+namespace Labcoat\Styleguide\Navigation\Items;
 
 interface ItemInterface {
   public function getName();
