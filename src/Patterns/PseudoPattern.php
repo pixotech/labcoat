@@ -2,10 +2,9 @@
 
 namespace Labcoat\Patterns;
 
-use Labcoat\Item;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
-class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInterface {
+class PseudoPattern implements HasDataInterface, PseudoPatternInterface {
 
   use HasDataTrait;
 
@@ -30,8 +29,20 @@ class PseudoPattern extends Item implements HasDataInterface, PseudoPatternInter
     return $this->pattern->getFile();
   }
 
+  public function getId() {
+    return $this->id;
+  }
+
   public function getIncludedPatterns() {
     return $this->pattern->getIncludedPatterns();
+  }
+
+  public function getName() {
+    return $this->name;
+  }
+
+  public function getPath() {
+    return $this->path;
   }
 
   public function getPartial() {
