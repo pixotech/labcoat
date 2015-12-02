@@ -8,9 +8,18 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
     $name = 'one';
-    $source = $this->makeSource($name);
-    $type = new Type($source);
+    $type = new Type($this->makeSource($name));
     $this->assertEquals($name, $type->getName());
+  }
+
+  public function testUppercaseName() {
+    $type = new Type($this->makeSource('one-two'));
+    $this->assertEquals('One Two', $type->getUppercaseName());
+  }
+
+  public function testLowercaseName() {
+    $type = new Type($this->makeSource('one-two'));
+    $this->assertEquals('one two', $type->getLowercaseName());
   }
 
   protected function makeSource($name) {

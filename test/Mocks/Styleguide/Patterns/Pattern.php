@@ -89,7 +89,7 @@ class Pattern implements PatternInterface {
     // TODO: Implement patternCSSExists() method.
   }
 
-  public function patternDesc() {
+  public function getDescription() {
     // TODO: Implement patternDesc() method.
   }
 

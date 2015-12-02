@@ -16,7 +16,8 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function getName() {
-    return $this->pattern->getName()->capitalized();
+    if (!$this->pattern->getPath()) return null;
+    return $this->pattern->getPath()->normalize()->getName()->capitalized();
   }
 
   public function getPartial() {

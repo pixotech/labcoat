@@ -48,14 +48,6 @@ class Pattern implements \JsonSerializable, PatternInterface {
     return new Pattern($styleguide, $pattern);
   }
 
-  public static function makeBreadcrumb($path) {
-    $func = function ($segment) {
-      return str_replace('-', ' ', Segment::stripDigits($segment));
-    };
-    $segments = array_map($func, explode('/', $path));
-    return implode(' &gt; ', array_slice($segments, 0, -1));
-  }
-
   public static function makeName($name) {
     return ucwords(str_replace('-', ' ', $name));
   }
@@ -70,7 +62,6 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->time = $pattern->getTime();
 
     $this->name = self::makeName($pattern->getName());
-    $this->breadcrumb = self::makeBreadcrumb($pattern->getPath());
 
     $this->makePaths($pattern);
 
@@ -85,10 +76,6 @@ class Pattern implements \JsonSerializable, PatternInterface {
     $this->includingPatterns[$pattern->getId()] = $pattern;
   }
 
-  public function getBreadcrumb() {
-    return $this->breadcrumb;
-  }
-
   public function getContent() {
     if (!isset($this->content)) {
       $this->content = $this->styleguide->renderPattern($this, $this->getData());
@@ -99,6 +86,10 @@ class Pattern implements \JsonSerializable, PatternInterface {
   public function getData() {
     if (!isset($this->data)) $this->makeData();
     return $this->data;
+  }
+
+  public function getDescription() {
+    return "";
   }
 
   /**
@@ -173,8 +164,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
       'cssEnabled' => false,
       'lineage' => $this->patternLineages(),
       'lineageR' => $this->patternLineagesR(),
-      'patternBreadcrumb' => $this->getBreadcrumb(),
-      'patternDesc' => $this->patternDesc(),
+      'patternDesc' => $this->getDescription(),
       'patternExtension' => 'twig',
       'patternName' => $this->name,
       'patternPartial' => $this->partial,
@@ -182,10 +172,6 @@ class Pattern implements \JsonSerializable, PatternInterface {
       'extraOutput' => [],
     ];
     return $data;
-  }
-
-  public function patternDesc() {
-    return "";
   }
 
   public function patternLineages() {

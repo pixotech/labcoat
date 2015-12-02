@@ -5,9 +5,9 @@ namespace Labcoat\Styleguide\Patterns;
 interface PatternInterface {
   public function addIncludedPattern(PatternInterface $pattern);
   public function addIncludingPattern(PatternInterface $pattern);
-  public function getBreadcrumb();
   public function getContent();
   public function getData();
+  public function getDescription();
   public function getEscapedSourcePath();
   public function getId();
   public function getIncludedPatterns();

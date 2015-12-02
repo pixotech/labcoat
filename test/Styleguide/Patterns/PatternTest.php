@@ -48,7 +48,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
   public function testPatternDesc() {
     $source = $this->makeSourcePattern();
     $pattern = new Pattern($this->makeStyleguide(), $source);
-    $this->assertEquals('', $pattern->patternDesc());
+    $this->assertEquals('', $pattern->getDescription());
   }
 
   public function testPatternLineages() {

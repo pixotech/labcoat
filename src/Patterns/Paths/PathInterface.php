@@ -27,6 +27,9 @@ interface PathInterface {
    */
   public function join($delimiter);
 
+  /**
+   * @return PathInterface
+   */
   public function normalize();
 
   /**

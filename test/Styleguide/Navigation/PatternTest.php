@@ -9,8 +9,7 @@ use Labcoat\Patterns\Paths\Path;
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
-    $source = $this->makePattern();
-    $source->name = new Name("one-two");
+    $source = $this->makePattern("one-two");
     $pattern = new Pattern($source);
     $this->assertEquals('One Two', $pattern->getName());
   }
