@@ -29,16 +29,18 @@ class Segment implements SegmentInterface {
    * @param string $segment
    */
   public function __construct($segment) {
-    $this->name = $segment;
-    list($ordering, $name) = array_pad(explode('-', $segment, 2), 2, NULL);
+    $name = $segment;
+    list($ordering, $ordered) = array_pad(explode('-', $segment, 2), 2, NULL);
     if (is_numeric($ordering)) {
       $this->ordering = $ordering;
-      $this->name = $name;
+      $name = $ordered;
     }
+    $this->name = new Name($name);
   }
 
   public function __toString() {
-    return $this->hasOrdering() ? "{$this->ordering}-{$this->name}" : $this->name;
+    $name = (string)$this->name;
+    return $this->hasOrdering() ? "{$this->ordering}-{$name}" : $name;
   }
 
   /**
