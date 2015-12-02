@@ -18,14 +18,7 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function getIndex() {
-    $type = Segment::stripDigits($this->name);
-    return [
-      "patternPath" => "{$this->name}/index.html",
-      "patternName" => "View All",
-      "patternType" => $this->name,
-      "patternSubtype" => "all",
-      "patternPartial" => "viewall-{$type}-all",
-    ];
+    return new TypeIndex($this);
   }
 
   public function getItems() {
@@ -65,7 +58,7 @@ class Type implements \JsonSerializable, TypeInterface {
       'patternTypeLC' => $this->getLowercaseName(),
       'patternTypeUC' => $this->getUppercaseName(),
       'patternType' => $this->name,
-      'patternTypeItems' => array_values($this->subtypes),
+      'patternTypeItems' => $this->getTypeItems(),
       'patternItems' => $this->getItems(),
     ];
   }
@@ -76,5 +69,12 @@ class Type implements \JsonSerializable, TypeInterface {
 
   protected function getSegmentName() {
     return (new Segment($this->name))->normalize()->getName();
+  }
+
+  /**
+   * @return array
+   */
+  protected function getTypeItems() {
+    return $this->getSubtypes();
   }
 }

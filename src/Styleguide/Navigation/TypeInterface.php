@@ -4,6 +4,7 @@ namespace Labcoat\Styleguide\Navigation;
 
 interface TypeInterface {
   public function getLowercaseName();
+
   public function getName();
 
   /**

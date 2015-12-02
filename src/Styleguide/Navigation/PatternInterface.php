@@ -2,9 +2,6 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
-interface PatternInterface {
-  public function getName();
-  public function getPartial();
-  public function getPath();
+interface PatternInterface extends ItemInterface {
   public function getState();
 }

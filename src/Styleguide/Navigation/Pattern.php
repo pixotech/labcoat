@@ -4,7 +4,7 @@ namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\Patterns\PatternInterface as SourcePattern;
 
-class Pattern implements \JsonSerializable, PatternInterface {
+class Pattern extends Item implements \JsonSerializable, PatternInterface {
 
   /**
    * @var SourcePattern
@@ -26,7 +26,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public function getPath() {
     $name = $this->pattern->getPath()->join('-');
-    return $name . DIRECTORY_SEPARATOR . $name . '.html';
+    return "{$name}/{$name}.html";
   }
 
   public function getState() {
@@ -34,11 +34,8 @@ class Pattern implements \JsonSerializable, PatternInterface {
   }
 
   public function jsonSerialize() {
-    return [
-      'patternPath' => $this->getPath(),
-      'patternName' => $this->getName(),
+    return parent::jsonSerialize() + [
       'patternState' => $this->getState(),
-      'patternPartial' => $this->getPartial(),
     ];
   }
 }
