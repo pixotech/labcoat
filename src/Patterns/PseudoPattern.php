@@ -37,8 +37,16 @@ class PseudoPattern implements HasDataInterface, PseudoPatternInterface {
     return $this->pattern->getIncludedPatterns();
   }
 
+  public function getLabel() {
+
+  }
+
   public function getName() {
     return $this->name;
+  }
+
+  public function getPagePath() {
+    return $this->path;
   }
 
   public function getPath() {

@@ -26,12 +26,20 @@ class Pattern implements PatternInterface {
     return false;
   }
 
+  public function getLabel() {
+
+  }
+
   public function getNormalizedPath() {
     return $this->normalizedPath;
   }
 
   public function getSlug() {
     return $this->slug;
+  }
+
+  public function getPagePath() {
+
   }
 
   public function isPattern() {

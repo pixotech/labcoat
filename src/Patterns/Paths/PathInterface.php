@@ -3,6 +3,7 @@
 namespace Labcoat\Patterns\Paths;
 
 interface PathInterface {
+
   public function getPartial();
   public function getPath();
 

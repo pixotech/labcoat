@@ -20,7 +20,6 @@ class Pattern implements PatternInterface {
   public function __construct($path, $file) {
     $this->path = new Path($path);
     $this->file = $file;
-    $this->id = $path;
     $this->findData();
   }
 
@@ -34,7 +33,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getId() {
-    return $this->id;
+    return $this->path->join('-');
   }
 
   public function getIncludedPatterns() {
@@ -42,11 +41,20 @@ class Pattern implements PatternInterface {
     return $this->includedPatterns;
   }
 
+  public function getLabel() {
+    return $this->path->normalize()->getName()->capitalized();
+  }
+
   /**
    * @return Paths\Name
    */
   public function getName() {
     return $this->path->getName();
+  }
+
+  public function getPagePath() {
+    $id = $this->getId();
+    return "$id/$id.html";
   }
 
   public function getPartial() {
