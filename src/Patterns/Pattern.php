@@ -42,6 +42,9 @@ class Pattern implements PatternInterface {
     return $this->includedPatterns;
   }
 
+  /**
+   * @return Paths\Name
+   */
   public function getName() {
     return $this->path->getName();
   }
@@ -51,7 +54,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getPath() {
-    return $this->path->getPath();
+    return $this->path;
   }
 
   /**

@@ -2,11 +2,15 @@
 
 namespace Labcoat\Styleguide\Navigation;
 
+use Labcoat\Mocks\Patterns\Pattern as Source;
+use Labcoat\Patterns\Paths\Name;
+use Labcoat\Patterns\Paths\Path;
+
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
     $source = $this->makePattern();
-    $source->name = "one-two";
+    $source->name = new Name("one-two");
     $pattern = new Pattern($source);
     $this->assertEquals('One Two', $pattern->getName());
   }
@@ -19,17 +23,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testPath() {
-    $source = $this->makePattern();
-    $source->path = "one/two/three";
+    $source = $this->makePattern("one/two/three");
     $pattern = new Pattern($source);
     $this->assertEquals("one-two-three/one-two-three.html", $pattern->getPath());
-  }
-
-  public function testSourcePath() {
-    $source = $this->makePattern();
-    $source->normalizedPath = "one/two/three";
-    $pattern = new Pattern($source);
-    $this->assertEquals($source->path, $pattern->getSourcePath());
   }
 
   public function testState() {
@@ -39,7 +35,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($source->state, $pattern->getState());
   }
 
-  protected function makePattern() {
-    return new \Labcoat\Mocks\Patterns\Pattern();
+  protected function makePattern($path = null) {
+    $pattern = new Source();
+    if (isset($path)) $pattern->path = new Path($path);
+    return $pattern;
   }
 }

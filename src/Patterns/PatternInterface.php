@@ -27,7 +27,7 @@ interface PatternInterface {
   public function getIncludedPatterns();
 
   /**
-   * @return string
+   * @return \Labcoat\Patterns\Paths\NameInterface
    */
   public function getName();
 
@@ -37,7 +37,7 @@ interface PatternInterface {
   public function getPartial();
 
   /**
-   * @return string
+   * @return \Labcoat\Patterns\Paths\PathInterface
    */
   public function getPath();
 
