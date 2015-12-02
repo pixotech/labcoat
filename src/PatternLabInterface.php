@@ -54,21 +54,6 @@ interface PatternLabInterface {
   public function getIgnoredExtensions();
 
   /**
-   * Get a pattern by partial or path
-   *
-   * Supported pattern selectors:
-   * - Partial, e.g. "atoms-button" or "pages-contact". Fuzzy matching is not supported.
-   * - Path, relative to the "source/_patterns" directory, without the template extension.
-   *   Ordering prefixes are disregarded.
-   *
-   * @param string $name The path or partial name of a pattern
-   * @return \Labcoat\Patterns\PatternInterface A pattern object
-   * @throws \OutOfBoundsException No matching pattern was found
-   * @see http://patternlab.io/docs/pattern-including.html "Including Patterns"
-   */
-  public function getPattern($name);
-
-  /**
    * Get the extension for pattern template files
    *
    * @return string The template extension

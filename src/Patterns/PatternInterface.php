@@ -52,7 +52,7 @@ interface PatternInterface {
   public function getState();
 
   /**
-   * @return string
+   * @return \Labcoat\Patterns\Paths\SegmentInterface
    */
   public function getSubtype();
 
@@ -67,7 +67,7 @@ interface PatternInterface {
   public function getTime();
 
   /**
-   * @return string
+   * @return \Labcoat\Patterns\Paths\SegmentInterface
    */
   public function getType();
 

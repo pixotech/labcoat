@@ -23,6 +23,10 @@ class Subtype implements SubtypeInterface {
     return $this->name;
   }
 
+  public function getPartial() {
+    // TODO: Implement getPartial() method.
+  }
+
   public function getPatterns() {
     return $this->patterns;
   }

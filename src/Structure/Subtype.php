@@ -19,6 +19,10 @@ class Subtype extends Folder implements SubtypeInterface {
     $this->type = $type;
   }
 
+  public function getPartial() {
+    return implode('-', [$this->type, $this->name]);
+  }
+
   /**
    * @return TypeInterface
    */

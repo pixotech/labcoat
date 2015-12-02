@@ -3,12 +3,8 @@
 namespace Labcoat\Styleguide\Navigation;
 
 use Labcoat\PatternLabInterface;
-use Labcoat\Patterns\PatternInterface as SourcePattern;
-use Labcoat\Structure\SubtypeInterface as SourceSubtype;
-use Labcoat\Styleguide\Navigation\Folders\SubtypeInterface;
+use Labcoat\Patterns\Paths\Segment;
 use Labcoat\Styleguide\Navigation\Folders\Type;
-use Labcoat\Styleguide\Navigation\Items\ItemInterface;
-use Labcoat\Styleguide\Navigation\Items\PatternItemInterface;
 
 class Navigation implements NavigationInterface, \JsonSerializable {
 
@@ -23,7 +19,7 @@ class Navigation implements NavigationInterface, \JsonSerializable {
   protected $patternPaths = [];
 
   /**
-   * @var Type[]
+   * @var \Labcoat\Styleguide\Navigation\Folders\TypeInterface[]
    */
   protected $types = [];
 
@@ -56,49 +52,25 @@ class Navigation implements NavigationInterface, \JsonSerializable {
     ];
   }
 
-  /**
-   * @param PatternItemInterface $pattern
-   */
-  protected function addPatternPath(SourcePattern $pattern) {
-    $path = explode('/', $pattern->getNormalizedPath());
-    $type = array_shift($path);
-    $name = $this->escapePath(array_pop($path));
-    $this->patternPaths[$type][$name] = $this->makeItemPath($pattern);
-    ksort($this->patternPaths[$type]);
-  }
-
-  /**
-   * @param SubtypeInterface $subtype
-   */
-  protected function addSubtypeIndexPath(SourceSubtype $subtype) {
-    $names = explode('/', $subtype->getNormalizedPath());
-    list($type, $name) = $names;
-    if (!isset($this->indexPaths[$type])) {
-      $typePath = array_shift(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
-      $this->indexPaths[$type] = ['all' => $typePath];
-      ksort($this->indexPaths);
-    }
-    $this->indexPaths[$type][$name] = $this->makeItemPath($subtype);
-    ksort($this->indexPaths[$type]);
-  }
-
-  protected function makeItemPath(ItemInterface $item) {
-    return $this->escapePath($item->getPath());
-  }
-
   protected function makePaths() {
-    foreach ($this->types as $type) {
+    foreach ($this->types as $navType) {
+      /** @var \Labcoat\Structure\TypeInterface $type */
+      $type = $navType->getFolder();
+      $typeName = (string)(new Segment($type->getName()))->getName();
       foreach ($type->getSubtypes() as $subtype) {
-        $this->indexPaths[$type->getName()][$subtype->getName()] = $subtype->getPartial();
+        $subtypeName = (string)$subtype->getName();
+        $this->indexPaths[$typeName][$subtypeName] = $subtype->getPartial();
         foreach ($subtype->getPatterns() as $pattern) {
-          $this->patternPaths[$type->getName()][$pattern->getName()] = $pattern->getPartial();
+          $patternName = (string)$pattern->getName();
+          $this->patternPaths[$typeName][$patternName] = $pattern->getPartial();
         }
       }
       if ($type->hasSubtypes()) {
-        $this->indexPaths[$type->getName()]['all'] = $type->getName();
+        $this->indexPaths[$typeName]['all'] = $type->getName();
       }
       foreach ($type->getPatterns() as $pattern) {
-        $this->patternPaths[$type->getName()][$pattern->getName()] = $pattern->getPartial();
+        $patternName = (string)$pattern->getName();
+        $this->patternPaths[$typeName][$patternName] = $pattern->getPartial();
       }
     }
   }

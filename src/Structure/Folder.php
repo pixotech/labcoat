@@ -27,6 +27,10 @@ abstract class Folder implements \Countable, FolderInterface {
     if (!empty($patterns)) $this->addPatterns($patterns);
   }
 
+  public function __toString() {
+    return $this->name;
+  }
+
   public function addPattern(PatternInterface $pattern) {
     $this->patterns[] = $pattern;
   }

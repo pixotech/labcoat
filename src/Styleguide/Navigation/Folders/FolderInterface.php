@@ -5,6 +5,11 @@ namespace Labcoat\Styleguide\Navigation\Folders;
 interface FolderInterface {
 
   /**
+   * @return \Labcoat\Structure\FolderInterface
+   */
+  public function getFolder();
+
+  /**
    * @return \Labcoat\Styleguide\Navigation\Items\ItemInterface[]
    */
   public function getItems();

@@ -13,7 +13,7 @@ use Labcoat\Assets\AssetDirectory;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\Filters\PatternSelectorFilterIterator;
+use Labcoat\Patterns\Paths\SegmentInterface;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Structure\Type;
 
@@ -136,20 +136,6 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * Display a text representation of the Pattern Lab
-   *
-   * @return string A list of Pattern Lab contents, indented to show nesting depth
-   */
-  public function __toString() {
-    $str = '';
-    foreach (new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST) as $item) {
-      $depth = count(preg_split('/[\/~]/', $item->getPath())) - 1;
-      $str .= str_repeat('- ', $depth) . $item->getPath() . "\n";
-    }
-    return $str;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getAnnotationsFile() {
@@ -191,19 +177,6 @@ class PatternLab implements PatternLabInterface {
    */
   public function getIgnoredExtensions() {
     return $this->config->getIgnoredExtensions();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPattern($name) {
-    if ($this->isPathName($name)) {
-      $name = $this->normalizePath($this->stripPatternExtensionFromPath($name));
-    }
-    $patterns = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-    $filter = new PatternSelectorFilterIterator($patterns, $name);
-    foreach ($filter as $pattern) return $pattern;
-    throw new \OutOfBoundsException("Unknown pattern: $name");
   }
 
   /**
@@ -321,10 +294,11 @@ class PatternLab implements PatternLabInterface {
   /**
    * Look for a type with the provided path, and create it if it doesn't exist
    *
-   * @param string $name The name of the type
+   * @param SegmentInterface $name The name of the type
    * @return \Labcoat\Structure\TypeInterface A pattern type object
    */
-  protected function getOrCreateType($name) {
+  protected function getOrCreateType(SegmentInterface $name) {
+    $name = (string)$name;
     if (!isset($this->types[$name])) $this->types[$name] = new Type($name);
     return $this->types[$name];
   }

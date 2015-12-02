@@ -7,6 +7,9 @@ use Labcoat\Structure\FolderInterface as SourceInterface;
 
 abstract class Folder implements FolderInterface, \JsonSerializable {
 
+  /**
+   * @var SourceInterface
+   */
   protected $folder;
 
   /**
@@ -18,6 +21,10 @@ abstract class Folder implements FolderInterface, \JsonSerializable {
 
   public function __construct(SourceInterface $folder) {
     $this->folder = $folder;
+  }
+
+  public function getFolder() {
+    return $this->folder;
   }
 
   public function getItems() {

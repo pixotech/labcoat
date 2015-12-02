@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Navigation\Folders;
 
+use Labcoat\Patterns\Paths\Segment;
 use Labcoat\Structure\SubtypeInterface as SourceInterface;
 use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\Navigation\Items\PatternItem;
@@ -28,7 +29,7 @@ class Subtype extends Folder implements \JsonSerializable, SubtypeInterface {
   }
 
   public function getLowercaseName() {
-    return str_replace('-', ' ', $this->getNameWithDashes());
+    return (new Segment($this->folder->getName()))->getName()->lowercase();
   }
 
   public function getPartial() {
