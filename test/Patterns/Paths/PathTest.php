@@ -97,7 +97,7 @@ class PathTest extends \PHPUnit_Framework_TestCase {
 
   public function testNameOfPatternWithFourSegments() {
     $path = new Path('type/subtype/one/two');
-    $this->assertEquals('one--two', $path->getName());
+    $this->assertEquals('one-two', $path->getName());
   }
 
   public function testNormalize() {

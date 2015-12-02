@@ -46,16 +46,4 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $pattern = new Pattern('01-one/02-two/03-three', __FILE__);
     $this->assertEquals('01-one/02-two/03-three', $pattern->getPath());
   }
-
-  # State
-
-  public function testState() {
-    $pattern = new Pattern('one/two/three@completed', __FILE__);
-    $this->assertEquals('completed', $pattern->getState());
-  }
-
-  public function testNameWithState() {
-    $pattern = new Pattern('one/two/three@completed', __FILE__);
-    $this->assertEquals('three', $pattern->getName());
-  }
 }

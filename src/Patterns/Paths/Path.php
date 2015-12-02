@@ -11,24 +11,16 @@ class Path implements \Countable, PathInterface {
    */
   protected $segments = [];
 
-  /**
-   * @var string
-   */
-  protected $state;
-
   public static function split($path) {
     return preg_split('|[\\\/]+|', $path, -1, PREG_SPLIT_NO_EMPTY);
   }
 
   public function __construct($path) {
-    if (false !== strpos($path, '@')) {
-      list($path, $this->state) = explode('@', $path, 2);
-    }
     $this->makeSegments($path);
   }
 
   public function __toString() {
-    return implode(self::DELIMITER, $this->segments);
+    return $this->join(self::DELIMITER);
   }
 
   public function count() {
@@ -39,7 +31,9 @@ class Path implements \Countable, PathInterface {
    * @return string
    */
   public function getPartial() {
-    return $this->hasType() ? implode('-', [$this->getType(), $this->getName()]) : $this->getName();
+    $name = $this->getName();
+    $type = $this->hasType() ? $this->getType() : $name;
+    return $type . '-' . $name;
   }
 
   /**
@@ -53,14 +47,7 @@ class Path implements \Countable, PathInterface {
    * @return string
    */
   public function getName() {
-    return implode('--', array_slice($this->segments, $this->getNameSegmentIndex()));
-  }
-
-  /**
-   * @return string|null
-   */
-  public function getState() {
-    return $this->state;
+    return implode('-', array_slice($this->segments, $this->getNameSegmentIndex()));
   }
 
   /**
@@ -83,6 +70,10 @@ class Path implements \Countable, PathInterface {
 
   public function hasType() {
     return $this->count() > 1;
+  }
+
+  public function join($delimiter) {
+    return implode($delimiter, $this->segments);
   }
 
   public function normalize() {

@@ -66,8 +66,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getState() {
-    if ($this->getConfiguration()->hasState()) return $this->getConfiguration()->getState();
-    return $this->path->getState() ?: '';
+    return $this->getConfiguration()->hasState() ? $this->getConfiguration()->getState() : '';
   }
 
   public function getSubtype() {
