@@ -37,6 +37,11 @@ interface FolderInterface {
   public function getPagePath();
 
   /**
+   * @return string
+   */
+  public function getPartial();
+
+  /**
    * @return PatternInterface[]
    */
   public function getPatterns();

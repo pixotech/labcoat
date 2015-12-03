@@ -47,4 +47,8 @@ class Type implements TypeInterface {
   public function getPagePath() {
     // TODO: Implement getPagePath() method.
   }
+
+  public function getPartial() {
+    // TODO: Implement getPartial() method.
+  }
 }

@@ -21,4 +21,7 @@ class Folder extends \Labcoat\Structure\Folder implements FolderInterface {
     // TODO: Implement getPagePath() method.
   }
 
+  public function getPartial() {
+    // TODO: Implement getPartial() method.
+  }
 }

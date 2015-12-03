@@ -21,6 +21,10 @@ class Type extends Folder implements TypeInterface {
     return $this->name;
   }
 
+  public function getPartial() {
+    // TODO: Implement getPartial() method.
+  }
+
   /**
    * @param $name
    * @return SubtypeInterface
