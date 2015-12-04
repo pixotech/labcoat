@@ -35,6 +35,45 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($label, $nav['patternTypeUC']);
   }
 
+  # Navigation: Subtypes
+
+  public function testNavItemSubtypeName() {
+    $name = 'subtype';
+    $subtype = new Subtype();
+    $subtype->name = $name;
+    $nav = DataFile::makeNavSubtype($subtype);
+    $this->assertEquals($name, $nav['patternSubtype']);
+  }
+
+  public function testNavItemSubtypeLowercaseName() {
+    $name = 'subtype';
+    $subtype = new Subtype();
+    $subtype->name = $name;
+    $nav = DataFile::makeNavSubtype($subtype);
+    $this->assertEquals($name, $nav['patternSubtypeLC']);
+  }
+
+  public function testNavItemSubtypeUppercaseName() {
+    $label = 'Subtype Label';
+    $subtype = new Subtype();
+    $subtype->label = $label;
+    $nav = DataFile::makeNavSubtype($subtype);
+    $this->assertEquals($label, $nav['patternSubtypeUC']);
+  }
+
+  # Navigation: Patterns
+
+  public function testNavItemPatternName() {
+    $name = 'Pattern Name';
+    $pattern = new Pattern();
+    $pattern->label = $name;
+    $nav = DataFile::makeNavPattern($pattern);
+    $this->assertEquals($name, $nav['patternName']);
+  }
+
+
+
+
   public function testNavItems() {
     $patternlab = new PatternLab();
     $file = new DataFile($patternlab);
@@ -63,45 +102,6 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $this->assertCount(1, $nav['patternTypes'][0]['patternTypeItems']);
   }
 
-  public function testNavItemSubtypeName() {
-    $name = 'subtype';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $subtype = new Subtype();
-    $subtype->name = $name;
-    $type->subtypes[] = $subtype;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($name, $nav['patternTypes'][0]['patternTypeItems'][0]['patternSubtype']);
-  }
-
-  public function testNavItemSubtypeLowercaseName() {
-    $name = 'subtype';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $subtype = new Subtype();
-    $subtype->name = $name;
-    $type->subtypes[] = $subtype;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($name, $nav['patternTypes'][0]['patternTypeItems'][0]['patternSubtypeLC']);
-  }
-
-  public function testNavItemSubtypeUppercaseName() {
-    $label = 'Subtype Label';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $subtype = new Subtype();
-    $subtype->label = $label;
-    $type->subtypes[] = $subtype;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($label, $nav['patternTypes'][0]['patternTypeItems'][0]['patternSubtypeUC']);
-  }
-
   public function testNavItemTypePatterns() {
     $patternlab = new PatternLab();
     $type = new Type();
@@ -124,19 +124,6 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $file = new DataFile($patternlab);
     $nav = $file->getNavItems();
     $this->assertCount(2, $nav['patternTypes'][0]['patternItems']);
-  }
-
-  public function testNavItemPatternName() {
-    $name = 'Pattern Name';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $pattern = new Pattern();
-    $pattern->label = $name;
-    $type->patterns[] = $pattern;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($name, $nav['patternTypes'][0]['patternItems'][0]['patternName']);
   }
 
   public function testNavItemPatternPagePath() {
