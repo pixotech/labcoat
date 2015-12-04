@@ -7,6 +7,7 @@ use Labcoat\Structure\TypeInterface;
 
 class Type implements TypeInterface {
 
+  public $label;
   public $name;
   public $path;
   public $patterns = [];
@@ -41,7 +42,7 @@ class Type implements TypeInterface {
   }
 
   public function getLabel() {
-    // TODO: Implement getLabel() method.
+    return $this->label;
   }
 
   public function getPagePath() {

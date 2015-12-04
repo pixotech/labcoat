@@ -3,6 +3,10 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\PatternLabInterface;
+use Labcoat\Patterns\PatternInterface;
+use Labcoat\Structure\FolderInterface;
+use Labcoat\Structure\SubtypeInterface;
+use Labcoat\Structure\TypeInterface;
 use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\StyleguideInterface;
 
@@ -28,10 +32,74 @@ class DataFile extends File implements DataFileInterface {
    */
   protected $patternlab;
 
+  public static function makeNavPattern(PatternInterface $pattern) {
+    return [
+      'patternPath' => $pattern->getPagePath(),
+      'patternName' => $pattern->getLabel(),
+      'patternPartial' => $pattern->getPartial(),
+      'patternState' => $pattern->getState(),
+    ];
+  }
+
+  public static function makeNavSubtype(SubtypeInterface $subtype) {
+    $data = [
+      'patternSubtypeLC' => $subtype->getName(),
+      'patternSubtypeUC' => $subtype->getLabel(),
+      'patternSubtype' => $subtype->getName(),
+      'patternSubtypeItems' => [],
+    ];
+    foreach ($subtype->getPatterns() as $pattern) {
+      $data['patternSubtypeItems'][] = self::makeNavPattern($pattern);
+    }
+    if (count($data['patternSubtypeItems'])) {
+      $data['patternSubtypeItems'][] = self::makeNavSubtypeItem($subtype);
+    }
+    return $data;
+  }
+
+  public static function makeNavSubtypeItem(SubtypeInterface $subtype) {
+    return [
+      "patternPath" => $subtype->getName(),
+      "patternName" => $subtype->getName(),
+      "patternType" => $subtype->getType()->getName(),
+      "patternSubtype" => $subtype->getName(),
+      "patternPartial" => $subtype->getPartial(),
+    ];
+  }
+
+  public static function makeNavType(TypeInterface $type) {
+    $data = [
+      'patternTypeLC' => $type->getName(),
+      'patternTypeUC' => $type->getLabel(),
+      'patternType' => $type->getName(),
+      'patternTypeItems' => [],
+      'patternItems' => [],
+    ];
+    foreach ($type->getSubtypes() as $subtype) {
+      $data['patternTypeItems'][] = self::makeNavSubtype($subtype);
+    }
+    foreach ($type->getPatterns() as $pattern) {
+      $data['patternItems'][] = self::makeNavPattern($pattern);
+    }
+    if (count($data['patternTypeItems'])) {
+      $data['patternItems'][] = self::makeNavTypeItem($type);
+    }
+    return $data;
+  }
+
+  public static function makeNavTypeItem(TypeInterface $type) {
+    return [
+      "patternPath" => $type->getName(),
+      "patternName" => $type->getName(),
+      "patternType" => $type->getName(),
+      "patternSubtype" => 'all',
+      "patternPartial" => $type->getPartial(),
+    ];
+  }
+
   public function __construct(PatternLabInterface $patternlab) {
     $this->patternlab = $patternlab;
     $this->loadControls();
-    $this->makeNavigation();
   }
 
   /**
@@ -56,11 +124,19 @@ class DataFile extends File implements DataFileInterface {
   public function getContents(StyleguideInterface $styleguide) {
     $contents  = "var config = " . json_encode($this->getConfig($styleguide)).";";
     $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
-    $contents .= "var navItems = " . json_encode($this->navigation) . ";";
+    $contents .= "var navItems = " . json_encode($this->getNavItems()) . ";";
     $contents .= "var patternPaths = " . json_encode($this->navigation->getPatternPaths()) . ";";
-    $contents .= "var viewAllPaths = " . json_encode($this->navigation->getIndexPaths()) . ";";
+    $contents .= "var viewAllPaths = " . json_encode($this->navigation->getViewAllPaths()) . ";";
     $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
     return $contents;
+  }
+
+  public function getNavItems() {
+    $nav = ['patternTypes' => []];
+    foreach ($this->patternlab->getTypes() as $type) {
+      $nav['patternTypes'][] = self::makeNavType($type);
+    }
+    return $nav;
   }
 
   public function getPath() {
@@ -127,9 +203,5 @@ class DataFile extends File implements DataFileInterface {
     foreach ($this->patternlab->getHiddenControls() as $control) {
       $this->controls['ishControlsHide'][$control] = 'true';
     }
-  }
-
-  protected function makeNavigation() {
-    $this->navigation = new Navigation($this->patternlab);
   }
 }

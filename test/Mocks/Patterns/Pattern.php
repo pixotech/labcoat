@@ -10,56 +10,22 @@ class Pattern implements PatternInterface {
 
   public $file;
   public $id;
+  public $label;
   public $name;
   public $normalizedPath;
+  public $pagePath;
   public $partial;
   public $path;
   public $slug;
   public $state;
   public $template;
 
-  public function actsLikePattern() {
-    return true;
-  }
-
-  public function actsLikeSection() {
-    return false;
-  }
-
   public function getLabel() {
-
-  }
-
-  public function getNormalizedPath() {
-    return $this->normalizedPath;
-  }
-
-  public function getSlug() {
-    return $this->slug;
+    return $this->label;
   }
 
   public function getPagePath() {
-
-  }
-
-  public function isPattern() {
-    return true;
-  }
-
-  public function isPseudoPattern() {
-    return false;
-  }
-
-  public function isSubtype() {
-    return false;
-  }
-
-  public function isType() {
-    return false;
-  }
-
-  public function getData() {
-    // TODO: Implement getData() method.
+    return $this->pagePath;
   }
 
   public function getFile() {

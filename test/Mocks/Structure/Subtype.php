@@ -7,6 +7,7 @@ use Labcoat\Structure\SubtypeInterface;
 
 class Subtype implements SubtypeInterface {
 
+  public $label;
   public $name;
   public $patterns = [];
   public $type;
@@ -40,7 +41,7 @@ class Subtype implements SubtypeInterface {
   }
 
   public function getLabel() {
-    // TODO: Implement getLabel() method.
+    return $this->label;
   }
 
   public function getPagePath() {

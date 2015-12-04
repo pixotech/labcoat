@@ -38,7 +38,7 @@ class Navigation implements NavigationInterface, \JsonSerializable {
     $this->makePaths();
   }
 
-  public function getIndexPaths() {
+  public function getViewAllPaths() {
     return $this->indexPaths;
   }
 

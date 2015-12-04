@@ -3,13 +3,14 @@
 namespace Labcoat\Mocks;
 
 use Labcoat\PatternLabInterface;
-use RecursiveIterator;
 
 class PatternLab implements PatternLabInterface {
 
+  public $assets = [];
+  public $hiddenControls = [];
   public $ignoredExtensions = [];
   public $patterns = [];
-  public $render;
+  public $types = [];
 
   public function getIgnoredExtensions() {
     return $this->ignoredExtensions;
@@ -23,48 +24,8 @@ class PatternLab implements PatternLabInterface {
     // TODO: Implement getPatternExtension() method.
   }
 
-  public function makeDocument($patternName, $variables = NULL) {
-    // TODO: Implement makeDocument() method.
-  }
-
-  public function render($patternName, $variables = NULL) {
-    return $this->render;
-  }
-
   public function getAssets() {
-    // TODO: Implement getAssets() method.
-  }
-
-  public function getLayout($name) {
-    // TODO: Implement getLayout() method.
-  }
-
-  public function getPattern($name) {
-    return $this->patterns[$name];
-  }
-
-  public function hasLayout($name) {
-    // TODO: Implement hasLayout() method.
-  }
-
-  public function getTwig() {
-    // TODO: Implement getTwig() method.
-  }
-
-  public function getDataDirectory() {
-    // TODO: Implement getDataDirectory() method.
-  }
-
-  public function getDefaultDirectoryPermissions() {
-    // TODO: Implement getDefaultDirectoryPermissions() method.
-  }
-
-  public function getExposedOptions() {
-    // TODO: Implement getExposedOptions() method.
-  }
-
-  public function getMetaDirectory() {
-    // TODO: Implement getMetaDirectory() method.
+    return $this->assets;
   }
 
   public function getPatterns() {
@@ -84,7 +45,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getHiddenControls() {
-    // TODO: Implement getHiddenControls() method.
+    return $this->hiddenControls;
   }
 
   public function getStyleguideFooter() {
@@ -107,38 +68,6 @@ class PatternLab implements PatternLabInterface {
     // TODO: Implement isIgnoredFile() method.
   }
 
-  public function current() {
-    // TODO: Implement current() method.
-  }
-
-  public function next() {
-    // TODO: Implement next() method.
-  }
-
-  public function key() {
-    // TODO: Implement key() method.
-  }
-
-  public function valid() {
-    // TODO: Implement valid() method.
-  }
-
-  public function rewind() {
-    // TODO: Implement rewind() method.
-  }
-
-  public function count() {
-    // TODO: Implement count() method.
-  }
-
-  public function hasChildren() {
-    // TODO: Implement hasChildren() method.
-  }
-
-  public function getChildren() {
-    // TODO: Implement getChildren() method.
-  }
-
   public function getStyleguideAssetDirectories() {
     // TODO: Implement getStyleguideAssetDirectories() method.
   }
@@ -152,6 +81,6 @@ class PatternLab implements PatternLabInterface {
   }
 
   public function getTypes() {
-    // TODO: Implement getTypes() method.
+    return $this->types;
   }
 }
