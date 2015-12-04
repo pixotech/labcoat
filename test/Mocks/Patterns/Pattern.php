@@ -96,4 +96,8 @@ class Pattern implements PatternInterface {
   public function render(DataInterface $data = NULL) {
     // TODO: Implement render() method.
   }
+
+  public function includes(PatternInterface $pattern) {
+    // TODO: Implement includes() method.
+  }
 }

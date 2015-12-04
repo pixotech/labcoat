@@ -125,6 +125,14 @@ class Pattern implements PatternInterface {
     return $this->path->hasType();
   }
 
+  public function includes(PatternInterface $pattern) {
+    foreach ($this->includedPatterns as $included) {
+      if ($included == $pattern->getPartial()) return true;
+      if ($included == (string)$pattern->getPath()) return true;
+    }
+    return false;
+  }
+
   public function render(DataInterface $data = NULL) {
     return $this->patternlab->render($this, $data);
   }

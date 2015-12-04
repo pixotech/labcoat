@@ -77,6 +77,8 @@ interface PatternLabInterface {
    */
   public function getPatterns();
 
+  public function getPatternsThatInclude(PatternInterface $pattern);
+
   /**
    * Get the paths to style guide asset directories
    *

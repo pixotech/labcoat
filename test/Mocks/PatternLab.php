@@ -89,4 +89,8 @@ class PatternLab implements PatternLabInterface {
   public function render(PatternInterface $pattern, DataInterface $data = NULL) {
     // TODO: Implement render() method.
   }
+
+  public function getPatternsThatInclude(PatternInterface $pattern) {
+    // TODO: Implement getPatternsThatInclude() method.
+  }
 }

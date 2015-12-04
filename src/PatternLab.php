@@ -210,6 +210,14 @@ class PatternLab implements PatternLabInterface {
     return $this->config->getPatternsDirectory();
   }
 
+  public function getPatternsThatInclude(PatternInterface $pattern) {
+    $patterns = [];
+    foreach ($this->getPatterns() as $other) {
+      if ($other->includes($pattern)) $patterns[] = $pattern;
+    }
+    return $patterns;
+  }
+
   /**
    * {@inheritdoc}
    */

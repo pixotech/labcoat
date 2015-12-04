@@ -123,6 +123,12 @@ interface PatternInterface {
    */
   public function hasType();
 
+  /**
+   * @param PatternInterface $pattern
+   * @return bool
+   */
+  public function includes(PatternInterface $pattern);
+
   public function render(DataInterface $data = null);
 
   /**
