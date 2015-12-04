@@ -71,6 +71,30 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($name, $nav['patternName']);
   }
 
+  public function testNavItemPatternPagePath() {
+    $path = 'path-to-the-pattern';
+    $pattern = new Pattern();
+    $pattern->pagePath = $path;
+    $nav = DataFile::makeNavPattern($pattern);
+    $this->assertEquals($path, $nav['patternPath']);
+  }
+
+  public function testNavItemPatternPartial() {
+    $partial = 'path-to-the-pattern';
+    $pattern = new Pattern();
+    $pattern->partial = $partial;
+    $nav = DataFile::makeNavPattern($pattern);
+    $this->assertEquals($partial, $nav['patternPartial']);
+  }
+
+  public function testNavItemPatternState() {
+    $state = 'state';
+    $pattern = new Pattern();
+    $pattern->state = $state;
+    $nav = DataFile::makeNavPattern($pattern);
+    $this->assertEquals($state, $nav['patternState']);
+  }
+
 
 
 
@@ -85,7 +109,7 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
 
   public function testNavItemTypes() {
     $patternlab = new PatternLab();
-    $patternlab->types[] = $type = $this->makeType('type');
+    $patternlab->types[] = new Type();
     $file = new DataFile($patternlab);
     $nav = $file->getNavItems();
     $this->assertCount(1, $nav['patternTypes']);
@@ -124,50 +148,5 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $file = new DataFile($patternlab);
     $nav = $file->getNavItems();
     $this->assertCount(2, $nav['patternTypes'][0]['patternItems']);
-  }
-
-  public function testNavItemPatternPagePath() {
-    $path = 'path-to-the-pattern';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $pattern = new Pattern();
-    $pattern->pagePath = $path;
-    $type->patterns[] = $pattern;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($path, $nav['patternTypes'][0]['patternItems'][0]['patternPath']);
-  }
-
-  public function testNavItemPatternPartial() {
-    $partial = 'path-to-the-pattern';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $pattern = new Pattern();
-    $pattern->partial = $partial;
-    $type->patterns[] = $pattern;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($partial, $nav['patternTypes'][0]['patternItems'][0]['patternPartial']);
-  }
-
-  public function testNavItemPatternState() {
-    $state = 'state';
-    $patternlab = new PatternLab();
-    $type = new Type();
-    $pattern = new Pattern();
-    $pattern->state = $state;
-    $type->patterns[] = $pattern;
-    $patternlab->types[] = $type;
-    $file = new DataFile($patternlab);
-    $nav = $file->getNavItems();
-    $this->assertEquals($state, $nav['patternTypes'][0]['patternItems'][0]['patternState']);
-  }
-
-  protected function makeType($name = null) {
-    $type = new Type();
-    $type->name = $name;
-    return $type;
   }
 }
