@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Data\DataInterface;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
 interface PatternInterface {
@@ -121,6 +122,8 @@ interface PatternInterface {
    * @return bool
    */
   public function hasType();
+
+  public function render(DataInterface $data = null);
 
   /**
    * @param ConfigurationInterface $configurationInterface

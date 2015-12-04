@@ -2,6 +2,7 @@
 
 namespace Labcoat\Mocks\Patterns;
 
+use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 use Labcoat\Patterns\PatternInterface;
@@ -90,5 +91,9 @@ class Pattern implements PatternInterface {
 
   public function hasSubtype() {
     // TODO: Implement hasSubtype() method.
+  }
+
+  public function render(DataInterface $data = NULL) {
+    // TODO: Implement render() method.
   }
 }

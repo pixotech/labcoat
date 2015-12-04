@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Data\DataInterface;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Paths\Path;
 use Labcoat\Patterns\Configuration\Configuration;
@@ -122,6 +123,10 @@ class Pattern implements PatternInterface {
 
   public function hasType() {
     return $this->path->hasType();
+  }
+
+  public function render(DataInterface $data = NULL) {
+    return $this->patternlab->render($this, $data);
   }
 
   public function setConfiguration(ConfigurationInterface $configuration) {

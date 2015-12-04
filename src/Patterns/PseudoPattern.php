@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Data\DataInterface;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
 class PseudoPattern implements HasDataInterface, PseudoPatternInterface {
@@ -102,5 +103,9 @@ class PseudoPattern implements HasDataInterface, PseudoPatternInterface {
 
   public function hasSubtype() {
     // TODO: Implement hasSubtype() method.
+  }
+
+  public function render(DataInterface $data = NULL) {
+    // TODO: Implement render() method.
   }
 }

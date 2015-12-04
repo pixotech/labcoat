@@ -60,11 +60,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $patternlab;
 
   /**
-   * @var \Twig_Environment
-   */
-  protected $patternParser;
-
-  /**
    * @var \Labcoat\Styleguide\Patterns\PatternInterface[]
    */
   protected $patterns = [];
