@@ -5,9 +5,7 @@ namespace Labcoat\Patterns;
 use Labcoat\Data\DataInterface;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
-class PseudoPattern implements HasDataInterface, PseudoPatternInterface {
-
-  use HasDataTrait;
+class PseudoPattern implements PseudoPatternInterface {
 
   protected $pattern;
   protected $time;
@@ -111,5 +109,17 @@ class PseudoPattern implements HasDataInterface, PseudoPatternInterface {
 
   public function includes(PatternInterface $pattern) {
     // TODO: Implement includes() method.
+  }
+
+  public function getNormalizedPath() {
+    // TODO: Implement getNormalizedPath() method.
+  }
+
+  public function getTemplateNames() {
+    // TODO: Implement getTemplateNames() method.
+  }
+
+  public function hasTemplateName($name) {
+    // TODO: Implement isTemplate() method.
   }
 }

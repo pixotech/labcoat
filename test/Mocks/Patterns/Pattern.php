@@ -100,4 +100,16 @@ class Pattern implements PatternInterface {
   public function includes(PatternInterface $pattern) {
     // TODO: Implement includes() method.
   }
+
+  public function getNormalizedPath() {
+    // TODO: Implement getNormalizedPath() method.
+  }
+
+  public function getTemplateNames() {
+    // TODO: Implement getTemplateNames() method.
+  }
+
+  public function hasTemplateName($name) {
+    // TODO: Implement isTemplate() method.
+  }
 }

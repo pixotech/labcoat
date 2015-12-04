@@ -51,6 +51,11 @@ interface PatternInterface {
   public function getName();
 
   /**
+   * @return \Labcoat\Patterns\Paths\PathInterface
+   */
+  public function getNormalizedPath();
+
+  /**
    * The path to the style guide page
    *
    * Equivalent to `id/id.html`. Cannot be overridden by configuration.
@@ -104,6 +109,11 @@ interface PatternInterface {
   public function getTemplate();
 
   /**
+   * @return array
+   */
+  public function getTemplateNames();
+
+  /**
    * @return int
    */
   public function getTime();
@@ -117,6 +127,12 @@ interface PatternInterface {
    * @return bool
    */
   public function hasSubtype();
+
+  /**
+   * @param string $name
+   * @return bool
+   */
+  public function hasTemplateName($name);
 
   /**
    * @return bool

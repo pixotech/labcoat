@@ -10,8 +10,6 @@ use Labcoat\Patterns\Configuration\ConfigurationInterface;
 
 class Pattern implements PatternInterface {
 
-  use HasDataTrait;
-
   protected $configuration;
   protected $file;
   protected $includedPatterns;
@@ -70,6 +68,10 @@ class Pattern implements PatternInterface {
     return $this->path->getName();
   }
 
+  public function getNormalizedPath() {
+    return $this->getPath()->normalize();
+  }
+
   public function getPagePath() {
     $id = $this->getId();
     return "$id/$id.html";
@@ -90,10 +92,6 @@ class Pattern implements PatternInterface {
     return $this->pseudoPatterns;
   }
 
-  public function getSlug() {
-    return $this->path->getName();
-  }
-
   public function getState() {
     return $this->getConfiguration()->hasState() ? $this->getConfiguration()->getState() : '';
   }
@@ -104,6 +102,13 @@ class Pattern implements PatternInterface {
 
   public function getTemplate() {
     return $this->getPath();
+  }
+
+  public function getTemplateNames() {
+    return [
+      (string)$this->getNormalizedPath(),
+      (string)$this->getPartial(),
+    ];
   }
 
   public function getTime() {
@@ -119,6 +124,10 @@ class Pattern implements PatternInterface {
 
   public function hasSubtype() {
     return $this->path->hasSubtype();
+  }
+
+  public function hasTemplateName($name) {
+    return in_array($name, $this->getTemplateNames());
   }
 
   public function hasType() {
