@@ -3,11 +3,10 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\PatternLabInterface;
+use Labcoat\Patterns\Paths\Segment;
 use Labcoat\Patterns\PatternInterface;
-use Labcoat\Structure\FolderInterface;
 use Labcoat\Structure\SubtypeInterface;
 use Labcoat\Structure\TypeInterface;
-use Labcoat\Styleguide\Navigation\Navigation;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class DataFile extends File implements DataFileInterface {
@@ -21,11 +20,6 @@ class DataFile extends File implements DataFileInterface {
    * @var array
    */
   protected $controls;
-
-  /**
-   * @var Navigation
-   */
-  protected $navigation;
 
   /**
    * @var PatternLabInterface
@@ -125,8 +119,8 @@ class DataFile extends File implements DataFileInterface {
     $contents  = "var config = " . json_encode($this->getConfig($styleguide)).";";
     $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
     $contents .= "var navItems = " . json_encode($this->getNavItems()) . ";";
-    $contents .= "var patternPaths = " . json_encode($this->navigation->getPatternPaths()) . ";";
-    $contents .= "var viewAllPaths = " . json_encode($this->navigation->getViewAllPaths()) . ";";
+    $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
+    $contents .= "var viewAllPaths = " . json_encode($this->getViewAllPaths()) . ";";
     $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
     return $contents;
   }
@@ -143,8 +137,41 @@ class DataFile extends File implements DataFileInterface {
     return $this->makePath(['styleguide', 'data', 'patternlab-data.js']);
   }
 
+  public function getPatternPaths() {
+    $paths = [];
+    foreach ($this->patternlab->getTypes() as $type) {
+      $typeName = (string)(new Segment($type->getName()))->getName();
+      foreach ($type->getSubtypes() as $subtype) {
+        foreach ($subtype->getPatterns() as $pattern) {
+          $patternName = (string)$pattern->getName();
+          $paths[$typeName][$patternName] = $pattern->getPartial();
+        }
+      }
+      foreach ($type->getPatterns() as $pattern) {
+        $patternName = (string)$pattern->getName();
+        $paths[$typeName][$patternName] = $pattern->getPartial();
+      }
+    }
+    return $paths;
+  }
+
   public function getTime() {
     return time();
+  }
+
+  public function getViewAllPaths() {
+    $paths = [];
+    foreach ($this->patternlab->getTypes() as $type) {
+      $typeName = (string)(new Segment($type->getName()))->getName();
+      foreach ($type->getSubtypes() as $subtype) {
+        $subtypeName = (string)$subtype->getName();
+        $paths[$typeName][$subtypeName] = $subtype->getPartial();
+      }
+      if ($type->hasSubtypes()) {
+        $paths[$typeName]['all'] = $type->getName();
+      }
+    }
+    return $paths;
   }
 
   public function put(StyleguideInterface $styleguide, $path) {
