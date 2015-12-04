@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Paths\Path;
 use Labcoat\Patterns\Configuration\Configuration;
 use Labcoat\Patterns\Configuration\ConfigurationInterface;
@@ -14,12 +15,29 @@ class Pattern implements PatternInterface {
   protected $file;
   protected $includedPatterns;
   protected $path;
+
+  /**
+   * @var PatternLabInterface
+   */
+  protected $patternlab;
+
   protected $pseudoPatterns;
   protected $time;
+  protected $valid;
 
-  public function __construct($path, $file) {
+  public static function isInclude(\Twig_Token $token) {
+    return self::isNameToken($token) && in_array($token->getValue(), ['include', 'extend']);
+  }
+
+  public static function isNameToken(\Twig_Token $token) {
+    return $token->getType() == \Twig_Token::NAME_TYPE;
+  }
+
+  public function __construct(PatternLabInterface $patternlab, $path, $file) {
+    $this->patternlab = $patternlab;
     $this->path = new Path($path);
     $this->file = $file;
+    $this->parseTemplate();
     $this->findData();
   }
 
@@ -37,7 +55,6 @@ class Pattern implements PatternInterface {
   }
 
   public function getIncludedPatterns() {
-    if (!isset($this->includedPatterns)) $this->findIncludedPatterns();
     return $this->includedPatterns;
   }
 
@@ -69,7 +86,7 @@ class Pattern implements PatternInterface {
    * @return PseudoPatternInterface
    */
   public function getPseudoPatterns() {
-    return $this->items;
+    return $this->pseudoPatterns;
   }
 
   public function getSlug() {
@@ -116,29 +133,11 @@ class Pattern implements PatternInterface {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
-        $this->items[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
+        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
         $this->dataFiles[] = $path;
       }
-    }
-  }
-
-  protected function findIncludedPatterns() {
-    $this->includedPatterns = [];
-    try {
-      $tokens = $this->getTemplateTokens();
-      while (!$tokens->isEOF()) {
-        $token = $tokens->next();
-        if ($token->getType() == \Twig_Token::NAME_TYPE && in_array($token->getValue(), ['include', 'extend'])) {
-          $next = $tokens->next()->getValue();
-          if ($next == '(') $next = $tokens->next()->getValue();
-          $this->includedPatterns[] = $next;
-        }
-      }
-    }
-    catch (\Twig_Error_Syntax $e) {
-      // Template syntax error
     }
   }
 
@@ -171,5 +170,24 @@ class Pattern implements PatternInterface {
   protected function makeConfiguration() {
     $data = $this->hasConfiguration() ? $this->getConfigurationData() : [];
     $this->configuration = new Configuration($data);
+  }
+
+  protected function parseTemplate() {
+    $this->valid = true;
+    $this->includedPatterns = [];
+    try {
+      $tokens = $this->getTemplateTokens();
+      while (!$tokens->isEOF()) {
+        $token = $tokens->next();
+        if (self::isInclude($token)) {
+          $next = $tokens->next()->getValue();
+          if ($next == '(') $next = $tokens->next()->getValue();
+          $this->includedPatterns[] = $next;
+        }
+      }
+    }
+    catch (\Twig_Error_Syntax $e) {
+      $this->valid = false;
+    }
   }
 }

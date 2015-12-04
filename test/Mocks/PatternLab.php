@@ -2,7 +2,9 @@
 
 namespace Labcoat\Mocks;
 
+use Labcoat\Data\DataInterface;
 use Labcoat\PatternLabInterface;
+use Labcoat\Patterns\PatternInterface;
 
 class PatternLab implements PatternLabInterface {
 
@@ -82,5 +84,9 @@ class PatternLab implements PatternLabInterface {
 
   public function getTypes() {
     return $this->types;
+  }
+
+  public function render(PatternInterface $pattern, DataInterface $data = NULL) {
+    // TODO: Implement render() method.
   }
 }

@@ -9,6 +9,9 @@
 
 namespace Labcoat;
 
+use Labcoat\Data\DataInterface;
+use Labcoat\Patterns\PatternInterface;
+
 interface PatternLabInterface {
 
   /**
@@ -28,7 +31,7 @@ interface PatternLabInterface {
   /**
    * Get the global variables used for all patterns
    *
-   * @return array The global pattern variables
+   * @return \Labcoat\Data\DataInterface The global pattern variables
    */
   public function getGlobalData();
 
@@ -138,4 +141,6 @@ interface PatternLabInterface {
    * @return bool True if the asset is in an ignored directory
    */
   public function isInIgnoredDirectory($path);
+
+  public function render(PatternInterface $pattern, DataInterface $data = null);
 }

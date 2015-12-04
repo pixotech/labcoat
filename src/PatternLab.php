@@ -13,9 +13,13 @@ use Labcoat\Assets\AssetDirectory;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
+use Labcoat\Data\Data;
+use Labcoat\Data\DataInterface;
 use Labcoat\Patterns\Paths\SegmentInterface;
 use Labcoat\Patterns\Pattern;
+use Labcoat\Patterns\PatternInterface;
 use Labcoat\Structure\Type;
+use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
 
@@ -30,7 +34,7 @@ class PatternLab implements PatternLabInterface {
   protected $config;
 
   /**
-   * @var array|null
+   * @var \Labcoat\Data\DataInterface
    */
   protected $globalData;
 
@@ -38,6 +42,11 @@ class PatternLab implements PatternLabInterface {
    * @var \Labcoat\Patterns\PatternInterface[]
    */
   protected $patterns;
+
+  /**
+   * @var \Labcoat\Twig\Environment
+   */
+  protected $twig;
 
   /**
    * @var \Labcoat\Structure\TypeInterface[]
@@ -132,7 +141,9 @@ class PatternLab implements PatternLabInterface {
    */
   public function __construct(ConfigurationInterface $config) {
     $this->config = $config;
+    $this->loadGlobalData();
     $this->findPatterns();
+    $this->makeParser();
   }
 
   /**
@@ -154,7 +165,6 @@ class PatternLab implements PatternLabInterface {
    * {@inheritdoc}
    */
   public function getGlobalData() {
-    if (!isset($this->globalData)) $this->loadGlobalData();
     return $this->globalData;
   }
 
@@ -266,6 +276,10 @@ class PatternLab implements PatternLabInterface {
     return count(array_intersect($dirs, $this->getIgnoredDirectories())) > 0;
   }
 
+  public function render(PatternInterface $pattern, DataInterface $data = null) {
+    return $this->twig->render($pattern->getPath(), isset($data) ? $data->toArray() : []);
+  }
+
   /**
    * Look in the asset directories for asset files
    */
@@ -285,7 +299,7 @@ class PatternLab implements PatternLabInterface {
     $ext = $this->getPatternExtension();
     foreach ($this->getPatternFilesIterator() as $match => $file) {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      $pattern = new Pattern($path, $match);
+      $pattern = new Pattern($this, $path, $match);
       $this->patterns[] = $pattern;
       if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
     }
@@ -316,22 +330,27 @@ class PatternLab implements PatternLabInterface {
    * Load all global pattern data
    */
   protected function loadGlobalData() {
-    $this->globalData = [];
+    $data = ['listitems' => $this->loadListItems()];
     foreach ($this->config->getGlobalDataFiles() as $path) {
-      $this->globalData = array_replace_recursive($this->globalData, self::loadData($path));
+      $data = array_replace_recursive($data, self::loadData($path));
     }
-    $this->loadListItems();
+    $this->globalData = new Data($data);
   }
 
   /**
    * Load list items data for patterns
    */
   protected function loadListItems() {
-    $this->globalData['listitems'] = [];
+    $items = [];
     foreach ($this->config->getListItemFiles() as $path) {
-      $this->globalData['listitems'] = array_merge($this->globalData['listitems'], self::loadData($path));
+      $items = array_merge($items, self::loadData($path));
     }
-    shuffle($this->globalData['listitems']);
+    shuffle($items);
+    return $items;
+  }
+
+  protected function makeParser() {
+    $this->twig = new Environment($this);
   }
 
   /**
