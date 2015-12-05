@@ -2,6 +2,7 @@
 
 namespace Labcoat\Patterns;
 
+use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Paths\Path;
@@ -11,6 +12,8 @@ use Labcoat\Patterns\Configuration\ConfigurationInterface;
 class Pattern implements PatternInterface {
 
   protected $configuration;
+  protected $data;
+  protected $example;
   protected $file;
   protected $includedPatterns;
   protected $path;
@@ -24,7 +27,7 @@ class Pattern implements PatternInterface {
   protected $time;
   protected $valid;
 
-  public static function isInclude(\Twig_Token $token) {
+  public static function isIncludeToken(\Twig_Token $token) {
     return self::isNameToken($token) && in_array($token->getValue(), ['include', 'extend']);
   }
 
@@ -43,6 +46,15 @@ class Pattern implements PatternInterface {
   public function getConfiguration() {
     if (!isset($this->configuration)) $this->makeConfiguration();
     return $this->configuration;
+  }
+
+  public function getData() {
+    return $this->data;
+  }
+
+  public function getExample() {
+    if (!isset($this->example)) $this->example = $this->render($this->getData());
+    return $this->example;
   }
 
   public function getFile() {
@@ -66,10 +78,6 @@ class Pattern implements PatternInterface {
    */
   public function getName() {
     return $this->path->getName();
-  }
-
-  public function getNormalizedPath() {
-    return $this->getPath()->normalize();
   }
 
   public function getPagePath() {
@@ -106,16 +114,13 @@ class Pattern implements PatternInterface {
 
   public function getTemplateNames() {
     return [
-      (string)$this->getNormalizedPath(),
+      (string)$this->getPath()->normalize(),
       (string)$this->getPartial(),
     ];
   }
 
   public function getTime() {
-    if (!isset($this->time)) {
-      $this->time = max(filemtime($this->file), $this->getDataTime());
-    }
-    return $this->time;
+    return filemtime($this->file);
   }
 
   public function getType() {
@@ -151,6 +156,7 @@ class Pattern implements PatternInterface {
   }
 
   protected function findData() {
+    $this->data = new Data();
     foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
@@ -158,7 +164,7 @@ class Pattern implements PatternInterface {
         $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
-        $this->dataFiles[] = $path;
+        $this->data->merge(Data::load($path));
       }
     }
   }
@@ -201,7 +207,7 @@ class Pattern implements PatternInterface {
       $tokens = $this->getTemplateTokens();
       while (!$tokens->isEOF()) {
         $token = $tokens->next();
-        if (self::isInclude($token)) {
+        if (self::isIncludeToken($token)) {
           $next = $tokens->next()->getValue();
           if ($next == '(') $next = $tokens->next()->getValue();
           $this->includedPatterns[] = $next;

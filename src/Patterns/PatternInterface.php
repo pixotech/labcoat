@@ -13,6 +13,16 @@ interface PatternInterface {
   public function getConfiguration();
 
   /**
+   * @return DataInterface
+   */
+  public function getData();
+
+  /**
+   * @return string
+   */
+  public function getExample();
+
+  /**
    * @return string
    */
   public function getFile();
@@ -49,11 +59,6 @@ interface PatternInterface {
    * @return string
    */
   public function getName();
-
-  /**
-   * @return \Labcoat\Patterns\Paths\PathInterface
-   */
-  public function getNormalizedPath();
 
   /**
    * The path to the style guide page

@@ -112,4 +112,12 @@ class Pattern implements PatternInterface {
   public function hasTemplateName($name) {
     // TODO: Implement isTemplate() method.
   }
+
+  public function getData() {
+    // TODO: Implement getData() method.
+  }
+
+  public function getExample() {
+    // TODO: Implement getExample() method.
+  }
 }

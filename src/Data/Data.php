@@ -6,6 +6,14 @@ class Data implements DataInterface, \JsonSerializable {
 
   protected $data;
 
+  public static function load($file) {
+    return static::parse(file_get_contents($file));
+  }
+
+  public static function parse($string) {
+    return new static(json_decode($string, true));
+  }
+
   public function __construct(array $data = []) {
     $this->data = $data;
   }

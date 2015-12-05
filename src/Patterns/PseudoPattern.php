@@ -122,4 +122,12 @@ class PseudoPattern implements PseudoPatternInterface {
   public function hasTemplateName($name) {
     // TODO: Implement isTemplate() method.
   }
+
+  public function getData() {
+    // TODO: Implement getData() method.
+  }
+
+  public function getExample() {
+    // TODO: Implement getExample() method.
+  }
 }
