@@ -9,7 +9,6 @@
 
 namespace Labcoat;
 
-use Labcoat\Assets\AssetDirectory;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
@@ -22,11 +21,6 @@ use Labcoat\Structure\Type;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
-
-  /**
-   * @var \Labcoat\Assets\Asset[]
-   */
-  protected $assets;
 
   /**
    * @var ConfigurationInterface
@@ -89,16 +83,6 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * Return the contents of a json-encoded data file
-   *
-   * @param string $path The path to the data fle
-   * @return mixed The parsed content of the file
-   */
-  public static function loadData($path) {
-    return json_decode(file_get_contents($path), true);
-  }
-
-  /**
    * Load a Pattern Lab installation that uses the Standard Edition file structure
    *
    * @param string $dir The path to the Pattern Lab installation
@@ -156,14 +140,6 @@ class PatternLab implements PatternLabInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAssets() {
-    if (!isset($this->assets)) $this->findAssets();
-    return $this->assets;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGlobalData() {
     return $this->globalData;
   }
@@ -173,20 +149,6 @@ class PatternLab implements PatternLabInterface {
    */
   public function getHiddenControls() {
     return $this->config->getHiddenControls();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getIgnoredDirectories() {
-    return $this->config->getIgnoredDirectories();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getIgnoredExtensions() {
-    return $this->config->getIgnoredExtensions();
   }
 
   /**
@@ -221,13 +183,6 @@ class PatternLab implements PatternLabInterface {
   /**
    * {@inheritdoc}
    */
-  public function getStyleguideAssetDirectories() {
-    return $this->config->getStyleguideAssetDirectories();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getStyleguideFooter() {
     return $this->config->getStyleguideFooter();
   }
@@ -240,13 +195,6 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getStyleguideTemplatesDirectory() {
-    return $this->config->getStyleguideTemplatesDirectories();
-  }
-
-  /**
    * @return Structure\TypeInterface[]
    */
   public function getTypes() {
@@ -254,49 +202,8 @@ class PatternLab implements PatternLabInterface {
   }
 
 
-  /**
-   * {@inheritdoc}
-   */
-  public function hasIgnoredExtension($path) {
-    $ext = pathinfo($path, PATHINFO_EXTENSION);
-    return in_array($ext, $this->getIgnoredExtensions());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isHiddenFile($path) {
-    return false !== strpos(DIRECTORY_SEPARATOR . $path, DIRECTORY_SEPARATOR . '_');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isIgnoredFile($path) {
-    return $this->hasIgnoredExtension($path) || $this->isInIgnoredDirectory($path);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isInIgnoredDirectory($path) {
-    $dirs = explode(DIRECTORY_SEPARATOR, dirname($path));
-    return count(array_intersect($dirs, $this->getIgnoredDirectories())) > 0;
-  }
-
   public function render(PatternInterface $pattern, DataInterface $data = null) {
     return $this->twig->render($pattern->getPath(), isset($data) ? $data->toArray() : []);
-  }
-
-  /**
-   * Look in the asset directories for asset files
-   */
-  protected function findAssets() {
-    $this->assets = [];
-    foreach ($this->config->getAssetDirectories() as $dir) {
-      $dir = new AssetDirectory($this, $dir);
-      $this->assets += $dir->getAssets();
-    }
   }
 
   /**
@@ -338,23 +245,10 @@ class PatternLab implements PatternLabInterface {
    * Load all global pattern data
    */
   protected function loadGlobalData() {
-    $data = ['listitems' => $this->loadListItems()];
+    $this->globalData = new Data();
     foreach ($this->config->getGlobalDataFiles() as $path) {
-      $data = array_replace_recursive($data, self::loadData($path));
+      $this->globalData->merge(Data::load($path));
     }
-    $this->globalData = new Data($data);
-  }
-
-  /**
-   * Load list items data for patterns
-   */
-  protected function loadListItems() {
-    $items = [];
-    foreach ($this->config->getListItemFiles() as $path) {
-      $items = array_merge($items, self::loadData($path));
-    }
-    shuffle($items);
-    return $items;
   }
 
   protected function makeParser() {

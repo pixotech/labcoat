@@ -2,30 +2,36 @@
 
 namespace Labcoat\Styleguide\Files;
 
-use Labcoat\Assets\AssetInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class AssetFile extends File implements AssetFileInterface {
 
-  protected $asset;
+  protected $file;
+  protected $path;
 
-  public function __construct(AssetInterface $asset) {
-    $this->asset = $asset;
-  }
-
-  public function getAsset() {
-    return $this->asset;
+  public function __construct($path, $file) {
+    $this->path = $path;
+    $this->file = $file;
   }
 
   public function getPath() {
-    return $this->asset->getPath();
+    $path = $this->path;
+    switch (dirname($path)) {
+      case 'html':
+        return basename($path);
+      case 'css/custom':
+      case 'css/patternlab':
+        $path = $this->makePath(['css', basename($path)]);
+      default:
+        return $this->makePath(['styleguide', $path]);
+    }
   }
 
   public function getTime() {
-    return filemtime($this->asset->getFile());
+    return filemtime($this->file);
   }
 
   public function put(StyleguideInterface $styleguide, $path) {
-    copy($this->asset->getFile(), $path);
+    copy($this->file, $path);
   }
 }

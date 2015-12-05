@@ -9,7 +9,6 @@
 
 namespace Labcoat\Styleguide;
 
-use Labcoat\Assets\AssetDirectory;
 use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
 use Labcoat\Styleguide\Files\AnnotationsFile;
@@ -21,16 +20,12 @@ use Labcoat\Styleguide\Files\PageFile;
 use Labcoat\Styleguide\Files\PatternEscapedSourceFile;
 use Labcoat\Styleguide\Files\PatternSourceFile;
 use Labcoat\Styleguide\Files\PatternTemplateFile;
-use Labcoat\Styleguide\Files\StyleguideAssetFile;
 use Labcoat\Styleguide\Generator\Generator;
 use Labcoat\Styleguide\Pages\PatternPage;
 use Labcoat\Styleguide\Pages\PatternPageInterface;
 use Labcoat\Styleguide\Pages\StyleguideIndexPage;
 use Labcoat\Styleguide\Pages\SubTypeIndexPage;
 use Labcoat\Styleguide\Pages\TypeIndexPage;
-use Labcoat\Styleguide\Patterns\Pattern;
-use Labcoat\Styleguide\Patterns\PatternInterface;
-use Labcoat\Twig\Loader;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -50,19 +45,9 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $globalData;
 
   /**
-   * @var array
-   */
-  protected $lineages;
-
-  /**
    * @var \Labcoat\PatternLabInterface
    */
   protected $patternlab;
-
-  /**
-   * @var \Labcoat\Styleguide\Patterns\PatternInterface[]
-   */
-  protected $patterns = [];
 
   /**
    * @var \Twig_Environment
@@ -134,13 +119,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   /**
    * {@inheritdoc}
    */
-  public function getPattern($id) {
-    return $this->patterns[$id];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getPatternLab() {
     return $this->patternlab;
   }
@@ -153,13 +131,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function renderPattern(PatternInterface $pattern, array $data = []) {
-    return $this->getPatternParser()->render($pattern->getTemplate(), $data);
-  }
-
-  /**
    * Add a file to the style guide
    *
    * @param FileInterface $file A file object
@@ -168,25 +139,23 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->files[$file->getPath()] = $file;
   }
 
-  /**
-   * Find pattern lineages
-   *
-   * This method interates through the patterns and determines which templates include which others.
-   */
-  protected function findPatternLineages() {
-    $this->lineages = [];
-    $includes = [];
-    foreach ($this->patterns as $id => $pattern) {
-      foreach ($pattern->getIncludedPatterns() as $included) {
-        if (!isset($includes[$included])) {
-          $includedPattern = $this->patternlab->getPattern($included);
-          $includes[$included] = $includedPattern->getId();
-        }
-        $includeId = $includes[$included];
-        $pattern->addIncludedPattern($this->patterns[$includeId]);
-        $this->patterns[$includeId]->addIncludingPattern($pattern);
-      }
-    }
+  protected function findAssetsDirectory() {
+    if (!$vendor = $this->findVendorDirectory()) return null;
+    $path = PatternLab::makePath([$vendor, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
+    return is_dir($path) ? $path : null;
+  }
+
+  protected function findTemplatesDirectory() {
+    if (!$vendor = $this->findVendorDirectory()) return null;
+    $path = PatternLab::makePath([$vendor, 'pattern-lab', 'styleguidekit-twig-default', 'views']);
+    return is_dir($path) ? $path : null;
+  }
+
+  protected function findVendorDirectory() {
+    $className = "Composer\\Autoload\\ClassLoader";
+    if (!class_exists($className)) return null;
+    $c = new \ReflectionClass($className);
+    return dirname($c->getFileName()) . '/..';
   }
 
   /**
@@ -205,16 +174,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected function getPatternHeaderTemplatePath() {
     return $this->patternlab->getStyleguideHeader();
-  }
-
-  /**
-   * Get the Twig parser for pattern templates
-   *
-   * @return \Twig_Environment A Twig parser object
-   */
-  protected function getPatternParser() {
-    if (!isset($this->patternParser)) $this->makePatternParser();
-    return $this->patternParser;
   }
 
   /**
@@ -258,14 +217,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     if ($path = $this->patternlab->getAnnotationsFile()) {
       $this->addFile(new AnnotationsFile($path));
     }
-  }
-
-  /**
-   * Make asset file objects
-   */
-  protected function makeAssetFiles() {
-    $this->makePatternLabAssetFiles();
-    $this->makeStyleguideAssetFiles();
   }
 
   /**
@@ -338,40 +289,24 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $pages;
   }
 
-  /**
-   * Make asset file objects
-   */
-  protected function makePatternLabAssetFiles() {
-    foreach ($this->patternlab->getAssets() as $asset) {
-      $this->addFile(new AssetFile($asset));
-    }
-  }
-
   protected function makePatternPages() {
     $pages = [];
     foreach ($this->patternlab->getPatterns() as $pattern) {
-      $pages[] = new PatternPage(new Pattern($this, $pattern));
+      $pages[] = new PatternPage($pattern);
     }
     return $pages;
   }
 
   /**
-   * Make the Twig parser for pattern templates
-   */
-  protected function makePatternParser() {
-    $loader = new Loader($this->patternlab);
-    $this->patternParser = new \Twig_Environment($loader);
-  }
-
-  /**
    * Make all style guide asset file objects
    */
-  protected function makeStyleguideAssetFiles() {
-    foreach ($this->patternlab->getStyleguideAssetDirectories() as $dir) {
-      $assets = new AssetDirectory($this->patternlab, $dir);
-      foreach ($assets->getAssets() as $asset) {
-        $this->addFile(new StyleguideAssetFile($asset));
-      }
+  protected function makeAssetFiles() {
+    if (!$assetsDir = $this->findAssetsDirectory()) return;
+    $dir = new \RecursiveDirectoryIterator($assetsDir, \FilesystemIterator::SKIP_DOTS);
+    $files = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::LEAVES_ONLY);
+    foreach ($files as $file => $obj) {
+      $path = substr($file, strlen($assetsDir) + 1);
+      $this->addFile(new AssetFile($path, $file));
     }
   }
 

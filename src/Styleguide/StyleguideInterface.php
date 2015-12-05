@@ -9,8 +9,6 @@
 
 namespace Labcoat\Styleguide;
 
-use Labcoat\Styleguide\Patterns\PatternInterface;
-
 interface StyleguideInterface {
 
   /**
@@ -51,14 +49,6 @@ interface StyleguideInterface {
   public function getMinimumWidth();
 
   /**
-   * Get the pattern with the provided ID
-   *
-   * @param string $id A pattern ID
-   * @return PatternInterface A Pattern object
-   */
-  public function getPattern($id);
-
-  /**
    * Get the Pattern Lab installation object used to make this style guide
    *
    * @return \Labcoat\PatternLabInterface A PatternLab object
@@ -73,13 +63,4 @@ interface StyleguideInterface {
    * @return string Rendered template content
    */
   public function render($template, array $data = []);
-
-  /**
-   * Render the named pattern with the provided data
-   *
-   * @param \Labcoat\Styleguide\Patterns\PatternInterface $pattern The pattern object to render
-   * @param array $data An array of template variables
-   * @return string Rendered template content
-   */
-  public function renderPattern(PatternInterface $pattern, array $data = []);
 }
