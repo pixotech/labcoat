@@ -7,16 +7,19 @@ use Labcoat\Styleguide\StyleguideInterface;
 
 class PatternPage extends Page implements PatternPageInterface {
 
+  /**
+   * @var PatternInterface
+   */
   protected $pattern;
 
-  public static function makeLineage($pattern) {
+  public static function makeLineage(PatternInterface $pattern) {
     return [
       'lineagePattern' => $pattern->getPartial(),
-      'lineagePath' => $pattern->getLineagePath(),
+      'lineagePath' => static::makeRelativePath($pattern->getPath()),
     ];
   }
 
-  public static function makePatternData($pattern) {
+  public static function makePatternData(PatternInterface $pattern) {
     $data = [
       'patternExtension' => 'twig',
       'cssEnabled' => false,
@@ -31,7 +34,7 @@ class PatternPage extends Page implements PatternPageInterface {
     return $data;
   }
 
-  public static function makePatternLineage($pattern) {
+  public static function makePatternLineage(PatternInterface $pattern) {
     $lineage = [];
     foreach ($pattern->getIncludedPatterns() as $pattern2) {
       $lineage[] = self::makeLineage($pattern2);
@@ -39,7 +42,11 @@ class PatternPage extends Page implements PatternPageInterface {
     return $lineage;
   }
 
-  public static function makeReversePatternLineage($pattern) {
+  public static function makeRelativePath($path) {
+    return "../../$path";
+  }
+
+  public static function makeReversePatternLineage(PatternInterface $pattern) {
     $lineage = [];
     foreach ($pattern->getIncludingPatterns() as $pattern2) {
       $lineage[] = self::makeLineage($pattern2);
