@@ -12,9 +12,9 @@ class SubtypeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('one', $subtype->getName());
   }
 
-  public function testNameHasDigits() {
+  public function testNameDoesNotHaveDigits() {
     $type = new Type();
     $subtype = new Subtype($type, '01-one');
-    $this->assertEquals('01-one', $subtype->getName());
+    $this->assertEquals('one', $subtype->getName());
   }
 }

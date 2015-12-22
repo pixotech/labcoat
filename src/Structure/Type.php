@@ -2,7 +2,6 @@
 
 namespace Labcoat\Structure;
 
-use Labcoat\Patterns\Paths\SegmentInterface;
 use Labcoat\Patterns\PatternInterface;
 
 class Type extends Folder implements TypeInterface {
@@ -48,11 +47,10 @@ class Type extends Folder implements TypeInterface {
   }
 
   /**
-   * @param SegmentInterface $name
+   * @param string $name
    * @return SubtypeInterface
    */
-  protected function getOrCreateSubtype(SegmentInterface $name) {
-    $name = (string)$name;
+  protected function getOrCreateSubtype($name) {
     if (!isset($this->subtypes[$name])) $this->subtypes[$name] = new Subtype($this, $name);
     return $this->subtypes[$name];
   }

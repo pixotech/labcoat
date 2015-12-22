@@ -2,13 +2,13 @@
 
 namespace Labcoat\Structure;
 
-use Labcoat\Patterns\Paths\Segment;
+use Labcoat\PatternLab\Name;
 use Labcoat\Patterns\PatternInterface;
 
 abstract class Folder implements \Countable, FolderInterface {
 
   /**
-   * @var string
+   * @var Name
    */
   protected $name;
 
@@ -24,12 +24,12 @@ abstract class Folder implements \Countable, FolderInterface {
    * @param PatternInterface[] $patterns
    */
   public function __construct($name, array $patterns = []) {
-    $this->name = (string)$name;
+    $this->name = new Name($name);
     if (!empty($patterns)) $this->addPatterns($patterns);
   }
 
   public function __toString() {
-    return $this->name;
+    return (string)$this->name;
   }
 
   public function addPattern(PatternInterface $pattern) {
@@ -45,11 +45,11 @@ abstract class Folder implements \Countable, FolderInterface {
   }
 
   public function getLabel() {
-    return (new Segment($this->name))->getName()->capitalized();
+    return $this->name->capitalized();
   }
 
   public function getName() {
-    return $this->name;
+    return (string)$this->name;
   }
 
   public function getPagePath() {
