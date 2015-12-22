@@ -68,10 +68,6 @@ class Name implements NameInterface {
     return strtolower($this->join(' '));
   }
 
-  public function raw() {
-    return $this->hasOrdering() ? implode('-', [$this->ordering, $this->name]) : $this->name;
-  }
-
   public function words() {
     return preg_split('/-+/', $this->name, -1, PREG_SPLIT_NO_EMPTY);
   }
