@@ -50,6 +50,10 @@ abstract class Folder implements \Countable, FolderInterface {
     return count($this->patterns);
   }
 
+  public function getId() {
+    return $this->id;
+  }
+
   public function getLabel() {
     return $this->name->capitalized();
   }

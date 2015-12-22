@@ -16,10 +16,6 @@ class Type extends Folder implements TypeInterface {
     else parent::addPattern($pattern);
   }
 
-  public function getId() {
-    return $this->id;
-  }
-
   public function getPartial() {
     // TODO: Implement getPartial() method.
   }
