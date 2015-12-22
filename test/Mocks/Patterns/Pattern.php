@@ -120,4 +120,12 @@ class Pattern implements PatternInterface {
   public function getExample() {
     // TODO: Implement getExample() method.
   }
+
+  public function hasState() {
+    // TODO: Implement hasState() method.
+  }
+
+  public function getDescription() {
+    // TODO: Implement getDescription() method.
+  }
 }

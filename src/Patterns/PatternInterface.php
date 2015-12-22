@@ -45,6 +45,11 @@ interface PatternInterface {
   /**
    * @return string
    */
+  public function getDescription();
+
+  /**
+   * @return string
+   */
   public function getExample();
 
   /**
@@ -152,6 +157,11 @@ interface PatternInterface {
    * @return \Labcoat\Structure\TypeInterface
    */
   public function getType();
+
+  /**
+   * @return bool
+   */
+  public function hasState();
 
   /**
    * @return bool

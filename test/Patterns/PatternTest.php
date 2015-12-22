@@ -3,6 +3,7 @@
 namespace Labcoat\Patterns;
 
 use Labcoat\Mocks\PatternLab;
+use Labcoat\Mocks\Patterns\Configuration\Configuration;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
@@ -126,6 +127,16 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern-01-one-02-two-03-three-04-four', $pattern->getName());
   }
 
+  public function testConfiguredName() {
+    $name = 'custom name';
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $config = new Configuration();
+    $config->name = $name;
+    $pattern->setConfiguration($config);
+    $this->assertEquals($name, $pattern->getName());
+  }
+
   # Partial
 
   public function testPartial() {
@@ -152,5 +163,40 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, '01-one/02-two/03-three', __FILE__);
     $this->assertEquals('01-one/02-two/03-three', $pattern->getPath());
+  }
+
+  # State
+
+  public function testNoDefaultState() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $this->assertFalse($pattern->hasState());
+  }
+
+  public function testConfiguredState() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $config = new Configuration();
+    $config->state = 'state';
+    $pattern->setConfiguration($config);
+    $this->assertTrue($pattern->hasState());
+  }
+
+  # Description
+
+  public function testDescription() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $this->assertEmpty($pattern->getDescription());
+  }
+
+  public function testConfiguredDescription() {
+    $description = 'custom description';
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $config = new Configuration();
+    $config->description = $description;
+    $pattern->setConfiguration($config);
+    $this->assertEquals($description, $pattern->getDescription());
   }
 }

@@ -13,6 +13,7 @@ class Pattern implements PatternInterface {
 
   protected $configuration;
   protected $data;
+  protected $description;
   protected $example;
   protected $file;
   protected $includedPatterns;
@@ -52,6 +53,11 @@ class Pattern implements PatternInterface {
     return $this->data;
   }
 
+  public function getDescription() {
+    if ($this->getConfiguration()->hasDescription()) return $this->getConfiguration()->getDescription();
+    return $this->description;
+  }
+
   public function getExample() {
     if (!isset($this->example)) $this->example = $this->render($this->getData());
     return $this->example;
@@ -77,6 +83,7 @@ class Pattern implements PatternInterface {
    * @return Paths\Name
    */
   public function getName() {
+    if ($this->getConfiguration()->hasName()) return $this->getConfiguration()->getName();
     return $this->path->getName();
   }
 
@@ -126,6 +133,10 @@ class Pattern implements PatternInterface {
   public function getType() {
     if ($this->getConfiguration()->hasType()) return $this->getConfiguration()->getType();
     return $this->path->getType();
+  }
+
+  public function hasState() {
+    return $this->getConfiguration()->hasState();
   }
 
   public function hasSubtype() {
