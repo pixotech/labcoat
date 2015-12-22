@@ -71,12 +71,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('Pattern One Two And Three And Four', $pattern->getLabel());
   }
 
-  public function testLabelWithLotsOfNestingDoesntHaveOrdering() {
-    $patternlab = new PatternLab();
-    $pattern = new Pattern($patternlab, 'type/subtype/pattern/01-one/02-two/03-three/04-four', __FILE__);
-    $this->assertEquals('Pattern One Two Three Four', $pattern->getLabel());
-  }
-
   public function testConfiguredLabel() {
     $label = 'custom label';
     $patternlab = new PatternLab();
@@ -95,10 +89,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern', $pattern->getName());
   }
 
-  public function testNameHasOrdering() {
+  public function testNameDoesNotHaveOrdering() {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, '01-pattern', __FILE__);
-    $this->assertEquals('01-pattern', $pattern->getName());
+    $this->assertEquals('pattern', $pattern->getName());
   }
 
   public function testNameWithType() {
@@ -107,10 +101,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern', $pattern->getName());
   }
 
-  public function testNameWithTypeHasOrdering() {
+  public function testNameWithTypeDoesNotHaveOrdering() {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, 'type/01-pattern', __FILE__);
-    $this->assertEquals('01-pattern', $pattern->getName());
+    $this->assertEquals('pattern', $pattern->getName());
   }
 
   public function testNameWithSubtype() {
@@ -119,10 +113,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern', $pattern->getName());
   }
 
-  public function testNameWithSubtypeHasOrdering() {
+  public function testNameWithSubtypeDoesNotHaveOrdering() {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, 'type/subtype/01-pattern', __FILE__);
-    $this->assertEquals('01-pattern', $pattern->getName());
+    $this->assertEquals('pattern', $pattern->getName());
   }
 
   public function testNameWithLotsOfNesting() {

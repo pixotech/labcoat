@@ -7,7 +7,7 @@ class Path implements \Countable, PathInterface {
   const DELIMITER = '/';
 
   /**
-   * @var SegmentInterface[]
+   * @var array
    */
   protected $segments = [];
 
@@ -16,7 +16,7 @@ class Path implements \Countable, PathInterface {
   }
 
   public function __construct($path) {
-    $this->makeSegments($path);
+    $this->segments = static::split($path);
   }
 
   public function __toString() {
@@ -25,15 +25,6 @@ class Path implements \Countable, PathInterface {
 
   public function count() {
     return count($this->segments);
-  }
-
-  /**
-   * @return string
-   */
-  public function getPartial() {
-    $name = $this->getName();
-    $type = $this->hasType() ? $this->getType() : $name;
-    return $type . '-' . $name;
   }
 
   /**
@@ -86,17 +77,6 @@ class Path implements \Countable, PathInterface {
    */
   public function join($delimiter) {
     return implode($delimiter, $this->segments);
-  }
-
-  /**
-   * @return Path
-   */
-  public function normalize() {
-    $normalized = clone $this;
-    foreach ($normalized->segments as $i => $segment) {
-      $normalized->segments[$i] = $segment->normalize();
-    }
-    return $normalized;
   }
 
   protected function getNameSegmentIndex() {

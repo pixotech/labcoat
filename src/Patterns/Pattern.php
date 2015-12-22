@@ -4,6 +4,7 @@ namespace Labcoat\Patterns;
 
 use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
+use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
 use Labcoat\Patterns\Paths\Path;
 use Labcoat\Patterns\Configuration\Configuration;
@@ -17,6 +18,7 @@ class Pattern implements PatternInterface {
   protected $example;
   protected $file;
   protected $includedPatterns;
+  protected $name;
   protected $path;
 
   /**
@@ -40,6 +42,7 @@ class Pattern implements PatternInterface {
     $this->patternlab = $patternlab;
     $this->path = new Path($path);
     $this->file = $file;
+    $this->name = new Name($this->path->getName());
     $this->parseTemplate();
     $this->findData();
   }
@@ -77,7 +80,7 @@ class Pattern implements PatternInterface {
 
   public function getLabel() {
     if ($this->getConfiguration()->hasLabel()) return $this->getConfiguration()->getLabel();
-    return $this->path->normalize()->getName()->capitalized();
+    return $this->name->capitalized();
   }
 
   /**
@@ -85,7 +88,7 @@ class Pattern implements PatternInterface {
    */
   public function getName() {
     if ($this->getConfiguration()->hasName()) return $this->getConfiguration()->getName();
-    return $this->path->getName();
+    return (string)$this->name;
   }
 
   public function getPagePath() {
@@ -94,7 +97,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getPartial() {
-    return $this->path->normalize()->getPartial();
+    return implode('-', [$this->getType(), $this->getName()]);
   }
 
   public function getPath() {
@@ -133,7 +136,7 @@ class Pattern implements PatternInterface {
 
   public function getType() {
     if ($this->getConfiguration()->hasType()) return $this->getConfiguration()->getType();
-    return $this->path->getType();
+    return new Name($this->path->getType());
   }
 
   public function hasState() {

@@ -38,7 +38,7 @@ class Name implements NameInterface {
       $this->ordering = (int)$ordering;
       $name = $ordered;
     }
-    $this->name = $name;
+    $this->name = (string)$name;
   }
 
   public function __toString() {

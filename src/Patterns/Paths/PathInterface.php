@@ -4,7 +4,6 @@ namespace Labcoat\Patterns\Paths;
 
 interface PathInterface {
 
-  public function getPartial();
   public function getPath();
 
   /**
@@ -27,11 +26,6 @@ interface PathInterface {
    * @return string
    */
   public function join($delimiter);
-
-  /**
-   * @return PathInterface
-   */
-  public function normalize();
 
   /**
    * @return bool
