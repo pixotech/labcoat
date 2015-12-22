@@ -26,7 +26,7 @@ class Name implements NameInterface {
     elseif ($name2->hasOrdering()) {
       return 1;
     }
-    return strcasecmp((string)$name1, (string)$name2);
+    return strnatcasecmp((string)$name1, (string)$name2);
   }
 
   /**
@@ -57,7 +57,7 @@ class Name implements NameInterface {
   }
 
   public function hasOrdering() {
-    return !isset($this->ordering);
+    return isset($this->ordering);
   }
 
   public function join($delimiter) {
