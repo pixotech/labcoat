@@ -76,6 +76,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getLabel() {
+    if ($this->getConfiguration()->hasLabel()) return $this->getConfiguration()->getLabel();
     return $this->path->normalize()->getName()->capitalized();
   }
 

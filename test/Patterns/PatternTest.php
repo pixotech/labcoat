@@ -77,6 +77,16 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('Pattern One Two Three Four', $pattern->getLabel());
   }
 
+  public function testConfiguredLabel() {
+    $label = 'custom label';
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $config = new Configuration();
+    $config->label = $label;
+    $pattern->setConfiguration($config);
+    $this->assertEquals($label, $pattern->getLabel());
+  }
+
   # Name
 
   public function testName() {
