@@ -16,8 +16,8 @@ class Name implements NameInterface {
 
   public static function cmp(NameInterface $name1, NameInterface $name2) {
     if ($name1->hasOrdering() and $name2->hasOrdering()) {
-      $order1 = (int)$name1->getOrdering();
-      $order2 = (int)$name2->getOrdering();
+      $order1 = $name1->getOrdering();
+      $order2 = $name2->getOrdering();
       if ($order1 <> $order2) return $order1 < $order2 ? -1 : 1;
     }
     elseif ($name1->hasOrdering()) {
@@ -35,7 +35,7 @@ class Name implements NameInterface {
   public function __construct($name) {
     list($ordering, $ordered) = array_pad(explode('-', $name, 2), 2, NULL);
     if (is_numeric($ordering)) {
-      $this->ordering = (int)$ordering;
+      $this->ordering = $ordering;
       $name = $ordered;
     }
     $this->name = (string)$name;
@@ -53,7 +53,7 @@ class Name implements NameInterface {
    * @return int|null
    */
   public function getOrdering() {
-    return $this->ordering;
+    return $this->hasOrdering() ? (int)$this->ordering : null;
   }
 
   public function hasOrdering() {
@@ -66,6 +66,10 @@ class Name implements NameInterface {
 
   public function lowercase() {
     return strtolower($this->join(' '));
+  }
+
+  public function raw() {
+    return $this->hasOrdering() ? implode('-', [$this->ordering, $this->name]) : $this->name;
   }
 
   public function words() {
