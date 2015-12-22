@@ -27,6 +27,16 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('01-one-02-two-03-three', $pattern->getId());
   }
 
+  public function testConfiguredId() {
+    $id = 'custom id';
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one', __FILE__);
+    $config = new Configuration();
+    $config->id = $id;
+    $pattern->setConfiguration($config);
+    $this->assertEquals($id, $pattern->getId());
+  }
+
   # Label
 
   public function testLabel() {

@@ -7,6 +7,7 @@ use Labcoat\Patterns\Configuration\ConfigurationInterface;
 class Configuration implements ConfigurationInterface {
 
   public $description;
+  public $id;
   public $label;
   public $name;
   public $state;
@@ -57,5 +58,13 @@ class Configuration implements ConfigurationInterface {
 
   public function hasLabel() {
     return !empty($this->label);
+  }
+
+  public function getId() {
+    return $this->id;
+  }
+
+  public function hasId() {
+    return !empty($this->id);
   }
 }

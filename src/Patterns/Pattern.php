@@ -71,6 +71,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getId() {
+    if ($this->getConfiguration()->hasId()) return $this->getConfiguration()->getId();
     return $this->path->join('-');
   }
 

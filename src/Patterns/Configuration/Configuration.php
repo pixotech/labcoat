@@ -14,6 +14,10 @@ class Configuration implements ConfigurationInterface {
     return $this->hasDescription() ? $this->config['description'] : null;
   }
 
+  public function getId() {
+    return $this->hasId() ? $this->config['id'] : null;
+  }
+
   public function getLabel() {
     return $this->hasLabel() ? $this->config['label'] : null;
   }
@@ -36,6 +40,10 @@ class Configuration implements ConfigurationInterface {
 
   public function hasDescription() {
     return !empty($this->config['description']);
+  }
+
+  public function hasId() {
+    return !empty($this->config['id']);
   }
 
   public function hasLabel() {

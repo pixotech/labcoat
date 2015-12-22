@@ -14,7 +14,6 @@ use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
-use Labcoat\Patterns\Paths\SegmentInterface;
 use Labcoat\Patterns\Pattern;
 use Labcoat\Patterns\PatternInterface;
 use Labcoat\Structure\Type;
