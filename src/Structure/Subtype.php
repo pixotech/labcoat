@@ -14,13 +14,13 @@ class Subtype extends Folder implements SubtypeInterface {
    * @param string $name
    * @param array $patterns
    */
-  public function __construct(TypeInterface $type, $name, array $patterns = []) {
-    parent::__construct($name, $patterns);
+  public function __construct(TypeInterface $type, $id, array $patterns = []) {
+    parent::__construct($id, $patterns);
     $this->type = $type;
   }
 
   public function getId() {
-    return implode('-', [$this->type->getId(), $this->name]);
+    return implode('-', [$this->type->getId(), $this->id]);
   }
 
   public function getLabel() {

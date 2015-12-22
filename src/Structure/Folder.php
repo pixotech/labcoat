@@ -8,6 +8,11 @@ use Labcoat\Patterns\PatternInterface;
 abstract class Folder implements \Countable, FolderInterface {
 
   /**
+   * @var string
+   */
+  protected $id;
+
+  /**
    * @var Name
    */
   protected $name;
@@ -20,11 +25,12 @@ abstract class Folder implements \Countable, FolderInterface {
   protected $time;
 
   /**
-   * @param string $name
+   * @param string $id
    * @param PatternInterface[] $patterns
    */
-  public function __construct($name, array $patterns = []) {
-    $this->name = new Name($name);
+  public function __construct($id, array $patterns = []) {
+    $this->id = $id;
+    $this->name = new Name($id);
     if (!empty($patterns)) $this->addPatterns($patterns);
   }
 

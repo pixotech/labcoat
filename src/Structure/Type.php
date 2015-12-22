@@ -17,7 +17,7 @@ class Type extends Folder implements TypeInterface {
   }
 
   public function getId() {
-    return $this->name;
+    return $this->id;
   }
 
   public function getPartial() {
