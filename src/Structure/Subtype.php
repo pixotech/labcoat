@@ -2,7 +2,7 @@
 
 namespace Labcoat\Structure;
 
-class Subtype extends Folder implements SubtypeInterface {
+class Subtype extends Type implements SubtypeInterface {
 
   /**
    * @var TypeInterface

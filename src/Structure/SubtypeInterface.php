@@ -16,7 +16,7 @@ Subtype properties:
 
  */
 
-interface SubtypeInterface extends FolderInterface {
+interface SubtypeInterface extends TypeInterface {
 
   /**
    * @return TypeInterface

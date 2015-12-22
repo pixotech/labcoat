@@ -47,4 +47,12 @@ class Subtype implements SubtypeInterface {
   public function getPagePath() {
     // TODO: Implement getPagePath() method.
   }
+
+  public function getSubtypes() {
+    // TODO: Implement getSubtypes() method.
+  }
+
+  public function hasSubtypes() {
+    // TODO: Implement hasSubtypes() method.
+  }
 }
