@@ -124,6 +124,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getType() {
+    if ($this->getConfiguration()->hasType()) return $this->getConfiguration()->getType();
     return $this->path->getType();
   }
 
@@ -136,7 +137,7 @@ class Pattern implements PatternInterface {
   }
 
   public function hasType() {
-    return $this->path->hasType();
+    return $this->getConfiguration()->hasType() || $this->path->hasType();
   }
 
   public function includes(PatternInterface $pattern) {

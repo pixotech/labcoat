@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Files;
 
-use Labcoat\Styleguide\Patterns\PatternInterface;
+use Labcoat\Patterns\PatternInterface;
 
 abstract class PatternFile extends File implements PatternFileInterface {
 

@@ -114,7 +114,7 @@ class PatternLab implements PatternLabInterface {
    * @return string The normalized path
    */
   public static function normalizePath($path) {
-    return implode('/', array_map(['Labcoat\Paths\Path', 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
+    return implode('/', array_map(['Labcoat\Patterns\Paths\Segment', 'stripDigits'], explode(DIRECTORY_SEPARATOR, $path)));
   }
 
 
@@ -128,6 +128,17 @@ class PatternLab implements PatternLabInterface {
     $this->loadGlobalData();
     $this->findPatterns();
     $this->makeParser();
+  }
+
+  public function __toString() {
+    $str = '';
+    foreach ($this->getPatterns() as $pattern) {
+      $str .= $pattern->getFile() . "\n";
+      $str .= '  Type: ' . $pattern->getType() . "\n";
+      $str .= '  Subtype: ' . ($pattern->hasSubtype() ? $pattern->getSubtype() : '') . "\n";
+      $str .= '  Partial: ' . $pattern->getPartial() . "\n";
+    }
+    return $str;
   }
 
   /**
@@ -216,18 +227,17 @@ class PatternLab implements PatternLabInterface {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
       $pattern = new Pattern($this, $path, $match);
       $this->patterns[] = $pattern;
-      if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
+      if ($pattern->hasType()) $this->getOrCreateType((string)$pattern->getType())->addPattern($pattern);
     }
   }
 
   /**
    * Look for a type with the provided path, and create it if it doesn't exist
    *
-   * @param SegmentInterface $name The name of the type
+   * @param string $name The name of the type
    * @return \Labcoat\Structure\TypeInterface A pattern type object
    */
-  protected function getOrCreateType(SegmentInterface $name) {
-    $name = (string)$name;
+  protected function getOrCreateType($name) {
     if (!isset($this->types[$name])) $this->types[$name] = new Type($name);
     return $this->types[$name];
   }
