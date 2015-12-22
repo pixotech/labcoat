@@ -38,7 +38,7 @@ class Path implements \Countable, PathInterface {
    * @return Name
    */
   public function getName() {
-    return new Name(implode('-', $this->getNameSegments()));
+    return implode('-', $this->getNameSegments());
   }
 
   /**
@@ -80,18 +80,17 @@ class Path implements \Countable, PathInterface {
   }
 
   protected function getNameSegmentIndex() {
-    if ($this->hasSubtype()) return 2;
-    elseif ($this->hasType()) return 1;
-    return 0;
+    switch (true) {
+      case $this->hasSubtype():
+        return 2;
+      case $this->hasType():
+        return 1;
+      default:
+        return 0;
+    }
   }
 
   protected function getNameSegments() {
     return array_slice($this->segments, $this->getNameSegmentIndex());
-  }
-
-  protected function makeSegments($path) {
-    foreach (self::split($path) as $segment) {
-      $this->segments[] = new Segment($segment);
-    }
   }
 }
