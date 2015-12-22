@@ -2,6 +2,8 @@
 
 namespace Labcoat\Patterns\Paths;
 
+use Labcoat\PatternLab\Name;
+
 class Path implements \Countable, PathInterface {
 
   const DELIMITER = '/';
@@ -35,14 +37,14 @@ class Path implements \Countable, PathInterface {
   }
 
   /**
-   * @return Name
+   * @return string
    */
   public function getName() {
     return implode('-', $this->getNameSegments());
   }
 
   /**
-   * @return Segment
+   * @return string
    */
   public function getSubtype() {
     if (!$this->hasSubtype()) throw new \BadMethodCallException("Path does not have subtype");
@@ -50,7 +52,7 @@ class Path implements \Countable, PathInterface {
   }
 
   /**
-   * @return Segment
+   * @return string
    */
   public function getType() {
     if (!$this->hasType()) throw new \BadMethodCallException("Path does not have type");
@@ -77,6 +79,14 @@ class Path implements \Countable, PathInterface {
    */
   public function join($delimiter) {
     return implode($delimiter, $this->segments);
+  }
+
+  public function normalize() {
+    $normalized = clone $this;
+    foreach ($normalized->segments as $i => $segment) {
+      $normalized->segments[$i] = (string)new Name($segment);
+    }
+    return $normalized;
   }
 
   protected function getNameSegmentIndex() {

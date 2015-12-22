@@ -99,4 +99,9 @@ class PathTest extends \PHPUnit_Framework_TestCase {
     $path = new Path('type/subtype/one/two');
     $this->assertEquals('one-two', $path->getName());
   }
+
+  public function testNormalize() {
+    $path = new Path('01-one/02-two/03-three/04-four');
+    $this->assertEquals('one/two/three/four', (string)$path->normalize());
+  }
 }

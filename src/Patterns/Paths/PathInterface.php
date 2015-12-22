@@ -7,17 +7,17 @@ interface PathInterface {
   public function getPath();
 
   /**
-   * @return Name
+   * @return string
    */
   public function getName();
 
   /**
-   * @return Name
+   * @return string
    */
   public function getSubtype();
 
   /**
-   * @return Name
+   * @return string
    */
   public function getType();
 
@@ -36,4 +36,9 @@ interface PathInterface {
    * @return bool
    */
   public function hasType();
+
+  /**
+   * @return PathInterface
+   */
+  public function normalize();
 }

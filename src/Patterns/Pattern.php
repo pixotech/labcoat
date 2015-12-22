@@ -85,7 +85,7 @@ class Pattern implements PatternInterface {
   }
 
   /**
-   * @return Paths\Name
+   * @return Name
    */
   public function getName() {
     if ($this->getConfiguration()->hasName()) return $this->getConfiguration()->getName();
