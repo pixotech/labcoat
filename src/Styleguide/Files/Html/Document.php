@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Html;
+namespace Labcoat\Styleguide\Files\Html;
 
 use Labcoat\Html\Document as HtmlDocument;
 use Labcoat\Styleguide\StyleguideInterface;
@@ -33,12 +33,12 @@ use Labcoat\Styleguide\StyleguideInterface;
 
  */
 
-class Document extends HtmlDocument {
+class Document extends HtmlDocument implements DocumentInterface {
 
   protected $styleguide;
 
   public function __construct(StyleguideInterface $styleguide) {
-    parent::__construct();
+    HtmlDocument::__construct();
     $this->styleguide = $styleguide;
   }
 
