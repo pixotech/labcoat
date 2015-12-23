@@ -6,9 +6,6 @@ use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
-use Labcoat\PatternLab\Patterns\Path;
-use Labcoat\PatternLab\Patterns\Configuration;
-use Labcoat\PatternLab\Patterns\ConfigurationInterface;
 
 class Pattern implements PatternInterface {
 
@@ -42,7 +39,7 @@ class Pattern implements PatternInterface {
     $this->patternlab = $patternlab;
     $this->path = new Path($path);
     $this->file = $file;
-    $this->name = new Name($this->path->getName());
+    $this->name = new Name($this->path->normalize()->getName());
     $this->parseTemplate();
     $this->findData();
   }

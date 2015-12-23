@@ -135,10 +135,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern-one-two-and-three-and-four', $pattern->getName());
   }
 
-  public function testNameWithLotsOfNestingHasOrdering() {
+  public function testNameWithLotsOfNestingDoesntHaveOrdering() {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, 'type/subtype/pattern/01-one/02-two/03-three/04-four', __FILE__);
-    $this->assertEquals('pattern-01-one-02-two-03-three-04-four', $pattern->getName());
+    $this->assertEquals('pattern-one-two-three-four', $pattern->getName());
   }
 
   public function testConfiguredName() {
