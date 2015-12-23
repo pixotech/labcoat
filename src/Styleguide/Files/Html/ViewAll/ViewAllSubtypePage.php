@@ -1,10 +1,10 @@
 <?php
 
-namespace Labcoat\Styleguide\Pages;
+namespace Labcoat\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 
-class SubTypeIndexPage extends IndexPage implements SubTypeIndexPageInterface {
+class ViewAllSubtypePage extends ViewAllPage implements ViewAllSubtypePageInterface {
 
   protected $partial;
   protected $path;

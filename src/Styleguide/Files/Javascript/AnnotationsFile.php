@@ -1,7 +1,8 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Styleguide\Files\Javascript;
 
+use Labcoat\Styleguide\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class AnnotationsFile extends File implements AnnotationsFileInterface {

@@ -1,8 +1,9 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Styleguide\Files\Patterns;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\Styleguide\Files\File;
 
 abstract class PatternFile extends File implements PatternFileInterface {
 

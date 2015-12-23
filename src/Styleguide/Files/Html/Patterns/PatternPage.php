@@ -1,8 +1,9 @@
 <?php
 
-namespace Labcoat\Styleguide\Pages;
+namespace Labcoat\Styleguide\Files\Html\Patterns;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\Styleguide\Files\Html\Page;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class PatternPage extends Page implements PatternPageInterface {
@@ -59,7 +60,7 @@ class PatternPage extends Page implements PatternPageInterface {
     $this->pattern = $pattern;
   }
 
-  public function getContent(StyleguideInterface $styleguide) {
+  public function getDocumentContent(StyleguideInterface $styleguide) {
     return $this->pattern->getContent();
   }
 

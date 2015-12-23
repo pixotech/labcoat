@@ -1,6 +1,8 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Styleguide\Files\Javascript;
+
+use Labcoat\Styleguide\Files\FileInterface;
 
 interface DataFileInterface extends FileInterface {
 

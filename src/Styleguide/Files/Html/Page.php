@@ -1,59 +1,47 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Styleguide\Files\Html;
 
-use Labcoat\Styleguide\Pages\PageInterface;
+use Labcoat\Styleguide\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
-class PageFile extends File {
-
-  /**
-   * @var PageInterface
-   */
-  protected $page;
-
-  public function __construct(PageInterface $page) {
-    $this->page = $page;
-  }
+abstract class Page extends File implements PageInterface {
 
   public function put(StyleguideInterface $styleguide, $path) {
+    file_put_contents($path, $this->getDocument($styleguide));
+  }
+
+  protected function getDocument(StyleguideInterface $styleguide) {
     $contents  = $this->makeHeader($styleguide);
-    $contents .= $this->page->getContent($styleguide);
+    $contents .= $this->getDocumentContent($styleguide);
     $contents .= $this->makeFooter($styleguide);
-    file_put_contents($path, $contents);
+    return $contents;
   }
 
-  public function getPath() {
-    $path = $this->page->getPath();
-    return is_array($path) ? $this->makePath($path) : $path;
-  }
-
-  public function getTime() {
-    return $this->page->getTime();
-  }
+  abstract protected function getDocumentContent(StyleguideInterface $styleguide);
 
   protected function getFooterVariables(StyleguideInterface $styleguide) {
-    $vars = $this->page->getFooterVariables($styleguide);
-    $vars += [
+    return [
       'cacheBuster' => $styleguide->getCacheBuster(),
       'patternLabFoot' => $this->getPatternLabFooterContent($styleguide),
     ];
-    return $vars;
   }
 
   protected function getHeaderVariables(StyleguideInterface $styleguide) {
-    $vars = $this->page->getHeaderVariables($styleguide);
-    $vars += [
+    return [
       'cacheBuster' => $styleguide->getCacheBuster(),
       'patternLabHead' => $this->getPatternLabHeaderContent($styleguide),
     ];
-    return $vars;
+  }
+
+  protected function getPatternData() {
+    return [];
   }
 
   protected function getPatternLabFooterContent(StyleguideInterface $styleguide) {
     $data = [
       'cacheBuster' => $styleguide->getCacheBuster(),
-      'patternData' => json_encode($this->page->getPatternData()),
+      'patternData' => json_encode($this->getPatternData()),
     ];
     return $styleguide->render('partials/general-footer', $data);
   }

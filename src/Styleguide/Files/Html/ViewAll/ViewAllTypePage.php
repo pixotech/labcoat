@@ -1,10 +1,10 @@
 <?php
 
-namespace Labcoat\Styleguide\Pages;
+namespace Labcoat\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
-class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
+class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
 
   public function __construct(TypeInterface $type) {
     $this->partial = $type->getName() . '-all';

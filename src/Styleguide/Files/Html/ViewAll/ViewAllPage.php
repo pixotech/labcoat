@@ -1,11 +1,12 @@
 <?php
 
-namespace Labcoat\Styleguide\Pages;
+namespace Labcoat\Styleguide\Files\Html\ViewAll;
 
+use Labcoat\Styleguide\Files\Html\Page;
 use Labcoat\Styleguide\Patterns\PatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
-abstract class IndexPage extends Page implements IndexPageInterface {
+class ViewAllPage extends Page implements ViewAllPageInterface {
 
   protected $partial;
   protected $patterns = [];
@@ -16,12 +17,16 @@ abstract class IndexPage extends Page implements IndexPageInterface {
     $this->time = max($this->time, $pattern->getTime());
   }
 
-  public function getContent(StyleguideInterface $styleguide) {
+  public function getDocumentContent(StyleguideInterface $styleguide) {
     $variables = [
       'partials' => $this->getPatterns(),
       'patternPartial' => '',
     ];
     return $styleguide->render('viewall', $variables);
+  }
+
+  public function getPath() {
+    return ['styleguide', 'html', 'styleguide.html'];
   }
 
   /**

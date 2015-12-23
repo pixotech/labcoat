@@ -1,10 +1,10 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Styleguide\Files\Patterns;
 
 use Labcoat\Styleguide\StyleguideInterface;
 
-class PatternSourceFile extends PatternFile implements PatternSourceFileInterface {
+class SourceFile extends PatternFile implements SourceFileInterface {
 
   public function put(StyleguideInterface $styleguide, $path) {
     file_put_contents($path, $this->pattern->getContent());

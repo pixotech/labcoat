@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Styleguide\Files\Javascript;
 
 use Labcoat\Mocks\PatternLab;
 use Labcoat\Mocks\PatternLab\Patterns\Pattern;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Pages;
+namespace Labcoat\Styleguide\Files\Html\Patterns;
 
 interface PatternPageInterface {
 
