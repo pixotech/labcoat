@@ -3,8 +3,8 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\PatternLabInterface;
-use Labcoat\Patterns\Paths\Segment;
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\Segment;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\Structure\SubtypeInterface;
 use Labcoat\Structure\TypeInterface;
 use Labcoat\Styleguide\StyleguideInterface;

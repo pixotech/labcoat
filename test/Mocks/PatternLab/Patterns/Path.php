@@ -1,8 +1,8 @@
 <?php
 
-namespace Labcoat\Mocks\Paths;
+namespace Labcoat\Mocks\PatternLab\Patterns;
 
-use Labcoat\Patterns\Paths\PathInterface;
+use Labcoat\PatternLab\Patterns\PathInterface;
 
 class Path implements PathInterface {
 
@@ -36,5 +36,13 @@ class Path implements PathInterface {
 
   public function hasType() {
     // TODO: Implement hasType() method.
+  }
+
+  public function join($delimiter) {
+    // TODO: Implement join() method.
+  }
+
+  public function normalize() {
+    // TODO: Implement normalize() method.
   }
 }

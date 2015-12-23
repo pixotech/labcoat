@@ -1,8 +1,8 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\PatternLab\Patterns;
 
-use Labcoat\Mocks\Patterns\Pattern;
+use Labcoat\Mocks\PatternLab\Patterns\Pattern;
 
 class PseudoPatternTest extends \PHPUnit_Framework_TestCase {
 

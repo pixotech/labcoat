@@ -1,9 +1,9 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\PatternLab\Patterns;
 
 use Labcoat\Data\DataInterface;
-use Labcoat\Patterns\Configuration\ConfigurationInterface;
+use Labcoat\PatternLab\Patterns\ConfigurationInterface;
 
 class PseudoPattern implements PseudoPatternInterface {
 

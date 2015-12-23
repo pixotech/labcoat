@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\PatternLab;
-use Labcoat\Patterns\PatternInterface as SourcePatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class Pattern implements \JsonSerializable, PatternInterface {
@@ -39,7 +39,7 @@ class Pattern implements \JsonSerializable, PatternInterface {
 
   public static function cast(StyleguideInterface $styleguide, SourcePatternInterface $pattern) {
     if ($pattern->isPseudoPattern()) {
-      /** @var \Labcoat\Patterns\PseudoPatternInterface $pattern */
+      /** @var \Labcoat\PatternLab\Patterns\PseudoPatternInterface $pattern */
       return new PseudoPattern($styleguide, $pattern);
     }
     return new Pattern($styleguide, $pattern);

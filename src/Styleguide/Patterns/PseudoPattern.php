@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Patterns;
 
-use Labcoat\Patterns\PseudoPatternInterface as SourcePatternInterface;
+use Labcoat\PatternLab\Patterns\PseudoPatternInterface as SourcePatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class PseudoPattern extends Pattern implements PseudoPatternInterface {

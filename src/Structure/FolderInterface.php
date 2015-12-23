@@ -2,7 +2,7 @@
 
 namespace Labcoat\Structure;
 
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 interface FolderInterface {
 

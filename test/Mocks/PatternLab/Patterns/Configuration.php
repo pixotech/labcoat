@@ -1,8 +1,8 @@
 <?php
 
-namespace Labcoat\Mocks\Patterns\Configuration;
+namespace Labcoat\Mocks\PatternLab\Patterns;
 
-use Labcoat\Patterns\Configuration\ConfigurationInterface;
+use Labcoat\PatternLab\Patterns\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface {
 

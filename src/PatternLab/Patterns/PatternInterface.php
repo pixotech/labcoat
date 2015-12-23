@@ -1,9 +1,9 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\PatternLab\Patterns;
 
 use Labcoat\Data\DataInterface;
-use Labcoat\Patterns\Configuration\ConfigurationInterface;
+use Labcoat\PatternLab\Patterns\ConfigurationInterface;
 
 /*
 
@@ -102,7 +102,7 @@ interface PatternInterface {
   /**
    * The partial name of the pattern
    *
-   * Defaults to `type-name`. Does not contain ordering. Can be overridden by configuration.
+   * I.e. `type-name`. Does not contain ordering. Cannot be overridden by configuration.
    *
    * @return string
    */
@@ -115,7 +115,7 @@ interface PatternInterface {
    * removed. Default source for pattern metadata such as name, type, and subtype. May contain ordering. Cannot be
    * overridden by configuration.
    *
-   * @return \Labcoat\Patterns\Paths\PathInterface
+   * @return \Labcoat\PatternLab\Patterns\PathInterface
    */
   public function getPath();
 

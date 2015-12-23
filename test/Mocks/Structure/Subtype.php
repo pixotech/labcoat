@@ -2,7 +2,7 @@
 
 namespace Labcoat\Mocks\Structure;
 
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\Structure\SubtypeInterface;
 
 class Subtype implements SubtypeInterface {

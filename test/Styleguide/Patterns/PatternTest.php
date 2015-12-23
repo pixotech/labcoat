@@ -3,8 +3,8 @@
 namespace Labcoat\Styleguide\Patterns;
 
 use Labcoat\Mocks\PatternLab;
-use Labcoat\Mocks\Patterns\Pattern as SourcePattern;
-use Labcoat\Mocks\Patterns\PseudoPattern;
+use Labcoat\Mocks\PatternLab\Patterns\Pattern as SourcePattern;
+use Labcoat\Mocks\PatternLab\Patterns\PseudoPattern;
 use Labcoat\Mocks\Styleguide\Styleguide;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {

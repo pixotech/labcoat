@@ -3,7 +3,7 @@
 namespace Labcoat\Structure;
 
 use Labcoat\PatternLab\Name;
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 abstract class Folder implements \Countable, FolderInterface {
 

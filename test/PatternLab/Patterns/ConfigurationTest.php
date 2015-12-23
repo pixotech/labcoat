@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Patterns\Configuration;
+namespace Labcoat\PatternLab\Patterns;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase {
 

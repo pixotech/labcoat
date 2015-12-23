@@ -1,9 +1,8 @@
 <?php
 
-namespace Labcoat\Mocks\Patterns;
+namespace Labcoat\Mocks\PatternLab\Patterns;
 
-use Labcoat\Patterns\PatternInterface;
-use Labcoat\Patterns\PseudoPatternInterface;
+use Labcoat\PatternLab\Patterns\PseudoPatternInterface;
 
 class PseudoPattern extends Pattern implements PseudoPatternInterface {
 

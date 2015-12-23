@@ -4,7 +4,7 @@ namespace Labcoat\Mocks;
 
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLabInterface;
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class PatternLab implements PatternLabInterface {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\PatternLab\Patterns;
 
 interface PseudoPatternInterface extends PatternInterface {
 

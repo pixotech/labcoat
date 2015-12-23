@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Mocks\PatternLab;
-use Labcoat\Mocks\Patterns\Pattern;
+use Labcoat\Mocks\PatternLab\Patterns\Pattern;
 use Labcoat\Mocks\Structure\Subtype;
 use Labcoat\Mocks\Structure\Type;
 

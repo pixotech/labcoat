@@ -1,11 +1,11 @@
 <?php
 
-namespace Labcoat\Mocks\Patterns;
+namespace Labcoat\Mocks\PatternLab\Patterns;
 
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab;
-use Labcoat\Patterns\Configuration\ConfigurationInterface;
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\ConfigurationInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 

@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class PatternPage extends Page implements PatternPageInterface {

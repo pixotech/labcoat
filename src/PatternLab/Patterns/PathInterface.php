@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Patterns\Paths;
+namespace Labcoat\PatternLab\Patterns;
 
 interface PathInterface {
 

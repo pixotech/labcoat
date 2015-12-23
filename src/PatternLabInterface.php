@@ -10,7 +10,7 @@
 namespace Labcoat;
 
 use Labcoat\Data\DataInterface;
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 interface PatternLabInterface {
 
@@ -52,7 +52,7 @@ interface PatternLabInterface {
   /**
    * Get all patterns
    *
-   * @return \Labcoat\Patterns\PatternInterface[] An array of pattern objects
+   * @return \Labcoat\PatternLab\Patterns\PatternInterface[] An array of pattern objects
    */
   public function getPatterns();
 

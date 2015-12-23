@@ -88,7 +88,7 @@ class HasPatternDataConstraint extends \PHPUnit_Framework_Constraint {
 
   protected function getPatternData($name) {
     $data = [];
-    /** @var \Labcoat\Patterns\HasDataInterface $pattern */
+    /** @var \Labcoat\PatternLab\Patterns\HasDataInterface $pattern */
     $pattern = $this->patternlab->getPattern($name);
     foreach ($pattern->getDataFiles() as $file) {
       $json = json_decode(file_get_contents($file), true);

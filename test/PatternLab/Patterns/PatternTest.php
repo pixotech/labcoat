@@ -1,9 +1,9 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\PatternLab\Patterns;
 
 use Labcoat\Mocks\PatternLab;
-use Labcoat\Mocks\Patterns\Configuration\Configuration;
+use Labcoat\Mocks\PatternLab\Patterns\Configuration;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {
 

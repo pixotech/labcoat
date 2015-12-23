@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Patterns\Configuration;
+namespace Labcoat\PatternLab\Patterns;
 
 interface ConfigurationInterface {
   public function getDescription();

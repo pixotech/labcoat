@@ -1,14 +1,14 @@
 <?php
 
-namespace Labcoat\Patterns;
+namespace Labcoat\PatternLab\Patterns;
 
 use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
-use Labcoat\Patterns\Paths\Path;
-use Labcoat\Patterns\Configuration\Configuration;
-use Labcoat\Patterns\Configuration\ConfigurationInterface;
+use Labcoat\PatternLab\Patterns\Path;
+use Labcoat\PatternLab\Patterns\Configuration;
+use Labcoat\PatternLab\Patterns\ConfigurationInterface;
 
 class Pattern implements PatternInterface {
 
