@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Patterns;
 
+use Labcoat\PatternLab;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class SourceFile extends PatternFile implements SourceFileInterface {
@@ -11,6 +12,7 @@ class SourceFile extends PatternFile implements SourceFileInterface {
   }
 
   public function getPath() {
-    return $this->pattern->getSourcePath();
+    $path = $this->pattern->getId();
+    return PatternLab::makePath(['patterns', $path, "$path.pattern.html"]);
   }
 }

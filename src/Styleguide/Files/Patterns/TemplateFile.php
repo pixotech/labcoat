@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Patterns;
 
+use Labcoat\PatternLab;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class TemplateFile extends PatternFile implements TemplateFileInterface {
@@ -12,7 +13,8 @@ class TemplateFile extends PatternFile implements TemplateFileInterface {
   }
 
   public function getPath() {
-    return $this->pattern->getTemplatePath();
+    $path = $this->pattern->getId();
+    return PatternLab::makePath(['patterns', $path, "$path.twig"]);
   }
 
   protected function getTemplateContent() {
