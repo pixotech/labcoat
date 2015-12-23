@@ -4,8 +4,8 @@ namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Mocks\PatternLab;
 use Labcoat\Mocks\PatternLab\Patterns\Pattern;
-use Labcoat\Mocks\Structure\Subtype;
-use Labcoat\Mocks\Structure\Type;
+use Labcoat\Mocks\PatternLab\Patterns\Types\Subtype;
+use Labcoat\Mocks\PatternLab\Patterns\Types\Type;
 
 class DataFileTest extends \PHPUnit_Framework_TestCase {
 

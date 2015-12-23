@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Structure;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\Patterns\PatternInterface;

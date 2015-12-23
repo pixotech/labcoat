@@ -1,6 +1,8 @@
 <?php
 
-namespace Labcoat\Structure;
+namespace Labcoat\PatternLab\Patterns\Types;
+
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 class Subtype extends Type implements SubtypeInterface {
 

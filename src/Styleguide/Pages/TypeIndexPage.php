@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-use Labcoat\Structure\TypeInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 class TypeIndexPage extends IndexPage implements TypeIndexPageInterface {
 

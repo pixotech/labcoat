@@ -1,8 +1,9 @@
 <?php
 
-namespace Labcoat\Structure;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 class Type extends Folder implements TypeInterface {
 

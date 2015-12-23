@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Structure;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 /*
 
@@ -15,6 +15,8 @@ Subtype properties:
     Used as the label for the subtype's navigation item
 
  */
+
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 interface SubtypeInterface extends TypeInterface {
 

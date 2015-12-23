@@ -5,8 +5,8 @@ namespace Labcoat\Styleguide\Files;
 use Labcoat\PatternLabInterface;
 use Labcoat\PatternLab\Patterns\Segment;
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\Structure\SubtypeInterface;
-use Labcoat\Structure\TypeInterface;
+use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class DataFile extends File implements DataFileInterface {

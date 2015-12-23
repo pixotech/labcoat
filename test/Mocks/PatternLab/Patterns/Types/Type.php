@@ -1,39 +1,40 @@
 <?php
 
-namespace Labcoat\Mocks\Structure;
+namespace Labcoat\Mocks\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\Structure\SubtypeInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
-class Subtype implements SubtypeInterface {
+class Type implements TypeInterface {
 
   public $label;
   public $name;
+  public $path;
   public $patterns = [];
-  public $type;
+  public $subtypes = [];
 
   public function addPattern(PatternInterface $pattern) {
-    // TODO: Implement addPattern() method.
+    $this->patterns[] = $pattern;
   }
 
   public function addPatterns(array $patterns) {
-    // TODO: Implement addPatterns() method.
+    foreach ($patterns as $pattern) $this->addPattern($pattern);
   }
 
   public function getName() {
     return $this->name;
   }
 
-  public function getPartial() {
-    // TODO: Implement getPartial() method.
-  }
-
   public function getPatterns() {
     return $this->patterns;
   }
 
-  public function getType() {
-    return $this->type;
+  public function hasSubtypes() {
+    return !empty($this->subtypes);
+  }
+
+  public function getSubtypes() {
+    return $this->subtypes;
   }
 
   public function getId() {
@@ -48,11 +49,7 @@ class Subtype implements SubtypeInterface {
     // TODO: Implement getPagePath() method.
   }
 
-  public function getSubtypes() {
-    // TODO: Implement getSubtypes() method.
-  }
-
-  public function hasSubtypes() {
-    // TODO: Implement hasSubtypes() method.
+  public function getPartial() {
+    // TODO: Implement getPartial() method.
   }
 }

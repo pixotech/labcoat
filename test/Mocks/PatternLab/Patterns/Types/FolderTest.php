@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Mocks\Structure;
+namespace Labcoat\Mocks\PatternLab\Patterns\Types;
 
 class FolderTest extends \PHPUnit_Framework_TestCase {
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Labcoat\Mocks\Structure;
+namespace Labcoat\Mocks\PatternLab\Patterns\Types;
 
-use Labcoat\Structure\FolderInterface;
+use Labcoat\PatternLab\Patterns\Types\FolderInterface;
 
-class Folder extends \Labcoat\Structure\Folder implements FolderInterface {
+class Folder extends \Labcoat\PatternLab\Patterns\Types\Folder implements FolderInterface {
 
   public $folder;
   public $patterns = [];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Structure;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 /*
 
@@ -15,6 +15,9 @@ Type properties:
     Used as the label for the type's navigation item
 
  */
+
+use Labcoat\PatternLab\Patterns\Types\FolderInterface;
+use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 
 interface TypeInterface extends FolderInterface {
 

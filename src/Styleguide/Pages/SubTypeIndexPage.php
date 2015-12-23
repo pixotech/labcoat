@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Pages;
 
-use Labcoat\Structure\SubtypeInterface;
+use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 
 class SubTypeIndexPage extends IndexPage implements SubTypeIndexPageInterface {
 
