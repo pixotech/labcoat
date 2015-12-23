@@ -11,21 +11,19 @@ namespace Labcoat\Styleguide;
 
 use Labcoat\PatternLab;
 use Labcoat\PatternLabInterface;
+use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\Styleguide\Files\Assets\AssetFile;
 use Labcoat\Styleguide\Files\Javascript\DataFile;
 use Labcoat\Styleguide\Files\FileInterface;
 use Labcoat\Styleguide\Files\LatestChangeFile;
-use Labcoat\Styleguide\Files\Html\Page;
+use Labcoat\Styleguide\Files\Html\Patterns\PatternPage;
+use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllSubtypePage;
+use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\Styleguide\Files\Patterns\TemplateFile;
 use Labcoat\Styleguide\Generator\Generator;
-use Labcoat\Styleguide\Files\Html\Patterns\PatternPage;
-use Labcoat\Styleguide\Files\Html\Patterns\PatternPageInterface;
-use Labcoat\Styleguide\Pages\StyleguideIndexPage;
-use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllSubtypePage;
-use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -236,7 +234,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * Make all file objects
    */
   protected function makeFiles() {
-    $this->makePageFiles($this->makePages());
+    $this->makePages();
     $this->makeAssetFiles();
     $this->makeDataFile();
     $this->makeAnnotationsFile();
@@ -244,14 +242,13 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function makeIndexPages() {
-    $pages = [new StyleguideIndexPage()];
+    $this->addFile(new ViewAllPage());
     foreach ($this->patternlab->getTypes() as $type) {
-      $pages[] = new ViewAllTypePage($type);
+      $this->addFile(new ViewAllTypePage($type));
       foreach ($type->getSubtypes() as $subtype) {
-        $pages[] = new ViewAllSubtypePage($subtype);
+        $this->addFile(new ViewAllSubtypePage($subtype));
       }
     }
-    return $pages;
   }
 
   /**
@@ -263,38 +260,19 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   /**
    * Make file objects for all the style guide pages
-   *
-   * @param \Labcoat\Styleguide\Pages\PageInterface[] An array of page objects
-   * @return \Labcoat\Styleguide\Files\FileInterface[] $pages An array of page file objects
-   */
-  protected function makePageFiles(array $pages) {
-    foreach ($pages as $page) {
-      $this->addFile(new Page($page));
-      if ($page instanceof PatternPageInterface) {
-        $this->addFile(new SourceFile($page->getPattern()));
-        $this->addFile(new EscapedSourceFile($page->getPattern()));
-        $this->addFile(new TemplateFile($page->getPattern()));
-      }
-    }
-  }
-
-  /**
-   * Make the style guide page objects
-   *
-   * @return \Labcoat\Styleguide\Pages\PageInterface[] An array of page objects
    */
   protected function makePages() {
-    $pages = $this->makePatternPages();
-    if ($this->hasFolderIndexes()) $pages = array_merge($this->makeIndexPages(), $pages);
-    return $pages;
+    $this->makePatternPages();
+    if ($this->hasFolderIndexes()) $this->makeIndexPages();
   }
 
   protected function makePatternPages() {
-    $pages = [];
     foreach ($this->patternlab->getPatterns() as $pattern) {
-      $pages[] = new PatternPage($pattern);
+      $this->addFile(new PatternPage($pattern));
+      $this->addFile(new SourceFile($pattern));
+      $this->addFile(new EscapedSourceFile($pattern));
+      $this->addFile(new TemplateFile($pattern));
     }
-    return $pages;
   }
 
   /**
