@@ -3,6 +3,7 @@
 namespace Labcoat\Mocks\PatternLab\Styleguide;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class Styleguide implements StyleguideInterface {
@@ -74,5 +75,9 @@ class Styleguide implements StyleguideInterface {
 
   public function render($template, array $data = []) {
     // TODO: Implement render() method.
+  }
+
+  public function renderPage(PageInterface $page) {
+    // TODO: Implement renderPage() method.
   }
 }

@@ -16,12 +16,12 @@ class ViewAllPage extends Page implements ViewAllPageInterface {
     $this->time = max($this->time, $pattern->getTime());
   }
 
-  public function getDocumentContent() {
+  public function getContent() {
     $variables = [
       'partials' => $this->getPatterns(),
       'patternPartial' => '',
     ];
-    return $this->render('viewall', $variables);
+    return $this->styleguide->render('viewall', $variables);
   }
 
   public function getPath() {

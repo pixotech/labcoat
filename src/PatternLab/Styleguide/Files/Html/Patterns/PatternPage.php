@@ -2,6 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
+use Labcoat\Generator\Paths\Path;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
@@ -61,31 +62,28 @@ class PatternPage extends Page implements PatternPageInterface {
     $this->pattern = $pattern;
   }
 
-  public function getDocumentContent() {
+  public function getContent() {
     return $this->pattern->getExample();
   }
 
-  public function getFooterVariables() {
-    return $this->pattern->getData();
-  }
-
-  public function getHeaderVariables() {
-    return $this->pattern->getData();
+  public function getData() {
+    return self::makePatternData($this->pattern);
   }
 
   public function getPath() {
-    return $this->pattern->getPagePath();
+    $path = $this->pattern->getId();
+    return new Path("patterns/$path/$path.html");
   }
 
   public function getPattern() {
     return $this->pattern;
   }
 
-  public function getPatternData() {
-    return self::makePatternData($this->pattern);
-  }
-
   public function getTime() {
     return $this->pattern->getTime();
+  }
+
+  public function getVariables() {
+    return $this->pattern->getData()->toArray();
   }
 }

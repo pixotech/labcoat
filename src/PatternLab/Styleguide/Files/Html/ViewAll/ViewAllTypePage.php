@@ -13,11 +13,11 @@ class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
     $this->path = $type->getName();
   }
 
-  public function getPath() {
-    return ['patterns', $this->path, 'index.html'];
+  public function getData() {
+    return ['patternPartial' => "viewall-{$this->partial}"];
   }
 
-  public function getPatternData() {
-    return ['patternPartial' => "viewall-{$this->partial}"];
+  public function getPath() {
+    return ['patterns', $this->path, 'index.html'];
   }
 }

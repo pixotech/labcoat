@@ -9,6 +9,8 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
+use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
+
 interface StyleguideInterface {
 
   /**
@@ -63,4 +65,6 @@ interface StyleguideInterface {
    * @return string Rendered template content
    */
   public function render($template, array $data = []);
+
+  public function renderPage(PageInterface $page);
 }

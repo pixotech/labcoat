@@ -16,11 +16,11 @@ class ViewAllSubtypePage extends ViewAllPage implements ViewAllSubtypePageInterf
     $this->path = str_replace(DIRECTORY_SEPARATOR, '-', $subtype->getName());
   }
 
-  public function getPath() {
-    return ['patterns', $this->path, "index.html"];
+  public function getData() {
+    return ['patternPartial' => "viewall-{$this->partial}"];
   }
 
-  public function getPatternData() {
-    return ['patternPartial' => "viewall-{$this->partial}"];
+  public function getPath() {
+    return ['patterns', $this->path, "index.html"];
   }
 }

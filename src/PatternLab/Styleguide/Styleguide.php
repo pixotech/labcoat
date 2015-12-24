@@ -17,6 +17,7 @@ use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile;
 use Labcoat\Generator\Files\FileInterface;
 use Labcoat\PatternLab\Styleguide\Files\Text\LatestChangeFile;
+use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Patterns\PatternPage;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllSubtypePage;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
@@ -41,6 +42,13 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @var array|null
    */
   protected $globalData;
+
+  /**
+   * A separate Twig parser for custom page header & footer templates
+   *
+   * @var \Twig_Environment
+   */
+  protected $pageTemplateParser;
 
   /**
    * @var \Labcoat\PatternLabInterface
@@ -180,7 +188,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @return \Twig_Environment A Twig parser object
    */
   protected function getTemplateParser() {
-    if (!isset($this->templateParser)) $this->templateParser = $this->makeDocumentTemplateParser();
+    if (!isset($this->templateParser)) $this->templateParser = $this->makePageTemplateParser();
     return $this->templateParser;
   }
 
@@ -268,28 +276,81 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     }
   }
 
-  protected function makeDocument($content, array $vars = []) {
 
+
+  # Page rendering
+
+  public function renderPage(PageInterface $page) {
+    if ($this->hasCustomPageTemplates()) return $this->renderPageWithCustomTemplates($page);
+    return null;
   }
 
-  protected function hasCustomDocumentFooter() {
+  protected function getPageFooterVariables(PageInterface $page) {
+    $vars = [
+      'cacheBuster' => $this->getCacheBuster(),
+      'patternLabFoot' => $this->getPatternLabFooterContent($page),
+    ];
+    return $vars + $page->getVariables();
+  }
+
+  protected function getPageHeaderVariables(PageInterface $page) {
+    $vars = [
+      'cacheBuster' => $this->getCacheBuster(),
+      'patternLabHead' => $this->getPatternLabHeaderContent(),
+    ];
+    return $vars + $page->getVariables();
+  }
+
+  protected function getPageTemplateParser() {
+    if (!isset($this->pageTemplateParser)) $this->pageTemplateParser = $this->makePageTemplateParser();
+    return $this->pageTemplateParser;
+  }
+
+  protected function getPatternLabFooterContent(PageInterface $page) {
+    $vars = [
+      'cacheBuster' => $this->getCacheBuster(),
+      'patternData' => json_encode($page->getData()),
+    ];
+    return $this->render('partials/general-footer', $vars);
+  }
+
+  protected function getPatternLabHeaderContent() {
+    $vars = [
+      'cacheBuster' => $this->getCacheBuster(),
+    ];
+    return $this->render('partials/general-header', $vars);
+  }
+
+  protected function hasCustomPageFooter() {
     return $this->getPatternLab()->hasStyleguideFooter();
   }
 
-  protected function hasCustomDocumentHeader() {
+  protected function hasCustomPageHeader() {
     return $this->getPatternLab()->hasStyleguideHeader();
   }
 
-  protected function hasCustomDocumentTemplates() {
-    return $this->hasCustomDocumentHeader() and $this->hasCustomDocumentFooter();
+  protected function hasCustomPageTemplates() {
+    return $this->hasCustomPageHeader() and $this->hasCustomPageFooter();
   }
 
-  protected function makeDocumentTemplateParser() {
-    if (!$this->hasCustomDocumentTemplates()) throw new \BadMethodCallException();
+  protected function makeCustomPageFooter(PageInterface $page) {
+    return $this->getPageTemplateParser()->render('footer', $this->getPageFooterVariables($page));
+  }
+
+  protected function makeCustomPageHeader(PageInterface $page) {
+    return $this->getPageTemplateParser()->render('header', $this->getPageHeaderVariables($page));
+  }
+
+  protected function makePageTemplateParser() {
+    if (!$this->hasCustomPageTemplates()) throw new \BadMethodCallException();
     $loader = new \Twig_Loader_Array([
       'patternLabHead' => file_get_contents($this->getPatternLab()->getStyleguideHeader()),
       'patternLabFoot' => file_get_contents($this->getPatternLab()->getStyleguideFooter()),
     ]);
     return new \Twig_Environment($loader, ['cache' => false]);
+  }
+
+  protected function renderPageWithCustomTemplates(PageInterface $page) {
+    return $this->makeCustomPageHeader($page) . $page->getContent() . $this->makeCustomPageFooter($page);
   }
 }
