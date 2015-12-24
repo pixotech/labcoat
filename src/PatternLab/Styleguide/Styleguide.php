@@ -9,7 +9,7 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\PatternLab;
+use Labcoat\PatternLab\Styleguide\Twig\PageTemplateLoader;
 use Labcoat\PatternLabInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
@@ -147,13 +147,13 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function findAssetsDirectory() {
     if (!$vendor = $this->findVendorDirectory()) return null;
-    $path = PatternLab::makePath([$vendor, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
+    $path = implode(DIRECTORY_SEPARATOR, [$vendor, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
     return is_dir($path) ? $path : null;
   }
 
   protected function findTemplatesDirectory() {
     if (!$vendor = $this->findVendorDirectory()) return null;
-    $path = PatternLab::makePath([$vendor, 'pattern-lab', 'styleguidekit-twig-default', 'views']);
+    $path = implode(DIRECTORY_SEPARATOR, [$vendor, 'pattern-lab', 'styleguidekit-twig-default', 'views']);
     return is_dir($path) ? $path : null;
   }
 
@@ -343,10 +343,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function makePageTemplateParser() {
     if (!$this->hasCustomPageTemplates()) throw new \BadMethodCallException();
-    $loader = new \Twig_Loader_Array([
-      'patternLabHead' => file_get_contents($this->getPatternLab()->getStyleguideHeader()),
-      'patternLabFoot' => file_get_contents($this->getPatternLab()->getStyleguideFooter()),
-    ]);
+    $loader = new PageTemplateLoader($this->getPatternLab());
     return new \Twig_Environment($loader, ['cache' => false]);
   }
 

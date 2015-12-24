@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Twig;
 
-class Loader extends \Twig_Loader_Array {
+class StyleguideTemplateLoader extends \Twig_Loader_Array {
 
   protected $viewsPath;
 
