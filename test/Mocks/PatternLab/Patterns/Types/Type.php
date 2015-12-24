@@ -7,6 +7,7 @@ use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 class Type implements TypeInterface {
 
+  public $id;
   public $label;
   public $name;
   public $path;
@@ -38,7 +39,7 @@ class Type implements TypeInterface {
   }
 
   public function getId() {
-    // TODO: Implement getId() method.
+    return $this->id;
   }
 
   public function getLabel() {

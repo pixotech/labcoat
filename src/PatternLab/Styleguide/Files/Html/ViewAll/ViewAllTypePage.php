@@ -8,17 +8,23 @@ use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
 
+  protected $type;
+
   public function __construct(StyleguideInterface $styleguide, TypeInterface $type) {
     parent::__construct($styleguide);
-    $this->partial = $type->getName() . '-all';
-    $this->path = $type->getId();
+    $this->type = $type;
   }
 
   public function getData() {
-    return ['patternPartial' => "viewall-{$this->partial}"];
+    return ['patternPartial' => $this->getPartial()];
+  }
+
+  public function getPartial() {
+    return 'viewall-' . $this->type->getName() . '-all';
   }
 
   public function getPath() {
-    return new Path("patterns/{$this->path}/index.html");
+    $id = $this->type->getId();
+    return new Path("patterns/$id/index.html");
   }
 }

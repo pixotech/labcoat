@@ -7,8 +7,10 @@ use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 
 class Subtype implements SubtypeInterface {
 
+  public $id;
   public $label;
   public $name;
+  public $partial;
   public $patterns = [];
   public $type;
 
@@ -25,7 +27,7 @@ class Subtype implements SubtypeInterface {
   }
 
   public function getPartial() {
-    // TODO: Implement getPartial() method.
+    return $this->partial;
   }
 
   public function getPatterns() {
@@ -37,7 +39,7 @@ class Subtype implements SubtypeInterface {
   }
 
   public function getId() {
-    // TODO: Implement getId() method.
+    return $this->id;
   }
 
   public function getLabel() {
