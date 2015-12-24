@@ -16,7 +16,7 @@ use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile;
 use Labcoat\Generator\Files\FileInterface;
-use Labcoat\PatternLab\Styleguide\Files\LatestChangeFile;
+use Labcoat\PatternLab\Styleguide\Files\Text\LatestChangeFile;
 use Labcoat\PatternLab\Styleguide\Files\Html\Patterns\PatternPage;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllSubtypePage;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;

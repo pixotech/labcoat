@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Files;
+namespace Labcoat\PatternLab\Styleguide\Files\Text;
 
 use Labcoat\Generator\Files\FileInterface;
 

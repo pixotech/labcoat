@@ -1,9 +1,10 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Files;
+namespace Labcoat\PatternLab\Styleguide\Files\Text;
 
 use Labcoat\Generator\Files\File;
 use Labcoat\Generator\Paths\Path;
+use Labcoat\PatternLab\Styleguide\Files\Text\LatestChangeFileInterface;
 
 class LatestChangeFile extends File implements LatestChangeFileInterface {
 
