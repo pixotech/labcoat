@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Assets;
 
-use Labcoat\Styleguide\Files\FileInterface;
+use Labcoat\Generator\Files\FileInterface;
 
 interface AssetFileInterface extends FileInterface {
 }

@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Html;
 
-use Labcoat\Styleguide\Files\File;
+use Labcoat\Generator\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
 abstract class Page extends File implements PageInterface {

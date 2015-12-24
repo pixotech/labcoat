@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Files\Assets;
 
 use Labcoat\Styleguide\Files\Assets\AssetFileInterface;
-use Labcoat\Styleguide\Files\File;
+use Labcoat\Generator\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class AssetFile extends File implements AssetFileInterface {

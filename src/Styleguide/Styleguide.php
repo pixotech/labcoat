@@ -15,7 +15,7 @@ use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\Styleguide\Files\Assets\AssetFile;
 use Labcoat\Styleguide\Files\Javascript\DataFile;
-use Labcoat\Styleguide\Files\FileInterface;
+use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Styleguide\Files\LatestChangeFile;
 use Labcoat\Styleguide\Files\Html\Patterns\PatternPage;
 use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllSubtypePage;
@@ -23,7 +23,7 @@ use Labcoat\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\Styleguide\Files\Patterns\TemplateFile;
-use Labcoat\Styleguide\Generator\Generator;
+use Labcoat\Generator\Generator;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -33,7 +33,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $cacheBuster;
 
   /**
-   * @var \Labcoat\Styleguide\Files\FileInterface[]
+   * @var \Labcoat\Generator\Files\FileInterface[]
    */
   protected $files = [];
 

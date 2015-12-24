@@ -1,9 +1,9 @@
 <?php
 
-namespace Labcoat\Styleguide\Generator;
+namespace Labcoat\Generator;
 
 use Labcoat\PatternLab;
-use Labcoat\Styleguide\Files\FileInterface;
+use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class Generator implements GeneratorInterface {
@@ -21,7 +21,7 @@ class Generator implements GeneratorInterface {
   public function __invoke() {
     $report = new Report();
     $paths = $this->getExistingPaths();
-    /** @var \Labcoat\Styleguide\Files\FileInterface $file */
+    /** @var \Labcoat\Generator\Files\FileInterface $file */
     foreach ($this->styleguide as $path => $file) {
       $report->addEvent($this->handleFile($file, $path));
       if (false !== $i = array_search($path, $paths)) {

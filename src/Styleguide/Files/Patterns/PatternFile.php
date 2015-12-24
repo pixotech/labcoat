@@ -3,7 +3,7 @@
 namespace Labcoat\Styleguide\Files\Patterns;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\Styleguide\Files\File;
+use Labcoat\Generator\Files\File;
 
 abstract class PatternFile extends File implements PatternFileInterface {
 

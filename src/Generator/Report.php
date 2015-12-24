@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Generator;
+namespace Labcoat\Generator;
 
 class Report implements \IteratorAggregate {
 

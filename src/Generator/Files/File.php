@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Styleguide\Files;
+namespace Labcoat\Generator\Files;
 
 abstract class File implements FileInterface {
 

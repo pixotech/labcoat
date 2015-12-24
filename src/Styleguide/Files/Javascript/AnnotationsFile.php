@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Javascript;
 
-use Labcoat\Styleguide\Files\File;
+use Labcoat\Generator\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class AnnotationsFile extends File implements AnnotationsFileInterface {

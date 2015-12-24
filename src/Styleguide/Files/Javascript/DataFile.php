@@ -7,7 +7,7 @@ use Labcoat\PatternLab\Patterns\Segment;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 use Labcoat\PatternLab\Patterns\Types\TypeInterface;
-use Labcoat\Styleguide\Files\File;
+use Labcoat\Generator\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class DataFile extends File implements DataFileInterface {

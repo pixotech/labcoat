@@ -2,7 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Html;
 
-use Labcoat\Styleguide\Files\FileInterface;
+use Labcoat\Generator\Files\FileInterface;
 
 interface PageInterface extends FileInterface {
 

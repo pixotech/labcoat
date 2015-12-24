@@ -2,6 +2,7 @@
 
 namespace Labcoat\Styleguide\Files;
 
+use Labcoat\Generator\Files\File;
 use Labcoat\Styleguide\StyleguideInterface;
 
 class LatestChangeFile extends File implements LatestChangeFileInterface {
