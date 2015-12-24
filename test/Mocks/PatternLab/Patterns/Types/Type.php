@@ -46,10 +46,6 @@ class Type implements TypeInterface {
     return $this->label;
   }
 
-  public function getPagePath() {
-    // TODO: Implement getPagePath() method.
-  }
-
   public function getPartial() {
     // TODO: Implement getPartial() method.
   }
