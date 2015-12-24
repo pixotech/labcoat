@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Assets;
 
 use Labcoat\Generator\Files\File;
+use Labcoat\Generator\Paths\Path;
 
 class AssetFile extends File implements AssetFileInterface {
 
@@ -18,12 +19,12 @@ class AssetFile extends File implements AssetFileInterface {
     $path = $this->path;
     switch (dirname($path)) {
       case 'html':
-        return basename($path);
+        return new Path(basename($path));
       case 'css/custom':
       case 'css/patternlab':
-        $path = $this->makePath(['css', basename($path)]);
+        $path = 'css/' . basename($path);
       default:
-        return $this->makePath(['styleguide', $path]);
+        return new Path('styleguide/' . $path);
     }
   }
 

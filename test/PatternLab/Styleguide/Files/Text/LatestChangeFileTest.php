@@ -3,8 +3,6 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Text;
 
 use Labcoat\Generator\Paths\Path;
-use Labcoat\PatternLab\Styleguide\Files\Text\LatestChangeFile;
-use PHPUnit_Framework_TestCase;
 
 class LatestChangeFileTest extends \PHPUnit_Framework_TestCase {
 
