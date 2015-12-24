@@ -56,19 +56,20 @@ class PatternPage extends Page implements PatternPageInterface {
     return $lineage;
   }
 
-  public function __construct(PatternInterface $pattern) {
+  public function __construct(StyleguideInterface $styleguide, PatternInterface $pattern) {
+    parent::__construct($styleguide);
     $this->pattern = $pattern;
   }
 
-  public function getDocumentContent(StyleguideInterface $styleguide) {
+  public function getDocumentContent() {
     return $this->pattern->getExample();
   }
 
-  public function getFooterVariables(StyleguideInterface $styleguide) {
+  public function getFooterVariables() {
     return $this->pattern->getData();
   }
 
-  public function getHeaderVariables(StyleguideInterface $styleguide) {
+  public function getHeaderVariables() {
     return $this->pattern->getData();
   }
 

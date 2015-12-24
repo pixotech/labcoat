@@ -222,11 +222,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function makeIndexPages() {
-    $this->addFile(new ViewAllPage());
+    $this->addFile(new ViewAllPage($this));
     foreach ($this->patternlab->getTypes() as $type) {
-      $this->addFile(new ViewAllTypePage($type));
+      $this->addFile(new ViewAllTypePage($this, $type));
       foreach ($type->getSubtypes() as $subtype) {
-        $this->addFile(new ViewAllSubtypePage($subtype));
+        $this->addFile(new ViewAllSubtypePage($this, $subtype));
       }
     }
   }
@@ -248,7 +248,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function makePatternPages() {
     foreach ($this->patternlab->getPatterns() as $pattern) {
-      $this->addFile(new PatternPage($pattern));
+      $this->addFile(new PatternPage($this, $pattern));
       $this->addFile(new SourceFile($pattern));
       $this->addFile(new EscapedSourceFile($pattern));
       $this->addFile(new TemplateFile($pattern));

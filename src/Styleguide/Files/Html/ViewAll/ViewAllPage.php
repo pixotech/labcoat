@@ -3,8 +3,7 @@
 namespace Labcoat\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Styleguide\Files\Html\Page;
-use Labcoat\Styleguide\Patterns\PatternInterface;
-use Labcoat\Styleguide\StyleguideInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class ViewAllPage extends Page implements ViewAllPageInterface {
 
@@ -17,12 +16,12 @@ class ViewAllPage extends Page implements ViewAllPageInterface {
     $this->time = max($this->time, $pattern->getTime());
   }
 
-  public function getDocumentContent(StyleguideInterface $styleguide) {
+  public function getDocumentContent() {
     $variables = [
       'partials' => $this->getPatterns(),
       'patternPartial' => '',
     ];
-    return $styleguide->render('viewall', $variables);
+    return $this->render('viewall', $variables);
   }
 
   public function getPath() {
@@ -30,7 +29,7 @@ class ViewAllPage extends Page implements ViewAllPageInterface {
   }
 
   /**
-   * @return \Labcoat\Styleguide\Patterns\PatternInterface[]
+   * @return PatternInterface[]
    */
   public function getPatterns() {
     return $this->patterns;

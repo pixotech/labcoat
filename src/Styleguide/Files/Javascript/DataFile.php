@@ -3,7 +3,6 @@
 namespace Labcoat\Styleguide\Files\Javascript;
 
 use Labcoat\PatternLabInterface;
-use Labcoat\PatternLab\Patterns\Segment;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 use Labcoat\PatternLab\Patterns\Types\TypeInterface;
@@ -26,6 +25,11 @@ class DataFile extends File implements DataFileInterface {
    * @var PatternLabInterface
    */
   protected $patternlab;
+
+  /**
+   * @var StyleguideInterface
+   */
+  protected $styleguide;
 
   public static function makeNavPattern(PatternInterface $pattern) {
     return [
@@ -92,7 +96,8 @@ class DataFile extends File implements DataFileInterface {
     ];
   }
 
-  public function __construct(PatternLabInterface $patternlab) {
+  public function __construct(StyleguideInterface $styleguide, PatternLabInterface $patternlab) {
+    $this->styleguide = $styleguide;
     $this->patternlab = $patternlab;
     $this->loadControls();
   }
@@ -101,11 +106,11 @@ class DataFile extends File implements DataFileInterface {
    * @param StyleguideInterface $styleguide
    * @return array
    */
-  public function getConfig(StyleguideInterface $styleguide) {
+  public function getConfig() {
     return [
-      'cacheBuster' => $styleguide->getCacheBuster(),
-      'ishMaximum' => $styleguide->getMaximumWidth(),
-      'ishMinimum' => $styleguide->getMinimumWidth(),
+      'cacheBuster' => $this->styleguide->getCacheBuster(),
+      'ishMaximum' => $this->styleguide->getMaximumWidth(),
+      'ishMinimum' => $this->styleguide->getMinimumWidth(),
     ];
   }
 
@@ -116,8 +121,8 @@ class DataFile extends File implements DataFileInterface {
     return $this->controls;
   }
 
-  public function getContents(StyleguideInterface $styleguide) {
-    $contents  = "var config = " . json_encode($this->getConfig($styleguide)).";";
+  public function getContents() {
+    $contents  = "var config = " . json_encode($this->getConfig()).";";
     $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
     $contents .= "var navItems = " . json_encode($this->getNavItems()) . ";";
     $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
@@ -175,8 +180,8 @@ class DataFile extends File implements DataFileInterface {
     return $paths;
   }
 
-  public function put(StyleguideInterface $styleguide, $path) {
-    file_put_contents($path, $this->getContents($styleguide));
+  public function put($path) {
+    file_put_contents($path, $this->getContents());
   }
 
   /**

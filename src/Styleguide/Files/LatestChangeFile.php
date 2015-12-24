@@ -3,7 +3,6 @@
 namespace Labcoat\Styleguide\Files;
 
 use Labcoat\Generator\Files\File;
-use Labcoat\Styleguide\StyleguideInterface;
 
 class LatestChangeFile extends File implements LatestChangeFileInterface {
 
@@ -21,7 +20,7 @@ class LatestChangeFile extends File implements LatestChangeFileInterface {
     return $this->time;
   }
 
-  public function put(StyleguideInterface $styleguide, $path) {
+  public function put($path) {
     file_put_contents($path, $this->time);
   }
 }

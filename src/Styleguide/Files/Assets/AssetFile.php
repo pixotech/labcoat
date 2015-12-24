@@ -2,9 +2,7 @@
 
 namespace Labcoat\Styleguide\Files\Assets;
 
-use Labcoat\Styleguide\Files\Assets\AssetFileInterface;
 use Labcoat\Generator\Files\File;
-use Labcoat\Styleguide\StyleguideInterface;
 
 class AssetFile extends File implements AssetFileInterface {
 
@@ -33,7 +31,7 @@ class AssetFile extends File implements AssetFileInterface {
     return filemtime($this->file);
   }
 
-  public function put(StyleguideInterface $styleguide, $path) {
+  public function put($path) {
     copy($this->file, $path);
   }
 }

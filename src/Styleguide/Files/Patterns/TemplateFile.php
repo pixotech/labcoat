@@ -3,11 +3,10 @@
 namespace Labcoat\Styleguide\Files\Patterns;
 
 use Labcoat\PatternLab;
-use Labcoat\Styleguide\StyleguideInterface;
 
 class TemplateFile extends PatternFile implements TemplateFileInterface {
 
-  public function put(StyleguideInterface $styleguide, $path) {
+  public function put($path) {
     $template = $this->getTemplateContent();
     file_put_contents($path, htmlentities($template));
   }

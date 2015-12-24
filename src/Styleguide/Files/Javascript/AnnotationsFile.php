@@ -3,7 +3,6 @@
 namespace Labcoat\Styleguide\Files\Javascript;
 
 use Labcoat\Generator\Files\File;
-use Labcoat\Styleguide\StyleguideInterface;
 
 class AnnotationsFile extends File implements AnnotationsFileInterface {
 
@@ -21,7 +20,7 @@ class AnnotationsFile extends File implements AnnotationsFileInterface {
     return filemtime($this->path);
   }
 
-  public function put(StyleguideInterface $styleguide, $path) {
+  public function put($path) {
     copy($this->path, $path);
   }
 }
