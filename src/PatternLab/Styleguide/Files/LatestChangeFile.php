@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files;
 
 use Labcoat\Generator\Files\File;
+use Labcoat\Generator\Paths\Path;
 
 class LatestChangeFile extends File implements LatestChangeFileInterface {
 
@@ -13,7 +14,7 @@ class LatestChangeFile extends File implements LatestChangeFileInterface {
   }
 
   public function getPath() {
-    return 'latest-change.txt';
+    return new Path('latest-change.txt');
   }
 
   public function getTime() {
