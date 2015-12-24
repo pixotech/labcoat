@@ -22,6 +22,8 @@ interface ConfigurationInterface {
   public function getStyleguideHeader();
   public function getStyleguideTemplatesDirectories();
   public function getTwigOptions();
+  public function hasStyleguideFooter();
+  public function hasStyleguideHeader();
   public function setAnnotationsFile($path);
   public function setIgnoredDirectories(array $directories);
   public function setIgnoredExtensions(array $extensions);

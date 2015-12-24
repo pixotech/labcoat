@@ -113,6 +113,14 @@ class Configuration implements ConfigurationInterface {
     return $this->twigOptions;
   }
 
+  public function hasStyleguideFooter() {
+    return !empty($this->styleguideFooterPath);
+  }
+
+  public function hasStyleguideHeader() {
+    return !empty($this->styleguideHeaderPath);
+  }
+
   public function setAnnotationsFile($path) {
     $this->annotationsPath = $path;
   }

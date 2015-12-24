@@ -4,7 +4,7 @@ namespace Labcoat\Mocks;
 
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLabInterface;
-use Labcoat\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class PatternLab implements PatternLabInterface {
 
@@ -92,5 +92,13 @@ class PatternLab implements PatternLabInterface {
 
   public function getPatternsThatInclude(PatternInterface $pattern) {
     // TODO: Implement getPatternsThatInclude() method.
+  }
+
+  public function hasStyleguideFooter() {
+    // TODO: Implement hasStyleguideFooter() method.
+  }
+
+  public function hasStyleguideHeader() {
+    // TODO: Implement hasStyleguideHeader() method.
   }
 }

@@ -60,7 +60,7 @@ class LabcoatConfiguration extends Configuration {
     $className = "Composer\\Autoload\\ClassLoader";
     if (!class_exists($className)) return null;
     $c = new \ReflectionClass($className);
-    return dirname($c->getFileName()) . '/..';
+    return dirname(dirname($c->getFileName()));
   }
 
   protected function getDirectoryIfExists($path) {
