@@ -5,7 +5,7 @@ namespace Labcoat\Generator;
 use Labcoat\Generator\Files\FileEvent;
 use Labcoat\PatternLab;
 use Labcoat\Generator\Files\FileInterface;
-use Labcoat\Styleguide\StyleguideInterface;
+use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class Generator implements GeneratorInterface {
 
