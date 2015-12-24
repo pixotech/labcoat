@@ -77,5 +77,15 @@ interface PatternLabInterface {
    */
   public function getTypes();
 
+  /**
+   * @return bool
+   */
+  public function hasStyleguideFooter();
+
+  /**
+   * @return bool
+   */
+  public function hasStyleguideHeader();
+
   public function render(PatternInterface $pattern, DataInterface $data = null);
 }

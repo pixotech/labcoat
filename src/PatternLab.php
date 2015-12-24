@@ -212,6 +212,14 @@ class PatternLab implements PatternLabInterface {
     return $this->types;
   }
 
+  public function hasStyleguideFooter() {
+    return $this->config->hasStyleguideFooter();
+  }
+
+  public function hasStyleguideHeader() {
+    return $this->config->hasStyleguideHeader();
+  }
+
 
   public function render(PatternInterface $pattern, DataInterface $data = null) {
     return $this->twig->render($pattern->getPath(), isset($data) ? $data->toArray() : []);

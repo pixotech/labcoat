@@ -93,4 +93,12 @@ class PatternLab implements PatternLabInterface {
   public function getPatternsThatInclude(PatternInterface $pattern) {
     // TODO: Implement getPatternsThatInclude() method.
   }
+
+  public function hasStyleguideFooter() {
+    // TODO: Implement hasStyleguideFooter() method.
+  }
+
+  public function hasStyleguideHeader() {
+    // TODO: Implement hasStyleguideHeader() method.
+  }
 }

@@ -175,32 +175,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * Get the content of a template
-   *
-   * @param string $template The path to the tempalte
-   * @return string The content of the template
-   */
-  protected function getStyleguideTemplateContent($template) {
-    return file_get_contents($this->getStyleguideTemplatePath($template));
-  }
-
-  /**
-   * Get the full path to a style guide template
-   *
-   * @param string $template The relative path of the template
-   * @return string The full template path
-   */
-  protected function getStyleguideTemplatePath($template) {
-    return PatternLab::makePath([$this->patternlab->getStyleguideTemplatesDirectory(), $template]);
-  }
-
-  /**
    * Get the Twig parser for style guide templates
    *
    * @return \Twig_Environment A Twig parser object
    */
   protected function getTemplateParser() {
-    if (!isset($this->templateParser)) $this->makeTemplateParser();
+    if (!isset($this->templateParser)) $this->templateParser = $this->makeDocumentTemplateParser();
     return $this->templateParser;
   }
 
@@ -288,20 +268,28 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     }
   }
 
-  /**
-   * Make the Twig parser for style guide template files
-   */
-  protected function makeTemplateParser() {
-    $templates = [
-      'partials/general-footer' => $this->getStyleguideTemplateContent('partials/general-footer.twig'),
-      'partials/general-header' => $this->getStyleguideTemplateContent('partials/general-header.twig'),
-      'patternSection.twig' => $this->getStyleguideTemplateContent('partials/patternSection.twig'),
-      'patternSectionSubtype.twig' => $this->getStyleguideTemplateContent('partials/patternSectionSubtype.twig'),
-      'viewall' => $this->getStyleguideTemplateContent('viewall.twig'),
-    ];
-    $templates['patternLabHead'] = file_get_contents($this->getPatternHeaderTemplatePath());
-    $templates['patternLabFoot'] = file_get_contents($this->getPatternFooterTemplatePath());
-    $loader = new \Twig_Loader_Array($templates);
-    $this->templateParser = new \Twig_Environment($loader, ['cache' => false]);
+  protected function makeDocument($content, array $vars = []) {
+
+  }
+
+  protected function hasCustomDocumentFooter() {
+    return $this->getPatternLab()->hasStyleguideFooter();
+  }
+
+  protected function hasCustomDocumentHeader() {
+    return $this->getPatternLab()->hasStyleguideHeader();
+  }
+
+  protected function hasCustomDocumentTemplates() {
+    return $this->hasCustomDocumentHeader() and $this->hasCustomDocumentFooter();
+  }
+
+  protected function makeDocumentTemplateParser() {
+    if (!$this->hasCustomDocumentTemplates()) throw new \BadMethodCallException();
+    $loader = new \Twig_Loader_Array([
+      'patternLabHead' => file_get_contents($this->getPatternLab()->getStyleguideHeader()),
+      'patternLabFoot' => file_get_contents($this->getPatternLab()->getStyleguideFooter()),
+    ]);
+    return new \Twig_Environment($loader, ['cache' => false]);
   }
 }

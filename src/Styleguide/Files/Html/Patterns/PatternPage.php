@@ -61,7 +61,7 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getDocumentContent(StyleguideInterface $styleguide) {
-    return $this->pattern->getContent();
+    return $this->pattern->getExample();
   }
 
   public function getFooterVariables(StyleguideInterface $styleguide) {
