@@ -207,7 +207,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * Make the Pattern Lab data file object
    */
   protected function makeDataFile() {
-    $this->addFile(new DataFile($this->patternlab));
+    $this->addFile(new DataFile($this, $this->patternlab));
   }
 
   /**

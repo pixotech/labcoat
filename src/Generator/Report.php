@@ -2,6 +2,8 @@
 
 namespace Labcoat\Generator;
 
+use Labcoat\Generator\Files\FileEvent;
+
 class Report implements \IteratorAggregate {
 
   protected $events = [];

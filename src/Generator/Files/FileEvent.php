@@ -1,6 +1,8 @@
 <?php
 
-namespace Labcoat\Generator;
+namespace Labcoat\Generator\Files;
+
+use Labcoat\Generator\EventInterface;
 
 class FileEvent implements EventInterface {
 
