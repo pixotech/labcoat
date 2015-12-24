@@ -142,7 +142,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @param FileInterface $file A file object
    */
   protected function addFile(FileInterface $file) {
-    $this->files[$file->getPath()] = $file;
+    $this->files[(string)$file->getPath()] = $file;
   }
 
   protected function findAssetsDirectory() {
