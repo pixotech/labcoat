@@ -2,6 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
-interface ViewAllSubtypePageInterface extends ViewAllPageInterface {
+interface ViewAllSubtypePageInterface extends ViewAllTypePageInterface {
 
 }
