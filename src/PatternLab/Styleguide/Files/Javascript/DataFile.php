@@ -219,11 +219,6 @@ class DataFile extends File implements DataFileInterface {
   protected function getStylesheets() {
     if (!isset($this->stylesheets)) {
       $this->stylesheets = [];
-      foreach ($this->patternlab->getAssets() as $asset) {
-        if (pathinfo($asset->getPath(), PATHINFO_EXTENSION) == 'css') {
-          $this->stylesheets[] = $asset->getFile();
-        }
-      }
     }
     return $this->stylesheets;
   }
