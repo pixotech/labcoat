@@ -9,6 +9,7 @@ use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 
+  public $data;
   public $description;
   public $example;
   public $file;
@@ -123,7 +124,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getData() {
-    // TODO: Implement getData() method.
+    return $this->data;
   }
 
   public function hasState() {

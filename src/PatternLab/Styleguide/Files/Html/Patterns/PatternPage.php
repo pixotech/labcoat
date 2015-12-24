@@ -31,9 +31,10 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public static function makeLineage(PatternInterface $pattern) {
+    $id = $pattern->getId();
     return [
       'lineagePattern' => $pattern->getPartial(),
-      'lineagePath' => static::makeRelativePath($pattern->getPath()),
+      'lineagePath' => "../../{$id}/{$id}.html",
     ];
   }
 
@@ -43,10 +44,6 @@ class PatternPage extends Page implements PatternPageInterface {
       $lineage[] = self::makeLineage($pattern2);
     }
     return $lineage;
-  }
-
-  public static function makeRelativePath($path) {
-    return "../../$path";
   }
 
   public static function makeReversePatternLineage(PatternInterface $pattern) {

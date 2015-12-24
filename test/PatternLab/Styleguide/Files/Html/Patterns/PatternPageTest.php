@@ -2,11 +2,19 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
+use Labcoat\Data\Data;
 use Labcoat\Generator\Files\FileTestCase;
 use Labcoat\Mocks\PatternLab\Patterns\Pattern;
 use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 
 class PatternPageTest extends FileTestCase {
+
+  public function testPattern() {
+    $styleguide = new Styleguide();
+    $pattern = new Pattern();
+    $file = new PatternPage($styleguide, $pattern);
+    $this->assertSame($pattern, $file->getPattern());
+  }
 
   public function testPath() {
     $id = 'pattern-id';
@@ -24,6 +32,15 @@ class PatternPageTest extends FileTestCase {
     $pattern->time = $time;
     $file = new PatternPage($styleguide, $pattern);
     $this->assertEquals($time, $file->getTime());
+  }
+
+  public function testContent() {
+    $example = '<p>This is the <strong>pattern example</strong></p>';
+    $styleguide = new Styleguide();
+    $pattern = new Pattern();
+    $pattern->example = $example;
+    $file = new PatternPage($styleguide, $pattern);
+    $this->assertEquals($example, $file->getContent());
   }
 
   public function testDataExtension() {
@@ -106,5 +123,31 @@ class PatternPageTest extends FileTestCase {
     $data = PatternPage::makeData($pattern);
     $this->assertArrayHasKey('lineageR', $data);
     $this->assertEquals(PatternPage::makeReversePatternLineage($pattern), $data['lineageR']);
+  }
+
+  public function testLineagePattern() {
+    $pattern = new Pattern();
+    $pattern->partial = 'pattern partial';
+    $lineage = PatternPage::makeLineage($pattern);
+    $this->assertArrayHasKey('lineagePattern', $lineage);
+    $this->assertEquals($pattern->partial, $lineage['lineagePattern']);
+  }
+
+  public function testLineagePath() {
+    $id = 'pattern-id';
+    $pattern = new Pattern();
+    $pattern->id = $id;
+    $lineage = PatternPage::makeLineage($pattern);
+    $this->assertArrayHasKey('lineagePath', $lineage);
+    $this->assertEquals("../../{$id}/{$id}.html", $lineage['lineagePath']);
+  }
+
+  public function testVariables() {
+    $variables = ['one' => 'two'];
+    $styleguide = new Styleguide();
+    $pattern = new Pattern();
+    $pattern->data = new Data($variables);
+    $file = new PatternPage($styleguide, $pattern);
+    $this->assertEquals($variables, $file->getVariables());
   }
 }
