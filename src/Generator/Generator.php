@@ -81,7 +81,7 @@ class Generator implements GeneratorInterface {
     $fileTime = is_file($destination) ? filemtime($destination) : 0;
     if ($this->force || $fileTime < $file->getTime()) {
       $this->ensurePathDirectory($destination);
-      $file->put($this->styleguide, $destination);
+      $file->put($destination);
       $event->stop(FileEvent::UPDATED);
     }
     else {
