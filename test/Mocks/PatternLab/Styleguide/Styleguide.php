@@ -12,6 +12,7 @@ class Styleguide implements StyleguideInterface {
   public $patternlab;
   public $patterns;
   public $rendered = [];
+  public $renders = [];
 
   public function getGlobalData() {
     return $this->globalData;
@@ -74,7 +75,8 @@ class Styleguide implements StyleguideInterface {
   }
 
   public function render($template, array $data = []) {
-    // TODO: Implement render() method.
+    $this->renders[] = [$template, $data];
+    return $this->rendered[$template];
   }
 
   public function renderPage(PageInterface $page) {
