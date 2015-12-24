@@ -9,6 +9,7 @@ use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 
+  public $example;
   public $file;
   public $id;
   public $label;
@@ -20,6 +21,11 @@ class Pattern implements PatternInterface {
   public $slug;
   public $state;
   public $template;
+  public $time;
+
+  public function getExample() {
+    return $this->example;
+  }
 
   public function getLabel() {
     return $this->label;
@@ -66,7 +72,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getTime() {
-    // TODO: Implement getTime() method.
+    return $this->time;
   }
 
   public function getConfiguration() {
@@ -115,10 +121,6 @@ class Pattern implements PatternInterface {
 
   public function getData() {
     // TODO: Implement getData() method.
-  }
-
-  public function getExample() {
-    // TODO: Implement getExample() method.
   }
 
   public function hasState() {

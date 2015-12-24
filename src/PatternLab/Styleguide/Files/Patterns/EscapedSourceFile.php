@@ -7,7 +7,7 @@ use Labcoat\PatternLab;
 class EscapedSourceFile extends PatternFile implements EscapedSourceFileInterface {
 
   public function put($path) {
-    file_put_contents($path, htmlentities($this->pattern->getContent()));
+    file_put_contents($path, htmlentities($this->pattern->getExample()));
   }
 
   public function getPath() {
