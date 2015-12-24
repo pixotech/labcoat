@@ -14,7 +14,7 @@ class Pattern implements PatternInterface {
   protected $description;
   protected $example;
   protected $file;
-  protected $includedPatterns;
+  protected $includedPatterns = [];
   protected $name;
   protected $path;
 
@@ -74,6 +74,10 @@ class Pattern implements PatternInterface {
 
   public function getIncludedPatterns() {
     return $this->includedPatterns;
+  }
+
+  public function getIncludingPatterns() {
+    return $this->patternlab->getPatternsThatInclude($this);
   }
 
   public function getLabel() {

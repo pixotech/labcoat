@@ -9,9 +9,12 @@ use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 
+  public $description;
   public $example;
   public $file;
   public $id;
+  public $includedPatterns = [];
+  public $includingPatterns = [];
   public $label;
   public $name;
   public $normalizedPath;
@@ -44,7 +47,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getIncludedPatterns() {
-    // TODO: Implement getIncludedPatterns() method.
+    return $this->includedPatterns;
   }
 
   public function getName() {
@@ -124,10 +127,14 @@ class Pattern implements PatternInterface {
   }
 
   public function hasState() {
-    // TODO: Implement hasState() method.
+    return !empty($this->state);
   }
 
   public function getDescription() {
-    // TODO: Implement getDescription() method.
+    return $this->description;
+  }
+
+  public function getIncludingPatterns() {
+    return $this->includingPatterns;
   }
 }

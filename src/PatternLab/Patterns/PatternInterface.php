@@ -3,7 +3,6 @@
 namespace Labcoat\PatternLab\Patterns;
 
 use Labcoat\Data\DataInterface;
-use Labcoat\PatternLab\Patterns\ConfigurationInterface;
 
 /*
 
@@ -71,6 +70,11 @@ interface PatternInterface {
    * @return array
    */
   public function getIncludedPatterns();
+
+  /**
+   * @return array
+   */
+  public function getIncludingPatterns();
 
   /**
    * The human-readable name of the pattern

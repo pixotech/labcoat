@@ -138,4 +138,8 @@ class PseudoPattern implements PseudoPatternInterface {
   public function getDescription() {
     // TODO: Implement getDescription() method.
   }
+
+  public function getIncludingPatterns() {
+    // TODO: Implement getIncludingPatterns() method.
+  }
 }

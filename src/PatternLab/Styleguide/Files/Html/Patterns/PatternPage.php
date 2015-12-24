@@ -14,14 +14,7 @@ class PatternPage extends Page implements PatternPageInterface {
    */
   protected $pattern;
 
-  public static function makeLineage(PatternInterface $pattern) {
-    return [
-      'lineagePattern' => $pattern->getPartial(),
-      'lineagePath' => static::makeRelativePath($pattern->getPath()),
-    ];
-  }
-
-  public static function makePatternData(PatternInterface $pattern) {
+  public static function makeData(PatternInterface $pattern) {
     $data = [
       'patternExtension' => 'twig',
       'cssEnabled' => false,
@@ -35,6 +28,13 @@ class PatternPage extends Page implements PatternPageInterface {
       'lineageR' => self::makeReversePatternLineage($pattern),
     ];
     return $data;
+  }
+
+  public static function makeLineage(PatternInterface $pattern) {
+    return [
+      'lineagePattern' => $pattern->getPartial(),
+      'lineagePath' => static::makeRelativePath($pattern->getPath()),
+    ];
   }
 
   public static function makePatternLineage(PatternInterface $pattern) {
@@ -67,7 +67,7 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getData() {
-    return self::makePatternData($this->pattern);
+    return self::makeData($this->pattern);
   }
 
   public function getPath() {
