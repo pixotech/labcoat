@@ -93,11 +93,6 @@ class Pattern implements PatternInterface {
     return (string)$this->name;
   }
 
-  public function getPagePath() {
-    $id = $this->getId();
-    return "$id/$id.html";
-  }
-
   public function getPartial() {
     return implode('-', [$this->getType(), $this->getName()]);
   }

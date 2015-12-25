@@ -32,8 +32,9 @@ class DataFile extends File implements DataFileInterface {
   protected $styleguide;
 
   public static function makeNavPattern(PatternInterface $pattern) {
+    $id = $pattern->getId();
     return [
-      'patternPath' => $pattern->getPagePath(),
+      'patternPath' => "patterns/$id/$id.html",
       'patternName' => $pattern->getLabel(),
       'patternPartial' => $pattern->getPartial(),
       'patternState' => $pattern->getState(),

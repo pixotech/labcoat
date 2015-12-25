@@ -95,15 +95,6 @@ interface PatternInterface {
   public function getName();
 
   /**
-   * The path to the style guide page
-   *
-   * Equivalent to `id/id.html`. Cannot be overridden by configuration.
-   *
-   * @return string
-   */
-  public function getPagePath();
-
-  /**
    * The partial name of the pattern
    *
    * I.e. `type-name`. Does not contain ordering. Cannot be overridden by configuration.
