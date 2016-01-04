@@ -147,10 +147,10 @@ class DataFile extends File implements DataFileInterface {
   public function getPatternPaths() {
     $paths = [];
     foreach ($this->patternlab->getTypes() as $type) {
-      $typeName = (string)(new Segment($type->getName()))->getName();
+      $typeName = $type->getId();
       foreach ($type->getSubtypes() as $subtype) {
         foreach ($subtype->getPatterns() as $pattern) {
-          $patternName = (string)$pattern->getName();
+          $patternName = $pattern->getId();
           $paths[$typeName][$patternName] = $pattern->getPartial();
         }
       }
@@ -169,9 +169,9 @@ class DataFile extends File implements DataFileInterface {
   public function getViewAllPaths() {
     $paths = [];
     foreach ($this->patternlab->getTypes() as $type) {
-      $typeName = (string)(new Segment($type->getName()))->getName();
+      $typeName = $type->getId();
       foreach ($type->getSubtypes() as $subtype) {
-        $subtypeName = (string)$subtype->getName();
+        $subtypeName = $subtype->getId();
         $paths[$typeName][$subtypeName] = $subtype->getPartial();
       }
       if ($type->hasSubtypes()) {

@@ -73,7 +73,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getIncludedPatterns() {
-    return $this->includedPatterns;
+    $included = [];
+    foreach ($this->includedPatterns as $pattern) {
+      #$included[] = $this->patternlab->get($pattern);
+    }
+    return $included;
   }
 
   public function getIncludingPatterns() {
