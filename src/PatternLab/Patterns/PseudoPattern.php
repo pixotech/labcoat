@@ -138,4 +138,8 @@ class PseudoPattern implements PseudoPatternInterface {
   public function getIncludingPatterns() {
     // TODO: Implement getIncludingPatterns() method.
   }
+
+  public function matches($name) {
+    // TODO: Implement matches() method.
+  }
 }

@@ -213,4 +213,30 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $pattern->setConfiguration($config);
     $this->assertEquals($description, $pattern->getDescription());
   }
+
+  # Matches
+
+  public function testMatchPartial() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one/two/three', __FILE__);
+    $this->assertTrue($pattern->matches('one-three'));
+  }
+
+  public function testMatchPath() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one/two/three', __FILE__);
+    $this->assertTrue($pattern->matches('one/two/three'));
+  }
+
+  public function testMatchPathWithOrdering() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, '01-one/02-two/03-three', __FILE__);
+    $this->assertTrue($pattern->matches('one/two/three'));
+  }
+
+  public function testMatchPathWithoutOrdering() {
+    $patternlab = new PatternLab();
+    $pattern = new Pattern($patternlab, 'one/two/three', __FILE__);
+    $this->assertTrue($pattern->matches('01-one/02-two/03-three'));
+  }
 }

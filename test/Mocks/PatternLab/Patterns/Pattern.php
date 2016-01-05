@@ -131,4 +131,8 @@ class Pattern implements PatternInterface {
   public function getIncludingPatterns() {
     return $this->includingPatterns;
   }
+
+  public function matches($name) {
+    // TODO: Implement matches() method.
+  }
 }

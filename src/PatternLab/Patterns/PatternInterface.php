@@ -180,6 +180,16 @@ interface PatternInterface {
    */
   public function includes(PatternInterface $pattern);
 
+  /**
+   * @param string $name
+   * @return bool
+   */
+  public function matches($name);
+
+  /**
+   * @param DataInterface|NULL $data
+   * @return string
+   */
   public function render(DataInterface $data = null);
 
   /**

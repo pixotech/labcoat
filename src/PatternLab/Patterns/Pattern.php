@@ -4,6 +4,7 @@ namespace Labcoat\PatternLab\Patterns;
 
 use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
+use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
 
@@ -162,6 +163,11 @@ class Pattern implements PatternInterface {
       if ($included == (string)$pattern->getPath()) return true;
     }
     return false;
+  }
+
+  public function matches($name) {
+    if (PatternLab::isPartialName($name)) return $name == $this->getPartial();
+    else return (string)PatternLab::normalizePath($name) == (string)PatternLab::normalizePath($this->getPath());
   }
 
   public function render(DataInterface $data = NULL) {
