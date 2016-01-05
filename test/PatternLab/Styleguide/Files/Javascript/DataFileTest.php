@@ -73,11 +73,11 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testNavItemPatternPagePath() {
-    $path = 'path-to-the-pattern';
+    $id = 'pattern-id';
     $pattern = new Pattern();
-    $pattern->pagePath = $path;
+    $pattern->id = $id;
     $nav = DataFile::makeNavPattern($pattern);
-    $this->assertEquals($path, $nav['patternPath']);
+    $this->assertEquals("patterns/$id/$id.html", $nav['patternPath']);
   }
 
   public function testNavItemPatternPartial() {

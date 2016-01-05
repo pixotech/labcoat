@@ -73,7 +73,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getIncludedPatterns() {
-    return $this->includedPatterns;
+    $included = [];
+    foreach ($this->includedPatterns as $pattern) {
+      #$included[] = $this->patternlab->get($pattern);
+    }
+    return $included;
   }
 
   public function getIncludingPatterns() {
@@ -91,11 +95,6 @@ class Pattern implements PatternInterface {
   public function getName() {
     if ($this->getConfiguration()->hasName()) return $this->getConfiguration()->getName();
     return (string)$this->name;
-  }
-
-  public function getPagePath() {
-    $id = $this->getId();
-    return "$id/$id.html";
   }
 
   public function getPartial() {

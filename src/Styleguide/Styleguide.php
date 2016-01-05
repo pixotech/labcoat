@@ -13,6 +13,10 @@ class Styleguide implements StyleguideInterface {
     $this->styleguide = new PatternLabStyleguide($labcoat);
   }
 
+  public function __toString() {
+    return (string)$this->styleguide;
+  }
+
   public function generate($directory) {
     return $this->styleguide->generate($directory);
   }

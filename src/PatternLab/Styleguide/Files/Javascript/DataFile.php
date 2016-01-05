@@ -32,8 +32,9 @@ class DataFile extends File implements DataFileInterface {
   protected $styleguide;
 
   public static function makeNavPattern(PatternInterface $pattern) {
+    $id = $pattern->getId();
     return [
-      'patternPath' => $pattern->getPagePath(),
+      'patternPath' => "patterns/$id/$id.html",
       'patternName' => $pattern->getLabel(),
       'patternPartial' => $pattern->getPartial(),
       'patternState' => $pattern->getState(),
@@ -146,10 +147,10 @@ class DataFile extends File implements DataFileInterface {
   public function getPatternPaths() {
     $paths = [];
     foreach ($this->patternlab->getTypes() as $type) {
-      $typeName = (string)(new Segment($type->getName()))->getName();
+      $typeName = $type->getId();
       foreach ($type->getSubtypes() as $subtype) {
         foreach ($subtype->getPatterns() as $pattern) {
-          $patternName = (string)$pattern->getName();
+          $patternName = $pattern->getId();
           $paths[$typeName][$patternName] = $pattern->getPartial();
         }
       }
@@ -168,9 +169,9 @@ class DataFile extends File implements DataFileInterface {
   public function getViewAllPaths() {
     $paths = [];
     foreach ($this->patternlab->getTypes() as $type) {
-      $typeName = (string)(new Segment($type->getName()))->getName();
+      $typeName = $type->getId();
       foreach ($type->getSubtypes() as $subtype) {
-        $subtypeName = (string)$subtype->getName();
+        $subtypeName = $subtype->getId();
         $paths[$typeName][$subtypeName] = $subtype->getPartial();
       }
       if ($type->hasSubtypes()) {
@@ -219,11 +220,6 @@ class DataFile extends File implements DataFileInterface {
   protected function getStylesheets() {
     if (!isset($this->stylesheets)) {
       $this->stylesheets = [];
-      foreach ($this->patternlab->getAssets() as $asset) {
-        if (pathinfo($asset->getPath(), PATHINFO_EXTENSION) == 'css') {
-          $this->stylesheets[] = $asset->getFile();
-        }
-      }
     }
     return $this->stylesheets;
   }

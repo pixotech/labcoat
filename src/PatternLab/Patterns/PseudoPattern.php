@@ -44,10 +44,6 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->name;
   }
 
-  public function getPagePath() {
-    return $this->path;
-  }
-
   public function getPath() {
     return $this->path;
   }

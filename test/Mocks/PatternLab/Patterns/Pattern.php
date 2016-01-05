@@ -18,11 +18,8 @@ class Pattern implements PatternInterface {
   public $includingPatterns = [];
   public $label;
   public $name;
-  public $normalizedPath;
-  public $pagePath;
   public $partial;
   public $path;
-  public $slug;
   public $state;
   public $template;
   public $time;
@@ -33,10 +30,6 @@ class Pattern implements PatternInterface {
 
   public function getLabel() {
     return $this->label;
-  }
-
-  public function getPagePath() {
-    return $this->pagePath;
   }
 
   public function getFile() {
