@@ -31,14 +31,6 @@ class Subtype extends Type implements SubtypeInterface {
     return implode('-', [$this->type->getId(), $this->id]);
   }
 
-  public function getLabel() {
-    // TODO: Implement getLabel() method.
-  }
-
-  public function getPagePath() {
-    // TODO: Implement getPagePath() method.
-  }
-
   public function getPartial() {
     return implode('-', [$this->type, $this->name]);
   }

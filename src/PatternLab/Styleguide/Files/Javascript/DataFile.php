@@ -34,7 +34,7 @@ class DataFile extends File implements DataFileInterface {
   public static function makeNavPattern(PatternInterface $pattern) {
     $id = $pattern->getId();
     return [
-      'patternPath' => "patterns/$id/$id.html",
+      'patternPath' => "$id/$id.html",
       'patternName' => $pattern->getLabel(),
       'patternPartial' => $pattern->getPartial(),
       'patternState' => $pattern->getState(),
@@ -123,12 +123,12 @@ class DataFile extends File implements DataFileInterface {
   }
 
   public function getContents() {
-    $contents  = "var config = " . json_encode($this->getConfig()).";";
-    $contents .= "var ishControls = " . json_encode($this->getControls()) . ";";
-    $contents .= "var navItems = " . json_encode($this->getNavItems()) . ";";
-    $contents .= "var patternPaths = " . json_encode($this->getPatternPaths()) . ";";
-    $contents .= "var viewAllPaths = " . json_encode($this->getViewAllPaths()) . ";";
-    $contents .= "var plugins = " . json_encode($this->getPlugins()) . ";";
+    $contents  = "var config = " . $this->jsonEncode($this->getConfig()).";\n\n";
+    $contents .= "var ishControls = " . $this->jsonEncode($this->getControls()) . ";\n\n";
+    $contents .= "var navItems = " . $this->jsonEncode($this->getNavItems()) . ";\n\n";
+    $contents .= "var patternPaths = " . $this->jsonEncode($this->getPatternPaths()) . ";\n\n";
+    $contents .= "var viewAllPaths = " . $this->jsonEncode($this->getViewAllPaths()) . ";\n\n";
+    $contents .= "var plugins = " . $this->jsonEncode($this->getPlugins()) . ";";
     return $contents;
   }
 
@@ -147,16 +147,16 @@ class DataFile extends File implements DataFileInterface {
   public function getPatternPaths() {
     $paths = [];
     foreach ($this->patternlab->getTypes() as $type) {
-      $typeName = $type->getId();
+      $typeName = $type->getName();
       foreach ($type->getSubtypes() as $subtype) {
         foreach ($subtype->getPatterns() as $pattern) {
-          $patternName = $pattern->getId();
-          $paths[$typeName][$patternName] = $pattern->getPartial();
+          $patternName = $pattern->getName();
+          $paths[$typeName][$patternName] = $pattern->getId();
         }
       }
       foreach ($type->getPatterns() as $pattern) {
         $patternName = (string)$pattern->getName();
-        $paths[$typeName][$patternName] = $pattern->getPartial();
+        $paths[$typeName][$patternName] = $pattern->getId();
       }
     }
     return $paths;
@@ -222,6 +222,10 @@ class DataFile extends File implements DataFileInterface {
       $this->stylesheets = [];
     }
     return $this->stylesheets;
+  }
+
+  protected function jsonEncode($var) {
+    return json_encode($var, JSON_PRETTY_PRINT);
   }
 
   protected function loadControls() {
