@@ -25,6 +25,6 @@ class ViewAllSubtypePageTest extends FileTestCase {
     $page = new ViewAllSubtypePage($styleguide, $subtype);
     $data = $page->getData();
     $this->assertArrayHasKey('patternPartial', $data);
-    $this->assertEquals("viewall-{$partial}", $data['patternPartial']);
+    $this->assertEquals($partial, $data['patternPartial']);
   }
 }

@@ -18,13 +18,13 @@ class ViewAllTypePageTest extends FileTestCase {
   }
 
   public function testData() {
-    $name = 'type-name';
+    $partial = 'type-name';
     $styleguide = new Styleguide();
     $type = new Type();
-    $type->name = $name;
+    $type->partial = $partial;
     $page = new ViewAllTypePage($styleguide, $type);
     $data = $page->getData();
     $this->assertArrayHasKey('patternPartial', $data);
-    $this->assertEquals("viewall-{$name}-all", $data['patternPartial']);
+    $this->assertEquals($partial, $data['patternPartial']);
   }
 }

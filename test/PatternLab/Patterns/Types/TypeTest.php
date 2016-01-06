@@ -2,15 +2,13 @@
 
 namespace Labcoat\PatternLab\Patterns\Types;
 
+use Labcoat\PatternLab\Name;
+
 class TypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
-    $type = new Type('one');
-    $this->assertEquals('one', $type->getName());
-  }
-
-  public function testNameDoesNotHaveDigits() {
-    $type = new Type('01-one');
-    $this->assertEquals('one', $type->getName());
+    $name = new Name('one');
+    $type = new Type($name);
+    $this->assertEquals($name, $type->getName());
   }
 }

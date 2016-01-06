@@ -3,18 +3,14 @@
 namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\Mocks\PatternLab\Patterns\Types\Type;
+use Labcoat\PatternLab\Name;
 
 class SubtypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testName() {
     $type = new Type();
-    $subtype = new Subtype($type, 'one');
-    $this->assertEquals('one', $subtype->getName());
-  }
-
-  public function testNameDoesNotHaveDigits() {
-    $type = new Type();
-    $subtype = new Subtype($type, '01-one');
-    $this->assertEquals('one', $subtype->getName());
+    $name = new Name('one');
+    $subtype = new Subtype($type, $name);
+    $this->assertEquals($name, $subtype->getName());
   }
 }

@@ -13,11 +13,11 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
   # Navigation: Types
 
   public function testNavItemTypeName() {
-    $name = 'type';
+    $id = 'type';
     $type = new Type();
-    $type->name = $name;
+    $type->id = $id;
     $nav = DataFile::makeNavType($type);
-    $this->assertEquals($name, $nav['patternType']);
+    $this->assertEquals($id, $nav['patternType']);
   }
 
   public function testNavItemTypeLowercaseName() {
@@ -77,7 +77,7 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $pattern = new Pattern();
     $pattern->id = $id;
     $nav = DataFile::makeNavPattern($pattern);
-    $this->assertEquals("patterns/$id/$id.html", $nav['patternPath']);
+    $this->assertEquals("$id/$id.html", $nav['patternPath']);
   }
 
   public function testNavItemPatternPartial() {

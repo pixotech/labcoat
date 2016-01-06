@@ -10,6 +10,7 @@ class Type implements TypeInterface {
   public $id;
   public $label;
   public $name;
+  public $partial;
   public $path;
   public $patterns = [];
   public $subtypes = [];
@@ -47,6 +48,6 @@ class Type implements TypeInterface {
   }
 
   public function getPartial() {
-    // TODO: Implement getPartial() method.
+    return $this->partial;
   }
 }
