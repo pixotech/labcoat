@@ -96,9 +96,6 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($state, $nav['patternState']);
   }
 
-
-
-
   public function testNavItems() {
     $styleguide = new Styleguide();
     $patternlab = new PatternLab();

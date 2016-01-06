@@ -19,11 +19,12 @@ class PatternPage extends Page implements PatternPageInterface {
       'patternExtension' => 'twig',
       'cssEnabled' => false,
       'extraOutput' => [],
-      'patternName' => $pattern->getName(),
+      'patternName' => $pattern->getLabel(),
       'patternPartial' => $pattern->getPartial(),
       'patternState' => $pattern->hasState() ? $pattern->getState() : '',
       'patternStateExists' => $pattern->hasState(),
       'patternDesc' => $pattern->getDescription(),
+      'patternDescExists' => (bool)$pattern->getDescription(),
       'lineage' => self::makePatternLineage($pattern),
       'lineageR' => self::makeReversePatternLineage($pattern),
     ];
