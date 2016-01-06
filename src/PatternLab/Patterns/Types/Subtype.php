@@ -33,7 +33,7 @@ class Subtype extends Type implements SubtypeInterface {
   }
 
   public function getPartial() {
-    return implode('-', [$this->type, $this->name]);
+    return 'viewall-' . implode('-', [$this->type, $this->name]);
   }
 
   /**

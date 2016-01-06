@@ -64,9 +64,9 @@ class DataFile extends File implements DataFileInterface {
     return [
       "patternPath" => "$id/index.html",
       "patternName" => self::VIEW_ALL,
-      "patternType" => $subtype->getType()->getName(),
+      "patternType" => $subtype->getType()->getId(),
       "patternSubtype" => $subtype->getName(),
-      "patternPartial" => 'viewall-' . $subtype->getPartial(),
+      "patternPartial" => $subtype->getPartial(),
     ];
   }
 
@@ -97,7 +97,7 @@ class DataFile extends File implements DataFileInterface {
       "patternName" => self::VIEW_ALL,
       "patternType" => $type->getId(),
       "patternSubtype" => 'all',
-      "patternPartial" => 'viewall-' . $type->getPartial() . '-all',
+      "patternPartial" => $type->getPartial(),
     ];
   }
 

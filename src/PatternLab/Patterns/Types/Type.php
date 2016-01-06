@@ -88,7 +88,7 @@ class Type implements TypeInterface {
   }
 
   public function getPartial() {
-    return $this->getName();
+    return 'viewall-' . $this->getName() . '-all';
   }
 
   /**
