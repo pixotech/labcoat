@@ -129,7 +129,7 @@ interface PatternInterface {
   public function getState();
 
   /**
-   * @return \Labcoat\PatternLab\Patterns\Types\SubtypeInterface
+   * @return \Labcoat\PatternLab\NameInterface
    */
   public function getSubtype();
 
@@ -149,7 +149,7 @@ interface PatternInterface {
   public function getTime();
 
   /**
-   * @return \Labcoat\PatternLab\Patterns\Types\TypeInterface
+   * @return \Labcoat\PatternLab\NameInterface
    */
   public function getType();
 

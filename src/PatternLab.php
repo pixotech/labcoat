@@ -14,6 +14,7 @@ use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
 use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
+use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Patterns\Path;
 use Labcoat\PatternLab\Patterns\Pattern;
 use Labcoat\PatternLab\Patterns\PatternInterface;
@@ -235,7 +236,7 @@ class PatternLab implements PatternLabInterface {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
       $pattern = new Pattern($this, $path, $match);
       $this->patterns[] = $pattern;
-      if ($pattern->hasType()) $this->getOrCreateType((string)$pattern->getType())->addPattern($pattern);
+      if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
     }
   }
 
@@ -245,9 +246,10 @@ class PatternLab implements PatternLabInterface {
    * @param string $name The name of the type
    * @return \Labcoat\PatternLab\Patterns\Types\TypeInterface A pattern type object
    */
-  protected function getOrCreateType($name) {
-    if (!isset($this->types[$name])) $this->types[$name] = new Type($name);
-    return $this->types[$name];
+  protected function getOrCreateType(NameInterface $name) {
+    $key = (string)$name;
+    if (!isset($this->types[$key])) $this->types[$key] = new Type($name);
+    return $this->types[$key];
   }
 
   protected function getPatternFilesIterator() {

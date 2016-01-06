@@ -11,6 +11,8 @@ use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class DataFile extends File implements DataFileInterface {
 
+  const VIEW_ALL = 'View All';
+
   /**
    * @var array
    */
@@ -58,12 +60,13 @@ class DataFile extends File implements DataFileInterface {
   }
 
   public static function makeNavSubtypeItem(SubtypeInterface $subtype) {
+    $id = $subtype->getId();
     return [
-      "patternPath" => $subtype->getName(),
-      "patternName" => $subtype->getName(),
+      "patternPath" => "$id/index.html",
+      "patternName" => self::VIEW_ALL,
       "patternType" => $subtype->getType()->getName(),
       "patternSubtype" => $subtype->getName(),
-      "patternPartial" => $subtype->getPartial(),
+      "patternPartial" => 'viewall-' . $subtype->getPartial(),
     ];
   }
 
@@ -71,7 +74,7 @@ class DataFile extends File implements DataFileInterface {
     $data = [
       'patternTypeLC' => $type->getName(),
       'patternTypeUC' => $type->getLabel(),
-      'patternType' => $type->getName(),
+      'patternType' => $type->getId(),
       'patternTypeItems' => [],
       'patternItems' => [],
     ];
@@ -88,12 +91,13 @@ class DataFile extends File implements DataFileInterface {
   }
 
   public static function makeNavTypeItem(TypeInterface $type) {
+    $id = $type->getId();
     return [
-      "patternPath" => $type->getName(),
-      "patternName" => $type->getName(),
-      "patternType" => $type->getName(),
+      "patternPath" => "$id/index.html",
+      "patternName" => self::VIEW_ALL,
+      "patternType" => $type->getId(),
       "patternSubtype" => 'all',
-      "patternPartial" => $type->getPartial(),
+      "patternPartial" => 'viewall-' . $type->getPartial() . '-all',
     ];
   }
 
@@ -169,13 +173,13 @@ class DataFile extends File implements DataFileInterface {
   public function getViewAllPaths() {
     $paths = [];
     foreach ($this->patternlab->getTypes() as $type) {
-      $typeName = $type->getId();
+      $typeName = $type->getName();
       foreach ($type->getSubtypes() as $subtype) {
-        $subtypeName = $subtype->getId();
-        $paths[$typeName][$subtypeName] = $subtype->getPartial();
+        $subtypeName = $subtype->getName();
+        $paths[$typeName][$subtypeName] = $subtype->getId();
       }
       if ($type->hasSubtypes()) {
-        $paths[$typeName]['all'] = $type->getName();
+        $paths[$typeName]['all'] = $type->getId();
       }
     }
     return $paths;

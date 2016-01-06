@@ -2,6 +2,7 @@
 
 namespace Labcoat\PatternLab\Patterns\Types;
 
+use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Subtype extends Type implements SubtypeInterface {
@@ -16,8 +17,8 @@ class Subtype extends Type implements SubtypeInterface {
    * @param string $name
    * @param array $patterns
    */
-  public function __construct(TypeInterface $type, $id, array $patterns = []) {
-    parent::__construct($id, $patterns);
+  public function __construct(TypeInterface $type, NameInterface $name, array $patterns = []) {
+    parent::__construct($name, $patterns);
     $this->type = $type;
   }
   /**

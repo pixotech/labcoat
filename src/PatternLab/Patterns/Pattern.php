@@ -118,7 +118,8 @@ class Pattern implements PatternInterface {
   }
 
   public function getSubtype() {
-    return $this->path->getSubtype();
+    if ($this->getConfiguration()->hasSubtype()) return $this->getConfiguration()->getSubtype();
+    return new Name($this->path->getSubtype());
   }
 
   public function getTemplate() {

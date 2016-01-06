@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Name;
+use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Type implements TypeInterface {
@@ -30,9 +31,9 @@ class Type implements TypeInterface {
    * @param string $id
    * @param PatternInterface[] $patterns
    */
-  public function __construct($id, array $patterns = []) {
-    $this->id = $id;
-    $this->name = new Name($id);
+  public function __construct(NameInterface $name, array $patterns = []) {
+    $this->id = $name->raw();
+    $this->name = $name;
     if (!empty($patterns)) $this->addPatterns($patterns);
   }
 
@@ -87,7 +88,7 @@ class Type implements TypeInterface {
   }
 
   public function getPartial() {
-    // TODO: Implement getPartial() method.
+    return $this->getName();
   }
 
   /**
@@ -113,11 +114,12 @@ class Type implements TypeInterface {
   }
 
   /**
-   * @param string $name
+   * @param NameInterface $name
    * @return SubtypeInterface
    */
-  protected function getOrCreateSubtype($name) {
-    if (!isset($this->subtypes[$name])) $this->subtypes[$name] = new Subtype($this, $name);
-    return $this->subtypes[$name];
+  protected function getOrCreateSubtype(NameInterface $name) {
+    $key = (string)$name;
+    if (!isset($this->subtypes[$key])) $this->subtypes[$key] = new Subtype($this, $name);
+    return $this->subtypes[$key];
   }
 }

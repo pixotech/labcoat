@@ -14,6 +14,11 @@ class Name implements NameInterface {
    */
   protected $ordering;
 
+  /**
+   * @var string
+   */
+  protected $raw;
+
   public static function cmp(NameInterface $name1, NameInterface $name2) {
     if ($name1->hasOrdering() and $name2->hasOrdering()) {
       $order1 = $name1->getOrdering();
@@ -33,6 +38,7 @@ class Name implements NameInterface {
    * @param string $name
    */
   public function __construct($name) {
+    $this->raw = (string)$name;
     list($ordering, $ordered) = array_pad(explode('-', $name, 2), 2, NULL);
     if (is_numeric($ordering)) {
       $this->ordering = $ordering;
@@ -66,6 +72,10 @@ class Name implements NameInterface {
 
   public function lowercase() {
     return strtolower($this->join(' '));
+  }
+
+  public function raw() {
+    return $this->raw;
   }
 
   public function words() {

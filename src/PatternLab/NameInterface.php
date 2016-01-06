@@ -31,6 +31,11 @@ interface NameInterface {
   public function lowercase();
 
   /**
+   * @return string
+   */
+  public function raw();
+
+  /**
    * @return array
    */
   public function words();
