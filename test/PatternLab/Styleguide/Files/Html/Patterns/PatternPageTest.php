@@ -66,10 +66,10 @@ class PatternPageTest extends FileTestCase {
 
   public function testDataName() {
     $pattern = new Pattern();
-    $pattern->name = 'pattern name';
+    $pattern->label = 'pattern name';
     $data = PatternPage::makeData($pattern);
     $this->assertArrayHasKey('patternName', $data);
-    $this->assertEquals($pattern->name, $data['patternName']);
+    $this->assertEquals($pattern->label, $data['patternName']);
   }
 
   public function testDataPartial() {
