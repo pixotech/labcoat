@@ -10,8 +10,4 @@ class ViewAllSubtypePage extends ViewAllTypePage implements ViewAllSubtypePageIn
   public function __construct(StyleguideInterface $styleguide, SubtypeInterface $subtype) {
     parent::__construct($styleguide, $subtype);
   }
-
-  public function getPartial() {
-    return 'viewall-' . $this->type->getPartial();
-  }
 }

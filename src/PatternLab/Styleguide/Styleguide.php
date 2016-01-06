@@ -231,13 +231,25 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function makeIndexPages() {
-    $this->addFile(new ViewAllPage($this));
+    $indexes = ['all' => new ViewAllPage($this)];
     foreach ($this->patternlab->getTypes() as $type) {
-      $this->addFile(new ViewAllTypePage($this, $type));
+      $typeId = $type->getId();
+      $indexes[$typeId] = new ViewAllTypePage($this, $type);
       foreach ($type->getSubtypes() as $subtype) {
-        $this->addFile(new ViewAllSubtypePage($this, $subtype));
+        $subtypeId = $subtype->getId();
+        $indexes[$subtypeId] = new ViewAllSubtypePage($this, $subtype);
+        foreach ($subtype->getPatterns() as $pattern) {
+          $indexes['all']->addPattern($pattern);
+          $indexes[$typeId]->addPattern($pattern);
+          $indexes[$subtypeId]->addPattern($pattern);
+        }
+      }
+      foreach ($type->getPatterns() as $pattern) {
+        $indexes['all']->addPattern($pattern);
+        $indexes[$typeId]->addPattern($pattern);
       }
     }
+    foreach ($indexes as $index) $this->addFile($index);
   }
 
   /**

@@ -20,7 +20,7 @@ class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
   }
 
   public function getPartial() {
-    return 'viewall-' . $this->type->getName() . '-all';
+    return $this->type->getPartial();
   }
 
   public function getPath() {
