@@ -22,10 +22,8 @@ class Data implements DataInterface, \JsonSerializable {
     return $this->toArray();
   }
 
-  public function merge(DataInterface $data) {
-    $merged = clone $this;
-    $merged->data = array_replace_recursive($merged->toArray(), $data->toArray());
-    return $merged;
+  public function merge(DataInterface $other) {
+    $this->data = array_replace_recursive($this->data, $other->toArray());
   }
 
   public function toArray() {

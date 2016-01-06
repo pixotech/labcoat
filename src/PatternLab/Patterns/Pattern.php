@@ -11,6 +11,10 @@ use Labcoat\PatternLabInterface;
 class Pattern implements PatternInterface {
 
   protected $configuration;
+
+  /**
+   * @var DataInterface
+   */
   protected $data;
   protected $description;
   protected $example;
@@ -51,6 +55,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getData() {
+    #print_r($this->data->toArray());
     return $this->data;
   }
 
