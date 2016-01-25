@@ -73,7 +73,8 @@ class Type implements \JsonSerializable, TypeInterface {
   }
 
   public function addSubtype(\Labcoat\Sections\SubtypeInterface $subtype) {
-    $name = array_pop(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
+    $segments = explode(DIRECTORY_SEPARATOR, $subtype->getPath());
+    $name = array_pop($segments);
     $this->subtypes[$name] = new Subtype($subtype);
     ksort($this->subtypes);
   }

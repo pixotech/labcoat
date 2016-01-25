@@ -26,7 +26,8 @@ class Navigation implements \JsonSerializable {
   protected $types = [];
 
   public static function getTypeFromPath($path) {
-    return array_shift(explode(DIRECTORY_SEPARATOR, $path));
+    $segments = explode(DIRECTORY_SEPARATOR, $path);
+    return array_shift($segments);
   }
 
   public static function escapePath($path) {
@@ -92,7 +93,8 @@ class Navigation implements \JsonSerializable {
     $names = explode('/', $subtype->getNormalizedPath());
     list($type, $name) = $names;
     if (!isset($this->indexPaths[$type])) {
-      $typePath = array_shift(explode(DIRECTORY_SEPARATOR, $subtype->getPath()));
+      $segments = explode(DIRECTORY_SEPARATOR, $subtype->getPath());
+      $typePath = array_shift($segments);
       $this->indexPaths[$type] = ['all' => $typePath];
       ksort($this->indexPaths);
     }
