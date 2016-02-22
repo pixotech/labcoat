@@ -2,7 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript;
 
-use Labcoat\PatternLabInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
 use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
@@ -22,11 +21,6 @@ class DataFile extends File implements DataFileInterface {
    * @var array
    */
   protected $controls;
-
-  /**
-   * @var PatternLabInterface
-   */
-  protected $patternlab;
 
   /**
    * @var StyleguideInterface
@@ -101,9 +95,8 @@ class DataFile extends File implements DataFileInterface {
     ];
   }
 
-  public function __construct(StyleguideInterface $styleguide, PatternLabInterface $patternlab) {
+  public function __construct(StyleguideInterface $styleguide) {
     $this->styleguide = $styleguide;
-    $this->patternlab = $patternlab;
     $this->loadControls();
   }
 
@@ -138,7 +131,7 @@ class DataFile extends File implements DataFileInterface {
 
   public function getNavItems() {
     $nav = ['patternTypes' => []];
-    foreach ($this->patternlab->getTypes() as $type) {
+    foreach ($this->styleguide->getTypes() as $type) {
       $nav['patternTypes'][] = self::makeNavType($type);
     }
     return $nav;
@@ -150,7 +143,7 @@ class DataFile extends File implements DataFileInterface {
 
   public function getPatternPaths() {
     $paths = [];
-    foreach ($this->patternlab->getTypes() as $type) {
+    foreach ($this->styleguide->getTypes() as $type) {
       $typeName = $type->getName();
       foreach ($type->getSubtypes() as $subtype) {
         foreach ($subtype->getPatterns() as $pattern) {
@@ -172,7 +165,7 @@ class DataFile extends File implements DataFileInterface {
 
   public function getViewAllPaths() {
     $paths = [];
-    foreach ($this->patternlab->getTypes() as $type) {
+    foreach ($this->styleguide->getTypes() as $type) {
       $typeName = $type->getName();
       foreach ($type->getSubtypes() as $subtype) {
         $subtypeName = $subtype->getName();
@@ -237,7 +230,7 @@ class DataFile extends File implements DataFileInterface {
       'ishControlsHide' => [],
       'mqs' => $this->getMediaQueries(),
     ];
-    foreach ($this->patternlab->getHiddenControls() as $control) {
+    foreach ($this->styleguide->getHiddenControls() as $control) {
       $this->controls['ishControlsHide'][$control] = 'true';
     }
   }

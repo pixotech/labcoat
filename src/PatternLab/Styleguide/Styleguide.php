@@ -32,6 +32,8 @@ use Labcoat\Generator\Generator;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
+  protected $annotationsFilePath;
+
   /**
    * @var int
    */
@@ -45,7 +47,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   /**
    * @var array|null
    */
-  protected $globalData;
+  protected $globalData = [];
+
+  /**
+   * @var array
+   */
+  protected $hiddenControls = [];
 
   /**
    * A separate Twig parser for custom page header & footer templates
@@ -54,10 +61,9 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected $pageTemplateParser;
 
-  /**
-   * @var \Labcoat\PatternLabInterface
-   */
-  protected $patternlab;
+  protected $patternFooterTemplatePath;
+
+  protected $patternHeaderTemplatePath;
 
   /**
    * @var Patterns\PatternInterface[]
@@ -74,11 +80,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected $types = [];
 
-  /**
-   * @param PatternLabInterface $patternlab
-   */
-  public function __construct(PatternLabInterface $patternlab) {
-    $this->patternlab = $patternlab;
+  public function __construct() {
     $this->makeCacheBuster();
     $this->makeFiles();
   }
@@ -107,6 +109,13 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
+   * @return mixed
+   */
+  public function getAnnotationsFilePath() {
+    return $this->annotationsFilePath;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getCacheBuster() {
@@ -117,8 +126,14 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * {@inheritdoc}
    */
   public function getGlobalData() {
-    if (!isset($this->globalData)) $this->globalData = $this->patternlab->getGlobalData();
     return $this->globalData;
+  }
+
+  /**
+   * @return array
+   */
+  public function getHiddenControls() {
+    return $this->hiddenControls;
   }
 
   /**
@@ -143,10 +158,21 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Get the path to the style guide footer template
+   *
+   * @return string The template path
    */
-  public function getPatternLab() {
-    return $this->patternlab;
+  public function getPatternFooterTemplatePath() {
+    return $this->patternlab->getStyleguideFooter();
+  }
+
+  /**
+   * Get the path to the style guide header template
+   *
+   * @return string The template path
+   */
+  public function getPatternHeaderTemplatePath() {
+    return $this->patternlab->getStyleguideHeader();
   }
 
   /**
@@ -154,6 +180,41 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   public function render($template, array $data = []) {
     return $this->getTemplateParser()->render($template, $data);
+  }
+
+  /**
+   * @param string $path
+   */
+  public function setAnnotationsFilePath($path) {
+    $this->annotationsFilePath = $path;
+  }
+
+  /**
+   * @param array|null $data
+   */
+  public function setGlobalData($data) {
+    $this->globalData = $data;
+  }
+
+  /**
+   * @param array $hiddenControls
+   */
+  public function setHiddenControls(array $hiddenControls) {
+    $this->hiddenControls = $hiddenControls;
+  }
+
+  /**
+   * @param string $path
+   */
+  public function setPatternFooterTemplatePath($path) {
+    $this->patternFooterTemplatePath = $path;
+  }
+
+  /**
+   * @param string $path
+   */
+  public function setPatternHeaderTemplatePath($path) {
+    $this->patternHeaderTemplatePath = $path;
   }
 
   /**
@@ -189,24 +250,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->types[$type];
   }
 
-  /**
-   * Get the path to the style guide footer template
-   *
-   * @return string The template path
-   */
-  protected function getPatternFooterTemplatePath() {
-    return $this->patternlab->getStyleguideFooter();
-  }
-
-  /**
-   * Get the path to the style guide header template
-   *
-   * @return string The template path
-   */
-  protected function getPatternHeaderTemplatePath() {
-    return $this->patternlab->getStyleguideHeader();
-  }
-
   protected function getPatterns() {
     return $this->patterns;
   }
@@ -233,7 +276,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * Make the annotations file object
    */
   protected function makeAnnotationsFile() {
-    if ($path = $this->patternlab->getAnnotationsFile()) {
+    if ($path = $this->getAnnotationsFilePath()) {
       $this->addFile(new AnnotationsFile($path));
     }
   }

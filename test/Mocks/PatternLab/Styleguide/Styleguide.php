@@ -9,10 +9,12 @@ use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 class Styleguide implements StyleguideInterface {
 
   public $globalData = [];
+  public $hiddenControls = [];
   public $patternlab;
   public $patterns = [];
   public $rendered = [];
   public $renders = [];
+  public $types = [];
 
   public function addPattern(\Labcoat\PatternLab\PatternInterface $pattern) {
     $this->patterns[] = $pattern;
@@ -85,5 +87,48 @@ class Styleguide implements StyleguideInterface {
 
   public function renderPage(PageInterface $page) {
     // TODO: Implement renderPage() method.
+  }
+
+  public function getPatternFooterTemplatePath() {
+    // TODO: Implement getPatternFooterTemplatePath() method.
+  }
+
+  public function getPatternHeaderTemplatePath() {
+    // TODO: Implement getPatternHeaderTemplatePath() method.
+  }
+
+  public function setPatternFooterTemplatePath($path) {
+    // TODO: Implement setPatternFooterTemplatePath() method.
+  }
+
+  public function setPatternHeaderTemplatePath($path) {
+    // TODO: Implement setPatternHeaderTemplatePath() method.
+  }
+
+  public function getAnnotationsFilePath() {
+    // TODO: Implement getAnnotationsFilePath() method.
+  }
+
+  public function setAnnotationsFilePath($path) {
+    // TODO: Implement setAnnotationsFilePath() method.
+  }
+
+  public function setGlobalData($data) {
+    // TODO: Implement setGlobalData() method.
+  }
+
+  public function getHiddenControls() {
+    return $this->hiddenControls;
+  }
+
+  public function setHiddenControls(array $controls) {
+    $this->hiddenControls = $controls;
+  }
+
+  /**
+   * @return array
+   */
+  public function getTypes() {
+    return $this->types;
   }
 }

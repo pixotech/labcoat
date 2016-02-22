@@ -27,6 +27,11 @@ interface StyleguideInterface {
   public function generate($directory);
 
   /**
+   * @return string
+   */
+  public function getAnnotationsFilePath();
+
+  /**
    * Get the cache-busting string
    *
    * This string is added to some asset URLs to prevent stale file copies from being served
@@ -43,6 +48,11 @@ interface StyleguideInterface {
   public function getGlobalData();
 
   /**
+   * @return array
+   */
+  public function getHiddenControls();
+
+  /**
    * Maximum size for the viewport resizer
    *
    * @return int
@@ -57,11 +67,23 @@ interface StyleguideInterface {
   public function getMinimumWidth();
 
   /**
-   * Get the Pattern Lab installation object used to make this style guide
+   * Get the path to the style guide footer template
    *
-   * @return \Labcoat\PatternLabInterface A PatternLab object
+   * @return string The template path
    */
-  public function getPatternLab();
+  public function getPatternFooterTemplatePath();
+
+  /**
+   * Get the path to the style guide header template
+   *
+   * @return string The template path
+   */
+  public function getPatternHeaderTemplatePath();
+
+  /**
+   * @return Types\TypeInterface[]
+   */
+  public function getTypes();
 
   /**
    * Render a style guide template with the provided data
@@ -73,4 +95,14 @@ interface StyleguideInterface {
   public function render($template, array $data = []);
 
   public function renderPage(PageInterface $page);
+
+  public function setAnnotationsFilePath($path);
+
+  public function setGlobalData($data);
+
+  public function setHiddenControls(array $controls);
+
+  public function setPatternFooterTemplatePath($path);
+
+  public function setPatternHeaderTemplatePath($path);
 }

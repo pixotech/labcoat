@@ -2,7 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript;
 
-use Labcoat\Mocks\PatternLab;
 use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\Mocks\PatternLab\Styleguide\Types\Subtype;
 use Labcoat\Mocks\PatternLab\Styleguide\Types\Type;
@@ -98,8 +97,7 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
 
   public function testNavItems() {
     $styleguide = new Styleguide();
-    $patternlab = new PatternLab();
-    $file = new DataFile($styleguide, $patternlab);
+    $file = new DataFile($styleguide);
     $nav = $file->getNavItems();
     $this->assertCount(1, $nav);
     $this->assertArrayHasKey('patternTypes', $nav);
@@ -108,47 +106,43 @@ class DataFileTest extends \PHPUnit_Framework_TestCase {
 
   public function testNavItemTypes() {
     $styleguide = new Styleguide();
-    $patternlab = new PatternLab();
-    $patternlab->types[] = new Type();
-    $file = new DataFile($styleguide, $patternlab);
+    $styleguide->types[] = new Type();
+    $file = new DataFile($styleguide);
     $nav = $file->getNavItems();
     $this->assertCount(1, $nav['patternTypes']);
   }
 
   public function testNavItemSubtypes() {
     $styleguide = new Styleguide();
-    $patternlab = new PatternLab();
     $type = new Type();
     $subtype = new Subtype();
     $type->subtypes[] = $subtype;
-    $patternlab->types[] = $type;
-    $file = new DataFile($styleguide, $patternlab);
+    $styleguide->types[] = $type;
+    $file = new DataFile($styleguide);
     $nav = $file->getNavItems();
     $this->assertCount(1, $nav['patternTypes'][0]['patternTypeItems']);
   }
 
   public function testNavItemTypePatterns() {
     $styleguide = new Styleguide();
-    $patternlab = new PatternLab();
     $type = new Type();
     $pattern = new Pattern();
     $type->patterns[] = $pattern;
-    $patternlab->types[] = $type;
-    $file = new DataFile($styleguide, $patternlab);
+    $styleguide->types[] = $type;
+    $file = new DataFile($styleguide);
     $nav = $file->getNavItems();
     $this->assertCount(1, $nav['patternTypes'][0]['patternItems']);
   }
 
   public function testNavItemTypePatternsIncludeSubtypeIndexes() {
     $styleguide = new Styleguide();
-    $patternlab = new PatternLab();
     $type = new Type();
     $subtype = new Subtype();
     $type->subtypes[] = $subtype;
     $pattern = new Pattern();
     $type->patterns[] = $pattern;
-    $patternlab->types[] = $type;
-    $file = new DataFile($styleguide, $patternlab);
+    $styleguide->types[] = $type;
+    $file = new DataFile($styleguide);
     $nav = $file->getNavItems();
     $this->assertCount(2, $nav['patternTypes'][0]['patternItems']);
   }
