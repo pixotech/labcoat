@@ -62,7 +62,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getFile() {
-    return $this->file;
+    return $this->source->getFile();
   }
 
   public function getId() {
@@ -82,14 +82,14 @@ class Pattern implements PatternInterface {
   }
 
   public function getLabel() {
-    return (new Name($this->name))->capitalized();
+    return $this->source->getLabel();
   }
 
   /**
    * @return Name
    */
   public function getName() {
-    return $this->source->getName();
+    return new Name($this->source->getName());
   }
 
   public function getPartial() {

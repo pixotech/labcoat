@@ -34,123 +34,41 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testLabel() {
     $source = new PatternSource();
-    $source->path = 'pattern';
+    $source->label = 'Pattern';
     $pattern = new Pattern($source);
     $this->assertEquals('Pattern', $pattern->getLabel());
-  }
-
-  public function testLabelDoesntHaveOrdering() {
-    $source = new PatternSource();
-    $source->path = '01-pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('Pattern', $pattern->getLabel());
-  }
-
-  public function testLabelWithType() {
-    $source = new PatternSource();
-    $source->path = 'type/pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('Pattern', $pattern->getLabel());
-  }
-
-  public function testLabelWithTypeDoesntHaveOrdering() {
-    $source = new PatternSource();
-    $source->path = 'type/01-pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('Pattern', $pattern->getLabel());
-  }
-
-  public function testLabelWithSubtype() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('Pattern', $pattern->getLabel());
-  }
-
-  public function testLabelWithSubtypeDoesntHaveOrdering() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/01-pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('Pattern', $pattern->getLabel());
-  }
-
-  public function testLabelWithLotsOfNesting() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/pattern/one/two/and-three/and-four';
-    $pattern = new Pattern($source);
-    $this->assertEquals('Pattern One Two And Three And Four', $pattern->getLabel());
   }
 
   # Name
 
   public function testName() {
     $source = new PatternSource();
-    $source->path = 'pattern';
+    $source->name = 'pattern';
     $pattern = new Pattern($source);
     $this->assertEquals('pattern', $pattern->getName());
   }
 
   public function testNameDoesNotHaveOrdering() {
     $source = new PatternSource();
-    $source->path = '01-pattern';
+    $source->name = '01-pattern';
     $pattern = new Pattern($source);
     $this->assertEquals('pattern', $pattern->getName());
-  }
-
-  public function testNameWithType() {
-    $source = new PatternSource();
-    $source->path = 'type/pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('pattern', $pattern->getName());
-  }
-
-  public function testNameWithTypeDoesNotHaveOrdering() {
-    $source = new PatternSource();
-    $source->path = 'type/01-pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('pattern', $pattern->getName());
-  }
-
-  public function testNameWithSubtype() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('pattern', $pattern->getName());
-  }
-
-  public function testNameWithSubtypeDoesNotHaveOrdering() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/01-pattern';
-    $pattern = new Pattern($source);
-    $this->assertEquals('pattern', $pattern->getName());
-  }
-
-  public function testNameWithLotsOfNesting() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/pattern/one/two/and-three/and-four';
-    $pattern = new Pattern($source);
-    $this->assertEquals('pattern-one-two-and-three-and-four', $pattern->getName());
-  }
-
-  public function testNameWithLotsOfNestingDoesntHaveOrdering() {
-    $source = new PatternSource();
-    $source->path = 'type/subtype/pattern/01-one/02-two/03-three/04-four';
-    $pattern = new Pattern($source);
-    $this->assertEquals('pattern-one-two-three-four', $pattern->getName());
   }
 
   # Partial
 
   public function testPartial() {
     $source = new PatternSource();
-    $source->path = 'one/two/three';
+    $source->type = 'one';
+    $source->name = 'three';
     $pattern = new Pattern($source);
     $this->assertEquals('one-three', $pattern->getPartial());
   }
 
   public function testPartialDoesntHaveOrdering() {
     $source = new PatternSource();
-    $source->path = '01-one/02-two/03-three';
+    $source->type = '01-one';
+    $source->name = '03-three';
     $pattern = new Pattern($source);
     $this->assertEquals('one-three', $pattern->getPartial());
   }
@@ -191,7 +109,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testMatchPartial() {
     $source = new PatternSource();
-    $source->path = 'one/two/three';
+    $source->type = 'one';
+    $source->name = 'three';
     $pattern = new Pattern($source);
     $this->assertTrue($pattern->matches('one-three'));
   }

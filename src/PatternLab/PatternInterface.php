@@ -7,6 +7,16 @@ interface PatternInterface {
   /**
    * @return string
    */
+  public function getFile();
+
+  /**
+   * @return string
+   */
+  public function getLabel();
+
+  /**
+   * @return string
+   */
   public function getName();
 
   /**
