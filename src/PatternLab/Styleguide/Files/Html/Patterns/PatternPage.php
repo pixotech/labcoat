@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
 use Labcoat\Generator\Paths\Path;
+use Labcoat\PatternLab\Styleguide\Files\Html\PageRendererInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
@@ -55,8 +56,8 @@ class PatternPage extends Page implements PatternPageInterface {
     return $lineage;
   }
 
-  public function __construct(StyleguideInterface $styleguide, PatternInterface $pattern) {
-    parent::__construct($styleguide);
+  public function __construct(PageRendererInterface $renderer, PatternInterface $pattern) {
+    parent::__construct($renderer);
     $this->pattern = $pattern;
   }
 

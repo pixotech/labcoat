@@ -4,42 +4,42 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
 use Labcoat\Data\Data;
 use Labcoat\Generator\Files\FileTestCase;
+use Labcoat\Mocks\PatternLab\Styleguide\Files\Html\PageRenderer;
 use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
-use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 
 class PatternPageTest extends FileTestCase {
 
   public function testPattern() {
-    $styleguide = new Styleguide();
+    $renderer = new PageRenderer();
     $pattern = new Pattern();
-    $file = new PatternPage($styleguide, $pattern);
+    $file = new PatternPage($renderer, $pattern);
     $this->assertSame($pattern, $file->getPattern());
   }
 
   public function testPath() {
     $id = 'pattern-id';
-    $styleguide = new Styleguide();
+    $renderer = new PageRenderer();
     $pattern = new Pattern();
     $pattern->id = $id;
-    $file = new PatternPage($styleguide, $pattern);
+    $file = new PatternPage($renderer, $pattern);
     $this->assertPath("patterns/{$id}/{$id}.html", $file->getPath());
   }
 
   public function testTime() {
     $time = time();
-    $styleguide = new Styleguide();
+    $renderer = new PageRenderer();
     $pattern = new Pattern();
     $pattern->time = $time;
-    $file = new PatternPage($styleguide, $pattern);
+    $file = new PatternPage($renderer, $pattern);
     $this->assertEquals($time, $file->getTime());
   }
 
   public function testContent() {
     $example = '<p>This is the <strong>pattern example</strong></p>';
-    $styleguide = new Styleguide();
+    $renderer = new PageRenderer();
     $pattern = new Pattern();
     $pattern->example = $example;
-    $file = new PatternPage($styleguide, $pattern);
+    $file = new PatternPage($renderer, $pattern);
     $this->assertEquals($example, $file->getContent());
   }
 
@@ -144,10 +144,10 @@ class PatternPageTest extends FileTestCase {
 
   public function testVariables() {
     $variables = ['one' => 'two'];
-    $styleguide = new Styleguide();
+    $renderer = new PageRenderer();
     $pattern = new Pattern();
     $pattern->data = new Data($variables);
-    $file = new PatternPage($styleguide, $pattern);
+    $file = new PatternPage($renderer, $pattern);
     $this->assertEquals($variables, $file->getVariables());
   }
 }
