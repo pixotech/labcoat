@@ -6,9 +6,12 @@ use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
+use Labcoat\PatternLab\PatternInterface as SourceInterface;
 use Labcoat\PatternLabInterface;
 
 class Pattern implements PatternInterface {
+
+  protected $source;
 
   protected $configuration;
 
@@ -40,13 +43,8 @@ class Pattern implements PatternInterface {
     return $token->getType() == \Twig_Token::NAME_TYPE;
   }
 
-  public function __construct(PatternLabInterface $patternlab, $path, $file) {
-    $this->patternlab = $patternlab;
-    $this->path = new Path($path);
-    $this->file = $file;
-    $this->name = new Name($this->path->normalize()->getName());
-    $this->parseTemplate();
-    $this->findData();
+  public function __construct(SourceInterface $source) {
+    $this->source = $source;
   }
 
   public function getData() {
@@ -68,7 +66,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getId() {
-    return $this->path->join('-');
+    return str_replace(DIRECTORY_SEPARATOR, '-', $this->getPath());
   }
 
   public function getIncludedPatterns() {
@@ -84,14 +82,14 @@ class Pattern implements PatternInterface {
   }
 
   public function getLabel() {
-    return $this->name->capitalized();
+    return (new Name($this->name))->capitalized();
   }
 
   /**
    * @return Name
    */
   public function getName() {
-    return (string)$this->name;
+    return $this->source->getName();
   }
 
   public function getPartial() {
@@ -99,7 +97,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getPath() {
-    return $this->path;
+    return $this->source->getPath();
   }
 
   /**
@@ -133,7 +131,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getType() {
-    return new Name($this->path->getType());
+    return new Name($this->source->getType());
   }
 
   public function hasState() {

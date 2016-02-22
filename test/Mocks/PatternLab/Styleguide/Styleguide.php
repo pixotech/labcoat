@@ -10,9 +10,13 @@ class Styleguide implements StyleguideInterface {
 
   public $globalData = [];
   public $patternlab;
-  public $patterns;
+  public $patterns = [];
   public $rendered = [];
   public $renders = [];
+
+  public function addPattern(\Labcoat\PatternLab\PatternInterface $pattern) {
+    $this->patterns[] = $pattern;
+  }
 
   public function getGlobalData() {
     return $this->globalData;

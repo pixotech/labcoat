@@ -9,9 +9,15 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
+use Labcoat\PatternLab\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 
 interface StyleguideInterface {
+
+  /**
+   * @param $pattern
+   */
+  public function addPattern(PatternInterface $pattern);
 
   /**
    * Generate a style guide in the provided directory

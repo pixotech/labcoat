@@ -18,7 +18,6 @@ use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
 use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
@@ -238,18 +237,6 @@ class PatternLab implements PatternLabInterface {
       $this->patterns[] = $pattern;
       if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
     }
-  }
-
-  /**
-   * Look for a type with the provided path, and create it if it doesn't exist
-   *
-   * @param string $name The name of the type
-   * @return \Labcoat\PatternLab\Styleguide\Types\TypeInterface A pattern type object
-   */
-  protected function getOrCreateType(NameInterface $name) {
-    $key = (string)$name;
-    if (!isset($this->types[$key])) $this->types[$key] = new Type($name);
-    return $this->types[$key];
   }
 
   protected function getPatternFilesIterator() {

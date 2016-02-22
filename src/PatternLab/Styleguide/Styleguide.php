@@ -9,14 +9,15 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
+use Labcoat\PatternLabInterface;
+use Labcoat\PatternLab\PatternInterface as PatternSourceInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\PatternLab\Styleguide\Twig\PageTemplateLoader;
 use Labcoat\PatternLab\Styleguide\Twig\StyleguideTemplateLoader;
-use Labcoat\PatternLabInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile;
-use Labcoat\Generator\Files\FileInterface;
 use Labcoat\PatternLab\Styleguide\Files\Text\LatestChangeFile;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Patterns\PatternPage;
@@ -25,6 +26,8 @@ use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
+use Labcoat\PatternLab\Styleguide\Types\Type;
+use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Generator\Generator;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
@@ -57,9 +60,19 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $patternlab;
 
   /**
+   * @var Patterns\PatternInterface[]
+   */
+  protected $patterns = [];
+
+  /**
    * @var \Twig_Environment
    */
   protected $templateParser;
+
+  /**
+   * @var Types\TypeInterface[]
+   */
+  protected $types = [];
 
   /**
    * @param PatternLabInterface $patternlab
@@ -77,6 +90,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $str .= '  ' . date('r', $file->getTime()) . "\n";
     }
     return $str;
+  }
+
+  public function addPattern(PatternSourceInterface $source) {
+    $pattern = new Pattern($source);
+    $this->patterns[] = $pattern;
+    if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
   /**
@@ -165,6 +184,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return dirname($c->getFileName()) . '/..';
   }
 
+  protected function getOrCreateType($type) {
+    if (!isset($this->types[$type])) $this->types[$type] = new Type($type);
+    return $this->types[$type];
+  }
+
   /**
    * Get the path to the style guide footer template
    *
@@ -183,6 +207,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->patternlab->getStyleguideHeader();
   }
 
+  protected function getPatterns() {
+    return $this->patterns;
+  }
+
   /**
    * Get the Twig parser for style guide templates
    *
@@ -191,6 +219,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected function getTemplateParser() {
     if (!isset($this->templateParser)) $this->templateParser = $this->makeTemplateParser();
     return $this->templateParser;
+  }
+
+  protected function getTypes() {
+    return $this->types;
   }
 
   protected function hasFolderIndexes() {
@@ -232,7 +264,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function makeIndexPages() {
     $indexes = ['all' => new ViewAllPage($this)];
-    foreach ($this->patternlab->getTypes() as $type) {
+    foreach ($this->getTypes() as $type) {
       $typeId = $type->getId();
       $indexes[$typeId] = new ViewAllTypePage($this, $type);
       foreach ($type->getSubtypes() as $subtype) {
@@ -268,7 +300,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function makePatternPages() {
-    foreach ($this->patternlab->getPatterns() as $pattern) {
+    foreach ($this->getPatterns() as $pattern) {
       $this->addFile(new PatternPage($this, $pattern));
       $this->addFile(new SourceFile($pattern));
       $this->addFile(new EscapedSourceFile($pattern));
