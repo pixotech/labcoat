@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Mocks\PatternLab\Styleguide\Patterns\Types;
+namespace Labcoat\Mocks\PatternLab\Styleguide\Types;
 
 class TypeTest extends \PHPUnit_Framework_TestCase {
 

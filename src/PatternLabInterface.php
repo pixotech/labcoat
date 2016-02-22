@@ -73,7 +73,7 @@ interface PatternLabInterface {
   public function getStyleguideHeader();
 
   /**
-   * @return \Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface[]
+   * @return \Labcoat\PatternLab\Styleguide\Types\TypeInterface[]
    */
   public function getTypes();
 

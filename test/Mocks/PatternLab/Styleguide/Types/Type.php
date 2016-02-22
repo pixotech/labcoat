@@ -1,9 +1,9 @@
 <?php
 
-namespace Labcoat\Mocks\PatternLab\Styleguide\Patterns\Types;
+namespace Labcoat\Mocks\PatternLab\Styleguide\Types;
 
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface;
+use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 class Type implements TypeInterface {
 

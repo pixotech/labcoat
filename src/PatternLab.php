@@ -18,7 +18,7 @@ use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
 use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Patterns\Types\Type;
+use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
@@ -44,7 +44,7 @@ class PatternLab implements PatternLabInterface {
   protected $twig;
 
   /**
-   * @var \Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface[]
+   * @var \Labcoat\PatternLab\Styleguide\Types\TypeInterface[]
    */
   protected $types;
 
@@ -207,7 +207,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * @return \Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface[]
+   * @return \Labcoat\PatternLab\Styleguide\Types\TypeInterface[]
    */
   public function getTypes() {
     return $this->types;
@@ -244,7 +244,7 @@ class PatternLab implements PatternLabInterface {
    * Look for a type with the provided path, and create it if it doesn't exist
    *
    * @param string $name The name of the type
-   * @return \Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface A pattern type object
+   * @return \Labcoat\PatternLab\Styleguide\Types\TypeInterface A pattern type object
    */
   protected function getOrCreateType(NameInterface $name) {
     $key = (string)$name;

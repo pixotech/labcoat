@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
-use Labcoat\PatternLab\Styleguide\Patterns\Types\SubtypeInterface;
+use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class ViewAllSubtypePage extends ViewAllTypePage implements ViewAllSubtypePageInterface {

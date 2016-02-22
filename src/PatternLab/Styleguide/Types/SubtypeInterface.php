@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Patterns\Types;
+namespace Labcoat\PatternLab\Styleguide\Types;
 
 /*
 
@@ -16,7 +16,7 @@ Subtype properties:
 
  */
 
-use Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface;
+use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 interface SubtypeInterface extends TypeInterface {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Patterns\Types;
+namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Types\Type;
+use Labcoat\Mocks\PatternLab\Styleguide\Types\Type;
 use Labcoat\PatternLab\Name;
 
 class SubtypeTest extends \PHPUnit_Framework_TestCase {
