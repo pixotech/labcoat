@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
 use Labcoat\Generator\Paths\Path;
-use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 

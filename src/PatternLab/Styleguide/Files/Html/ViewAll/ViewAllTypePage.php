@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Paths\Path;
-use Labcoat\PatternLab\Patterns\Types\TypeInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {

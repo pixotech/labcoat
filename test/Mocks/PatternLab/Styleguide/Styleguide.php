@@ -2,7 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab\Styleguide;
 
-use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 

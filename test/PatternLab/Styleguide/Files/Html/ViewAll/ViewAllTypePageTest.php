@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Files\FileTestCase;
-use Labcoat\Mocks\PatternLab\Patterns\Types\Type;
+use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Types\Type;
 use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 
 class ViewAllTypePageTest extends FileTestCase {

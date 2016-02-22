@@ -3,9 +3,9 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript;
 
 use Labcoat\PatternLabInterface;
-use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
-use Labcoat\PatternLab\Patterns\Types\TypeInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\Types\SubtypeInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface;
 use Labcoat\Generator\Files\File;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 

@@ -4,7 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Paths\Path;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
-use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Patterns\PatternPage;
 
 class ViewAllPage extends Page implements ViewAllPageInterface {

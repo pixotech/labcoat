@@ -10,7 +10,7 @@
 namespace Labcoat;
 
 use Labcoat\Data\DataInterface;
-use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 
 interface PatternLabInterface {
 
@@ -52,7 +52,7 @@ interface PatternLabInterface {
   /**
    * Get all patterns
    *
-   * @return \Labcoat\PatternLab\Patterns\PatternInterface[] An array of pattern objects
+   * @return \Labcoat\PatternLab\Styleguide\Patterns\PatternInterface[] An array of pattern objects
    */
   public function getPatterns();
 
@@ -73,7 +73,7 @@ interface PatternLabInterface {
   public function getStyleguideHeader();
 
   /**
-   * @return \Labcoat\PatternLab\Patterns\Types\TypeInterface[]
+   * @return \Labcoat\PatternLab\Styleguide\Patterns\Types\TypeInterface[]
    */
   public function getTypes();
 

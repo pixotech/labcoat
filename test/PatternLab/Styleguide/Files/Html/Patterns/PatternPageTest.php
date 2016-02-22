@@ -4,7 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
 use Labcoat\Data\Data;
 use Labcoat\Generator\Files\FileTestCase;
-use Labcoat\Mocks\PatternLab\Patterns\Pattern;
+use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 
 class PatternPageTest extends FileTestCase {
