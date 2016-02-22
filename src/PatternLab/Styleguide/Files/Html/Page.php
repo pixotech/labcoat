@@ -3,28 +3,23 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html;
 
 use Labcoat\Generator\Files\File;
-use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 abstract class Page extends File implements PageInterface {
 
   /**
-   * @var StyleguideInterface
+   * @var PageRendererInterface
    */
-  protected $styleguide;
+  protected $renderer;
 
-  public function __construct(StyleguideInterface $styleguide) {
-    $this->styleguide = $styleguide;
+  public function __construct(PageRendererInterface $renderer) {
+    $this->renderer = $renderer;
   }
 
   public function getData() {
     return [];
   }
 
-  public function getVariables() {
-    return [];
-  }
-
   public function put($path) {
-    file_put_contents($path, $this->styleguide->renderPage($this));
+    file_put_contents($path, call_user_func($this->renderer, $this->getContent(), $this->getData()));
   }
 }

@@ -5,11 +5,14 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html;
 use Labcoat\Generator\Files\FileInterface;
 
 interface PageInterface extends FileInterface {
+
+  /**
+   * @return string
+   */
   public function getContent();
-  public function getData();
 
   /**
    * @return array
    */
-  public function getVariables();
+  public function getData();
 }

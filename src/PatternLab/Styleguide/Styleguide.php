@@ -3,16 +3,15 @@
 /**
  * @package Labcoat
  * @author Pixo <info@pixotech.com>
- * @copyright 2015, Pixo
+ * @copyright 2016, Pixo
  * @license http://opensource.org/licenses/NCSA NCSA
  */
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\PatternLabInterface;
 use Labcoat\PatternLab\PatternInterface as PatternSourceInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
-use Labcoat\PatternLab\Styleguide\Twig\PageTemplateLoader;
+use Labcoat\PatternLab\Styleguide\Twig\HeaderFooterTemplateLoader;
 use Labcoat\PatternLab\Styleguide\Twig\StyleguideTemplateLoader;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
@@ -163,7 +162,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @return string The template path
    */
   public function getPatternFooterTemplatePath() {
-    return $this->patternlab->getStyleguideFooter();
+    return $this->patternFooterTemplatePath;
   }
 
   /**
@@ -172,7 +171,14 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @return string The template path
    */
   public function getPatternHeaderTemplatePath() {
-    return $this->patternlab->getStyleguideHeader();
+    return $this->patternHeaderTemplatePath;
+  }
+
+  /**
+   * @return Types\TypeInterface[]
+   */
+  public function getTypes() {
+    return $this->types;
   }
 
   /**
@@ -264,10 +270,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->templateParser;
   }
 
-  protected function getTypes() {
-    return $this->types;
-  }
-
   protected function hasFolderIndexes() {
     return true;
   }
@@ -291,7 +293,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * Make the Pattern Lab data file object
    */
   protected function makeDataFile() {
-    $this->addFile(new DataFile($this, $this->patternlab));
+    $this->addFile(new DataFile($this));
   }
 
   /**
@@ -306,6 +308,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function makeIndexPages() {
+    /** @var Files\Html\ViewAll\ViewAllPageInterface[] $indexes */
     $indexes = ['all' => new ViewAllPage($this)];
     foreach ($this->getTypes() as $type) {
       $typeId = $type->getId();
@@ -410,11 +413,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function hasCustomPageFooter() {
-    return $this->getPatternLab()->hasStyleguideFooter();
+    return !empty($this->patternFooterTemplatePath);
   }
 
   protected function hasCustomPageHeader() {
-    return $this->getPatternLab()->hasStyleguideHeader();
+    return !empty($this->patternHeaderTemplatePath);
   }
 
   protected function hasCustomPageTemplates() {
@@ -431,7 +434,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function makePageTemplateParser() {
     if (!$this->hasCustomPageTemplates()) throw new \BadMethodCallException();
-    $loader = new PageTemplateLoader($this->getPatternLab());
+    $loader = new HeaderFooterTemplateLoader($this->getPatternLab());
     return new \Twig_Environment($loader, ['cache' => false]);
   }
 
