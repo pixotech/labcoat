@@ -3,7 +3,6 @@
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
 use Labcoat\Mocks\PatternLab;
-use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Configuration;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
@@ -25,16 +24,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, '01-one/02-two/03-three', __FILE__);
     $this->assertEquals('01-one-02-two-03-three', $pattern->getId());
-  }
-
-  public function testConfiguredId() {
-    $id = 'custom id';
-    $patternlab = new PatternLab();
-    $pattern = new Pattern($patternlab, 'one', __FILE__);
-    $config = new Configuration();
-    $config->id = $id;
-    $pattern->setConfiguration($config);
-    $this->assertEquals($id, $pattern->getId());
   }
 
   # Label
@@ -79,16 +68,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, 'type/subtype/pattern/one/two/and-three/and-four', __FILE__);
     $this->assertEquals('Pattern One Two And Three And Four', $pattern->getLabel());
-  }
-
-  public function testConfiguredLabel() {
-    $label = 'custom label';
-    $patternlab = new PatternLab();
-    $pattern = new Pattern($patternlab, 'one', __FILE__);
-    $config = new Configuration();
-    $config->label = $label;
-    $pattern->setConfiguration($config);
-    $this->assertEquals($label, $pattern->getLabel());
   }
 
   # Name
@@ -141,16 +120,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('pattern-one-two-three-four', $pattern->getName());
   }
 
-  public function testConfiguredName() {
-    $name = 'custom name';
-    $patternlab = new PatternLab();
-    $pattern = new Pattern($patternlab, 'one', __FILE__);
-    $config = new Configuration();
-    $config->name = $name;
-    $pattern->setConfiguration($config);
-    $this->assertEquals($name, $pattern->getName());
-  }
-
   # Partial
 
   public function testPartial() {
@@ -187,31 +156,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($pattern->hasState());
   }
 
-  public function testConfiguredState() {
-    $patternlab = new PatternLab();
-    $pattern = new Pattern($patternlab, 'one', __FILE__);
-    $config = new Configuration();
-    $config->state = 'state';
-    $pattern->setConfiguration($config);
-    $this->assertTrue($pattern->hasState());
-  }
-
   # Description
 
   public function testDescription() {
     $patternlab = new PatternLab();
     $pattern = new Pattern($patternlab, 'one', __FILE__);
     $this->assertEmpty($pattern->getDescription());
-  }
-
-  public function testConfiguredDescription() {
-    $description = 'custom description';
-    $patternlab = new PatternLab();
-    $pattern = new Pattern($patternlab, 'one', __FILE__);
-    $config = new Configuration();
-    $config->description = $description;
-    $pattern->setConfiguration($config);
-    $this->assertEquals($description, $pattern->getDescription());
   }
 
   # Matches

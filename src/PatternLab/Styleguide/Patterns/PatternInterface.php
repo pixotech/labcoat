@@ -32,11 +32,6 @@ Pattern properties:
 interface PatternInterface {
 
   /**
-   * @return ConfigurationInterface
-   */
-  public function getConfiguration();
-
-  /**
    * @return DataInterface
    */
   public function getData();
@@ -191,9 +186,4 @@ interface PatternInterface {
    * @return string
    */
   public function render(DataInterface $data = null);
-
-  /**
-   * @param ConfigurationInterface $configurationInterface
-   */
-  public function setConfiguration(ConfigurationInterface $configurationInterface);
 }

@@ -49,18 +49,12 @@ class Pattern implements PatternInterface {
     $this->findData();
   }
 
-  public function getConfiguration() {
-    if (!isset($this->configuration)) $this->makeConfiguration();
-    return $this->configuration;
-  }
-
   public function getData() {
     #print_r($this->data->toArray());
     return $this->data;
   }
 
   public function getDescription() {
-    if ($this->getConfiguration()->hasDescription()) return $this->getConfiguration()->getDescription();
     return $this->description;
   }
 
@@ -74,7 +68,6 @@ class Pattern implements PatternInterface {
   }
 
   public function getId() {
-    if ($this->getConfiguration()->hasId()) return $this->getConfiguration()->getId();
     return $this->path->join('-');
   }
 
@@ -91,7 +84,6 @@ class Pattern implements PatternInterface {
   }
 
   public function getLabel() {
-    if ($this->getConfiguration()->hasLabel()) return $this->getConfiguration()->getLabel();
     return $this->name->capitalized();
   }
 
@@ -99,7 +91,6 @@ class Pattern implements PatternInterface {
    * @return Name
    */
   public function getName() {
-    if ($this->getConfiguration()->hasName()) return $this->getConfiguration()->getName();
     return (string)$this->name;
   }
 
@@ -119,11 +110,10 @@ class Pattern implements PatternInterface {
   }
 
   public function getState() {
-    return $this->getConfiguration()->hasState() ? $this->getConfiguration()->getState() : '';
+    return '';
   }
 
   public function getSubtype() {
-    if ($this->getConfiguration()->hasSubtype()) return $this->getConfiguration()->getSubtype();
     return new Name($this->path->getSubtype());
   }
 
@@ -143,12 +133,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getType() {
-    if ($this->getConfiguration()->hasType()) return $this->getConfiguration()->getType();
     return new Name($this->path->getType());
   }
 
   public function hasState() {
-    return $this->getConfiguration()->hasState();
+    return false;
   }
 
   public function hasSubtype() {
@@ -160,7 +149,7 @@ class Pattern implements PatternInterface {
   }
 
   public function hasType() {
-    return $this->getConfiguration()->hasType() || $this->path->hasType();
+    return $this->path->hasType();
   }
 
   public function includes(PatternInterface $pattern) {
@@ -180,10 +169,6 @@ class Pattern implements PatternInterface {
     return $this->patternlab->render($this, $data);
   }
 
-  public function setConfiguration(ConfigurationInterface $configuration) {
-    $this->configuration = $configuration;
-  }
-
   protected function findData() {
     $this->data = new Data();
     foreach (glob($this->getDataFilePattern()) as $path) {
@@ -198,14 +183,6 @@ class Pattern implements PatternInterface {
     }
   }
 
-  protected function getConfigurationData() {
-    return json_decode(file_get_contents($this->getConfigurationPath()), true);
-  }
-
-  protected function getConfigurationPath() {
-    return dirname($this->file) . DIRECTORY_SEPARATOR . basename($this->path) . '.pattern.json';
-  }
-
   protected function getDataFilePattern() {
     return dirname($this->file) . DIRECTORY_SEPARATOR . basename($this->path) . '*.json';
   }
@@ -218,15 +195,6 @@ class Pattern implements PatternInterface {
     $template = file_get_contents($this->file);
     $lexer = new \Twig_Lexer(new \Twig_Environment());
     return $lexer->tokenize($template);
-  }
-
-  protected function hasConfiguration() {
-    return file_exists($this->getConfigurationPath());
-  }
-
-  protected function makeConfiguration() {
-    $data = $this->hasConfiguration() ? $this->getConfigurationData() : [];
-    $this->configuration = new Configuration($data);
   }
 
   protected function parseTemplate() {
