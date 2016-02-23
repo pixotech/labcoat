@@ -15,4 +15,9 @@ interface PatternLabInterface {
    * @return \Labcoat\PatternLab\PatternInterface[]
    */
   public function getPatterns();
+
+  /**
+   * @return \Labcoat\PatternLab\Styleguide\StyleguideInterface
+   */
+  public function getStyleguide();
 }

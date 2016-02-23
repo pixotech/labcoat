@@ -12,7 +12,6 @@ namespace Labcoat;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\PatternLab\Pattern;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
 
 class PatternLab implements PatternLabInterface {
@@ -21,6 +20,11 @@ class PatternLab implements PatternLabInterface {
    * @var \Labcoat\PatternLab\PatternInterface[]
    */
   protected $patterns;
+
+  /**
+   * @return \Labcoat\PatternLab\Styleguide\StyleguideInterface[]
+   */
+  protected $styleguide;
 
   /**
    * Is this a partial name?
@@ -99,41 +103,21 @@ class PatternLab implements PatternLabInterface {
    * @param \Labcoat\Configuration\ConfigurationInterface $config A configuration object
    */
   public function __construct(ConfigurationInterface $config) {
-    $this->findPatterns($config->getPatternsDirectory(), $config->getPatternExtension());
+    $this->patterns = $config->getPatterns();
+    $this->styleguide = $config->getStyleguide($this);
   }
 
   /**
-   * {@inheritdoc}
+   * @return PatternLab\PatternInterface[]
    */
   public function getPatterns() {
     return $this->patterns;
   }
 
   /**
-   * Look in the pattern directory for pattern templates
+   * @return PatternLab\Styleguide\StyleguideInterface
    */
-  protected function findPatterns($dir, $ext) {
-    foreach ($this->getPatternFilesIterator($dir, $ext) as $match => $file) {
-      $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      $this->patterns[] = Pattern::makeFromFile($dir, $path, $ext);
-    }
-  }
-
-  protected function getPatternFilesIterator($dir, $ext) {
-    $flags = \FilesystemIterator::SKIP_DOTS;
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
-    $regex = '|\.' . preg_quote($ext) . '$|';
-    return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
-  }
-
-  /**
-   * Remove the template extension from a path
-   *
-   * @param string $path The template path with extension
-   * @return string The path with the extension removed
-   */
-  protected function stripPatternExtensionFromPath($path, $ext) {
-    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
-    return $path;
+  public function getStyleguide() {
+    return $this->styleguide;
   }
 }

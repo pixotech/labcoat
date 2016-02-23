@@ -2,7 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
@@ -155,24 +154,6 @@ class Pattern implements PatternInterface {
   public function matches($name) {
     if (PatternLab::isPartialName($name)) return $name == $this->getPartial();
     else return (string)PatternLab::normalizePath($name) == (string)PatternLab::normalizePath($this->getPath());
-  }
-
-  protected function findData() {
-    $this->data = new Data();
-    foreach (glob($this->getDataFilePattern()) as $path) {
-      $name = basename($path, '.json');
-      list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
-      if (!empty($pseudoPattern)) {
-        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
-      }
-      else {
-        $this->data->merge(Data::load($path));
-      }
-    }
-  }
-
-  protected function getDataFilePattern() {
-    return dirname($this->getFile()) . DIRECTORY_SEPARATOR . basename($this->getPath()) . '*.json';
   }
 
   /**

@@ -2,6 +2,8 @@
 
 namespace Labcoat\PatternLab;
 
+use Labcoat\Configuration\Pattern;
+
 class PatternTest extends \PHPUnit_Framework_TestCase {
 
   public function testMakeFromFile() {

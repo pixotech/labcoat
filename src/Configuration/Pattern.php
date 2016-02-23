@@ -1,10 +1,16 @@
 <?php
 
-namespace Labcoat\PatternLab;
+namespace Labcoat\Configuration;
 
+use Labcoat\Data\Data;
+use Labcoat\PatternLab\Name;
+use Labcoat\PatternLab\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
+use Labcoat\PatternLab\Styleguide\Patterns\PseudoPattern;
 
 class Pattern implements PatternInterface {
+
+  protected $data;
 
   protected $description;
 
@@ -15,6 +21,8 @@ class Pattern implements PatternInterface {
   protected $name;
 
   protected $path;
+
+  protected $pseudoPatterns = [];
 
   protected $state;
 
@@ -71,5 +79,23 @@ class Pattern implements PatternInterface {
 
   public function hasType() {
     return !empty($this->type);
+  }
+
+  protected function findData() {
+    $this->data = new Data();
+    foreach (glob($this->getDataFilePattern()) as $path) {
+      $name = basename($path, '.json');
+      list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
+      if (!empty($pseudoPattern)) {
+        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
+      }
+      else {
+        $this->data->merge(Data::load($path));
+      }
+    }
+  }
+
+  protected function getDataFilePattern() {
+    return dirname($this->getFile()) . DIRECTORY_SEPARATOR . basename($this->getPath()) . '*.json';
   }
 }

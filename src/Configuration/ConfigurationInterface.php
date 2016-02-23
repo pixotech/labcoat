@@ -2,6 +2,8 @@
 
 namespace Labcoat\Configuration;
 
+use Labcoat\PatternLabInterface;
+
 interface ConfigurationInterface {
   public function addAssetDirectory($path);
   public function addGlobalData($path);
@@ -16,7 +18,15 @@ interface ConfigurationInterface {
   public function getIgnoredExtensions();
   public function getListItemFiles();
   public function getPatternExtension();
+  public function getPatterns();
   public function getPatternsDirectory();
+
+  /**
+   * @param PatternLabInterface $patternlab
+   * @return \Labcoat\PatternLab\Styleguide\StyleguideInterface
+   */
+  public function getStyleguide(PatternLabInterface $patternlab);
+
   public function getStyleguideAssetDirectories();
   public function getStyleguideFooter();
   public function getStyleguideHeader();
