@@ -147,7 +147,7 @@ class DataFile extends File implements DataFileInterface {
       $typeName = $type->getName();
       foreach ($type->getSubtypes() as $subtype) {
         foreach ($subtype->getPatterns() as $pattern) {
-          $patternName = $pattern->getName();
+          $patternName = (string)$pattern->getName();
           $paths[$typeName][$patternName] = $pattern->getId();
         }
       }

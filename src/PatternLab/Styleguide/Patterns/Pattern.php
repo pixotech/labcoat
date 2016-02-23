@@ -54,7 +54,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getExample() {
-    if (!isset($this->example)) $this->example = $this->makeExample($this->getData());
+    if (!isset($this->example)) $this->example = print_r($this->getData(), true); //$this->makeExample($this->getData());
     return $this->example;
   }
 
@@ -75,6 +75,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getIncludingPatterns() {
+    return [];
     return $this->patternlab->getPatternsThatInclude($this);
   }
 

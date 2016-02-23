@@ -41,7 +41,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   /**
    * @var \Labcoat\Generator\Files\FileInterface[]
    */
-  protected $files = [];
+  protected $files;
 
   /**
    * @var array|null
@@ -74,13 +74,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   public function __construct(PatternLabInterface $patternlab) {
     $this->patternTemplateParser = $this->makePatternTemplateParser($patternlab);
     foreach ($patternlab->getPatterns() as $pattern) $this->addPattern($pattern);
-    $this->makeCacheBuster();
-    $this->makeFiles();
   }
 
   public function __toString() {
     $str = '';
-    foreach ($this->files as $file) {
+    foreach ($this->getFiles() as $file) {
       $str .= $file->getPath() . "\n";
       $str .= '  ' . date('r', $file->getTime()) . "\n";
     }
@@ -133,7 +131,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * {@inheritdoc}
    */
   public function getIterator() {
-    return new \ArrayIterator($this->files);
+    return new \ArrayIterator($this->getFiles());
   }
 
   /**
@@ -219,6 +217,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->files[(string)$file->getPath()] = $file;
   }
 
+  protected function clearFiles() {
+    $this->files = null;
+  }
+
   protected function findAssetsDirectory() {
     if (!$vendor = $this->findVendorDirectory()) return null;
     $path = implode(DIRECTORY_SEPARATOR, [$vendor, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
@@ -232,9 +234,15 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return dirname($c->getFileName()) . '/..';
   }
 
+  protected function getFiles() {
+    if (!isset($this->files)) $this->makeFiles();
+    return $this->files;
+  }
+
   protected function getOrCreateType($type) {
-    if (!isset($this->types[$type])) $this->types[$type] = new Type($type);
-    return $this->types[$type];
+    $key = (string)$type;
+    if (!isset($this->types[$key])) $this->types[$key] = new Type($type);
+    return $this->types[$key];
   }
 
   protected function getPageFooterContent() {
@@ -284,10 +292,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $path = substr($file, strlen($assetsDir) + 1);
       $this->addFile(new AssetFile($path, $file));
     }
-  }
-
-  protected function makeCacheBuster() {
-    $this->cacheBuster = time();
   }
 
   protected function makeDataFile() {

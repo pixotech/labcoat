@@ -3,11 +3,12 @@
 namespace Labcoat\Twig;
 
 use Labcoat\PatternLab;
+use Labcoat\PatternLab\PatternInterface;
 use Labcoat\PatternLabInterface;
 
 class Loader implements \Twig_LoaderInterface {
 
-  protected $extension;
+  protected $extension = 'twig';
   protected $index;
 
   public static function isPath($selector) {
@@ -15,7 +16,6 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   public function __construct(PatternLabInterface $patternlab) {
-    $this->extension = $patternlab->getPatternExtension();
     $this->makeIndex($patternlab);
   }
 
@@ -46,11 +46,15 @@ class Loader implements \Twig_LoaderInterface {
     $this->index = [];
     foreach ($patternlab->getPatterns() as $pattern) {
       $file = $pattern->getFile();
-      $partial = $pattern->getPartial();
+      $partial = $this->makePartial($pattern);
       $path = PatternLab::normalizePath($pattern->getPath());
       $this->index[$partial] = $file;
       $this->index[$path] = $file;
     }
+  }
+
+  protected function makePartial(PatternInterface $pattern) {
+    return $pattern->hasType() ? "{$pattern->getType()}-{$pattern->getName()}" : $pattern->getName();
   }
 
   protected function stripExtension($path) {

@@ -11,7 +11,7 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $path = 'one/two/three';
     $extension = 'twig';
     $pattern = Pattern::makeFromFile($dir, $path, $extension);
-    $this->assertEquals($pattern->getFile(), implode(DIRECTORY_SEPARATOR, [$dir, $path, $extension]));
+    $this->assertEquals($pattern->getFile(), $dir . DIRECTORY_SEPARATOR . $path . '.' . $extension);
   }
 
   public function testNameFromFile() {

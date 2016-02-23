@@ -32,7 +32,8 @@ class Pattern implements PatternInterface {
 
   public static function makeFromFile($dir, $path, $extension) {
     $pattern = new static();
-    $pattern->file = implode(DIRECTORY_SEPARATOR, [$dir, $path, $extension]);
+    $pattern->path = $path;
+    $pattern->file = $dir . DIRECTORY_SEPARATOR . $path . '.' . $extension;
     $path = new Path($path);
     $pattern->name = $path->getName();
     $pattern->label = (new Name($pattern->name))->capitalized();
