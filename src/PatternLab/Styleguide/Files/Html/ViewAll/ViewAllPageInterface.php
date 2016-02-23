@@ -7,5 +7,4 @@ use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 
 interface ViewAllPageInterface extends PageInterface {
   public function addPattern(PatternInterface $pattern);
-  public function getContentVariables();
 }

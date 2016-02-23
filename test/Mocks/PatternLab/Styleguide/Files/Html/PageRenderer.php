@@ -6,7 +6,11 @@ use Labcoat\PatternLab\Styleguide\Files\Html\PageRendererInterface;
 
 class PageRenderer implements PageRendererInterface {
 
-  public function __invoke($content, array $data = []) {
-    // TODO: Implement __invoke() method.
+  public function renderPage($content, array $data = []) {
+    // TODO
+  }
+
+  public function renderPatterns(array $patterns) {
+    // TODO
   }
 }

@@ -20,6 +20,6 @@ abstract class Page extends File implements PageInterface {
   }
 
   public function put($path) {
-    file_put_contents($path, call_user_func($this->renderer, $this->getContent(), $this->getData()));
+    file_put_contents($path, $this->renderer->renderPage($this->getContent(), $this->getData()));
   }
 }

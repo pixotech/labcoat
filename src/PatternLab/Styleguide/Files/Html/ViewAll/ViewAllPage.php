@@ -35,14 +35,7 @@ class ViewAllPage extends Page implements ViewAllPageInterface {
   }
 
   public function getContent() {
-    return $this->styleguide->render('viewall', $this->getContentVariables());
-  }
-
-  public function getContentVariables() {
-    return [
-      'partials' => $this->getPartials(),
-      'patternPartial' => '',
-    ];
+    return $this->renderer->renderPatterns($this->getPartials());
   }
 
   public function getPath() {

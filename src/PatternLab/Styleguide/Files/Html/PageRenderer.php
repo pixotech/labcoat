@@ -28,15 +28,20 @@ class PageRenderer implements PageRendererInterface {
     $this->makeStyleguideTemplateParser();
   }
 
-  public function __invoke($content, array $data = []) {
-    return $this->renderHeader() . $content . $this->renderFooter($data);
-  }
-
   /**
    * @return string
    */
   public function getCacheBuster() {
     return $this->cacheBuster;
+  }
+
+  public function renderPage($content, array $data = []) {
+    return $this->renderHeader() . $content . $this->renderFooter($data);
+  }
+
+  public function renderPatterns(array $patterns) {
+    $vars = ['partials' => $patterns, 'patternPartial' => ''];
+    return $this->styleguideTemplateParser->render('viewall', $vars);
   }
 
   /**

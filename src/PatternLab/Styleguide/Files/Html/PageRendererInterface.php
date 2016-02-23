@@ -4,5 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html;
 
 interface PageRendererInterface {
 
-  public function __invoke($content, array $data = []);
+  public function renderPage($content, array $data = []);
+
+  public function renderPatterns(array $patterns);
 }
