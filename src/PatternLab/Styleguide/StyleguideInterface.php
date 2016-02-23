@@ -10,7 +10,6 @@
 namespace Labcoat\PatternLab\Styleguide;
 
 use Labcoat\PatternLab\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 
 interface StyleguideInterface {
 
@@ -84,17 +83,6 @@ interface StyleguideInterface {
    * @return Types\TypeInterface[]
    */
   public function getTypes();
-
-  /**
-   * Render a style guide template with the provided data
-   *
-   * @param string $template The name of the template
-   * @param array $data An array of template variables
-   * @return string Rendered template content
-   */
-  public function render($template, array $data = []);
-
-  public function renderPage(PageInterface $page);
 
   public function setAnnotationsFilePath($path);
 
