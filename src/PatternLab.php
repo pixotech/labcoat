@@ -3,7 +3,7 @@
 /**
  * @package Labcoat
  * @author Pixo <info@pixotech.com>
- * @copyright 2015, Pixo
+ * @copyright 2016, Pixo
  * @license http://opensource.org/licenses/NCSA NCSA
  */
 
@@ -12,25 +12,13 @@ namespace Labcoat;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\Data\Data;
 use Labcoat\Data\DataInterface;
-use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
 use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
-
-  /**
-   * @var ConfigurationInterface
-   */
-  protected $config;
-
-  /**
-   * @var \Labcoat\Data\DataInterface
-   */
-  protected $globalData;
 
   /**
    * @var \Labcoat\PatternLab\Styleguide\Patterns\PatternInterface[]
@@ -41,11 +29,6 @@ class PatternLab implements PatternLabInterface {
    * @var \Labcoat\Twig\Environment
    */
   protected $twig;
-
-  /**
-   * @var \Labcoat\PatternLab\Styleguide\Types\TypeInterface[]
-   */
-  protected $types;
 
   /**
    * Is this a partial name?
@@ -124,8 +107,6 @@ class PatternLab implements PatternLabInterface {
    * @param \Labcoat\Configuration\ConfigurationInterface $config A configuration object
    */
   public function __construct(ConfigurationInterface $config) {
-    $this->config = $config;
-    $this->loadGlobalData();
     $this->findPatterns();
     $this->makeParser();
   }
@@ -139,27 +120,6 @@ class PatternLab implements PatternLabInterface {
       $str .= '  Partial: ' . $pattern->getPartial() . "\n";
     }
     return $str;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAnnotationsFile() {
-    return $this->config->getAnnotationsFile();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGlobalData() {
-    return $this->globalData;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getHiddenControls() {
-    return $this->config->getHiddenControls();
   }
 
   /**
@@ -191,36 +151,6 @@ class PatternLab implements PatternLabInterface {
     return $patterns;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getStyleguideFooter() {
-    return $this->config->getStyleguideFooter();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStyleguideHeader() {
-    return $this->config->getStyleguideHeader();
-  }
-
-  /**
-   * @return \Labcoat\PatternLab\Styleguide\Types\TypeInterface[]
-   */
-  public function getTypes() {
-    return $this->types;
-  }
-
-  public function hasStyleguideFooter() {
-    return $this->config->hasStyleguideFooter();
-  }
-
-  public function hasStyleguideHeader() {
-    return $this->config->hasStyleguideHeader();
-  }
-
-
   public function render(PatternInterface $pattern, DataInterface $data = null) {
     return $this->twig->render($pattern->getPath(), isset($data) ? $data->toArray() : []);
   }
@@ -235,7 +165,6 @@ class PatternLab implements PatternLabInterface {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
       $pattern = new Pattern($this, $path, $match);
       $this->patterns[] = $pattern;
-      if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
     }
   }
 
@@ -246,16 +175,6 @@ class PatternLab implements PatternLabInterface {
     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
     $regex = '|\.' . preg_quote($ext) . '$|';
     return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
-  }
-
-  /**
-   * Load all global pattern data
-   */
-  protected function loadGlobalData() {
-    $this->globalData = new Data();
-    foreach ($this->config->getGlobalDataFiles() as $path) {
-      $this->globalData->merge(Data::load($path));
-    }
   }
 
   protected function makeParser() {
