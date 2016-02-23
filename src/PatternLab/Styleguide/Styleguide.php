@@ -23,6 +23,7 @@ use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternRenderer;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Generator\Generator;
@@ -59,6 +60,8 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected $patternHeaderTemplatePath;
 
+  protected $patternRenderer;
+
   /**
    * @var Patterns\PatternInterface[]
    */
@@ -85,7 +88,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   public function addPattern(PatternSourceInterface $source) {
-    $pattern = new Pattern($source, $this->patternTemplateParser, $this->getGlobalData());
+    $pattern = new Pattern($source, $this->getPatternRenderer());
     $this->patterns[] = $pattern;
     if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
@@ -257,6 +260,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->pageRenderer;
   }
 
+  protected function getPatternRenderer() {
+    if (!isset($this->patternRenderer)) $this->patternRenderer = $this->makePatternRenderer();
+    return $this->patternRenderer;
+  }
+
   protected function getPatterns() {
     return $this->patterns;
   }
@@ -348,6 +356,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $this->addFile(new EscapedSourceFile($pattern));
       $this->addFile(new TemplateFile($pattern));
     }
+  }
+
+  protected function makePatternRenderer() {
+    return new PatternRenderer($this->patternTemplateParser, $this->getGlobalData());
   }
 
   protected function makePatternTemplateParser(PatternLabInterface $patternlab) {

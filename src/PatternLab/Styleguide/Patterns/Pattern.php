@@ -9,23 +9,16 @@ use Labcoat\PatternLabInterface;
 
 class Pattern implements PatternInterface {
 
-  protected $globalData;
-
   protected $example;
 
   protected $includedPatterns = [];
 
-  /**
-   * @var \Twig_Environment
-   */
-  protected $parser;
-
-  /**
-   * @var PatternLabInterface
-   */
-  protected $patternlab;
-
   protected $pseudoPatterns;
+
+  /**
+   * @var PatternRenderer
+   */
+  protected $renderer;
 
   protected $source;
 
@@ -41,14 +34,13 @@ class Pattern implements PatternInterface {
     return $token->getType() == \Twig_Token::NAME_TYPE;
   }
 
-  public function __construct(SourceInterface $source, \Twig_Environment $parser, array $globalData = []) {
+  public function __construct(SourceInterface $source, PatternRenderer $renderer) {
     $this->source = $source;
-    $this->parser = $parser;
-    $this->globalData = $globalData;
+    $this->renderer = $renderer;
   }
 
   public function getData() {
-    return $this->source->getData() + $this->globalData;
+    return $this->source->getData();
   }
 
   public function getDescription() {
@@ -78,7 +70,6 @@ class Pattern implements PatternInterface {
 
   public function getIncludingPatterns() {
     return [];
-    return $this->patternlab->getPatternsThatInclude($this);
   }
 
   public function getLabel() {
@@ -101,7 +92,7 @@ class Pattern implements PatternInterface {
   }
 
   /**
-   * @return PseudoPatternInterface
+   * @return PseudoPatternInterface[]
    */
   public function getPseudoPatterns() {
     return $this->pseudoPatterns;
@@ -172,7 +163,7 @@ class Pattern implements PatternInterface {
   protected function makeExample() {
     $template = $this->getPartial();
     $vars = $this->getData();
-    return $this->parser->render($template, $vars);
+    return $this->renderer->render($template, $vars);
   }
 
   protected function parseTemplate() {
