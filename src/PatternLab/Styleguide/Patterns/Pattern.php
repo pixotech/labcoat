@@ -20,6 +20,11 @@ class Pattern implements PatternInterface {
   protected $includedPatterns = [];
 
   /**
+   * @var \Twig_Environment
+   */
+  protected $parser;
+
+  /**
    * @var PatternLabInterface
    */
   protected $patternlab;
@@ -40,13 +45,13 @@ class Pattern implements PatternInterface {
     return $token->getType() == \Twig_Token::NAME_TYPE;
   }
 
-  public function __construct(SourceInterface $source) {
+  public function __construct(SourceInterface $source, \Twig_Environment $parser) {
     $this->source = $source;
+    $this->parser = $parser;
   }
 
   public function getData() {
-    #print_r($this->data->toArray());
-    return $this->data;
+    return $this->data ?: [];
   }
 
   public function getDescription() {
@@ -54,7 +59,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getExample() {
-    if (!isset($this->example)) $this->example = print_r($this->getData(), true); //$this->makeExample($this->getData());
+    if (!isset($this->example)) $this->example = $this->makeExample();
     return $this->example;
   }
 
@@ -165,6 +170,12 @@ class Pattern implements PatternInterface {
     $template = file_get_contents($this->getFile());
     $lexer = new \Twig_Lexer(new \Twig_Environment());
     return $lexer->tokenize($template);
+  }
+
+  protected function makeExample() {
+    $template = $this->getPartial();
+    $vars = $this->getData();
+    return $this->parser->render($template, $vars);
   }
 
   protected function parseTemplate() {
