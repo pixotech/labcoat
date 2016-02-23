@@ -132,7 +132,7 @@ print $doc;
 Labcoat can generate style guides that use the [Pattern Lab interface](https://github.com/pattern-lab/styleguidekit-assets-default)
 
 ```php
-$labcoat = new Labcoat\PatternLab('/path/to/patternlab');
+$labcoat = new Labcoat\PatternLab($config);
 $styleguide = new Labcoat\Styleguide\Styleguide($labcoat);
 $styleguide->generate('/path/to/styleguide');
 ```
