@@ -2,18 +2,12 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\PatternInterface as SourceInterface;
 use Labcoat\PatternLabInterface;
 
 class Pattern implements PatternInterface {
-
-  /**
-   * @var DataInterface
-   */
-  protected $data;
 
   protected $example;
 
@@ -51,7 +45,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getData() {
-    return $this->data ?: [];
+    return $this->source->getData();
   }
 
   public function getDescription() {

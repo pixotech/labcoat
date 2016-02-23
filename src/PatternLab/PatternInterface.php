@@ -4,6 +4,8 @@ namespace Labcoat\PatternLab;
 
 interface PatternInterface {
 
+  public function getData();
+
   /**
    * @return string
    */

@@ -6,7 +6,6 @@ use Labcoat\Data\Data;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
-use Labcoat\PatternLab\Styleguide\Patterns\PseudoPattern;
 
 class Pattern implements PatternInterface {
 
@@ -39,7 +38,12 @@ class Pattern implements PatternInterface {
     $pattern->label = (new Name($pattern->name))->capitalized();
     if ($path->hasType()) $pattern->type = $path->getType();
     if ($path->hasSubtype()) $pattern->subtype = $path->getSubtype();
+    $pattern->findData();
     return $pattern;
+  }
+
+  public function getData() {
+    return $this->data->toArray();
   }
 
   public function getDescription() {
@@ -88,7 +92,7 @@ class Pattern implements PatternInterface {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
-        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
+        #$this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
         $this->data->merge(Data::load($path));

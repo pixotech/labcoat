@@ -2,9 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-use Labcoat\Data\DataInterface;
-use Labcoat\PatternLab\Styleguide\Patterns\ConfigurationInterface;
-
 class PseudoPattern implements PseudoPatternInterface {
 
   protected $pattern;
@@ -18,10 +15,6 @@ class PseudoPattern implements PseudoPatternInterface {
     $this->id = $this->path;
     $this->name = $pattern->getName() . ' ' . str_replace('-', ' ', $variant);
     $this->dataFiles = [$dataFile];
-  }
-
-  public function getConfiguration() {
-    return $this->pattern->getConfiguration();
   }
 
   public function getFile() {
@@ -79,10 +72,6 @@ class PseudoPattern implements PseudoPatternInterface {
     return $this->variant;
   }
 
-  public function setConfiguration(ConfigurationInterface $configuration) {
-    throw new \BadMethodCallException("Pseudo-patterns cannot have configuration");
-  }
-
   public function getType() {
     // TODO: Implement getType() method.
   }
@@ -101,10 +90,6 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function includes(PatternInterface $pattern) {
     // TODO: Implement includes() method.
-  }
-
-  public function getNormalizedPath() {
-    // TODO: Implement getNormalizedPath() method.
   }
 
   public function getTemplateNames() {
