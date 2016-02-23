@@ -73,7 +73,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   public function __construct(PatternLabInterface $patternlab) {
     $this->patternTemplateParser = $this->makePatternTemplateParser($patternlab);
-    foreach ($patternlab->getPatterns() as $pattern) $this->addPattern($pattern);
   }
 
   public function __toString() {
@@ -86,7 +85,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   public function addPattern(PatternSourceInterface $source) {
-    $pattern = new Pattern($source, $this->patternTemplateParser);
+    $pattern = new Pattern($source, $this->patternTemplateParser, $this->getGlobalData());
     $this->patterns[] = $pattern;
     if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }

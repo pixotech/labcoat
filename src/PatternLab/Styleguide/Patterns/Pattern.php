@@ -9,6 +9,8 @@ use Labcoat\PatternLabInterface;
 
 class Pattern implements PatternInterface {
 
+  protected $globalData;
+
   protected $example;
 
   protected $includedPatterns = [];
@@ -39,13 +41,14 @@ class Pattern implements PatternInterface {
     return $token->getType() == \Twig_Token::NAME_TYPE;
   }
 
-  public function __construct(SourceInterface $source, \Twig_Environment $parser) {
+  public function __construct(SourceInterface $source, \Twig_Environment $parser, array $globalData = []) {
     $this->source = $source;
     $this->parser = $parser;
+    $this->globalData = $globalData;
   }
 
   public function getData() {
-    return $this->source->getData();
+    return $this->source->getData() + $this->globalData;
   }
 
   public function getDescription() {

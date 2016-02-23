@@ -43,7 +43,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getData() {
-    return $this->data->toArray();
+    return $this->data;
   }
 
   public function getDescription() {
@@ -87,7 +87,7 @@ class Pattern implements PatternInterface {
   }
 
   protected function findData() {
-    $this->data = new Data();
+    $data = new Data();
     foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
@@ -95,9 +95,10 @@ class Pattern implements PatternInterface {
         #$this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
-        $this->data->merge(Data::load($path));
+        $data->merge(Data::load($path));
       }
     }
+    $this->data = $data->toArray();
   }
 
   protected function getDataFilePattern() {

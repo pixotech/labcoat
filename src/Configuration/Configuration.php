@@ -2,6 +2,7 @@
 
 namespace Labcoat\Configuration;
 
+use Labcoat\Data\Data;
 use Labcoat\PatternLab\Styleguide\Styleguide;
 use Labcoat\PatternLabInterface;
 
@@ -114,6 +115,7 @@ class Configuration implements ConfigurationInterface {
     $styleguide->setHiddenControls($this->getHiddenControls());
     $styleguide->setPatternFooterTemplatePath($this->getStyleguideFooter());
     $styleguide->setPatternHeaderTemplatePath($this->getStyleguideHeader());
+    foreach ($patternlab->getPatterns() as $pattern) $styleguide->addPattern($pattern);
     return $styleguide;
   }
 
@@ -193,8 +195,9 @@ class Configuration implements ConfigurationInterface {
   }
 
   protected function getDataFromFiles(array $files) {
-    $data = [];
-    return $data;
+    $data = new Data();
+    foreach ($files as $file) $data->merge(Data::load($file));
+    return $data->toArray();
   }
 
   protected function getPatternFilesIterator() {
