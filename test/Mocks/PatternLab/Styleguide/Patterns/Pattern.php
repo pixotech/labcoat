@@ -2,9 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab\Styleguide\Patterns;
 
-use Labcoat\Data\DataInterface;
 use Labcoat\PatternLab;
-use Labcoat\PatternLab\Styleguide\Patterns\ConfigurationInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
@@ -72,14 +70,6 @@ class Pattern implements PatternInterface {
     return $this->time;
   }
 
-  public function getConfiguration() {
-    // TODO: Implement getConfiguration() method.
-  }
-
-  public function setConfiguration(ConfigurationInterface $configurationInterface) {
-    // TODO: Implement setConfiguration() method.
-  }
-
   public function getType() {
     // TODO: Implement getType() method.
   }
@@ -96,24 +86,12 @@ class Pattern implements PatternInterface {
     // TODO: Implement hasSubtype() method.
   }
 
-  public function render(DataInterface $data = NULL) {
-    // TODO: Implement render() method.
-  }
-
   public function includes(PatternInterface $pattern) {
     // TODO: Implement includes() method.
   }
 
-  public function getNormalizedPath() {
-    // TODO: Implement getNormalizedPath() method.
-  }
-
   public function getTemplateNames() {
     // TODO: Implement getTemplateNames() method.
-  }
-
-  public function hasTemplateName($name) {
-    // TODO: Implement isTemplate() method.
   }
 
   public function getData() {

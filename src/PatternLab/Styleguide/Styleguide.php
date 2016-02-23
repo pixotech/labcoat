@@ -26,6 +26,8 @@ use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Generator\Generator;
+use Labcoat\PatternLabInterface;
+use Labcoat\Twig\Loader;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -51,12 +53,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected $hiddenControls = [];
 
-  /**
-   * A separate Twig parser for custom page header & footer templates
-   *
-   * @var \Twig_Environment
-   */
-  protected $pageTemplateParser;
+  protected $pageRenderer;
 
   protected $patternFooterTemplatePath;
 
@@ -67,17 +64,16 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected $patterns = [];
 
-  /**
-   * @var \Twig_Environment
-   */
-  protected $templateParser;
+  protected $patternTemplateParser;
 
   /**
    * @var Types\TypeInterface[]
    */
   protected $types = [];
 
-  public function __construct() {
+  public function __construct(PatternLabInterface $patternlab) {
+    $this->patternTemplateParser = $this->makePatternTemplateParser($patternlab);
+    foreach ($patternlab->getPatterns() as $pattern) $this->addPattern($pattern);
     $this->makeCacheBuster();
     $this->makeFiles();
   }
@@ -349,5 +345,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $this->addFile(new EscapedSourceFile($pattern));
       $this->addFile(new TemplateFile($pattern));
     }
+  }
+
+  protected function makePatternTemplateParser(PatternLabInterface $patternlab) {
+    $loader = new Loader($patternlab);
+    return new \Twig_Environment($loader);
   }
 }

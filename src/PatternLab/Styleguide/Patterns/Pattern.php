@@ -11,20 +11,14 @@ use Labcoat\PatternLabInterface;
 
 class Pattern implements PatternInterface {
 
-  protected $source;
-
-  protected $configuration;
-
   /**
    * @var DataInterface
    */
   protected $data;
-  protected $description;
+
   protected $example;
-  protected $file;
+
   protected $includedPatterns = [];
-  protected $name;
-  protected $path;
 
   /**
    * @var PatternLabInterface
@@ -32,7 +26,11 @@ class Pattern implements PatternInterface {
   protected $patternlab;
 
   protected $pseudoPatterns;
+
+  protected $source;
+
   protected $time;
+
   protected $valid;
 
   public static function isIncludeToken(\Twig_Token $token) {
@@ -53,11 +51,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getDescription() {
-    return $this->description;
+    return $this->source->getDescription();
   }
 
   public function getExample() {
-    if (!isset($this->example)) $this->example = $this->render($this->getData());
+    if (!isset($this->example)) $this->example = $this->makeExample($this->getData());
     return $this->example;
   }
 
@@ -108,11 +106,11 @@ class Pattern implements PatternInterface {
   }
 
   public function getState() {
-    return '';
+    return $this->source->getState();
   }
 
   public function getSubtype() {
-    return new Name($this->path->getSubtype());
+    return new Name($this->source->getSubtype());
   }
 
   public function getTemplate() {
@@ -127,7 +125,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getTime() {
-    return filemtime($this->file);
+    return filemtime($this->getFile());
   }
 
   public function getType() {
@@ -139,15 +137,11 @@ class Pattern implements PatternInterface {
   }
 
   public function hasSubtype() {
-    return $this->path->hasSubtype();
-  }
-
-  public function hasTemplateName($name) {
-    return in_array($name, $this->getTemplateNames());
+    return $this->source->hasSubtype();
   }
 
   public function hasType() {
-    return $this->path->hasType();
+    return $this->source->hasType();
   }
 
   public function includes(PatternInterface $pattern) {
@@ -161,10 +155,6 @@ class Pattern implements PatternInterface {
   public function matches($name) {
     if (PatternLab::isPartialName($name)) return $name == $this->getPartial();
     else return (string)PatternLab::normalizePath($name) == (string)PatternLab::normalizePath($this->getPath());
-  }
-
-  public function render(DataInterface $data = NULL) {
-    return $this->patternlab->render($this, $data);
   }
 
   protected function findData() {
@@ -182,7 +172,7 @@ class Pattern implements PatternInterface {
   }
 
   protected function getDataFilePattern() {
-    return dirname($this->file) . DIRECTORY_SEPARATOR . basename($this->path) . '*.json';
+    return dirname($this->getFile()) . DIRECTORY_SEPARATOR . basename($this->getPath()) . '*.json';
   }
 
   /**
@@ -190,7 +180,7 @@ class Pattern implements PatternInterface {
    * @throws \Twig_Error_Syntax
    */
   protected function getTemplateTokens() {
-    $template = file_get_contents($this->file);
+    $template = file_get_contents($this->getFile());
     $lexer = new \Twig_Lexer(new \Twig_Environment());
     return $lexer->tokenize($template);
   }

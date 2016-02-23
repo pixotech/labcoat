@@ -159,12 +159,6 @@ interface PatternInterface {
   public function hasSubtype();
 
   /**
-   * @param string $name
-   * @return bool
-   */
-  public function hasTemplateName($name);
-
-  /**
    * @return bool
    */
   public function hasType();
@@ -180,10 +174,4 @@ interface PatternInterface {
    * @return bool
    */
   public function matches($name);
-
-  /**
-   * @param DataInterface|NULL $data
-   * @return string
-   */
-  public function render(DataInterface $data = null);
 }

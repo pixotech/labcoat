@@ -12,23 +12,15 @@ namespace Labcoat;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\Data\DataInterface;
+use Labcoat\PatternLab\Pattern;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
-use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
-use Labcoat\Twig\Environment;
 
 class PatternLab implements PatternLabInterface {
 
   /**
-   * @var \Labcoat\PatternLab\Styleguide\Patterns\PatternInterface[]
+   * @var \Labcoat\PatternLab\PatternInterface[]
    */
   protected $patterns;
-
-  /**
-   * @var \Labcoat\Twig\Environment
-   */
-  protected $twig;
 
   /**
    * Is this a partial name?
@@ -107,26 +99,7 @@ class PatternLab implements PatternLabInterface {
    * @param \Labcoat\Configuration\ConfigurationInterface $config A configuration object
    */
   public function __construct(ConfigurationInterface $config) {
-    $this->findPatterns();
-    $this->makeParser();
-  }
-
-  public function __toString() {
-    $str = '';
-    foreach ($this->getPatterns() as $pattern) {
-      $str .= $pattern->getFile() . "\n";
-      $str .= '  Type: ' . $pattern->getType() . "\n";
-      $str .= '  Subtype: ' . ($pattern->hasSubtype() ? $pattern->getSubtype() : '') . "\n";
-      $str .= '  Partial: ' . $pattern->getPartial() . "\n";
-    }
-    return $str;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPatternExtension() {
-    return $this->config->getPatternExtension();
+    $this->findPatterns($config->getPatternsDirectory(), $config->getPatternExtension());
   }
 
   /**
@@ -137,48 +110,20 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getPatternsDirectory() {
-    return $this->config->getPatternsDirectory();
-  }
-
-  public function getPatternsThatInclude(PatternInterface $pattern) {
-    $patterns = [];
-    foreach ($this->getPatterns() as $other) {
-      if ($other->includes($pattern)) $patterns[] = $pattern;
-    }
-    return $patterns;
-  }
-
-  public function render(PatternInterface $pattern, DataInterface $data = null) {
-    return $this->twig->render($pattern->getPath(), isset($data) ? $data->toArray() : []);
-  }
-
-  /**
    * Look in the pattern directory for pattern templates
    */
-  protected function findPatterns() {
-    $dir = $this->getPatternsDirectory();
-    $ext = $this->getPatternExtension();
-    foreach ($this->getPatternFilesIterator() as $match => $file) {
+  protected function findPatterns($dir, $ext) {
+    foreach ($this->getPatternFilesIterator($dir, $ext) as $match => $file) {
       $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      $pattern = new Pattern($this, $path, $match);
-      $this->patterns[] = $pattern;
+      $this->patterns[] = Pattern::makeFromFile($dir, $path, $ext);
     }
   }
 
-  protected function getPatternFilesIterator() {
-    $dir = $this->getPatternsDirectory();
-    $ext = $this->getPatternExtension();
+  protected function getPatternFilesIterator($dir, $ext) {
     $flags = \FilesystemIterator::SKIP_DOTS;
     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
     $regex = '|\.' . preg_quote($ext) . '$|';
     return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
-  }
-
-  protected function makeParser() {
-    $this->twig = new Environment($this);
   }
 
   /**
@@ -187,8 +132,7 @@ class PatternLab implements PatternLabInterface {
    * @param string $path The template path with extension
    * @return string The path with the extension removed
    */
-  protected function stripPatternExtensionFromPath($path) {
-    $ext = '.' . $this->getPatternExtension();
+  protected function stripPatternExtensionFromPath($path, $ext) {
     if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
     return $path;
   }

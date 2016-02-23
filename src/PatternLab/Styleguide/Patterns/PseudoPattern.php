@@ -99,10 +99,6 @@ class PseudoPattern implements PseudoPatternInterface {
     // TODO: Implement hasSubtype() method.
   }
 
-  public function render(DataInterface $data = NULL) {
-    // TODO: Implement render() method.
-  }
-
   public function includes(PatternInterface $pattern) {
     // TODO: Implement includes() method.
   }
@@ -113,10 +109,6 @@ class PseudoPattern implements PseudoPatternInterface {
 
   public function getTemplateNames() {
     // TODO: Implement getTemplateNames() method.
-  }
-
-  public function hasTemplateName($name) {
-    // TODO: Implement isTemplate() method.
   }
 
   public function getData() {

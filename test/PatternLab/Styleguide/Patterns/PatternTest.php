@@ -14,8 +14,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($source->file, $pattern->getFile());
   }
 
-  # ID
-
   public function testId() {
     $source = new PatternSource();
     $source->path = 'one/two/three';
@@ -30,16 +28,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('01-one-02-two-03-three', $pattern->getId());
   }
 
-  # Label
-
   public function testLabel() {
     $source = new PatternSource();
     $source->label = 'Pattern';
     $pattern = new Pattern($source);
     $this->assertEquals('Pattern', $pattern->getLabel());
   }
-
-  # Name
 
   public function testName() {
     $source = new PatternSource();
@@ -54,8 +48,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $pattern = new Pattern($source);
     $this->assertEquals('pattern', $pattern->getName());
   }
-
-  # Partial
 
   public function testPartial() {
     $source = new PatternSource();
@@ -73,8 +65,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('one-three', $pattern->getPartial());
   }
 
-  # Path
-
   public function testPath() {
     $source = new PatternSource();
     $source->path = 'one/two/three';
@@ -89,7 +79,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('01-one/02-two/03-three', $pattern->getPath());
   }
 
-  # State
+  public function testState() {
+    $source = new PatternSource();
+    $source->state = 'state';
+    $pattern = new Pattern($source);
+    $this->assertEquals($source->state, $pattern->getState());
+  }
 
   public function testNoDefaultState() {
     $source = new PatternSource();
@@ -97,15 +92,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($pattern->hasState());
   }
 
-  # Description
-
   public function testDescription() {
     $source = new PatternSource();
+    $source->description = "This is the description";
     $pattern = new Pattern($source);
-    $this->assertEmpty($pattern->getDescription());
+    $this->assertEquals($source->description, $pattern->getDescription());
   }
-
-  # Matches
 
   public function testMatchPartial() {
     $source = new PatternSource();

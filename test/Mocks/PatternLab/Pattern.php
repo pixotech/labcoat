@@ -9,12 +9,12 @@ class Pattern implements PatternInterface {
   /**
    * @var string
    */
-  public $file;
+  public $description;
 
   /**
    * @var string
    */
-  public $id;
+  public $file;
 
   /**
    * @var string
@@ -34,7 +34,21 @@ class Pattern implements PatternInterface {
   /**
    * @var string
    */
+  public $state;
+
+  /**
+   * @var string
+   */
+  public $subtype;
+
+  /**
+   * @var string
+   */
   public $type;
+
+  public function getDescription() {
+    return $this->description;
+  }
 
   /**
    * @return string
@@ -67,7 +81,35 @@ class Pattern implements PatternInterface {
   /**
    * @return string
    */
+  public function getState() {
+    return $this->state;
+  }
+
+  /**
+   * @return string
+   */
+  public function getSubtype() {
+    return $this->subtype;
+  }
+
+  /**
+   * @return string
+   */
   public function getType() {
     return $this->type;
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasSubtype() {
+    return !empty($this->subtype);
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasType() {
+    return !empty($this->type);
   }
 }
