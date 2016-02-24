@@ -15,7 +15,7 @@ class PseudoPattern extends AbstractPattern {
   }
 
   public function getData() {
-    return $this->source->getData() + $this->getPattern()->getData();
+    return array_replace_recursive($this->getPattern()->getData(), $this->source->getData());
   }
 
   public function getDescription() {

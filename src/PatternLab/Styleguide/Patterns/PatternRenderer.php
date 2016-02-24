@@ -20,6 +20,6 @@ class PatternRenderer implements PatternRendererInterface {
   }
 
   public function render($pattern, array $vars = []) {
-    return $this->parser->render($pattern, $vars + $this->globalData);
+    return $this->parser->render($pattern, array_replace_recursive($this->globalData, $vars));
   }
 }
