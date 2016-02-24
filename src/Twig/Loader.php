@@ -56,8 +56,8 @@ class Loader implements \Twig_LoaderInterface {
 
   protected function makePartial(PatternInterface $pattern) {
     $name = (new Name($pattern->getName()))->__toString();
-    $type = $pattern->hasType() ? (new Name($pattern->getType()))->__toString() : null;
-    return $type ? "$type-$name" : $name;
+    $type = (new Name($pattern->getType()))->__toString();
+    return "$type-$name";
   }
 
   protected function stripExtension($path) {

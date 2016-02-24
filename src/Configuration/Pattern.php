@@ -34,9 +34,9 @@ class Pattern implements PatternInterface {
     $pattern->path = $path;
     $pattern->file = $dir . DIRECTORY_SEPARATOR . $path . '.' . $extension;
     $path = new Path($path);
+    $pattern->type = $path->getType();
     $pattern->name = $path->getName();
     $pattern->label = (new Name($pattern->name))->capitalized();
-    if ($path->hasType()) $pattern->type = $path->getType();
     if ($path->hasSubtype()) $pattern->subtype = $path->getSubtype();
     $pattern->findData();
     return $pattern;
@@ -66,6 +66,13 @@ class Pattern implements PatternInterface {
     return $this->path;
   }
 
+  /**
+   * @return array
+   */
+  public function getPseudoPatterns() {
+    return $this->pseudoPatterns;
+  }
+
   public function getState() {
     return $this->state;
   }
@@ -82,17 +89,13 @@ class Pattern implements PatternInterface {
     return !empty($this->subtype);
   }
 
-  public function hasType() {
-    return !empty($this->type);
-  }
-
   protected function findData() {
     $data = new Data();
     foreach (glob($this->getDataFilePattern()) as $path) {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
-        #$this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
+        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
         $data->merge(Data::load($path));

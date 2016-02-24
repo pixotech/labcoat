@@ -1,13 +1,13 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Files\Javascript;
+namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile;
 
 use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
 use Labcoat\Mocks\PatternLab\Styleguide\Types\Subtype;
 use Labcoat\Mocks\PatternLab\Styleguide\Types\Type;
 use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 
-class DataFileTest extends \PHPUnit_Framework_TestCase {
+class DataFileTest {
 
   # Navigation: Types
 

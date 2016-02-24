@@ -6,18 +6,9 @@ use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\PatternInterface as SourceInterface;
 
-class Pattern implements PatternInterface {
-
-  protected $example;
+class Pattern extends AbstractPattern {
 
   protected $includedPatterns = [];
-
-  protected $pseudoPatterns;
-
-  /**
-   * @var PatternRenderer
-   */
-  protected $renderer;
 
   protected $source;
 
@@ -34,8 +25,8 @@ class Pattern implements PatternInterface {
   }
 
   public function __construct(SourceInterface $source, PatternRendererInterface $renderer) {
+    parent::__construct($renderer);
     $this->source = $source;
-    $this->renderer = $renderer;
   }
 
   public function getData() {
@@ -46,17 +37,8 @@ class Pattern implements PatternInterface {
     return $this->source->getDescription();
   }
 
-  public function getExample() {
-    if (!isset($this->example)) $this->example = $this->makeExample();
-    return $this->example;
-  }
-
   public function getFile() {
     return $this->source->getFile();
-  }
-
-  public function getId() {
-    return str_replace(DIRECTORY_SEPARATOR, '-', $this->getPath());
   }
 
   public function getIncludedPatterns() {
@@ -82,19 +64,8 @@ class Pattern implements PatternInterface {
     return new Name($this->source->getName());
   }
 
-  public function getPartial() {
-    return implode('-', [$this->getType(), $this->getName()]);
-  }
-
   public function getPath() {
     return $this->source->getPath();
-  }
-
-  /**
-   * @return PseudoPatternInterface[]
-   */
-  public function getPseudoPatterns() {
-    return $this->pseudoPatterns;
   }
 
   public function getState() {
@@ -106,7 +77,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getTemplate() {
-    return $this->getPath();
+    return $this->source->getPath();
   }
 
   public function getTemplateNames() {
@@ -132,10 +103,6 @@ class Pattern implements PatternInterface {
     return $this->source->hasSubtype();
   }
 
-  public function hasType() {
-    return $this->source->hasType();
-  }
-
   public function includes(PatternInterface $pattern) {
     foreach ($this->includedPatterns as $included) {
       if ($included == $pattern->getPartial()) return true;
@@ -157,12 +124,6 @@ class Pattern implements PatternInterface {
     $template = file_get_contents($this->getFile());
     $lexer = new \Twig_Lexer(new \Twig_Environment());
     return $lexer->tokenize($template);
-  }
-
-  protected function makeExample() {
-    $template = $this->getPartial();
-    $vars = $this->getData();
-    return $this->renderer->render($template, $vars);
   }
 
   protected function parseTemplate() {

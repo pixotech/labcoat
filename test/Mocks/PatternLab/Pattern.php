@@ -37,6 +37,11 @@ class Pattern implements PatternInterface {
   public $path;
 
   /**
+   * @var array
+   */
+  public $pseudopatterns = [];
+
+  /**
    * @var string
    */
   public $state;
@@ -91,6 +96,13 @@ class Pattern implements PatternInterface {
   }
 
   /**
+   * @return array
+   */
+  public function getPseudopatterns() {
+    return $this->pseudopatterns;
+  }
+
+  /**
    * @return string
    */
   public function getState() {
@@ -116,12 +128,5 @@ class Pattern implements PatternInterface {
    */
   public function hasSubtype() {
     return !empty($this->subtype);
-  }
-
-  /**
-   * @return bool
-   */
-  public function hasType() {
-    return !empty($this->type);
   }
 }
