@@ -3,7 +3,8 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
 use Labcoat\Generator\Paths\Path;
-use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Files\Html\PageRendererInterface;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
@@ -19,11 +20,12 @@ class PatternPage extends Page implements PatternPageInterface {
       'patternExtension' => 'twig',
       'cssEnabled' => false,
       'extraOutput' => [],
-      'patternName' => $pattern->getName(),
+      'patternName' => $pattern->getLabel(),
       'patternPartial' => $pattern->getPartial(),
       'patternState' => $pattern->hasState() ? $pattern->getState() : '',
       'patternStateExists' => $pattern->hasState(),
       'patternDesc' => $pattern->getDescription(),
+      'patternDescExists' => (bool)$pattern->getDescription(),
       'lineage' => self::makePatternLineage($pattern),
       'lineageR' => self::makeReversePatternLineage($pattern),
     ];
@@ -54,8 +56,8 @@ class PatternPage extends Page implements PatternPageInterface {
     return $lineage;
   }
 
-  public function __construct(StyleguideInterface $styleguide, PatternInterface $pattern) {
-    parent::__construct($styleguide);
+  public function __construct(PageRendererInterface $renderer, PatternInterface $pattern) {
+    parent::__construct($renderer);
     $this->pattern = $pattern;
   }
 

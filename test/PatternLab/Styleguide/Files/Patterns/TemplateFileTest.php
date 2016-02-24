@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Patterns;
 
 use Labcoat\Generator\Files\FileTestCase;
-use Labcoat\Mocks\PatternLab\Patterns\Pattern;
+use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
 
 class TemplateFileTest extends FileTestCase {
 

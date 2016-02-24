@@ -9,9 +9,14 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
+use Labcoat\PatternLab\PatternInterface;
 
 interface StyleguideInterface {
+
+  /**
+   * @param $pattern
+   */
+  public function addPattern(PatternInterface $pattern);
 
   /**
    * Generate a style guide in the provided directory
@@ -19,6 +24,11 @@ interface StyleguideInterface {
    * @param string $directory The destination for the new style guide
    */
   public function generate($directory);
+
+  /**
+   * @return string
+   */
+  public function getAnnotationsFilePath();
 
   /**
    * Get the cache-busting string
@@ -37,6 +47,11 @@ interface StyleguideInterface {
   public function getGlobalData();
 
   /**
+   * @return array
+   */
+  public function getHiddenControls();
+
+  /**
    * Maximum size for the viewport resizer
    *
    * @return int
@@ -51,20 +66,31 @@ interface StyleguideInterface {
   public function getMinimumWidth();
 
   /**
-   * Get the Pattern Lab installation object used to make this style guide
+   * Get the path to the style guide footer template
    *
-   * @return \Labcoat\PatternLabInterface A PatternLab object
+   * @return string The template path
    */
-  public function getPatternLab();
+  public function getPatternFooterTemplatePath();
 
   /**
-   * Render a style guide template with the provided data
+   * Get the path to the style guide header template
    *
-   * @param string $template The name of the template
-   * @param array $data An array of template variables
-   * @return string Rendered template content
+   * @return string The template path
    */
-  public function render($template, array $data = []);
+  public function getPatternHeaderTemplatePath();
 
-  public function renderPage(PageInterface $page);
+  /**
+   * @return Types\TypeInterface[]
+   */
+  public function getTypes();
+
+  public function setAnnotationsFilePath($path);
+
+  public function setGlobalData($data);
+
+  public function setHiddenControls(array $controls);
+
+  public function setPatternFooterTemplatePath($path);
+
+  public function setPatternHeaderTemplatePath($path);
 }

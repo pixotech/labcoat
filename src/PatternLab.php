@@ -3,7 +3,7 @@
 /**
  * @package Labcoat
  * @author Pixo <info@pixotech.com>
- * @copyright 2015, Pixo
+ * @copyright 2016, Pixo
  * @license http://opensource.org/licenses/NCSA NCSA
  */
 
@@ -12,40 +12,19 @@ namespace Labcoat;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\Data\Data;
-use Labcoat\Data\DataInterface;
-use Labcoat\PatternLab\Patterns\Path;
-use Labcoat\PatternLab\Patterns\Pattern;
-use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Patterns\Types\Type;
-use Labcoat\Twig\Environment;
+use Labcoat\PatternLab\Styleguide\Patterns\Path;
 
 class PatternLab implements PatternLabInterface {
 
   /**
-   * @var ConfigurationInterface
-   */
-  protected $config;
-
-  /**
-   * @var \Labcoat\Data\DataInterface
-   */
-  protected $globalData;
-
-  /**
-   * @var \Labcoat\PatternLab\Patterns\PatternInterface[]
+   * @var \Labcoat\PatternLab\PatternInterface[]
    */
   protected $patterns;
 
   /**
-   * @var \Labcoat\Twig\Environment
+   * @return \Labcoat\PatternLab\Styleguide\StyleguideInterface[]
    */
-  protected $twig;
-
-  /**
-   * @var \Labcoat\PatternLab\Patterns\Types\TypeInterface[]
-   */
-  protected $types;
+  protected $styleguide;
 
   /**
    * Is this a partial name?
@@ -124,164 +103,21 @@ class PatternLab implements PatternLabInterface {
    * @param \Labcoat\Configuration\ConfigurationInterface $config A configuration object
    */
   public function __construct(ConfigurationInterface $config) {
-    $this->config = $config;
-    $this->loadGlobalData();
-    $this->findPatterns();
-    $this->makeParser();
-  }
-
-  public function __toString() {
-    $str = '';
-    foreach ($this->getPatterns() as $pattern) {
-      $str .= $pattern->getFile() . "\n";
-      $str .= '  Type: ' . $pattern->getType() . "\n";
-      $str .= '  Subtype: ' . ($pattern->hasSubtype() ? $pattern->getSubtype() : '') . "\n";
-      $str .= '  Partial: ' . $pattern->getPartial() . "\n";
-    }
-    return $str;
+    $this->patterns = $config->getPatterns();
+    $this->styleguide = $config->getStyleguide($this);
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getAnnotationsFile() {
-    return $this->config->getAnnotationsFile();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGlobalData() {
-    return $this->globalData;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getHiddenControls() {
-    return $this->config->getHiddenControls();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPatternExtension() {
-    return $this->config->getPatternExtension();
-  }
-
-  /**
-   * {@inheritdoc}
+   * @return PatternLab\PatternInterface[]
    */
   public function getPatterns() {
     return $this->patterns;
   }
 
   /**
-   * {@inheritdoc}
+   * @return PatternLab\Styleguide\StyleguideInterface
    */
-  public function getPatternsDirectory() {
-    return $this->config->getPatternsDirectory();
-  }
-
-  public function getPatternsThatInclude(PatternInterface $pattern) {
-    $patterns = [];
-    foreach ($this->getPatterns() as $other) {
-      if ($other->includes($pattern)) $patterns[] = $pattern;
-    }
-    return $patterns;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStyleguideFooter() {
-    return $this->config->getStyleguideFooter();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStyleguideHeader() {
-    return $this->config->getStyleguideHeader();
-  }
-
-  /**
-   * @return \Labcoat\PatternLab\Patterns\Types\TypeInterface[]
-   */
-  public function getTypes() {
-    return $this->types;
-  }
-
-  public function hasStyleguideFooter() {
-    return $this->config->hasStyleguideFooter();
-  }
-
-  public function hasStyleguideHeader() {
-    return $this->config->hasStyleguideHeader();
-  }
-
-
-  public function render(PatternInterface $pattern, DataInterface $data = null) {
-    return $this->twig->render($pattern->getPath(), isset($data) ? $data->toArray() : []);
-  }
-
-  /**
-   * Look in the pattern directory for pattern templates
-   */
-  protected function findPatterns() {
-    $dir = $this->getPatternsDirectory();
-    $ext = $this->getPatternExtension();
-    foreach ($this->getPatternFilesIterator() as $match => $file) {
-      $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      $pattern = new Pattern($this, $path, $match);
-      $this->patterns[] = $pattern;
-      if ($pattern->hasType()) $this->getOrCreateType((string)$pattern->getType())->addPattern($pattern);
-    }
-  }
-
-  /**
-   * Look for a type with the provided path, and create it if it doesn't exist
-   *
-   * @param string $name The name of the type
-   * @return \Labcoat\PatternLab\Patterns\Types\TypeInterface A pattern type object
-   */
-  protected function getOrCreateType($name) {
-    if (!isset($this->types[$name])) $this->types[$name] = new Type($name);
-    return $this->types[$name];
-  }
-
-  protected function getPatternFilesIterator() {
-    $dir = $this->getPatternsDirectory();
-    $ext = $this->getPatternExtension();
-    $flags = \FilesystemIterator::SKIP_DOTS;
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
-    $regex = '|\.' . preg_quote($ext) . '$|';
-    return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
-  }
-
-  /**
-   * Load all global pattern data
-   */
-  protected function loadGlobalData() {
-    $this->globalData = new Data();
-    foreach ($this->config->getGlobalDataFiles() as $path) {
-      $this->globalData->merge(Data::load($path));
-    }
-  }
-
-  protected function makeParser() {
-    $this->twig = new Environment($this);
-  }
-
-  /**
-   * Remove the template extension from a path
-   *
-   * @param string $path The template path with extension
-   * @return string The path with the extension removed
-   */
-  protected function stripPatternExtensionFromPath($path) {
-    $ext = '.' . $this->getPatternExtension();
-    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
-    return $path;
+  public function getStyleguide() {
+    return $this->styleguide;
   }
 }

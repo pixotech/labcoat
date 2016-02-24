@@ -2,6 +2,10 @@
 
 namespace Labcoat\Configuration;
 
+use Labcoat\Data\Data;
+use Labcoat\PatternLab\Styleguide\Styleguide;
+use Labcoat\PatternLabInterface;
+
 class Configuration implements ConfigurationInterface {
 
   protected $annotationsPath;
@@ -86,8 +90,33 @@ class Configuration implements ConfigurationInterface {
     return $this->patternExtension;
   }
 
+  /**
+   * Look in the pattern directory for pattern templates
+   */
+  public function getPatterns() {
+    $dir = $this->getPatternsDirectory();
+    $ext = $this->getPatternExtension();
+    $patterns = [];
+    foreach ($this->getPatternFilesIterator() as $match => $file) {
+      $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
+      $patterns[] = Pattern::makeFromFile($dir, $path, $ext);
+    }
+    return $patterns;
+  }
+
   public function getPatternsDirectory() {
     return $this->patternsDirectory;
+  }
+
+  public function getStyleguide(PatternLabInterface $patternlab) {
+    $styleguide = new Styleguide($patternlab);
+    $styleguide->setAnnotationsFilePath($this->getAnnotationsFile());
+    $styleguide->setGlobalData($this->getDataFromFiles($this->getGlobalDataFiles()));
+    $styleguide->setHiddenControls($this->getHiddenControls());
+    $styleguide->setPatternFooterTemplatePath($this->getStyleguideFooter());
+    $styleguide->setPatternHeaderTemplatePath($this->getStyleguideHeader());
+    foreach ($patternlab->getPatterns() as $pattern) $styleguide->addPattern($pattern);
+    return $styleguide;
   }
 
   public function getStyleguideAssetDirectories() {
@@ -163,5 +192,20 @@ class Configuration implements ConfigurationInterface {
 
   public function setTwigOptions(array $options) {
     $this->twigOptions = $options;
+  }
+
+  protected function getDataFromFiles(array $files) {
+    $data = new Data();
+    foreach ($files as $file) $data->merge(Data::load($file));
+    return $data->toArray();
+  }
+
+  protected function getPatternFilesIterator() {
+    $dir = $this->getPatternsDirectory();
+    $ext = $this->getPatternExtension();
+    $flags = \FilesystemIterator::SKIP_DOTS;
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+    $regex = '|\.' . preg_quote($ext) . '$|';
+    return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
   }
 }
