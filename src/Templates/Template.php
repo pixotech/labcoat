@@ -19,6 +19,10 @@ class Template implements TemplateInterface {
   }
 
   protected static function getIdFromPath($path, $dir) {
+    return str_replace(DIRECTORY_SEPARATOR, '/', static::getRelativePathWithoutExtension($path, $dir));
+  }
+
+  protected static function getRelativePathWithoutExtension($path, $dir) {
     return substr($path, strlen($dir) + 1, -1 - strlen(static::$extension));
   }
 
@@ -45,10 +49,6 @@ class Template implements TemplateInterface {
     return $this->id;
   }
 
-  public function getNames() {
-    return isset($this->id) ? [$this->id] : [];
-  }
-
   public function getTime() {
     $time = new \DateTime();
     $time->setTimestamp($this->file->getMTime());
@@ -56,6 +56,6 @@ class Template implements TemplateInterface {
   }
 
   public function is($name) {
-    return in_array($name, $this->getNames());
+    return $name == $this->getId();
   }
 }
