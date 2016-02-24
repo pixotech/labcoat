@@ -10,14 +10,14 @@ interface TemplateInterface {
   public function getFile();
 
   /**
-   * @return mixed
+   * @return string
    */
   public function getId();
 
   /**
-   * @return string[]
+   * @return \DateTime
    */
-  public function getNames();
+  public function getTime();
 
   /**
    * @param string $name
