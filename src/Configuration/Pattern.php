@@ -34,9 +34,9 @@ class Pattern implements PatternInterface {
     $pattern->path = $path;
     $pattern->file = $dir . DIRECTORY_SEPARATOR . $path . '.' . $extension;
     $path = new Path($path);
+    $pattern->type = $path->getType();
     $pattern->name = $path->getName();
     $pattern->label = (new Name($pattern->name))->capitalized();
-    if ($path->hasType()) $pattern->type = $path->getType();
     if ($path->hasSubtype()) $pattern->subtype = $path->getSubtype();
     $pattern->findData();
     return $pattern;
@@ -80,10 +80,6 @@ class Pattern implements PatternInterface {
 
   public function hasSubtype() {
     return !empty($this->subtype);
-  }
-
-  public function hasType() {
-    return !empty($this->type);
   }
 
   protected function findData() {

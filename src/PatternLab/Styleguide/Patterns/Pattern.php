@@ -132,10 +132,6 @@ class Pattern implements PatternInterface {
     return $this->source->hasSubtype();
   }
 
-  public function hasType() {
-    return $this->source->hasType();
-  }
-
   public function includes(PatternInterface $pattern) {
     foreach ($this->includedPatterns as $included) {
       if ($included == $pattern->getPartial()) return true;

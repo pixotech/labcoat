@@ -117,11 +117,4 @@ class Pattern implements PatternInterface {
   public function hasSubtype() {
     return !empty($this->subtype);
   }
-
-  /**
-   * @return bool
-   */
-  public function hasType() {
-    return !empty($this->type);
-  }
 }

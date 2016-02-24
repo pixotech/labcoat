@@ -90,7 +90,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   public function addPattern(PatternSourceInterface $source) {
     $pattern = new Pattern($source, $this->getPatternRenderer());
     $this->patterns[] = $pattern;
-    if ($pattern->hasType()) $this->getOrCreateType($pattern->getType())->addPattern($pattern);
+    $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
   /**

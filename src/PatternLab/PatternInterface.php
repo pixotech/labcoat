@@ -50,9 +50,4 @@ interface PatternInterface {
    * @return bool
    */
   public function hasSubtype();
-
-  /**
-   * @return bool
-   */
-  public function hasType();
 }

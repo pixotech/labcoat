@@ -159,11 +159,6 @@ interface PatternInterface {
   public function hasSubtype();
 
   /**
-   * @return bool
-   */
-  public function hasType();
-
-  /**
    * @param PatternInterface $pattern
    * @return bool
    */

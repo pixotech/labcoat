@@ -34,11 +34,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($pattern->getType(), 'one');
   }
 
-  public function testNoTypeFromFile() {
-    $pattern = Pattern::makeFromFile(__DIR__, 'one', 'twig');
-    $this->assertFalse($pattern->hasType());
-  }
-
   public function testSubtypeFromFile() {
     $pattern = Pattern::makeFromFile(__DIR__, 'one/two/three', 'twig');
     $this->assertEquals($pattern->getSubtype(), 'two');
