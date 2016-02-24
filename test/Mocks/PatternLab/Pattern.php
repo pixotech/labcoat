@@ -7,6 +7,11 @@ use Labcoat\PatternLab\PatternInterface;
 class Pattern implements PatternInterface {
 
   /**
+   * @var array
+   */
+  public $data = [];
+
+  /**
    * @var string
    */
   public $description;
@@ -45,6 +50,13 @@ class Pattern implements PatternInterface {
    * @var string
    */
   public $type;
+
+  /**
+   * @return array
+   */
+  public function getData() {
+    return $this->data;
+  }
 
   public function getDescription() {
     return $this->description;

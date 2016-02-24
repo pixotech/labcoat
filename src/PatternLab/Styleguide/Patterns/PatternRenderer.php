@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-class PatternRenderer {
+class PatternRenderer implements PatternRendererInterface {
 
   /**
    * @var array

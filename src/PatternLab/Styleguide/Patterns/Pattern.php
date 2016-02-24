@@ -5,7 +5,6 @@ namespace Labcoat\PatternLab\Styleguide\Patterns;
 use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\PatternInterface as SourceInterface;
-use Labcoat\PatternLabInterface;
 
 class Pattern implements PatternInterface {
 
@@ -34,7 +33,7 @@ class Pattern implements PatternInterface {
     return $token->getType() == \Twig_Token::NAME_TYPE;
   }
 
-  public function __construct(SourceInterface $source, PatternRenderer $renderer) {
+  public function __construct(SourceInterface $source, PatternRendererInterface $renderer) {
     $this->source = $source;
     $this->renderer = $renderer;
   }
