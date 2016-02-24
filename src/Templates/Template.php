@@ -13,9 +13,22 @@ class Template implements TemplateInterface {
   public static function inDirectory($dir) {
     $collection = static::makeCollection();
     foreach (static::makeDirectoryIterator($dir) as $path => $file) {
-      $collection->add(new static($file, static::getIdFromPath($path, $dir)));
+      try {
+        $collection->add(new static($file, static::getIdFromPath($path, $dir)));
+      }
+      catch (\InvalidArgumentException $e) {
+        continue;
+      }
     }
     return $collection;
+  }
+
+  protected static function getFileRegex() {
+    return '|\.' . preg_quote(static::$extension) . '$|';
+  }
+
+  protected static function getFilesIterator($dir) {
+    return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
   }
 
   protected static function getIdFromPath($path, $dir) {
@@ -31,9 +44,7 @@ class Template implements TemplateInterface {
   }
 
   protected static function makeDirectoryIterator($dir) {
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
-    $regex = '|\.' . preg_quote(static::$extension) . '$|';
-    return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
+    return new \RegexIterator(static::getFilesIterator($dir), static::getFileRegex(), \RegexIterator::MATCH);
   }
 
   public function __construct(\SplFileInfo $file, $id = null) {
@@ -51,11 +62,15 @@ class Template implements TemplateInterface {
 
   public function getTime() {
     $time = new \DateTime();
-    $time->setTimestamp($this->file->getMTime());
+    $time->setTimestamp($this->getFileTimestamp());
     return $time;
   }
 
   public function is($name) {
     return $name == $this->getId();
+  }
+
+  protected function getFileTimestamp() {
+    return $this->getFile()->getMTime();
   }
 }
