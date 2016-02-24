@@ -2,121 +2,94 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-class PseudoPattern implements PseudoPatternInterface {
+use Labcoat\PatternLab\Name;
+use Labcoat\PatternLab\PseudoPatternInterface as SourceInterface;
 
-  protected $pattern;
-  protected $time;
-  protected $variant;
+class PseudoPattern extends AbstractPattern {
 
-  public function __construct(PatternInterface $pattern, $variant, $dataFile) {
-    $this->pattern = $pattern;
-    $this->variant = $variant;
-    $this->path = $pattern->getPath() . "~{$variant}";
-    $this->id = $this->path;
-    $this->name = $pattern->getName() . ' ' . str_replace('-', ' ', $variant);
-    $this->dataFiles = [$dataFile];
+  protected $source;
+
+  public function __construct(SourceInterface $source, PatternRendererInterface $renderer) {
+    parent::__construct($renderer);
+    $this->source = $source;
+  }
+
+  public function getData() {
+    return $this->source->getData() + $this->getPattern()->getData();
+  }
+
+  public function getDescription() {
+    return $this->getPattern()->getDescription();
   }
 
   public function getFile() {
-    return $this->pattern->getFile();
-  }
-
-  public function getId() {
-    return $this->id;
+    return $this->getPattern()->getFile();
   }
 
   public function getIncludedPatterns() {
-    return $this->pattern->getIncludedPatterns();
-  }
-
-  public function getLabel() {
-
-  }
-
-  public function getName() {
-    return $this->name;
-  }
-
-  public function getPath() {
-    return $this->path;
-  }
-
-  public function getPartial() {
-    return $this->pattern->getPartial() . '-' . $this->getVariantName();
-  }
-
-  public function getPattern() {
-    return $this->pattern;
-  }
-
-  public function getPseudoPatterns() {
     return [];
   }
 
+  public function getIncludingPatterns() {
+    return [];
+  }
+
+  public function getLabel() {
+    return (new Name($this->getName()))->capitalized();
+  }
+
+  public function getName() {
+    return $this->getPattern()->getName() . '-' . $this->source->getName();
+  }
+
+  public function getPath() {
+    return $this->getPattern()->getPath() . '-' . $this->source->getName();
+  }
+
   public function getState() {
-    return $this->pattern->getState();
-  }
-
-  public function getTemplate() {
-    return $this->pattern->getTemplate();
-  }
-
-  public function getTime() {
-    if (!isset($this->time)) {
-      $this->time = max($this->pattern->getTime(), $this->getDataTime());
-    }
-    return $this->time;
-  }
-
-  public function getVariantName() {
-    return $this->variant;
-  }
-
-  public function getType() {
-    // TODO: Implement getType() method.
-  }
-
-  public function hasType() {
-    // TODO: Implement hasType() method.
+    return $this->getPattern()->getState();
   }
 
   public function getSubtype() {
-    // TODO: Implement getSubtype() method.
+    return new Name($this->getPattern()->getSubtype());
   }
 
-  public function hasSubtype() {
-    // TODO: Implement hasSubtype() method.
-  }
-
-  public function includes(PatternInterface $pattern) {
-    // TODO: Implement includes() method.
+  public function getTemplate() {
+    return $this->getPattern()->getPath();
   }
 
   public function getTemplateNames() {
     // TODO: Implement getTemplateNames() method.
   }
 
-  public function getData() {
-    // TODO: Implement getData() method.
+  public function getTime() {
+    // TODO: Implement getTime() method.
   }
 
-  public function getExample() {
-    // TODO: Implement getExample() method.
+  public function getType() {
+    return new Name($this->source->getPattern()->getType());
   }
 
   public function hasState() {
-    // TODO: Implement hasState() method.
+    return $this->source->getPattern()->getState();
   }
 
-  public function getDescription() {
-    // TODO: Implement getDescription() method.
+  public function hasSubtype() {
+    return $this->source->getPattern()->hasSubtype();
   }
 
-  public function getIncludingPatterns() {
-    // TODO: Implement getIncludingPatterns() method.
+  public function includes(PatternInterface $pattern) {
+    // TODO: Implement includes() method.
   }
 
   public function matches($name) {
     // TODO: Implement matches() method.
+  }
+
+  /**
+   * @return \Labcoat\PatternLab\PatternInterface
+   */
+  protected function getPattern() {
+    return $this->source->getPattern();
   }
 }

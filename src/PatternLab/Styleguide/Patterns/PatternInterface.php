@@ -4,31 +4,6 @@ namespace Labcoat\PatternLab\Styleguide\Patterns;
 
 use Labcoat\Data\DataInterface;
 
-/*
-
-Pattern properties:
-
-  Path
-    The path of the pattern's styleguide page, relative to the patterns/ directory
-    E.g. 00-atoms-00-logo\00-atoms-0-logo.html
-    Used in the URL of the pattern's navigation item
-
-  Name
-    The name of the pattern with ordering removed, dashes converted to spaces, with all words capitalized
-    Used as the label for the pattern's navigation item
-
-  Partial
-    The type (with ordering removed) + '-' + the name (with ordering removed)
-    Expected to be unique
-    E.g. atoms-logo
-    Stored in each pattern's navigation item
-    Used as the ID of the pattern in the index pages
-
-  State
-    Added as a class to the pattern's navigation item
-
- */
-
 interface PatternInterface {
 
   /**
@@ -108,11 +83,6 @@ interface PatternInterface {
    * @return \Labcoat\PatternLab\Styleguide\Patterns\PathInterface
    */
   public function getPath();
-
-  /**
-   * @return PseudoPatternInterface[]
-   */
-  public function getPseudoPatterns();
 
   /**
    * The pattern's state of development

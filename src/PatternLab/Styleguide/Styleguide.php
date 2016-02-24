@@ -9,13 +9,15 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
+use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\PatternInterface as PatternSourceInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageRenderer;
 use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
+use Labcoat\PatternLab\Styleguide\Patterns\PseudoPattern;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
-use Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile;
+use Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\DataFile;
 use Labcoat\PatternLab\Styleguide\Files\Text\LatestChangeFile;
 use Labcoat\PatternLab\Styleguide\Files\Html\Patterns\PatternPage;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllSubtypePage;
@@ -23,6 +25,7 @@ use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
+use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternRenderer;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
@@ -88,9 +91,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   public function addPattern(PatternSourceInterface $source) {
-    $pattern = new Pattern($source, $this->getPatternRenderer());
-    $this->patterns[] = $pattern;
-    $this->getOrCreateType($pattern->getType())->addPattern($pattern);
+    $this->addStyleguidePattern(new Pattern($source, $this->getPatternRenderer()));
+    foreach ($source->getPseudoPatterns() as $pseudo) {
+      $this->addStyleguidePattern(new PseudoPattern($pseudo, $this->getPatternRenderer()));
+    }
   }
 
   /**
@@ -217,6 +221,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected function addFile(FileInterface $file) {
     $this->files[(string)$file->getPath()] = $file;
+  }
+
+  protected function addStyleguidePattern(PatternInterface $pattern) {
+    $this->patterns[] = $pattern;
+    $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
   protected function clearFiles() {

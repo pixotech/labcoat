@@ -66,6 +66,13 @@ class Pattern implements PatternInterface {
     return $this->path;
   }
 
+  /**
+   * @return array
+   */
+  public function getPseudoPatterns() {
+    return $this->pseudoPatterns;
+  }
+
   public function getState() {
     return $this->state;
   }
@@ -88,7 +95,7 @@ class Pattern implements PatternInterface {
       $name = basename($path, '.json');
       list (, $pseudoPattern) = array_pad(explode('~', $name, 2), 2, null);
       if (!empty($pseudoPattern)) {
-        #$this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
+        $this->pseudoPatterns[$pseudoPattern] = new PseudoPattern($this, $pseudoPattern, $path);
       }
       else {
         $data->merge(Data::load($path));

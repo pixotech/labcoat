@@ -32,6 +32,11 @@ interface PatternInterface {
   public function getPath();
 
   /**
+   * @return PseudoPatternInterface[]
+   */
+  public function getPseudoPatterns();
+
+  /**
    * @return string
    */
   public function getState();
