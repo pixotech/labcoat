@@ -15,9 +15,4 @@ interface CollectionInterface {
    * @throws \OutOfBoundsException
    */
   public function find($name);
-
-  /**
-   * @return LoaderInterface
-   */
-  public function getLoader();
 }
