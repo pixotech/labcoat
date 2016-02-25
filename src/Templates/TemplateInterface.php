@@ -10,6 +10,11 @@ interface TemplateInterface {
   public function getFile();
 
   /**
+   * @return array
+   */
+  public function getIncludedTemplates();
+
+  /**
    * @return string
    */
   public function getId();
@@ -24,4 +29,9 @@ interface TemplateInterface {
    * @return bool
    */
   public function is($name);
+
+  /**
+   * @return bool
+   */
+  public function isValid();
 }

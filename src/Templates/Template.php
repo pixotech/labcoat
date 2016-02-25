@@ -80,6 +80,11 @@ class Template implements TemplateInterface {
     return $this->id;
   }
 
+  public function getIncludedTemplates() {
+    if (!isset($this->includedTemplates)) $this->parseTemplate();
+    return $this->includedTemplates;
+  }
+
   public function getTime() {
     $time = new \DateTime();
     $time->setTimestamp($this->getTimestamp());
@@ -92,6 +97,11 @@ class Template implements TemplateInterface {
    */
   public function is($name) {
     return $name == $this->getId();
+  }
+
+  public function isValid() {
+    if (!isset($this->valid)) $this->parseTemplate();
+    return $this->valid;
   }
 
   /**
