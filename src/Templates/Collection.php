@@ -10,6 +10,14 @@ class Collection implements CollectionInterface, \Twig_LoaderInterface {
   protected $templates = [];
 
   /**
+   * @param string $name
+   * @return TemplateInterface
+   */
+  public function __invoke($name) {
+    return $this->find($name);
+  }
+
+  /**
    * @param TemplateInterface $template
    */
   public function add(TemplateInterface $template) {

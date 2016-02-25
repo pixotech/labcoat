@@ -52,6 +52,10 @@ class Template implements TemplateInterface {
     if (isset($id)) $this->id;
   }
 
+  public function __toString() {
+    return $this->getId();
+  }
+
   public function getFile() {
     return $this->file;
   }
