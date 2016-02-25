@@ -133,6 +133,9 @@ class Template implements TemplateInterface {
     return $this->getLexer()->tokenize($this->getContent());
   }
 
+  /**
+   * Validate the template and list the other templates it uses
+   */
   protected function parseTemplate() {
     $this->valid = true;
     $templates = [];
