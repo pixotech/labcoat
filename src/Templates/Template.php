@@ -52,6 +52,10 @@ class Template implements TemplateInterface {
     if (isset($id)) $this->id;
   }
 
+  public function __invoke(\Twig_Environment $parser, array $vars = []) {
+    return $parser->render($this->getId(), $vars);
+  }
+
   public function __toString() {
     return $this->getId();
   }
