@@ -2,7 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Assets;
 
-use Labcoat\Generator\Files\FileInterface;
+interface AssetFileInterface extends \Labcoat\Generator\Files\AssetFileInterface {
 
-interface AssetFileInterface extends FileInterface {
 }
