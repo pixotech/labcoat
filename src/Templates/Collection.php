@@ -2,7 +2,7 @@
 
 namespace Labcoat\Templates;
 
-class Collection implements CollectionInterface, \Twig_LoaderInterface {
+class Collection implements CollectionInterface {
 
   /**
    * @var TemplateInterface[]

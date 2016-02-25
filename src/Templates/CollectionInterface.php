@@ -2,7 +2,7 @@
 
 namespace Labcoat\Templates;
 
-interface CollectionInterface {
+interface CollectionInterface extends \Twig_LoaderInterface {
 
   /**
    * @param TemplateInterface $template
@@ -10,7 +10,7 @@ interface CollectionInterface {
   public function add(TemplateInterface $template);
 
   /**
-   * @param $name
+   * @param string $name
    * @return TemplateInterface
    * @throws \OutOfBoundsException
    */
