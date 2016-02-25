@@ -8,7 +8,11 @@ class Template implements TemplateInterface {
 
   protected $id;
 
+  protected $includedTemplates;
+
   protected $file;
+
+  protected $valid;
 
   public static function inDirectory($dir) {
     $collection = static::makeCollection();
@@ -37,6 +41,14 @@ class Template implements TemplateInterface {
 
   protected static function getRelativePathWithoutExtension($path, $dir) {
     return substr($path, strlen($dir) + 1, -1 - strlen(static::$extension));
+  }
+
+  protected static function isIncludeToken(\Twig_Token $token) {
+    return self::isNameToken($token) && in_array($token->getValue(), ['include', 'extend']);
+  }
+
+  protected static function isNameToken(\Twig_Token $token) {
+    return $token->getType() == \Twig_Token::NAME_TYPE;
   }
 
   protected static function makeCollection() {
@@ -70,15 +82,64 @@ class Template implements TemplateInterface {
 
   public function getTime() {
     $time = new \DateTime();
-    $time->setTimestamp($this->getFileTimestamp());
+    $time->setTimestamp($this->getTimestamp());
     return $time;
   }
 
+  /**
+   * @param string $name
+   * @return bool
+   */
   public function is($name) {
     return $name == $this->getId();
   }
 
-  protected function getFileTimestamp() {
+  /**
+   * @return string
+   */
+  protected function getContent() {
+    return file_get_contents($this->getFile());
+  }
+
+  /**
+   * @return \Twig_Lexer
+   */
+  protected function getLexer() {
+    return new \Twig_Lexer(new \Twig_Environment());
+  }
+
+  /**
+   * @return int
+   */
+  protected function getTimestamp() {
     return $this->getFile()->getMTime();
+  }
+
+  /**
+   * @return \Twig_TokenStream
+   * @throws \Twig_Error_Syntax
+   */
+  protected function getTokens() {
+    return $this->getLexer()->tokenize($this->getContent());
+  }
+
+  protected function parseTemplate() {
+    $this->valid = true;
+    $templates = [];
+    try {
+      $tokens = $this->getTokens();
+      while (!$tokens->isEOF()) {
+        $token = $tokens->next();
+        if ($this->isIncludeToken($token)) {
+          $next = $tokens->next()->getValue();
+          if ($next == '(') $next = $tokens->next()->getValue();
+          $templates[] = $next;
+        }
+      }
+      $this->includedTemplates = array_unique($templates);
+    }
+    catch (\Twig_Error_Syntax $e) {
+      $this->valid = false;
+    }
   }
 }
