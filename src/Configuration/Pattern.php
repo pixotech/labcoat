@@ -3,9 +3,7 @@
 namespace Labcoat\Configuration;
 
 use Labcoat\Data\Data;
-use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Patterns\Path;
 
 class Pattern implements PatternInterface {
 
@@ -28,19 +26,6 @@ class Pattern implements PatternInterface {
   protected $subtype;
 
   protected $type;
-
-  public static function makeFromFile($dir, $path, $extension) {
-    $pattern = new static();
-    $pattern->path = $path;
-    $pattern->file = $dir . DIRECTORY_SEPARATOR . $path . '.' . $extension;
-    $path = new Path($path);
-    $pattern->type = $path->getType();
-    $pattern->name = $path->getName();
-    $pattern->label = (new Name($pattern->name))->capitalized();
-    if ($path->hasSubtype()) $pattern->subtype = $path->getSubtype();
-    $pattern->findData();
-    return $pattern;
-  }
 
   public function getData() {
     return $this->data;

@@ -9,7 +9,6 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\PatternLab\Name;
 use Labcoat\PatternLab\Patterns\PatternInterface as PatternSourceInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageRenderer;
 use Labcoat\PatternLab\Styleguide\Patterns\Pattern;

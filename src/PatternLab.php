@@ -12,8 +12,10 @@ namespace Labcoat;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
-use Labcoat\PatternLab\Styleguide\Patterns\Path;
 
+/**
+ * @deprecated 1.1.0 PatternLab classes moved to \Labcoat\PatternLab
+ */
 class PatternLab implements PatternLabInterface {
 
   /**
@@ -81,21 +83,6 @@ class PatternLab implements PatternLabInterface {
   public static function makePath(array $segments) {
     return implode('/', $segments);
   }
-
-  /**
-   * Normalize a template path
-   *
-   * Normalization invokes:
-   * - Removing all ordering digits
-   * - Replace all slashes with a forward slash
-   *
-   * @param string $path The raw path
-   * @return string The normalized path
-   */
-  public static function normalizePath($path) {
-    return (string)(new Path($path))->normalize();
-  }
-
 
   /**
    * Constructor

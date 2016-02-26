@@ -2,8 +2,6 @@
 
 namespace Labcoat\PatternLab\Templates;
 
-use Labcoat\PatternLab\Styleguide\Patterns\Path;
-
 class Template extends \Labcoat\Templates\Template implements TemplateInterface {
 
   /**

@@ -4,6 +4,9 @@ namespace Labcoat\Styleguide;
 
 use Labcoat\PatternLabInterface;
 
+/**
+ * @deprecated 1.1.0 PatternLab classes moved to \Labcoat\PatternLab
+ */
 class Styleguide implements StyleguideInterface {
 
   protected $styleguide;

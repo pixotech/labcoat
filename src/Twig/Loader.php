@@ -7,6 +7,9 @@ use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
 
+/**
+ * @deprecated 1.1.0 PatternLab classes moved to \Labcoat\PatternLab
+ */
 class Loader implements \Twig_LoaderInterface {
 
   protected $extension = 'twig';
@@ -38,8 +41,7 @@ class Loader implements \Twig_LoaderInterface {
    * @throws \Twig_Error_Loader
    */
   protected function getFile($name) {
-    $key = $this->isPath($name) ? PatternLab::normalizePath($this->stripExtension($name)) : $name;
-    if (isset($this->index[$key])) return $this->index[$key];
+    if (isset($this->index[$name])) return $this->index[$name];
     throw new \Twig_Error_Loader("Unknown pattern: $name");
   }
 
@@ -48,9 +50,7 @@ class Loader implements \Twig_LoaderInterface {
     foreach ($patternlab->getPatterns() as $pattern) {
       $file = $pattern->getFile();
       $partial = $this->makePartial($pattern);
-      $path = PatternLab::normalizePath($pattern->getPath());
       $this->index[$partial] = $file;
-      $this->index[$path] = $file;
     }
   }
 
