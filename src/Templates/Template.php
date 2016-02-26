@@ -121,7 +121,7 @@ class Template implements TemplateInterface {
    */
   public function __construct(\SplFileInfo $file, $id = null) {
     $this->file = $file;
-    if (isset($id)) $this->id;
+    if (isset($id)) $this->id = $id;
   }
 
   /**

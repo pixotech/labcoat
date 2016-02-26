@@ -2,6 +2,8 @@
 
 namespace Labcoat\PatternLab\Templates;
 
+use Labcoat\PatternLab\Styleguide\Patterns\Path;
+
 class Template extends \Labcoat\Templates\Template implements TemplateInterface {
 
   /**
@@ -10,9 +12,33 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   protected $data;
 
   /**
+   * @var string
+   */
+  protected $name;
+
+  /**
+   * @var string
+   */
+  protected $subtype;
+
+  /**
+   * @var string
+   */
+  protected $type;
+
+  /**
    * @var array
    */
   protected $variants;
+
+  /**
+   * @param \SplFileInfo $file
+   * @param string $id
+   */
+  public function __construct(\SplFileInfo $file, $id = null) {
+    parent::__construct($file, $id);
+    $this->splitId();
+  }
 
   /**
    * @return array
@@ -20,6 +46,27 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   public function getData() {
     if (!isset($this->data)) $this->findData();
     return $this->data;
+  }
+
+  /**
+   * @return string
+   */
+  public function getName() {
+    return $this->name;
+  }
+
+  /**
+   * @return string
+   */
+  public function getSubtype() {
+    return $this->subtype;
+  }
+
+  /**
+   * @return string
+   */
+  public function getType() {
+    return $this->type;
   }
 
   /**
@@ -41,6 +88,13 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   /**
    * @return bool
    */
+  public function hasSubtype() {
+    return !empty($this->subtype);
+  }
+
+  /**
+   * @return bool
+   */
   public function hasVariants() {
     if (!isset($this->variants)) $this->findVariants();
     return !empty($this->variants);
@@ -49,7 +103,7 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   protected function findData() {
     try {
       $file = $this->getSibing('json');
-      $this->data = json_decode(file_get_contents($file->getPathname()), true);
+      $this->data = $this->loadData($file->getPathname());
     }
     catch (\OutOfBoundsException $e) {
       $this->data = [];
@@ -60,7 +114,7 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
     $this->variants = [];
     foreach (glob($this->getVariantFilePattern()) as $path) {
       list (, $name) = array_pad(explode('~', basename($path, '.json'), 2), 2, null);
-      $this->variants[$name] = new \SplFileInfo($path);
+      $this->variants[$name] = $this->loadData($path);
     }
   }
 
@@ -69,5 +123,18 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
    */
   protected function getVariantFilePattern() {
     return $this->getPathWithoutExtension() . '~*.json';
+  }
+
+  protected function loadData($path) {
+    return json_decode(file_get_contents($path), true);
+  }
+
+  protected function splitId() {
+    $path = $this->getId();
+    $segments = explode('/', $path);
+    $this->name = array_pop($segments);
+    if (empty($segments)) throw new \DomainException("Unknown pattern type: $path");
+    $this->type = array_shift($segments);
+    if (!empty($segments)) $this->subtype = array_shift($segments);
   }
 }
