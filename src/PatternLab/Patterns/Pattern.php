@@ -25,8 +25,11 @@ class Pattern implements PatternInterface {
     return $this->getTemplate()->getData();
   }
 
+  /**
+   * @return string
+   */
   public function getDescription() {
-    // TODO: Implement getDescription() method.
+    return '';
   }
 
   /**
@@ -36,8 +39,11 @@ class Pattern implements PatternInterface {
     return $this->getTemplate()->getFile()->getPathname();
   }
 
+  /**
+   * @return string
+   */
   public function getLabel() {
-    // TODO: Implement getLabel() method.
+    return ucfirst($this->getName());
   }
 
   /**
@@ -47,8 +53,11 @@ class Pattern implements PatternInterface {
     return $this->getTemplate()->getName();
   }
 
+  /**
+   * @return string
+   */
   public function getPath() {
-    // TODO: Implement getPath() method.
+    return $this->getTemplate()->getId();
   }
 
   /**
@@ -62,8 +71,11 @@ class Pattern implements PatternInterface {
     return $pseudoPatterns;
   }
 
+  /**
+   * @return string
+   */
   public function getState() {
-    // TODO: Implement getState() method.
+    return '';
   }
 
   /**
