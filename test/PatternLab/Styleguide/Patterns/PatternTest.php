@@ -99,33 +99,4 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $pattern = new Pattern($source, new MockPatternRenderer());
     $this->assertEquals($source->description, $pattern->getDescription());
   }
-
-  public function testMatchPartial() {
-    $source = new PatternSource();
-    $source->type = 'one';
-    $source->name = 'three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertTrue($pattern->matches('one-three'));
-  }
-
-  public function testMatchPath() {
-    $source = new PatternSource();
-    $source->path = 'one/two/three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertTrue($pattern->matches('one/two/three'));
-  }
-
-  public function testMatchPathWithOrdering() {
-    $source = new PatternSource();
-    $source->path = '01-one/02-two/03-three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertTrue($pattern->matches('one/two/three'));
-  }
-
-  public function testMatchPathWithoutOrdering() {
-    $source = new PatternSource();
-    $source->path = 'one/two/three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertTrue($pattern->matches('01-one/02-two/03-three'));
-  }
 }

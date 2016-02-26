@@ -68,13 +68,6 @@ class Pattern extends AbstractPattern {
     return $this->source->getPath();
   }
 
-  public function getTemplateNames() {
-    return [
-      (string)$this->getPath()->normalize(),
-      (string)$this->getPartial(),
-    ];
-  }
-
   public function getTime() {
     return filemtime($this->getFile());
   }
@@ -89,18 +82,5 @@ class Pattern extends AbstractPattern {
 
   public function hasSubtype() {
     return $this->source->hasSubtype();
-  }
-
-  public function includes(PatternInterface $pattern) {
-    foreach ($this->includedPatterns as $included) {
-      if ($included == $pattern->getPartial()) return true;
-      if ($included == (string)$pattern->getPath()) return true;
-    }
-    return false;
-  }
-
-  public function matches($name) {
-    if (PatternLab::isPartialName($name)) return $name == $this->getPartial();
-    else return (string)PatternLab::normalizePath($name) == (string)PatternLab::normalizePath($this->getPath());
   }
 }

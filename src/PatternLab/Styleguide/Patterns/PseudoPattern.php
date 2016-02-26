@@ -58,10 +58,6 @@ class PseudoPattern extends AbstractPattern {
     return $this->getPattern()->getPath();
   }
 
-  public function getTemplateNames() {
-    // TODO: Implement getTemplateNames() method.
-  }
-
   public function getTime() {
     // TODO: Implement getTime() method.
   }
@@ -76,14 +72,6 @@ class PseudoPattern extends AbstractPattern {
 
   public function hasSubtype() {
     return $this->source->getPattern()->hasSubtype();
-  }
-
-  public function includes(PatternInterface $pattern) {
-    // TODO: Implement includes() method.
-  }
-
-  public function matches($name) {
-    // TODO: Implement matches() method.
   }
 
   /**

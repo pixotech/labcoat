@@ -104,11 +104,6 @@ interface PatternInterface {
   public function getTemplate();
 
   /**
-   * @return array
-   */
-  public function getTemplateNames();
-
-  /**
    * @return int
    */
   public function getTime();
@@ -127,16 +122,4 @@ interface PatternInterface {
    * @return bool
    */
   public function hasSubtype();
-
-  /**
-   * @param PatternInterface $pattern
-   * @return bool
-   */
-  public function includes(PatternInterface $pattern);
-
-  /**
-   * @param string $name
-   * @return bool
-   */
-  public function matches($name);
 }
