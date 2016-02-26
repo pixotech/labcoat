@@ -2,6 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Patterns;
 
+use Labcoat\Generator\Paths\Path;
 use Labcoat\PatternLab;
 
 class EscapedSourceFile extends PatternFile implements EscapedSourceFileInterface {
@@ -12,6 +13,6 @@ class EscapedSourceFile extends PatternFile implements EscapedSourceFileInterfac
 
   public function getPath() {
     $path = $this->pattern->getId();
-    return PatternLab::makePath(['patterns', $path, "$path.escaped.html"]);
+    return new Path("patterns/$path/$path.escaped.html");
   }
 }

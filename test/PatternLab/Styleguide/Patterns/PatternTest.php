@@ -15,20 +15,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($source->file, $pattern->getFile());
   }
 
-  public function testId() {
-    $source = new PatternSource();
-    $source->path = 'one/two/three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertEquals('one-two-three', $pattern->getId());
-  }
-
-  public function testIdContainsOrdering() {
-    $source = new PatternSource();
-    $source->path = '01-one/02-two/03-three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertEquals('01-one-02-two-03-three', $pattern->getId());
-  }
-
   public function testLabel() {
     $source = new PatternSource();
     $source->label = 'Pattern';

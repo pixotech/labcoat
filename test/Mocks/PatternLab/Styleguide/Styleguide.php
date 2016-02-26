@@ -68,10 +68,6 @@ class Styleguide implements StyleguideInterface {
     // TODO: Implement getTwig() method.
   }
 
-  public function renderPattern(PatternInterface $pattern, array $data = []) {
-    return $this->rendered[$pattern->getId()];
-  }
-
   public function getMaximumWidth() {
     // TODO: Implement getMaximumWidth() method.
   }

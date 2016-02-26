@@ -2,6 +2,8 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
+use Labcoat\PatternLab\PatternLab;
+
 abstract class AbstractPattern implements PatternInterface {
 
   /**
@@ -40,7 +42,8 @@ abstract class AbstractPattern implements PatternInterface {
    * @return string
    */
   public function getPartial() {
-    return implode('-', [$this->getType(), $this->getName()]);
+    $type = PatternLab::stripOrdering($this->getType());
+    return $type . '-' . $this->getName();
   }
 
   /**

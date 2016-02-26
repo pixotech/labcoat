@@ -2,7 +2,6 @@
 
 namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\PatternLab\NameInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 
 class Subtype extends Type implements SubtypeInterface {
@@ -17,7 +16,7 @@ class Subtype extends Type implements SubtypeInterface {
    * @param string $name
    * @param array $patterns
    */
-  public function __construct(TypeInterface $type, NameInterface $name, array $patterns = []) {
+  public function __construct(TypeInterface $type, $name, array $patterns = []) {
     parent::__construct($name, $patterns);
     $this->type = $type;
   }
@@ -29,11 +28,13 @@ class Subtype extends Type implements SubtypeInterface {
   }
 
   public function getId() {
-    return implode('-', [$this->type->getId(), $this->id]);
+    return $this->type->getId() .'-' . $this->name;
   }
 
   public function getPartial() {
-    return 'viewall-' . implode('-', [$this->type, $this->name]);
+    $type = $this->type->getName();
+    $name = $this->getName();
+    return "viewall-{$type}-{$name}";
   }
 
   /**

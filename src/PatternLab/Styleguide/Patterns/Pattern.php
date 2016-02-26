@@ -2,8 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-use Labcoat\PatternLab;
-use Labcoat\PatternLab\Name;
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\PatternInterface as SourceInterface;
 
 class Pattern extends AbstractPattern {
@@ -46,10 +45,10 @@ class Pattern extends AbstractPattern {
   }
 
   /**
-   * @return Name
+   * @return string
    */
   public function getName() {
-    return new Name($this->source->getName());
+    return PatternLab::stripOrdering($this->source->getName());
   }
 
   public function getPath() {
@@ -61,7 +60,7 @@ class Pattern extends AbstractPattern {
   }
 
   public function getSubtype() {
-    return new Name($this->source->getSubtype());
+    return $this->source->getSubtype();
   }
 
   public function getTemplate() {
@@ -73,7 +72,7 @@ class Pattern extends AbstractPattern {
   }
 
   public function getType() {
-    return new Name($this->source->getType());
+    return $this->source->getType();
   }
 
   public function hasState() {

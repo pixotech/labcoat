@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-use Labcoat\PatternLab\Name;
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\PseudoPatternInterface as SourceInterface;
 
 class PseudoPattern extends AbstractPattern {
@@ -35,7 +35,7 @@ class PseudoPattern extends AbstractPattern {
   }
 
   public function getLabel() {
-    return (new Name($this->getName()))->capitalized();
+    return PatternLab::makeLabel($this->getName());
   }
 
   public function getName() {
@@ -51,7 +51,7 @@ class PseudoPattern extends AbstractPattern {
   }
 
   public function getSubtype() {
-    return new Name($this->getPattern()->getSubtype());
+    return $this->getPattern()->getSubtype();
   }
 
   public function getTemplate() {
@@ -63,15 +63,15 @@ class PseudoPattern extends AbstractPattern {
   }
 
   public function getType() {
-    return new Name($this->source->getPattern()->getType());
+    return $this->getPattern()->getType();
   }
 
   public function hasState() {
-    return $this->source->getPattern()->getState();
+    return $this->getPattern()->getState();
   }
 
   public function hasSubtype() {
-    return $this->source->getPattern()->hasSubtype();
+    return $this->getPattern()->hasSubtype();
   }
 
   /**

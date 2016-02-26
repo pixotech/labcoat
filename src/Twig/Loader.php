@@ -4,7 +4,6 @@ namespace Labcoat\Twig;
 
 use Labcoat\PatternLab;
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
 
 /**
@@ -55,9 +54,7 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   protected function makePartial(PatternInterface $pattern) {
-    $name = (new Name($pattern->getName()))->__toString();
-    $type = (new Name($pattern->getType()))->__toString();
-    return "$type-$name";
+    return PatternLab\PatternLab::makePartial($pattern->getType(), $pattern->getName());
   }
 
   protected function stripExtension($path) {

@@ -2,8 +2,6 @@
 
 namespace Labcoat\PatternLab\Patterns;
 
-use Labcoat\PatternLab\Patterns\PseudoPatternInterface;
-
 interface PatternInterface {
 
   public function getData();

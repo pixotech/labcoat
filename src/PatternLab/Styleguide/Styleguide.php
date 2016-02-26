@@ -250,9 +250,8 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function getOrCreateType($type) {
-    $key = (string)$type;
-    if (!isset($this->types[$key])) $this->types[$key] = new Type($type);
-    return $this->types[$key];
+    if (!isset($this->types[$type])) $this->types[$type] = new Type($type);
+    return $this->types[$type];
   }
 
   protected function getPageFooterContent() {

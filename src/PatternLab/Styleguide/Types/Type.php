@@ -2,19 +2,13 @@
 
 namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\PatternLab\Name;
-use Labcoat\PatternLab\NameInterface;
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 
 class Type implements TypeInterface {
 
   /**
    * @var string
-   */
-  protected $id;
-
-  /**
-   * @var Name
    */
   protected $name;
 
@@ -28,17 +22,16 @@ class Type implements TypeInterface {
   protected $time;
 
   /**
-   * @param string $id
+   * @param string $name
    * @param PatternInterface[] $patterns
    */
-  public function __construct(NameInterface $name, array $patterns = []) {
-    $this->id = $name->raw();
+  public function __construct($name, array $patterns = []) {
     $this->name = $name;
     if (!empty($patterns)) $this->addPatterns($patterns);
   }
 
   public function __toString() {
-    return (string)$this->name;
+    return $this->getName();
   }
 
   /**
@@ -58,15 +51,15 @@ class Type implements TypeInterface {
   }
 
   public function getId() {
-    return $this->id;
+    return $this->name;
   }
 
   public function getLabel() {
-    return $this->name->capitalized();
+    return PatternLab::makeLabel($this->name);
   }
 
   public function getName() {
-    return (string)$this->name;
+    return PatternLab::stripOrdering($this->name);
   }
 
   /**
@@ -114,12 +107,11 @@ class Type implements TypeInterface {
   }
 
   /**
-   * @param NameInterface $name
+   * @param string $name
    * @return SubtypeInterface
    */
-  protected function getOrCreateSubtype(NameInterface $name) {
-    $key = (string)$name;
-    if (!isset($this->subtypes[$key])) $this->subtypes[$key] = new Subtype($this, $name);
-    return $this->subtypes[$key];
+  protected function getOrCreateSubtype($name) {
+    if (!isset($this->subtypes[$name])) $this->subtypes[$name] = new Subtype($this, $name);
+    return $this->subtypes[$name];
   }
 }
