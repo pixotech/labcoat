@@ -2,7 +2,7 @@
 
 namespace Labcoat\Twig;
 
-use Labcoat\PatternLab;
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLabInterface;
 
@@ -40,6 +40,7 @@ class Loader implements \Twig_LoaderInterface {
    * @throws \Twig_Error_Loader
    */
   protected function getFile($name) {
+    if ($this->isPath($name)) $name = $this->makePartialFromPath($name);
     if (isset($this->index[$name])) return $this->index[$name];
     throw new \Twig_Error_Loader("Unknown pattern: $name");
   }
@@ -54,7 +55,12 @@ class Loader implements \Twig_LoaderInterface {
   }
 
   protected function makePartial(PatternInterface $pattern) {
-    return PatternLab\PatternLab::makePartial($pattern->getType(), $pattern->getName());
+    return PatternLab::makePartial($pattern->getType(), $pattern->getName());
+  }
+
+  protected function makePartialFromPath($path) {
+    list($name, $type) = PatternLab::splitPath($this->stripExtension($path));
+    return PatternLab::makePartial($type, $name);
   }
 
   protected function stripExtension($path) {

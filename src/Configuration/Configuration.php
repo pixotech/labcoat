@@ -3,7 +3,9 @@
 namespace Labcoat\Configuration;
 
 use Labcoat\Data\Data;
+use Labcoat\PatternLab\Patterns\Pattern;
 use Labcoat\PatternLab\Styleguide\Styleguide;
+use Labcoat\PatternLab\Templates\Template;
 use Labcoat\PatternLabInterface;
 
 class Configuration implements ConfigurationInterface {
@@ -94,12 +96,9 @@ class Configuration implements ConfigurationInterface {
    * Look in the pattern directory for pattern templates
    */
   public function getPatterns() {
-    $dir = $this->getPatternsDirectory();
-    $ext = $this->getPatternExtension();
     $patterns = [];
-    foreach ($this->getPatternFilesIterator() as $match => $file) {
-      $path = substr($match, strlen($dir) + 1, -1 - strlen($ext));
-      $patterns[] = Pattern::makeFromFile($dir, $path, $ext);
+    foreach ($this->getTemplates() as $template) {
+      $patterns[] = new Pattern($template);
     }
     return $patterns;
   }
@@ -209,5 +208,9 @@ class Configuration implements ConfigurationInterface {
     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
     $regex = '|\.' . preg_quote($ext) . '$|';
     return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
+  }
+
+  protected function getTemplates() {
+    return Template::inDirectory($this->getPatternsDirectory());
   }
 }

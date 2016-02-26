@@ -2,6 +2,8 @@
 
 namespace Labcoat\PatternLab\Templates;
 
+use Labcoat\PatternLab\PatternLab;
+
 class Template extends \Labcoat\Templates\Template implements TemplateInterface {
 
   /**
@@ -128,11 +130,6 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   }
 
   protected function splitId() {
-    $path = $this->getId();
-    $segments = explode('/', $path);
-    $this->name = array_pop($segments);
-    if (empty($segments)) throw new \DomainException("Unknown pattern type: $path");
-    $this->type = array_shift($segments);
-    if (!empty($segments)) $this->subtype = array_shift($segments);
+    list($this->name, $this->type, $this->subtype) = PatternLab::splitPath($this->getId());
   }
 }
