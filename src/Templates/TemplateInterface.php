@@ -5,6 +5,11 @@ namespace Labcoat\Templates;
 interface TemplateInterface {
 
   /**
+   * @return array
+   */
+  public function getDependencies();
+
+  /**
    * @return \SplFileInfo
    */
   public function getFile();
@@ -20,9 +25,19 @@ interface TemplateInterface {
   public function getId();
 
   /**
+   * @return string
+   */
+  public function getParent();
+
+  /**
    * @return \DateTime
    */
   public function getTime();
+
+  /**
+   * @return bool
+   */
+  public function hasParent();
 
   /**
    * @param string $name
