@@ -2,7 +2,7 @@
 
 namespace Labcoat\Templates;
 
-class Collection implements CollectionInterface {
+class Collection implements CollectionInterface, \IteratorAggregate {
 
   /**
    * @var TemplateInterface[]
@@ -41,6 +41,13 @@ class Collection implements CollectionInterface {
    */
   public function getCacheKey($name) {
     return $this->getTemplate($name)->getId();
+  }
+
+  /**
+   * @return \ArrayIterator
+   */
+  public function getIterator() {
+    return new \ArrayIterator($this->getTemplates());
   }
 
   /**
