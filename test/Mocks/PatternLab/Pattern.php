@@ -2,7 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab;
 
-use Labcoat\PatternLab\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Pattern implements PatternInterface {
 

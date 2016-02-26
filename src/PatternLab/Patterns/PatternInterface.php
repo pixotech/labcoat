@@ -1,6 +1,8 @@
 <?php
 
-namespace Labcoat\PatternLab;
+namespace Labcoat\PatternLab\Patterns;
+
+use Labcoat\PatternLab\Patterns\PseudoPatternInterface;
 
 interface PatternInterface {
 

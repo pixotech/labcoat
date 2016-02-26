@@ -16,7 +16,7 @@ class Styleguide implements StyleguideInterface {
   public $renders = [];
   public $types = [];
 
-  public function addPattern(\Labcoat\PatternLab\PatternInterface $pattern) {
+  public function addPattern(\Labcoat\PatternLab\Patterns\PatternInterface $pattern) {
     $this->patterns[] = $pattern;
   }
 

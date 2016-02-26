@@ -12,7 +12,7 @@ namespace Labcoat;
 interface PatternLabInterface {
 
   /**
-   * @return \Labcoat\PatternLab\PatternInterface[]
+   * @return \Labcoat\PatternLab\Patterns\PatternInterface[]
    */
   public function getPatterns();
 

@@ -4,7 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Patterns;
 
 use Labcoat\PatternLab;
 use Labcoat\PatternLab\Name;
-use Labcoat\PatternLab\PatternInterface as SourceInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface as SourceInterface;
 
 class Pattern extends AbstractPattern {
 

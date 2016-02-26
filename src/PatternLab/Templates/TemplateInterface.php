@@ -35,7 +35,7 @@ interface TemplateInterface extends \Labcoat\Templates\TemplateInterface {
   public function hasData();
 
   /**
-   * @return string
+   * @return bool
    */
   public function hasSubtype();
 

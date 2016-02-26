@@ -3,7 +3,7 @@
 namespace Labcoat\Twig;
 
 use Labcoat\PatternLab;
-use Labcoat\PatternLab\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Name;
 use Labcoat\PatternLabInterface;
 

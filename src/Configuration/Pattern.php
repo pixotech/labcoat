@@ -4,7 +4,7 @@ namespace Labcoat\Configuration;
 
 use Labcoat\Data\Data;
 use Labcoat\PatternLab\Name;
-use Labcoat\PatternLab\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\Path;
 
 class Pattern implements PatternInterface {

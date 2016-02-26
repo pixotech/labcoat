@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
 use Labcoat\PatternLab\Name;
-use Labcoat\PatternLab\PseudoPatternInterface as SourceInterface;
+use Labcoat\PatternLab\Patterns\PseudoPatternInterface as SourceInterface;
 
 class PseudoPattern extends AbstractPattern {
 
@@ -87,7 +87,7 @@ class PseudoPattern extends AbstractPattern {
   }
 
   /**
-   * @return \Labcoat\PatternLab\PatternInterface
+   * @return \Labcoat\PatternLab\Patterns\PatternInterface
    */
   protected function getPattern() {
     return $this->source->getPattern();

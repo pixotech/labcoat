@@ -9,7 +9,7 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\PatternLab\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 interface StyleguideInterface {
 

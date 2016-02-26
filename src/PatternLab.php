@@ -17,7 +17,7 @@ use Labcoat\PatternLab\Styleguide\Patterns\Path;
 class PatternLab implements PatternLabInterface {
 
   /**
-   * @var \Labcoat\PatternLab\PatternInterface[]
+   * @var \Labcoat\PatternLab\Patterns\PatternInterface[]
    */
   protected $patterns;
 
@@ -108,7 +108,7 @@ class PatternLab implements PatternLabInterface {
   }
 
   /**
-   * @return PatternLab\PatternInterface[]
+   * @return \Labcoat\PatternLab\Patterns\PatternInterface[]
    */
   public function getPatterns() {
     return $this->patterns;

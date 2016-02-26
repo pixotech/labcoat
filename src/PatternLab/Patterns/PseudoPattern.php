@@ -1,15 +1,17 @@
 <?php
 
-namespace Labcoat\Configuration;
-
-use Labcoat\Data\Data;
-use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Patterns\PseudoPatternInterface;
+namespace Labcoat\PatternLab\Patterns;
 
 class PseudoPattern implements PseudoPatternInterface {
 
+  /**
+   * @var array
+   */
   protected $data;
 
+  /**
+   * @var string
+   */
   protected $name;
 
   /**
@@ -17,20 +19,29 @@ class PseudoPattern implements PseudoPatternInterface {
    */
   protected $pattern;
 
-  public function __construct(PatternInterface $pattern, $name, $dataFile) {
+  public function __construct(PatternInterface $pattern, $name, array $data) {
     $this->pattern = $pattern;
     $this->name = $name;
-    $this->data = Data::load($dataFile)->toArray();
+    $this->data = $data;
   }
 
+  /**
+   * @return array
+   */
   public function getData() {
     return $this->data;
   }
 
+  /**
+   * @return string
+   */
   public function getName() {
     return $this->name;
   }
 
+  /**
+   * @return PatternInterface
+   */
   public function getPattern() {
     return $this->pattern;
   }
