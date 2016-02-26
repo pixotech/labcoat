@@ -291,10 +291,9 @@ class Template implements TemplateInterface {
           $next = $tokens->next()->getValue();
           if ($next == '(') $next = $tokens->next()->getValue();
           if ($token->getValue() == 'extends') $this->parentTemplate = $next;
-          else $this->includedTemplates[] = $next;
+          elseif (!in_array($next, $this->includedTemplates)) $this->includedTemplates[] = $next;
         }
       }
-      $this->includedTemplates = array_unique($this->includedTemplates);
     }
     catch (\Twig_Error_Syntax $e) {
       $this->valid = false;
