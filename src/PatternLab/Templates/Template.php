@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Templates;
 
 use Labcoat\PatternLab\PatternLab;
+use Labcoat\PatternLab\Patterns\Pattern;
 
 class Template extends \Labcoat\Templates\Template implements TemplateInterface {
 
@@ -12,33 +13,9 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   protected $data;
 
   /**
-   * @var string
-   */
-  protected $name;
-
-  /**
-   * @var string
-   */
-  protected $subtype;
-
-  /**
-   * @var string
-   */
-  protected $type;
-
-  /**
    * @var array
    */
   protected $variants;
-
-  /**
-   * @param \SplFileInfo $file
-   * @param string $id
-   */
-  public function __construct(\SplFileInfo $file, $id = null) {
-    parent::__construct($file, $id);
-    $this->splitId();
-  }
 
   /**
    * @return array
@@ -49,24 +26,21 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   }
 
   /**
-   * @return string
+   * Pattern[]
    */
-  public function getName() {
-    return $this->name;
-  }
-
-  /**
-   * @return string
-   */
-  public function getSubtype() {
-    return $this->subtype;
-  }
-
-  /**
-   * @return string
-   */
-  public function getType() {
-    return $this->type;
+  public function getPatterns() {
+    $patterns = [];
+    list ($name, $type, $subtype) = PatternLab::splitPath($this->getId());
+    $pattern = new Pattern($name, $type, $subtype);
+    $pattern->setLabel(PatternLab::makeLabel($name));
+    $patterns[] = $pattern;
+    foreach ($this->getVariants() as $variant => $data) {
+      $variantName = "{$name}-{$variant}";
+      $pattern = new Pattern($variantName, $type, $subtype);
+      $pattern->setLabel(PatternLab::makeLabel($variantName));
+      $patterns[] = $pattern;
+    }
+    return $patterns;
   }
 
   /**
@@ -83,13 +57,6 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   public function hasData() {
     if (!isset($this->data)) $this->findData();
     return !empty($this->data);
-  }
-
-  /**
-   * @return bool
-   */
-  public function hasSubtype() {
-    return !empty($this->subtype);
   }
 
   /**
@@ -127,9 +94,5 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
 
   protected function loadData($path) {
     return json_decode(file_get_contents($path), true);
-  }
-
-  protected function splitId() {
-    list($this->name, $this->type, $this->subtype) = PatternLab::splitPath($this->getId());
   }
 }

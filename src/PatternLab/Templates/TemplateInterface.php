@@ -10,19 +10,9 @@ interface TemplateInterface extends \Labcoat\Templates\TemplateInterface {
   public function getData();
 
   /**
-   * @return string
+   * @return \Labcoat\PatternLab\Patterns\PatternInterface[]
    */
-  public function getName();
-
-  /**
-   * @return string
-   */
-  public function getSubtype();
-
-  /**
-   * @return string
-   */
-  public function getType();
+  public function getPatterns();
 
   /**
    * @return array
@@ -33,11 +23,6 @@ interface TemplateInterface extends \Labcoat\Templates\TemplateInterface {
    * @return bool
    */
   public function hasData();
-
-  /**
-   * @return bool
-   */
-  public function hasSubtype();
 
   /**
    * @return bool

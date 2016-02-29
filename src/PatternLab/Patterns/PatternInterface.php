@@ -4,8 +4,6 @@ namespace Labcoat\PatternLab\Patterns;
 
 interface PatternInterface {
 
-  public function getData();
-
   /**
    * @return string
    */
@@ -14,7 +12,7 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getFile();
+  public function getExample();
 
   /**
    * @return string
@@ -25,16 +23,6 @@ interface PatternInterface {
    * @return string
    */
   public function getName();
-
-  /**
-   * @return string
-   */
-  public function getPath();
-
-  /**
-   * @return PseudoPatternInterface[]
-   */
-  public function getPseudoPatterns();
 
   /**
    * @return string
@@ -55,4 +43,39 @@ interface PatternInterface {
    * @return bool
    */
   public function hasSubtype();
+
+  /**
+   * @param string $description
+   */
+  public function setDescription($description);
+
+  /**
+   * @param string $example
+   */
+  public function setExample($example);
+
+  /**
+   * @param string $label
+   */
+  public function setLabel($label);
+
+  /**
+   * @param string $name
+   */
+  public function setName($name);
+
+  /**
+   * @param string $state
+   */
+  public function setState($state);
+
+  /**
+   * @param string $subtype
+   */
+  public function setSubtype($subtype);
+
+  /**
+   * @param string $type
+   */
+  public function setType($type);
 }

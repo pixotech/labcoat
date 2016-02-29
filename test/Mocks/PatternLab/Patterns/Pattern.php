@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\Mocks\PatternLab;
+namespace Labcoat\Mocks\PatternLab\Patterns;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
 
@@ -56,22 +56,8 @@ class Pattern implements PatternInterface {
    */
   public $type;
 
-  /**
-   * @return array
-   */
-  public function getData() {
-    return $this->data;
-  }
-
   public function getDescription() {
     return $this->description;
-  }
-
-  /**
-   * @return string
-   */
-  public function getFile() {
-    return $this->file;
   }
 
   /**
@@ -86,20 +72,6 @@ class Pattern implements PatternInterface {
    */
   public function getName() {
     return $this->name;
-  }
-
-  /**
-   * @return string
-   */
-  public function getPath() {
-    return $this->path;
-  }
-
-  /**
-   * @return array
-   */
-  public function getPseudopatterns() {
-    return $this->pseudopatterns;
   }
 
   /**
@@ -128,5 +100,37 @@ class Pattern implements PatternInterface {
    */
   public function hasSubtype() {
     return !empty($this->subtype);
+  }
+
+  public function getExample() {
+    // TODO: Implement getExample() method.
+  }
+
+  public function setDescription($description) {
+    // TODO: Implement setDescription() method.
+  }
+
+  public function setExample($example) {
+    // TODO: Implement setExample() method.
+  }
+
+  public function setLabel($label) {
+    // TODO: Implement setLabel() method.
+  }
+
+  public function setName($name) {
+    // TODO: Implement setName() method.
+  }
+
+  public function setState($state) {
+    // TODO: Implement setState() method.
+  }
+
+  public function setSubtype($subtype) {
+    // TODO: Implement setSubtype() method.
+  }
+
+  public function setType($type) {
+    // TODO: Implement setType() method.
   }
 }

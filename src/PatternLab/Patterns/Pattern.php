@@ -2,107 +2,158 @@
 
 namespace Labcoat\PatternLab\Patterns;
 
-use Labcoat\PatternLab\Templates\TemplateInterface;
+use Labcoat\PatternLab\PatternLab;
 
 class Pattern implements PatternInterface {
 
   /**
-   * @var TemplateInterface
+   * @var string
    */
-  protected $template;
+  protected $description = '';
 
   /**
-   * @param TemplateInterface $template
+   * @var string
    */
-  public function __construct(TemplateInterface $template) {
-    $this->template = $template;
-  }
+  protected $example = '';
 
   /**
-   * @return array
+   * @var string
    */
-  public function getData() {
-    return $this->getTemplate()->getData();
+  protected $label;
+
+  /**
+   * @var string
+   */
+  protected $name;
+
+  /**
+   * @var string
+   */
+  protected $state = '';
+
+  /**
+   * @var string
+   */
+  protected $subtype;
+
+  /**
+   * @var string
+   */
+  protected $type;
+
+  /**
+   * @param string $name
+   * @param string $type
+   * @param string|null $subtype
+   */
+  public function __construct($name, $type, $subtype = null) {
+    $this->name = $name;
+    $this->type = $type;
+    $this->subtype = $subtype;
   }
 
   /**
    * @return string
    */
   public function getDescription() {
-    return '';
+    return $this->description;
   }
 
   /**
    * @return string
    */
-  public function getFile() {
-    return $this->getTemplate()->getFile()->getPathname();
+  public function getExample() {
+    return $this->example;
   }
 
   /**
    * @return string
    */
   public function getLabel() {
-    return ucfirst($this->getName());
+    return $this->label ?: PatternLab::makeLabel($this->getName());
   }
 
   /**
    * @return string
    */
   public function getName() {
-    return $this->getTemplate()->getName();
-  }
-
-  /**
-   * @return string
-   */
-  public function getPath() {
-    return $this->getTemplate()->getId();
-  }
-
-  /**
-   * @return PseudoPattern[]
-   */
-  public function getPseudoPatterns() {
-    $pseudoPatterns = [];
-    foreach ($this->getTemplate()->getVariants() as $name => $data) {
-      $pseudoPatterns[$name] = new PseudoPattern($this, $name, $data);
-    }
-    return $pseudoPatterns;
+    return $this->name;
   }
 
   /**
    * @return string
    */
   public function getState() {
-    return '';
+    return $this->state;
   }
 
   /**
    * @return string
    */
   public function getSubtype() {
-    return $this->getTemplate()->getSubtype();
+    return $this->subtype;
   }
 
   /**
    * @return string
    */
   public function getType() {
-    return $this->getTemplate()->getType();
+    return $this->type;
   }
 
   /**
    * @return bool
    */
   public function hasSubtype() {
-    return $this->getTemplate()->hasSubtype();
+    return !empty($this->subtype);
   }
 
   /**
-   * @return TemplateInterface
+   * @param string $description
    */
-  protected function getTemplate() {
-    return $this->template;
+  public function setDescription($description) {
+    $this->description = $description;
+  }
+
+  /**
+   * @param string $example
+   */
+  public function setExample($example) {
+    $this->example = $example;
+  }
+
+  /**
+   * @param string $label
+   */
+  public function setLabel($label) {
+    $this->label = $label;
+  }
+
+  /**
+   * @param string $name
+   */
+  public function setName($name) {
+    $this->name = $name;
+  }
+
+  /**
+   * @param string $state
+   */
+  public function setState($state) {
+    $this->state = $state;
+  }
+
+  /**
+   * @param string $subtype
+   */
+  public function setSubtype($subtype) {
+    $this->subtype = $subtype;
+  }
+
+  /**
+   * @param string $type
+   */
+  public function setType($type) {
+    $this->type = $type;
   }
 }

@@ -2,18 +2,10 @@
 
 namespace Labcoat\PatternLab\Styleguide\Patterns;
 
-use Labcoat\Mocks\PatternLab;
 use Labcoat\Mocks\PatternLab\Styleguide\Patterns\PatternRenderer as MockPatternRenderer;
-use Labcoat\Mocks\PatternLab\Pattern as PatternSource;
+use Labcoat\Mocks\PatternLab\Patterns\Pattern as PatternSource;
 
 class PatternTest extends \PHPUnit_Framework_TestCase {
-
-  public function testFile() {
-    $source = new PatternSource();
-    $source->file = __FILE__;
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertEquals($source->file, $pattern->getFile());
-  }
 
   public function testLabel() {
     $source = new PatternSource();
@@ -50,20 +42,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $source->name = '03-three';
     $pattern = new Pattern($source, new MockPatternRenderer());
     $this->assertEquals('one-three', $pattern->getPartial());
-  }
-
-  public function testPath() {
-    $source = new PatternSource();
-    $source->path = 'one/two/three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertEquals('one/two/three', $pattern->getPath());
-  }
-
-  public function testPathHasDigits() {
-    $source = new PatternSource();
-    $source->path = '01-one/02-two/03-three';
-    $pattern = new Pattern($source, new MockPatternRenderer());
-    $this->assertEquals('01-one/02-two/03-three', $pattern->getPath());
   }
 
   public function testState() {
