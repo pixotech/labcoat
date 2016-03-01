@@ -3,10 +3,12 @@
 namespace Labcoat\Configuration;
 
 use Labcoat\Data\Data;
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\Pattern;
 use Labcoat\PatternLab\Styleguide\Styleguide;
 use Labcoat\PatternLab\Templates\Template;
 use Labcoat\PatternLabInterface;
+
 
 class Configuration implements ConfigurationInterface {
 
@@ -98,7 +100,17 @@ class Configuration implements ConfigurationInterface {
   public function getPatterns() {
     $patterns = [];
     foreach ($this->getTemplates() as $template) {
-      $patterns[] = new Pattern($template);
+      /** @var Template $template */
+      list ($name, $type, $subtype) = PatternLab::splitPath($template->getId());
+      $pattern = new Pattern($name, $type, $subtype);
+      $pattern->setLabel(PatternLab::makeLabel($name));
+      $patterns[] = $pattern;
+      foreach ($template->getVariants() as $variant => $data) {
+        $variantName = "{$name}-{$variant}";
+        $pattern = new Pattern($variantName, $type, $subtype);
+        $pattern->setLabel(PatternLab::makeLabel($variantName));
+        $patterns[] = $pattern;
+      }
     }
     return $patterns;
   }
@@ -210,6 +222,9 @@ class Configuration implements ConfigurationInterface {
     return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
   }
 
+  /**
+   * @return \Labcoat\Templates\Collection
+   */
   protected function getTemplates() {
     return Template::inDirectory($this->getPatternsDirectory());
   }

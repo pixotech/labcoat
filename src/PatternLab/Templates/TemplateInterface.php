@@ -10,11 +10,6 @@ interface TemplateInterface extends \Labcoat\Templates\TemplateInterface {
   public function getData();
 
   /**
-   * @return \Labcoat\PatternLab\Patterns\PatternInterface[]
-   */
-  public function getPatterns();
-
-  /**
    * @return array
    */
   public function getVariants();

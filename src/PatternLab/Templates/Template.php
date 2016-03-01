@@ -2,9 +2,6 @@
 
 namespace Labcoat\PatternLab\Templates;
 
-use Labcoat\PatternLab\PatternLab;
-use Labcoat\PatternLab\Patterns\Pattern;
-
 class Template extends \Labcoat\Templates\Template implements TemplateInterface {
 
   /**
@@ -18,29 +15,18 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   protected $variants;
 
   /**
+   * @return Collection
+   */
+  protected static function makeCollection() {
+    return new Collection();
+  }
+
+  /**
    * @return array
    */
   public function getData() {
     if (!isset($this->data)) $this->findData();
     return $this->data;
-  }
-
-  /**
-   * Pattern[]
-   */
-  public function getPatterns() {
-    $patterns = [];
-    list ($name, $type, $subtype) = PatternLab::splitPath($this->getId());
-    $pattern = new Pattern($name, $type, $subtype);
-    $pattern->setLabel(PatternLab::makeLabel($name));
-    $patterns[] = $pattern;
-    foreach ($this->getVariants() as $variant => $data) {
-      $variantName = "{$name}-{$variant}";
-      $pattern = new Pattern($variantName, $type, $subtype);
-      $pattern->setLabel(PatternLab::makeLabel($variantName));
-      $patterns[] = $pattern;
-    }
-    return $patterns;
   }
 
   /**

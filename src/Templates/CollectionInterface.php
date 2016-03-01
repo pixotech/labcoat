@@ -15,4 +15,9 @@ interface CollectionInterface extends \Twig_LoaderInterface {
    * @throws \OutOfBoundsException
    */
   public function find($name);
+
+  /**
+   * @return TemplateInterface[]
+   */
+  public function getTemplates();
 }
