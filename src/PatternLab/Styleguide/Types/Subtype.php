@@ -20,7 +20,7 @@ class Subtype extends Type implements SubtypeInterface {
     parent::__construct($name, $patterns);
     $this->type = $type;
   }
-  
+
   /**
    * @param PatternInterface $pattern
    */
