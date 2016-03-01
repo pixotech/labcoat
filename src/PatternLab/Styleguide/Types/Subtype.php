@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Subtype extends Type implements SubtypeInterface {
 
@@ -20,6 +20,7 @@ class Subtype extends Type implements SubtypeInterface {
     parent::__construct($name, $patterns);
     $this->type = $type;
   }
+  
   /**
    * @param PatternInterface $pattern
    */

@@ -141,13 +141,4 @@ class PatternPageTest extends FileTestCase {
     $this->assertArrayHasKey('lineagePath', $lineage);
     $this->assertEquals("../../{$id}/{$id}.html", $lineage['lineagePath']);
   }
-
-  public function testVariables() {
-    $variables = ['one' => 'two'];
-    $renderer = new PageRenderer();
-    $pattern = new Pattern();
-    $pattern->data = new Data($variables);
-    $file = new PatternPage($renderer, $pattern);
-    $this->assertEquals($variables, $file->getVariables());
-  }
 }

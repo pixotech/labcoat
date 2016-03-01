@@ -20,12 +20,15 @@ class Pattern extends AbstractPattern {
     $this->source = $source;
   }
 
-  public function getData() {
-    return $this->source->getData();
-  }
-
   public function getDescription() {
     return $this->source->getDescription();
+  }
+
+  /**
+   * @return string
+   */
+  public function getExample() {
+    return $this->source->getExample();
   }
 
   public function getFile() {
@@ -61,10 +64,6 @@ class Pattern extends AbstractPattern {
 
   public function getSubtype() {
     return $this->source->getSubtype();
-  }
-
-  public function getTemplate() {
-    return $this->source->getPath();
   }
 
   public function getTime() {

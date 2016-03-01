@@ -62,10 +62,6 @@ class Pattern implements PatternInterface {
     return $this->state;
   }
 
-  public function getTemplate() {
-    return $this->template;
-  }
-
   public function getTime() {
     return $this->time;
   }

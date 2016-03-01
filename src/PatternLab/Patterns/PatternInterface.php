@@ -32,6 +32,11 @@ interface PatternInterface {
   /**
    * @return string
    */
+  public function getStyleguideDirectoryName();
+
+  /**
+   * @return string
+   */
   public function getSubtype();
 
   /**

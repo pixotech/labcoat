@@ -9,10 +9,8 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\PatternLab\Patterns\PatternInterface as PatternSourceInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageRenderer;
-use Labcoat\PatternLab\Styleguide\Patterns\Pattern;
-use Labcoat\PatternLab\Styleguide\Patterns\PseudoPattern;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
@@ -24,8 +22,6 @@ use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Patterns\PatternRenderer;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Generator\Generator;
@@ -89,11 +85,9 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $str;
   }
 
-  public function addPattern(PatternSourceInterface $source) {
-    $this->addStyleguidePattern(new Pattern($source, $this->getPatternRenderer()));
-    foreach ($source->getPseudoPatterns() as $pseudo) {
-      $this->addStyleguidePattern(new PseudoPattern($pseudo, $this->getPatternRenderer()));
-    }
+  public function addPattern(PatternInterface $pattern) {
+    $this->patterns[] = $pattern;
+    $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
   /**

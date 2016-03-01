@@ -26,14 +26,6 @@ abstract class AbstractPattern implements PatternInterface {
   /**
    * @return string
    */
-  public function getExample() {
-    if (!isset($this->example)) $this->example = $this->makeExample();
-    return $this->example;
-  }
-
-  /**
-   * @return string
-   */
   public function getId() {
     return str_replace(DIRECTORY_SEPARATOR, '-', $this->getPath());
   }
@@ -44,19 +36,5 @@ abstract class AbstractPattern implements PatternInterface {
   public function getPartial() {
     $type = PatternLab::stripOrdering($this->getType());
     return $type . '-' . $this->getName();
-  }
-
-  /**
-   * @return array
-   */
-  protected function getTemplateVariables() {
-    return $this->getData();
-  }
-
-  /**
-   * @return string
-   */
-  protected function makeExample() {
-    return $this->renderer->render($this->getTemplate(), $this->getTemplateVariables());
   }
 }

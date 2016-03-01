@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Types;
 
 use Labcoat\PatternLab\PatternLab;
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Type implements TypeInterface {
 

@@ -126,6 +126,10 @@ class Pattern implements PatternInterface {
     // TODO: Implement setState() method.
   }
 
+  public function getStyleguideDirectoryName() {
+    // TODO: Implement getStyleguideDirectoryName() method.
+  }
+
   public function setSubtype($subtype) {
     // TODO: Implement setSubtype() method.
   }

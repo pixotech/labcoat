@@ -2,7 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab\Styleguide\Types;
 
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 class Type implements TypeInterface {

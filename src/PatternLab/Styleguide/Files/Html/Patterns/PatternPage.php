@@ -6,7 +6,6 @@ use Labcoat\Generator\Paths\Path;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageRendererInterface;
 use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
-use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class PatternPage extends Page implements PatternPageInterface {
 
@@ -80,9 +79,5 @@ class PatternPage extends Page implements PatternPageInterface {
 
   public function getTime() {
     return $this->pattern->getTime();
-  }
-
-  public function getVariables() {
-    return $this->pattern->getData()->toArray();
   }
 }

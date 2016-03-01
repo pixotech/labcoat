@@ -7,11 +7,6 @@ use Labcoat\Data\DataInterface;
 interface PatternInterface {
 
   /**
-   * @return DataInterface
-   */
-  public function getData();
-
-  /**
    * @return string
    */
   public function getDescription();
@@ -70,11 +65,6 @@ interface PatternInterface {
    * @return string
    */
   public function getSubtype();
-
-  /**
-   * @return string
-   */
-  public function getTemplate();
 
   /**
    * @return int
