@@ -27,14 +27,18 @@ class Subtype extends Type implements SubtypeInterface {
     $this->patterns[] = $pattern;
   }
 
-  public function getId() {
-    return $this->type->getId() .'-' . $this->name;
+  /*
+   * @return string
+   */
+  public function getPartial() {
+    return 'viewall-' . $this->type->getName() . '-' . $this->getName();
   }
 
-  public function getPartial() {
-    $type = $this->type->getName();
-    $name = $this->getName();
-    return "viewall-{$type}-{$name}";
+  /**
+   * @return string
+   */
+  public function getStyleguideDirectoryName() {
+    return $this->type->getName() .'-' . $this->getName();
   }
 
   /**
