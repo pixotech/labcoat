@@ -13,12 +13,12 @@ class TemplateFile extends PatternFile implements TemplateFileInterface {
   }
 
   public function getPath() {
-    $path = $this->pattern->getId();
-    return new Path("patterns/$path/$path.twig");
+    $dir = $this->pattern->getStyleguideDirectoryName();
+    return new Path("patterns/$dir/$dir.twig");
   }
 
   protected function getTemplateContent() {
-    return file_get_contents($this->pattern->getFile());
+    return $this->pattern->getTemplateContent();
   }
 
   protected function getTemplateExtension() {

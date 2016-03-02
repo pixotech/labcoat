@@ -12,7 +12,7 @@ class EscapedSourceFile extends PatternFile implements EscapedSourceFileInterfac
   }
 
   public function getPath() {
-    $path = $this->pattern->getId();
-    return new Path("patterns/$path/$path.escaped.html");
+    $dir = $this->pattern->getStyleguideDirectoryName();
+    return new Path("patterns/$dir/$dir.escaped.html");
   }
 }

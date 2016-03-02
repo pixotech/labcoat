@@ -5,7 +5,7 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 use Labcoat\Data\Data;
 use Labcoat\Generator\Files\FileTestCase;
 use Labcoat\Mocks\PatternLab\Styleguide\Files\Html\PageRenderer;
-use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
+use Labcoat\Mocks\PatternLab\Patterns\Pattern;
 
 class PatternPageTest extends FileTestCase {
 
@@ -17,12 +17,12 @@ class PatternPageTest extends FileTestCase {
   }
 
   public function testPath() {
-    $id = 'pattern-id';
+    $dir = 'pattern-id';
     $renderer = new PageRenderer();
     $pattern = new Pattern();
-    $pattern->id = $id;
+    $pattern->styleguideDirectoryName = $dir;
     $file = new PatternPage($renderer, $pattern);
-    $this->assertPath("patterns/{$id}/{$id}.html", $file->getPath());
+    $this->assertPath("patterns/{$dir}/{$dir}.html", $file->getPath());
   }
 
   public function testTime() {
@@ -134,11 +134,11 @@ class PatternPageTest extends FileTestCase {
   }
 
   public function testLineagePath() {
-    $id = 'pattern-id';
+    $dir = 'pattern-id';
     $pattern = new Pattern();
-    $pattern->id = $id;
+    $pattern->styleguideDirectoryName = $dir;
     $lineage = PatternPage::makeLineage($pattern);
     $this->assertArrayHasKey('lineagePath', $lineage);
-    $this->assertEquals("../../{$id}/{$id}.html", $lineage['lineagePath']);
+    $this->assertEquals("../../{$dir}/{$dir}.html", $lineage['lineagePath']);
   }
 }

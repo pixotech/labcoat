@@ -17,6 +17,16 @@ class Pattern implements PatternInterface {
   protected $example = '';
 
   /**
+   * @var PatternInterface[]
+   */
+  protected $includedPatterns = [];
+
+  /**
+   * @var PatternInterface[]
+   */
+  protected $includingPatterns = [];
+
+  /**
    * @var string
    */
   protected $label;
@@ -35,6 +45,11 @@ class Pattern implements PatternInterface {
    * @var string
    */
   protected $subtype;
+
+  /**
+   * @var string
+   */
+  protected $templateContent;
 
   /**
    * @var string
@@ -67,6 +82,20 @@ class Pattern implements PatternInterface {
   }
 
   /**
+   * @return PatternInterface[]
+   */
+  public function getIncludedPatterns() {
+    return $this->includedPatterns;
+  }
+
+  /**
+   * @return PatternInterface[]
+   */
+  public function getIncludingPatterns() {
+    return $this->includingPatterns;
+  }
+
+  /**
    * @return string
    */
   public function getLabel() {
@@ -78,6 +107,13 @@ class Pattern implements PatternInterface {
    */
   public function getName() {
     return $this->name;
+  }
+
+  /**
+   * @return string
+   */
+  public function getPartial() {
+    return PatternLab::makePartial($this->getType(), $this->getName());
   }
 
   /**
@@ -97,8 +133,22 @@ class Pattern implements PatternInterface {
   /**
    * @return string
    */
+  public function getTemplateContent() {
+    return $this->templateContent;
+  }
+
+  /**
+   * @return string
+   */
   public function getType() {
     return $this->type;
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasState() {
+    return !empty($this->state);
   }
 
   /**
@@ -158,6 +208,13 @@ class Pattern implements PatternInterface {
    */
   public function setSubtype($subtype) {
     $this->subtype = $subtype;
+  }
+
+  /**
+   * @param string $content
+   */
+  public function setTemplateContent($content) {
+    $this->templateContent = $content;
   }
 
   /**

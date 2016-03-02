@@ -16,6 +16,12 @@ class Pattern implements PatternInterface {
    */
   public $description;
 
+  public $example;
+
+  public $includedPatterns = [];
+
+  public $includingPatterns = [];
+
   /**
    * @var string
    */
@@ -30,6 +36,11 @@ class Pattern implements PatternInterface {
    * @var string
    */
   public $name;
+
+  /**
+   * @var string
+   */
+  public $partial;
 
   /**
    * @var string
@@ -49,7 +60,17 @@ class Pattern implements PatternInterface {
   /**
    * @var string
    */
+  public $styleguideDirectoryName;
+
+  /**
+   * @var string
+   */
   public $subtype;
+
+  /**
+   * @var string
+   */
+  public $templateContent;
 
   /**
    * @var string
@@ -98,12 +119,19 @@ class Pattern implements PatternInterface {
   /**
    * @return bool
    */
+  public function hasState() {
+    return !empty($this->state);
+  }
+
+  /**
+   * @return bool
+   */
   public function hasSubtype() {
     return !empty($this->subtype);
   }
 
   public function getExample() {
-    // TODO: Implement getExample() method.
+    return $this->example;
   }
 
   public function setDescription($description) {
@@ -112,6 +140,20 @@ class Pattern implements PatternInterface {
 
   public function setExample($example) {
     // TODO: Implement setExample() method.
+  }
+
+  /**
+   * @return array
+   */
+  public function getIncludedPatterns() {
+    return $this->includedPatterns;
+  }
+
+  /**
+   * @return array
+   */
+  public function getIncludingPatterns() {
+    return $this->includingPatterns;
   }
 
   public function setLabel($label) {
@@ -127,7 +169,7 @@ class Pattern implements PatternInterface {
   }
 
   public function getStyleguideDirectoryName() {
-    // TODO: Implement getStyleguideDirectoryName() method.
+    return $this->styleguideDirectoryName;
   }
 
   public function setSubtype($subtype) {
@@ -136,5 +178,17 @@ class Pattern implements PatternInterface {
 
   public function setType($type) {
     // TODO: Implement setType() method.
+  }
+
+  public function getPartial() {
+    return $this->partial;
+  }
+
+  public function getTemplateContent() {
+    return $this->templateContent;
+  }
+
+  public function setTemplateContent($content) {
+    $this->templateContent = $content;
   }
 }

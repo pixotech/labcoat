@@ -3,16 +3,16 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Patterns;
 
 use Labcoat\Generator\Files\FileTestCase;
-use Labcoat\Mocks\PatternLab\Styleguide\Patterns\Pattern;
+use Labcoat\Mocks\PatternLab\Patterns\Pattern;
 
 class SourceFileTest extends FileTestCase {
 
   public function testPath() {
-    $id = 'pattern-id';
+    $dir = 'pattern-id';
     $pattern = new Pattern();
-    $pattern->id = $id;
+    $pattern->styleguideDirectoryName = $dir;
     $file = new SourceFile($pattern);
-    $this->assertPath("patterns/{$id}/{$id}.pattern.html", $file->getPath());
+    $this->assertPath("patterns/{$dir}/{$dir}.pattern.html", $file->getPath());
   }
 
   public function testPut() {

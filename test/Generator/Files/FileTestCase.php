@@ -4,6 +4,7 @@ namespace Labcoat\Generator\Files;
 
 use Labcoat\Generator\Paths\Path;
 use Labcoat\Generator\Paths\PathInterface;
+use Labcoat\Mocks\PatternLab\Styleguide\Files\Html\PageRenderer;
 
 abstract class FileTestCase extends \PHPUnit_Framework_TestCase {
 
@@ -21,6 +22,10 @@ abstract class FileTestCase extends \PHPUnit_Framework_TestCase {
     $file = tempnam(sys_get_temp_dir(), $prefix);
     $this->testFiles[] = $file;
     return $file;
+  }
+
+  protected function makeRenderer() {
+    return new PageRenderer();
   }
 
   protected function tearDown() {

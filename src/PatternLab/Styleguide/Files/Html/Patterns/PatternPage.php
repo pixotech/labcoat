@@ -3,8 +3,8 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 
 use Labcoat\Generator\Paths\Path;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageRendererInterface;
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
 
 class PatternPage extends Page implements PatternPageInterface {
@@ -32,10 +32,10 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public static function makeLineage(PatternInterface $pattern) {
-    $id = $pattern->getId();
+    $dir = $pattern->getStyleguideDirectoryName();
     return [
       'lineagePattern' => $pattern->getPartial(),
-      'lineagePath' => "../../{$id}/{$id}.html",
+      'lineagePath' => "../../{$dir}/{$dir}.html",
     ];
   }
 
@@ -69,8 +69,8 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getPath() {
-    $path = $this->pattern->getId();
-    return new Path("patterns/$path/$path.html");
+    $dir = $this->pattern->getStyleguideDirectoryName();
+    return new Path("patterns/$dir/$dir.html");
   }
 
   public function getPattern() {
@@ -78,6 +78,6 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getTime() {
-    return $this->pattern->getTime();
+    return time();
   }
 }

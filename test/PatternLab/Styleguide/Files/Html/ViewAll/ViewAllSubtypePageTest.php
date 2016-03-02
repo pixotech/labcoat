@@ -10,19 +10,17 @@ class ViewAllSubtypePageTest extends FileTestCase {
 
   public function testPath() {
     $name = 'subtype-id';
-    $renderer = new PageRenderer();
     $subtype = new Subtype();
     $subtype->styleguideDirectoryName = $name;
-    $page = new ViewAllSubtypePage($renderer, $subtype);
+    $page = new ViewAllSubtypePage($this->makeRenderer(), $subtype);
     $this->assertPath("patterns/$name/index.html", $page->getPath());
   }
 
   public function testData() {
     $partial = 'subtype-name';
-    $renderer = new PageRenderer();
     $subtype = new Subtype();
     $subtype->partial = $partial;
-    $page = new ViewAllSubtypePage($renderer, $subtype);
+    $page = new ViewAllSubtypePage($this->makeRenderer(), $subtype);
     $data = $page->getData();
     $this->assertArrayHasKey('patternPartial', $data);
     $this->assertEquals($partial, $data['patternPartial']);

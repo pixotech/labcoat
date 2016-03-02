@@ -12,7 +12,7 @@ class SourceFile extends PatternFile implements SourceFileInterface {
   }
 
   public function getPath() {
-    $path = $this->pattern->getId();
-    return new Path("patterns/$path/$path.pattern.html");
+    $dir = $this->pattern->getStyleguideDirectoryName();
+    return new Path("patterns/$dir/$dir.pattern.html");
   }
 }
