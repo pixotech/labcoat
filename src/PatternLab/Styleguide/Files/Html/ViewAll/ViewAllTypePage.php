@@ -24,7 +24,7 @@ class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
   }
 
   public function getPath() {
-    $id = $this->type->getId();
-    return new Path("patterns/$id/index.html");
+    $dir = $this->type->getStyleguideDirectoryName();
+    return new Path("patterns/$dir/index.html");
   }
 }

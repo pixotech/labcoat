@@ -12,16 +12,6 @@ interface TypeInterface {
   public function addPattern(PatternInterface $pattern);
 
   /**
-   * @param PatternInterface[] $patterns
-   */
-  public function addPatterns(array $patterns);
-
-  /**
-   * @return string
-   */
-  public function getId();
-
-  /**
    * @return string
    */
   public function getLabel();
@@ -40,6 +30,11 @@ interface TypeInterface {
    * @return PatternInterface[]
    */
   public function getPatterns();
+
+  /**
+   * @return string
+   */
+  public function getStyleguideDirectoryName();
 
   /**
    * @return SubtypeInterface[]

@@ -9,12 +9,12 @@ use Labcoat\Mocks\PatternLab\Styleguide\Types\Type;
 class ViewAllTypePageTest extends FileTestCase {
 
   public function testPath() {
-    $id = 'type-id';
+    $name = 'type-id';
     $renderer = new PageRenderer();
     $type = new Type();
-    $type->id = $id;
+    $type->name = $name;
     $page = new ViewAllTypePage($renderer, $type);
-    $this->assertPath("patterns/$id/index.html", $page->getPath());
+    $this->assertPath("patterns/$name/index.html", $page->getPath());
   }
 
   public function testData() {

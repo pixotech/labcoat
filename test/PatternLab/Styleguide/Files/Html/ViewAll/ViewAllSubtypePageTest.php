@@ -9,12 +9,12 @@ use Labcoat\Mocks\PatternLab\Styleguide\Types\Subtype;
 class ViewAllSubtypePageTest extends FileTestCase {
 
   public function testPath() {
-    $id = 'subtype-id';
+    $name = 'subtype-id';
     $renderer = new PageRenderer();
     $subtype = new Subtype();
-    $subtype->id = $id;
+    $subtype->styleguideDirectoryName = $name;
     $page = new ViewAllSubtypePage($renderer, $subtype);
-    $this->assertPath("patterns/$id/index.html", $page->getPath());
+    $this->assertPath("patterns/$name/index.html", $page->getPath());
   }
 
   public function testData() {

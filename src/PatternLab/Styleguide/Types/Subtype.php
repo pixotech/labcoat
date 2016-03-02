@@ -14,10 +14,9 @@ class Subtype extends Type implements SubtypeInterface {
   /**
    * @param TypeInterface $type
    * @param string $name
-   * @param array $patterns
    */
-  public function __construct(TypeInterface $type, $name, array $patterns = []) {
-    parent::__construct($name, $patterns);
+  public function __construct(TypeInterface $type, $name) {
+    parent::__construct($name);
     $this->type = $type;
   }
 

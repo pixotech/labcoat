@@ -7,19 +7,15 @@ use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
 
 class Subtype implements SubtypeInterface {
 
-  public $id;
   public $label;
   public $name;
   public $partial;
   public $patterns = [];
+  public $styleguideDirectoryName;
   public $type;
 
   public function addPattern(PatternInterface $pattern) {
     // TODO: Implement addPattern() method.
-  }
-
-  public function addPatterns(array $patterns) {
-    // TODO: Implement addPatterns() method.
   }
 
   public function getName() {
@@ -38,16 +34,12 @@ class Subtype implements SubtypeInterface {
     return $this->type;
   }
 
-  public function getId() {
-    return $this->id;
-  }
-
   public function getLabel() {
     return $this->label;
   }
 
-  public function getPagePath() {
-    // TODO: Implement getPagePath() method.
+  public function getStyleguideDirectoryName() {
+    return $this->styleguideDirectoryName;
   }
 
   public function getSubtypes() {

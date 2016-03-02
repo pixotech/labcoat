@@ -7,20 +7,15 @@ use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 class Type implements TypeInterface {
 
-  public $id;
   public $label;
   public $name;
   public $partial;
-  public $path;
   public $patterns = [];
+  public $styleguideDirectoryPath;
   public $subtypes = [];
 
   public function addPattern(PatternInterface $pattern) {
     $this->patterns[] = $pattern;
-  }
-
-  public function addPatterns(array $patterns) {
-    foreach ($patterns as $pattern) $this->addPattern($pattern);
   }
 
   public function getName() {
@@ -39,15 +34,15 @@ class Type implements TypeInterface {
     return $this->subtypes;
   }
 
-  public function getId() {
-    return $this->id;
-  }
-
   public function getLabel() {
     return $this->label;
   }
 
   public function getPartial() {
     return $this->partial;
+  }
+
+  public function getStyleguideDirectoryName() {
+    return $this->getName();
   }
 }
