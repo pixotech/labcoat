@@ -23,16 +23,10 @@ class PageRenderer implements PageRendererInterface {
   protected $styleguideTemplateParser;
 
 
-  public function __construct($header, $footer) {
+  public function __construct($header, $footer, $cacheBuster = null) {
+    $this->cacheBuster = $cacheBuster ?: time();
     $this->makeHeaderFooterTemplateParser($header, $footer);
     $this->makeStyleguideTemplateParser();
-  }
-
-  /**
-   * @return string
-   */
-  public function getCacheBuster() {
-    return $this->cacheBuster;
   }
 
   public function renderPage($content, array $data = []) {
@@ -45,18 +39,11 @@ class PageRenderer implements PageRendererInterface {
   }
 
   /**
-   * @param string $cacheBuster
-   */
-  public function setCacheBuster($cacheBuster) {
-    $this->cacheBuster = $cacheBuster;
-  }
-
-  /**
    * @param array $data
    * @return string
    */
   protected function makeGeneralFooter(array $data) {
-    $vars = ['cacheBuster' => $this->getCacheBuster(), 'patternData' => json_encode($data)];
+    $vars = ['cacheBuster' => $this->cacheBuster, 'patternData' => json_encode($data)];
     return $this->styleguideTemplateParser->render('partials/general-footer', $vars);
   }
 
@@ -64,7 +51,7 @@ class PageRenderer implements PageRendererInterface {
    * @return string
    */
   protected function makeGeneralHeader() {
-    $vars = ['cacheBuster' => $this->getCacheBuster()];
+    $vars = ['cacheBuster' => $this->cacheBuster];
     return $this->styleguideTemplateParser->render('partials/general-header', $vars);
   }
 
@@ -83,12 +70,12 @@ class PageRenderer implements PageRendererInterface {
   }
 
   protected function renderFooter(array $data) {
-    $vars = ['cacheBuster' => $this->getCacheBuster(), 'patternLabFoot' => $this->makeGeneralFooter($data)];
+    $vars = ['cacheBuster' => $this->cacheBuster, 'patternLabFoot' => $this->makeGeneralFooter($data)];
     return $this->headerFooterTemplateParser->render('footer', $vars);
   }
 
   protected function renderHeader() {
-    $vars = ['cacheBuster' => $this->getCacheBuster(), 'patternLabHead' => $this->makeGeneralHeader()];
+    $vars = ['cacheBuster' => $this->cacheBuster, 'patternLabHead' => $this->makeGeneralHeader()];
     return $this->headerFooterTemplateParser->render('header', $vars);
   }
 }

@@ -10,9 +10,4 @@ class ViewAllPageTest extends FileTestCase {
     $page = new ViewAllPage($this->makeRenderer());
     $this->assertPath('styleguide/html/styleguide.html', $page->getPath());
   }
-
-  public function testTime() {
-    $page = new ViewAllPage($this->makeRenderer());
-    $this->assertEquals(null, $page->getTime());
-  }
 }

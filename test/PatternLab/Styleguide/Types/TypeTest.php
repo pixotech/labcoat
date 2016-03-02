@@ -12,10 +12,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($name, $type->getName());
   }
 
-  public function testNameDoesntHaveOrdering() {
+  public function testNameHasOrdering() {
     $name = '01-one';
     $type = new Type($name);
-    $this->assertEquals('one', $type->getName());
+    $this->assertEquals($name, $type->getName());
   }
 
   public function testLabel() {

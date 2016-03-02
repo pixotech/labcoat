@@ -19,10 +19,10 @@ class SubtypeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($name, $subtype->getName());
   }
 
-  public function testNameDoesntHaveOrdering() {
+  public function testNameHasOrdering() {
     $name = '01-one';
     $subtype = new Subtype(new Type(), $name);
-    $this->assertEquals('one', $subtype->getName());
+    $this->assertEquals($name, $subtype->getName());
   }
 
   public function testLabel() {
