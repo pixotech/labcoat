@@ -52,7 +52,7 @@ class Type implements TypeInterface {
    * @return string
    */
   public function getName() {
-    return PatternLab::stripOrdering($this->name);
+    return $this->name;
   }
 
   /**
@@ -73,7 +73,7 @@ class Type implements TypeInterface {
    * @return string
    */
   public function getStyleguideDirectoryName() {
-    return $this->getName();
+    return $this->name;
   }
 
   /**

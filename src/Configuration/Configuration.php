@@ -149,6 +149,13 @@ class Configuration implements ConfigurationInterface {
   }
 
   /**
+   * @return \Labcoat\Templates\Collection
+   */
+  public function getTemplates() {
+    return Template::inDirectory($this->getPatternsDirectory());
+  }
+
+  /**
    * @return array
    */
   public function getTwigOptions() {
@@ -220,12 +227,5 @@ class Configuration implements ConfigurationInterface {
     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
     $regex = '|\.' . preg_quote($ext) . '$|';
     return new \RegexIterator($files, $regex, \RegexIterator::MATCH);
-  }
-
-  /**
-   * @return \Labcoat\Templates\Collection
-   */
-  protected function getTemplates() {
-    return Template::inDirectory($this->getPatternsDirectory());
   }
 }

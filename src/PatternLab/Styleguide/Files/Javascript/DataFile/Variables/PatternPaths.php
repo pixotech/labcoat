@@ -2,6 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
 
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class PatternPaths extends Variable {
@@ -31,16 +32,16 @@ class PatternPaths extends Variable {
   public function getValue() {
     $paths = [];
     foreach ($this->styleguide->getTypes() as $type) {
-      $typeName = $type->getName();
+      $typeName = PatternLab::stripOrdering($type->getName());
       foreach ($type->getSubtypes() as $subtype) {
         foreach ($subtype->getPatterns() as $pattern) {
-          $patternName = (string)$pattern->getName();
-          $paths[$typeName][$patternName] = $pattern->getId();
+          $patternName = PatternLab::stripOrdering($pattern->getName());
+          $paths[$typeName][$patternName] = $pattern->getStyleguideDirectoryName();
         }
       }
       foreach ($type->getPatterns() as $pattern) {
-        $patternName = (string)$pattern->getName();
-        $paths[$typeName][$patternName] = $pattern->getId();
+        $patternName = PatternLab::stripOrdering($pattern->getName());
+        $paths[$typeName][$patternName] = $pattern->getStyleguideDirectoryName();
       }
     }
     return $paths;

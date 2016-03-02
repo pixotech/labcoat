@@ -2,6 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
 
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class ViewAllPaths extends Variable {
@@ -31,13 +32,13 @@ class ViewAllPaths extends Variable {
   public function getValue() {
     $paths = [];
     foreach ($this->styleguide->getTypes() as $type) {
-      $typeName = $type->getName();
+      $typeName = PatternLab::stripOrdering($type->getName());
       foreach ($type->getSubtypes() as $subtype) {
-        $subtypeName = $subtype->getName();
-        $paths[$typeName][$subtypeName] = $subtype->getId();
+        $subtypeName = PatternLab::stripOrdering($subtype->getName());
+        $paths[$typeName][$subtypeName] = $subtype->getStyleguideDirectoryName();
       }
       if ($type->hasSubtypes()) {
-        $paths[$typeName]['all'] = $type->getId();
+        $paths[$typeName]['all'] = $type->getStyleguideDirectoryName();
       }
     }
     return $paths;

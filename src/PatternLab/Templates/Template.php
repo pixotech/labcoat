@@ -2,12 +2,19 @@
 
 namespace Labcoat\PatternLab\Templates;
 
+use Labcoat\PatternLab\PatternLab;
+
 class Template extends \Labcoat\Templates\Template implements TemplateInterface {
 
   /**
    * @var array
    */
   protected $data;
+
+  /**
+   * @var string
+   */
+  protected $partial;
 
   /**
    * @var array
@@ -21,12 +28,22 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
     return new Collection();
   }
 
+  public function __construct(\SplFileInfo $file, $id = null) {
+    parent::__construct($file, $id);
+    list($name, $type) = PatternLab::splitPath($id);
+    $this->partial = PatternLab::makePartial($type, $name);
+  }
+
   /**
    * @return array
    */
   public function getData() {
     if (!isset($this->data)) $this->findData();
     return $this->data;
+  }
+
+  public function getPartial() {
+    return $this->partial;
   }
 
   /**
@@ -51,6 +68,11 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
   public function hasVariants() {
     if (!isset($this->variants)) $this->findVariants();
     return !empty($this->variants);
+  }
+
+  public function is($name) {
+    if ($this->isPath($name)) $name = $this->makePartialFromPath($name);
+    return $name == $this->getPartial();
   }
 
   protected function findData() {
@@ -78,7 +100,22 @@ class Template extends \Labcoat\Templates\Template implements TemplateInterface 
     return $this->getPathWithoutExtension() . '~*.json';
   }
 
+  protected function isPath($selector) {
+    return strpbrk($selector, DIRECTORY_SEPARATOR . '/') !== false;
+  }
+
   protected function loadData($path) {
     return json_decode(file_get_contents($path), true);
+  }
+
+  protected function makePartialFromPath($path) {
+    list($name, $type) = PatternLab::splitPath($this->stripExtension($path));
+    return PatternLab::makePartial($type, $name);
+  }
+
+  protected function stripExtension($path) {
+    $ext = '.twig';
+    if (substr($path, 0 - strlen($ext)) == $ext) $path = substr($path, 0, 0 - strlen($ext));
+    return $path;
   }
 }

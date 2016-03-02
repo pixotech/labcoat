@@ -18,7 +18,6 @@ interface ConfigurationInterface {
   public function getIgnoredExtensions();
   public function getListItemFiles();
   public function getPatternExtension();
-  public function getPatterns();
   public function getPatternsDirectory();
 
   /**
@@ -31,6 +30,12 @@ interface ConfigurationInterface {
   public function getStyleguideFooter();
   public function getStyleguideHeader();
   public function getStyleguideTemplatesDirectories();
+
+  /**
+   * @return \Labcoat\PatternLab\Templates\CollectionInterface
+   */
+  public function getTemplates();
+
   public function getTwigOptions();
   public function hasStyleguideFooter();
   public function hasStyleguideHeader();

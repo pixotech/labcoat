@@ -38,7 +38,7 @@ class Subtype extends Type implements SubtypeInterface {
    * @return string
    */
   public function getStyleguideDirectoryName() {
-    return $this->type->getName() .'-' . $this->getName();
+    return $this->type->getStyleguideDirectoryName() .'-' . $this->name;
   }
 
   /**

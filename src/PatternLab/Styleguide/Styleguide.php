@@ -25,8 +25,6 @@ use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
 use Labcoat\Generator\Generator;
-use Labcoat\PatternLabInterface;
-use Labcoat\Twig\Loader;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -58,23 +56,15 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected $patternHeaderTemplatePath;
 
-  protected $patternRenderer;
-
   /**
-   * @var Patterns\PatternInterface[]
+   * @var PatternInterface[]
    */
   protected $patterns = [];
-
-  protected $patternTemplateParser;
 
   /**
    * @var Types\TypeInterface[]
    */
   protected $types = [];
-
-  public function __construct(PatternLabInterface $patternlab) {
-    $this->patternTemplateParser = $this->makePatternTemplateParser($patternlab);
-  }
 
   public function __toString() {
     $str = '';
@@ -109,6 +99,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * {@inheritdoc}
    */
   public function getCacheBuster() {
+    if (!isset($this->cacheBuster)) $this->cacheBuster = (string)time();
     return $this->cacheBuster;
   }
 
@@ -123,7 +114,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @return array
    */
   public function getHiddenControls() {
-    return $this->hiddenControls;
+    return $this->hiddenControls ?: ['hay'];
   }
 
   /**
@@ -261,11 +252,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->pageRenderer;
   }
 
-  protected function getPatternRenderer() {
-    if (!isset($this->patternRenderer)) $this->patternRenderer = $this->makePatternRenderer();
-    return $this->patternRenderer;
-  }
-
   protected function getPatterns() {
     return $this->patterns;
   }
@@ -318,10 +304,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     /** @var Files\Html\ViewAll\ViewAllPageInterface[] $indexes */
     $indexes = ['all' => new ViewAllPage($this->getPageRenderer())];
     foreach ($this->getTypes() as $type) {
-      $typeId = $type->getId();
+      $typeId = $type->getName();
       $indexes[$typeId] = new ViewAllTypePage($this->getPageRenderer(), $type);
       foreach ($type->getSubtypes() as $subtype) {
-        $subtypeId = $subtype->getId();
+        $subtypeId = $subtype->getName();
         $indexes[$subtypeId] = new ViewAllSubtypePage($this->getPageRenderer(), $subtype);
         foreach ($subtype->getPatterns() as $pattern) {
           $indexes['all']->addPattern($pattern);
@@ -357,14 +343,5 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $this->addFile(new EscapedSourceFile($pattern));
       $this->addFile(new TemplateFile($pattern));
     }
-  }
-
-  protected function makePatternRenderer() {
-    return new PatternRenderer($this->patternTemplateParser, $this->getGlobalData());
-  }
-
-  protected function makePatternTemplateParser(PatternLabInterface $patternlab) {
-    $loader = new Loader($patternlab);
-    return new \Twig_Environment($loader);
   }
 }

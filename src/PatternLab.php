@@ -12,6 +12,10 @@ namespace Labcoat;
 use Labcoat\Configuration\ConfigurationInterface;
 use Labcoat\Configuration\LabcoatConfiguration;
 use Labcoat\Configuration\StandardEditionConfiguration;
+use Labcoat\PatternLab\Patterns\Pattern;
+use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Styleguide;
+use Labcoat\PatternLab\Templates\TemplateInterface;
 
 /**
  * @deprecated 1.1.0 PatternLab classes moved to \Labcoat\PatternLab
@@ -19,14 +23,24 @@ use Labcoat\Configuration\StandardEditionConfiguration;
 class PatternLab implements PatternLabInterface {
 
   /**
-   * @var \Labcoat\PatternLab\Patterns\PatternInterface[]
+   * @var ConfigurationInterface
    */
-  protected $patterns;
+  protected $config;
 
   /**
-   * @return \Labcoat\PatternLab\Styleguide\StyleguideInterface[]
+   * @var array
    */
-  protected $styleguide;
+  protected $globalData;
+
+  /**
+   * @var PatternLab\Templates\CollectionInterface
+   */
+  protected $templates;
+
+  /**
+   * @var \Twig_Environment
+   */
+  protected $twig;
 
   /**
    * Is this a partial name?
@@ -90,8 +104,7 @@ class PatternLab implements PatternLabInterface {
    * @param \Labcoat\Configuration\ConfigurationInterface $config A configuration object
    */
   public function __construct(ConfigurationInterface $config) {
-    $this->patterns = $config->getPatterns();
-    $this->styleguide = $config->getStyleguide($this);
+    $this->config = $config;
   }
 
   /**
@@ -105,6 +118,66 @@ class PatternLab implements PatternLabInterface {
    * @return PatternLab\Styleguide\StyleguideInterface
    */
   public function getStyleguide() {
-    return $this->styleguide;
+    $styleguide = new Styleguide();
+    $styleguide->setAnnotationsFilePath($this->config->getAnnotationsFile());
+    $styleguide->setPatternHeaderTemplatePath($this->config->getStyleguideHeader());
+    $styleguide->setPatternFooterTemplatePath($this->config->getStyleguideFooter());
+    foreach ($this->getTemplates() as $template) {
+      /** @var PatternLab\Templates\Template $template */
+      $pattern = $this->makePattern($template);
+      $styleguide->addPattern($pattern);
+      foreach ($template->getVariants() as $variant => $data) {
+        $styleguide->addPattern($this->makePseudoPattern($pattern, $variant, $data));
+      }
+    }
+    return $styleguide;
+  }
+
+  protected function getGlobalData() {
+    if (!isset($this->globalData)) {
+      $this->globalData = [];
+      foreach ($this->config->getGlobalDataFiles() as $file) {
+        $fileData = json_decode(file_get_contents($file), true);
+        $this->globalData = array_replace_recursive($this->globalData, $fileData);
+      }
+    }
+    return $this->globalData;
+  }
+
+  protected function getTemplates() {
+    if (!isset($this->templates)) {
+      $this->templates = $this->config->getTemplates();
+    }
+    return $this->templates;
+  }
+
+  protected function getTwig() {
+    if (!isset($this->twig)) {
+      $this->twig = new \Twig_Environment($this->getTemplates());
+    }
+    return $this->twig;
+  }
+
+  protected function makePattern(TemplateInterface $template) {
+    list($name, $type, $subtype) = PatternLab\PatternLab::splitPath($template->getId());
+    $pattern = new Pattern($name, $type, $subtype);
+    $pattern->setLabel(PatternLab\PatternLab::makeLabel($name));
+    $pattern->setTemplateContent(file_get_contents($template->getFile()));
+    $pattern->setExample($this->makePatternExample($template));
+    return $pattern;
+  }
+
+  protected function makePatternExample(TemplateInterface $template) {
+    $templateData = $template->hasData() ? $template->getData() : [];
+    $data = array_replace_recursive($this->getGlobalData(), $templateData);
+    return $this->getTwig()->render($template->getId(), $data);
+  }
+
+  protected function makePseudoPattern(PatternInterface $pattern, $variant, $data) {
+    $name = $pattern->getName() . '-' . $variant;
+    $pseudo = new Pattern($name, $pattern->getType(), $pattern->hasSubtype() ? $pattern->getSubtype() : null);
+    $pseudo->setLabel(PatternLab\PatternLab::makeLabel($name));
+    $pseudo->setTemplateContent($pattern->getTemplateContent());
+    return $pseudo;
   }
 }

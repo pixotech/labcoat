@@ -2,7 +2,8 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
 
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
+use Labcoat\PatternLab\PatternLab;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
 use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
@@ -42,9 +43,9 @@ class NavigationItems extends Variable {
   }
 
   protected function makeNavPattern(PatternInterface $pattern) {
-    $id = $pattern->getId();
+    $dir = $pattern->getStyleguideDirectoryName();
     return [
-      'patternPath' => "$id/$id.html",
+      'patternPath' => "$dir/$dir.html",
       'patternName' => $pattern->getLabel(),
       'patternPartial' => $pattern->getPartial(),
       'patternState' => $pattern->getState(),
@@ -53,7 +54,7 @@ class NavigationItems extends Variable {
 
   protected function makeNavSubtype(SubtypeInterface $subtype) {
     $data = [
-      'patternSubtypeLC' => $subtype->getName(),
+      'patternSubtypeLC' => PatternLab::stripOrdering($subtype->getName()),
       'patternSubtypeUC' => $subtype->getLabel(),
       'patternSubtype' => $subtype->getName(),
       'patternSubtypeItems' => [],
@@ -68,11 +69,11 @@ class NavigationItems extends Variable {
   }
 
   protected function makeNavSubtypeItem(SubtypeInterface $subtype) {
-    $id = $subtype->getId();
+    $dir = $subtype->getStyleguideDirectoryName();
     return [
-      "patternPath" => "$id/index.html",
+      "patternPath" => "$dir/index.html",
       "patternName" => self::VIEW_ALL,
-      "patternType" => $subtype->getType()->getId(),
+      "patternType" => $subtype->getType()->getName(),
       "patternSubtype" => $subtype->getName(),
       "patternPartial" => $subtype->getPartial(),
     ];
@@ -80,9 +81,9 @@ class NavigationItems extends Variable {
 
   protected function makeNavType(TypeInterface $type) {
     $data = [
-      'patternTypeLC' => $type->getName(),
+      'patternTypeLC' => PatternLab::stripOrdering($type->getName()),
       'patternTypeUC' => $type->getLabel(),
-      'patternType' => $type->getId(),
+      'patternType' => $type->getName(),
       'patternTypeItems' => [],
       'patternItems' => [],
     ];
@@ -99,11 +100,11 @@ class NavigationItems extends Variable {
   }
 
   protected function makeNavTypeItem(TypeInterface $type) {
-    $id = $type->getId();
+    $dir = $type->getStyleguideDirectoryName();
     return [
-      "patternPath" => "$id/index.html",
+      "patternPath" => "$dir/index.html",
       "patternName" => self::VIEW_ALL,
-      "patternType" => $type->getId(),
+      "patternType" => $type->getName(),
       "patternSubtype" => 'all',
       "patternPartial" => $type->getPartial(),
     ];
