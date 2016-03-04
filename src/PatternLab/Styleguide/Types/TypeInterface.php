@@ -24,6 +24,11 @@ interface TypeInterface {
   /**
    * @return string
    */
+  public function getNameWithoutOrdering();
+
+  /**
+   * @return string
+   */
   public function getPartial();
 
   /**

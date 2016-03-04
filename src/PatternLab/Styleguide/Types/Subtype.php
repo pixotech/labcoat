@@ -31,7 +31,7 @@ class Subtype extends Type implements SubtypeInterface {
    * @return string
    */
   public function getPartial() {
-    return 'viewall-' . $this->type->getName() . '-' . $this->getName();
+    return 'viewall-' . $this->type->getNameWithoutOrdering() . '-' . $this->getNameWithoutOrdering();
   }
 
   /**

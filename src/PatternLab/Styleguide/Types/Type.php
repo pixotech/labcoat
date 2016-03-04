@@ -56,6 +56,13 @@ class Type implements TypeInterface {
   }
 
   /**
+   * @return string
+   */
+  public function getNameWithoutOrdering() {
+    return PatternLab::stripOrdering($this->getName());
+  }
+
+  /**
    * @return PatternInterface[]
    */
   public function getPatterns() {
@@ -66,7 +73,7 @@ class Type implements TypeInterface {
    * @return string
    */
   public function getPartial() {
-    return 'viewall-' . $this->getName() . '-all';
+    return 'viewall-' . $this->getNameWithoutOrdering() . '-all';
   }
 
   /**
