@@ -36,7 +36,9 @@ class NavigationItems extends Variable {
    */
   public function getValue() {
     $nav = ['patternTypes' => []];
-    foreach ($this->styleguide->getTypes() as $type) {
+    $types = $this->styleguide->getTypes();
+    ksort($types);
+    foreach ($types as $type) {
       $nav['patternTypes'][] = $this->makeNavType($type);
     }
     return $nav;
@@ -59,7 +61,9 @@ class NavigationItems extends Variable {
       'patternSubtype' => $subtype->getName(),
       'patternSubtypeItems' => [],
     ];
-    foreach ($subtype->getPatterns() as $pattern) {
+    $patterns = $subtype->getPatterns();
+    ksort($patterns);
+    foreach ($patterns as $pattern) {
       $data['patternSubtypeItems'][] = $this->makeNavPattern($pattern);
     }
     if (count($data['patternSubtypeItems'])) {
@@ -87,10 +91,14 @@ class NavigationItems extends Variable {
       'patternTypeItems' => [],
       'patternItems' => [],
     ];
-    foreach ($type->getSubtypes() as $subtype) {
+    $subtypes = $type->getSubtypes();
+    ksort($subtypes);
+    foreach ($subtypes as $subtype) {
       $data['patternTypeItems'][] = $this->makeNavSubtype($subtype);
     }
-    foreach ($type->getPatterns() as $pattern) {
+    $patterns = $type->getPatterns();
+    ksort($patterns);
+    foreach ($patterns as $pattern) {
       $data['patternItems'][] = $this->makeNavPattern($pattern);
     }
     if (count($data['patternTypeItems'])) {

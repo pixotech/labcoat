@@ -38,7 +38,7 @@ class Type implements TypeInterface {
    */
   public function addPattern(PatternInterface $pattern) {
     if ($pattern->hasSubtype()) $this->getOrCreateSubtype($pattern->getSubtype())->addPattern($pattern);
-    else $this->patterns[] = $pattern;
+    else $this->patterns[$pattern->getName()] = $pattern;
   }
 
   /**
