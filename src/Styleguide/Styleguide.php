@@ -183,13 +183,18 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $includes = [];
     foreach ($this->patterns as $id => $pattern) {
       foreach ($pattern->getIncludedPatterns() as $included) {
-        if (!isset($includes[$included])) {
-          $includedPattern = $this->patternlab->getPattern($included);
-          $includes[$included] = $includedPattern->getId();
+        try {
+          if (!isset($includes[$included])) {
+            $includedPattern = $this->patternlab->getPattern($included);
+            $includes[$included] = $includedPattern->getId();
+          }
+          $includeId = $includes[$included];
+          $pattern->addIncludedPattern($this->patterns[$includeId]);
+          $this->patterns[$includeId]->addIncludingPattern($pattern);
         }
-        $includeId = $includes[$included];
-        $pattern->addIncludedPattern($this->patterns[$includeId]);
-        $this->patterns[$includeId]->addIncludingPattern($pattern);
+        catch (\OutOfBoundsException $e) {
+          continue;
+        }
       }
     }
   }
