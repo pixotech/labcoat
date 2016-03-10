@@ -125,6 +125,10 @@ class Document implements DocumentInterface {
   }
 
   protected function makeHead() {
+    return $this->makeElement('head', $this->makeHeadContent());
+  }
+
+  protected function makeHeadContent() {
     $head  = $this->makeTitle();
     $head .= $this->makeCharsetMeta();
     $head .= $this->makeMeta('viewport', 'width=device-width');
@@ -140,7 +144,7 @@ class Document implements DocumentInterface {
     }
     if ($this->hasStyles()) $head .= $this->makeStyleBlocks();
     if (!$this->hasStyles() && $this->hasStylesheets()) $head .= $this->makeStylesheetLinks();
-    return $this->makeElement('head', $head);
+    return $head;
   }
 
   protected function makeElement($name, $content = null, array $attributes = []) {
