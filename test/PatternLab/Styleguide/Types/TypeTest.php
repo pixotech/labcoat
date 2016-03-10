@@ -44,9 +44,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testAddPattern() {
     $pattern = new Pattern();
+    $pattern->name = 'pattern-name';
     $type = new Type('type');
     $type->addPattern($pattern);
-    $this->assertEquals([$pattern], $type->getPatterns());
+    $this->assertEquals([$pattern->name => $pattern], $type->getPatterns());
   }
 
   public function testAddPatternWithSubtype() {

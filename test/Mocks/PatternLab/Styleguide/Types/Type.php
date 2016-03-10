@@ -2,6 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab\Styleguide\Types;
 
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
@@ -20,6 +21,10 @@ class Type implements TypeInterface {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getNameWithoutOrdering() {
+    return PatternLab::stripOrdering($this->getName());
   }
 
   public function getPatterns() {

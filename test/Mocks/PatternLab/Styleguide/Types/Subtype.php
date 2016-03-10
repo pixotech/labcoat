@@ -2,6 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab\Styleguide\Types;
 
+use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
 
@@ -20,6 +21,10 @@ class Subtype implements SubtypeInterface {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getNameWithoutOrdering() {
+    return PatternLab::stripOrdering($this->getName());
   }
 
   public function getPartial() {
