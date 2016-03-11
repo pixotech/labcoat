@@ -2,7 +2,7 @@
 
 namespace Labcoat\Variables;
 
-class Parser implements ParserInterface {
+class Parser implements ParserInterface, \ArrayAccess {
 
   protected $defaultHandler;
 
@@ -16,6 +16,22 @@ class Parser implements ParserInterface {
 
   public function addHandler($prefix, callable $handler) {
     $this->handlers[$prefix] = $handler;
+  }
+
+  public function offsetExists($var) {
+    return array_key_exists($var, $this->variables);
+  }
+
+  public function offsetGet($var) {
+    return $this->variables[$var];
+  }
+
+  public function offsetSet($var, $value) {
+    $this->variables[$var] = $value;
+  }
+
+  public function offsetUnset($var) {
+    unset($this->variables[$var]);
   }
 
   public function parse(array $source) {
@@ -88,7 +104,7 @@ class Parser implements ParserInterface {
   }
 
   protected function getTemplateVariable($name) {
-    if (!array_key_exists($name, $this->variables)) throw new \OutOfBoundsException("Unknown variable: $name");
+    if (!$this->offsetExists($name)) throw new \OutOfBoundsException("Unknown variable: $name");
     return $this->variables[$name];
   }
 
