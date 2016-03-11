@@ -70,6 +70,18 @@ class Parser implements ParserInterface, \ArrayAccess {
     return false;
   }
 
+  protected function getCount($count) {
+    if (false !== strpos($count, '-')) {
+      list($min, $max) = explode('-', $count);
+      return mt_rand($min, $max);
+    }
+    elseif (false !== strpos($count, '/')) {
+      $options = explode('/', $count);
+      return intval($options[array_rand($options)]);
+    }
+    return intval($count);
+  }
+
   protected function getDataVariable($data, $var) {
     if (is_array($data)) {
       return $data[$var];
@@ -94,9 +106,19 @@ class Parser implements ParserInterface, \ArrayAccess {
   }
 
   protected function getTemplateClass($className) {
+    $count = null;
+    if (preg_match('#\[([0-9-/]+)\]$#', $className, $m)) {
+      $count = $this->getCount($m[1]);
+      $className = substr($className, 0, strlen($className) - strlen($m[0]));
+    }
     if (!class_exists($className)) throw new \OutOfBoundsException("Unknown class: $className");
     $klass = new \ReflectionClass($className);
-    return $klass->newInstance();
+    $instances = [];
+    $instanceCount = isset($count) ? $count : 1;
+    for ($i = 0; $i < $instanceCount; $i++) {
+      $instances[] = $klass->newInstance();
+    }
+    return isset($count) ? $instances : $instances[0];
   }
 
   protected function getTemplateRegex() {
