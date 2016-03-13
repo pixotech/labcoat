@@ -70,4 +70,14 @@ interface StyleguideInterface {
    * @return array
    */
   public function getTypes();
+
+  /**
+   * @return bool
+   */
+  public function hasScripts();
+
+  /**
+   * @return bool
+   */
+  public function hasStylesheets();
 }

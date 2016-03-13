@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Kit;
 
 use Labcoat\Html\Element;
+use Labcoat\PatternLab\Styleguide\Files\Javascript\Variable;
 use Labcoat\PatternLab\Styleguide\Kit\Partials\PatternSection;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
@@ -17,6 +18,7 @@ class ViewAll {
   public function __construct(StyleguideInterface $styleguide, array $patterns = [], $partial = '') {
     $this->styleguide = $styleguide;
     $this->patterns = $patterns;
+    $this->partial = $partial;
   }
 
   public function __toString() {
@@ -56,12 +58,13 @@ class ViewAll {
   }
 
   public function getScriptContent() {
-    $content  = $this->getScriptVariable('patternPartial', $this->getPartial());
-    $content .= $this->getScriptVariable('lineage', '');
-    return $content;
+    return implode('', $this->getScriptVariables());
   }
 
-  public function getScriptVariable($name, $value) {
-    return "var $name = \"$value\";";
+  public function getScriptVariables() {
+    return [
+      new Variable('patternPartial', $this->getPartial()),
+      new Variable('lineage', ''),
+    ];
   }
 }

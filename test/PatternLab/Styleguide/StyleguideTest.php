@@ -38,4 +38,20 @@ class StyleguideTest extends \PHPUnit_Framework_TestCase {
     $styleguide->setBreakpoints($breakpoints);
     $this->assertEquals($breakpoints, $styleguide->getBreakpoints());
   }
+
+  public function testScripts() {
+    $script = '/path/to/script.js';
+    $styleguide = new Styleguide();
+    $styleguide->addScript($script);
+    $this->assertTrue($styleguide->hasScripts());
+    $this->assertEquals([$script], $styleguide->getScripts());
+  }
+
+  public function testStylesheets() {
+    $stylesheet = '/path/to/stylesheet.css';
+    $styleguide = new Styleguide();
+    $styleguide->addStylesheet($stylesheet);
+    $this->assertTrue($styleguide->hasStylesheets());
+    $this->assertEquals([$stylesheet], $styleguide->getStylesheets());
+  }
 }

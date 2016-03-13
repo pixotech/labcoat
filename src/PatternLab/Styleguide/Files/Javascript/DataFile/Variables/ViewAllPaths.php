@@ -2,6 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
 
+use Labcoat\PatternLab\Styleguide\Files\Javascript\Variable;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class ViewAllPaths extends Variable {

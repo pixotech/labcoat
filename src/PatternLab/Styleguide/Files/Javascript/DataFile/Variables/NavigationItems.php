@@ -3,6 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Files\Javascript\Variable;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 use Labcoat\PatternLab\Patterns\Types\TypeInterface;

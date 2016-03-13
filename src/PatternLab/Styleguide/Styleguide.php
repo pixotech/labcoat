@@ -88,6 +88,9 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected $types = [];
 
+  /**
+   * @return string
+   */
   public function __toString() {
     $str = '';
     foreach ($this->getFiles() as $file) {
@@ -96,16 +99,25 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $str;
   }
 
+  /**
+   * @param PatternInterface $pattern
+   */
   public function addPattern(PatternInterface $pattern) {
     $key = $this->getPatternDirectoryName($pattern);
     $this->patterns[$key] = $pattern;
     $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
+  /**
+   * @param string $script
+   */
   public function addScript($script) {
     $this->scripts[] = $script;
   }
 
+  /**
+   * @param string $stylesheet
+   */
   public function addStylesheet($stylesheet) {
     $this->stylesheets[] = $stylesheet;
   }
@@ -247,6 +259,20 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   public function setMinimumWidth($minimumWidth) {
     $this->minimumWidth = $minimumWidth;
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasScripts() {
+    return !empty($this->scripts);
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasStylesheets() {
+    return !empty($this->stylesheets);
   }
 
   protected function addFile(FileInterface $file) {

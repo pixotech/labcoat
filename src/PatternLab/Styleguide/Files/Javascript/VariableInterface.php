@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
+namespace Labcoat\PatternLab\Styleguide\Files\Javascript;
 
 interface VariableInterface {
 
