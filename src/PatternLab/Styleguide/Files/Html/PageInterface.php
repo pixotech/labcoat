@@ -12,7 +12,7 @@ interface PageInterface extends FileInterface {
   public function getContent();
 
   /**
-   * @return array
+   * @return mixed
    */
   public function getData();
 }

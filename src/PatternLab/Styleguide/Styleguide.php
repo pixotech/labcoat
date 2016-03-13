@@ -9,8 +9,8 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
+use Labcoat\Html\Document;
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Files\Html\PageRenderer;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
@@ -24,14 +24,21 @@ use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
-use Labcoat\Generator\Generator;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
-  protected $annotationsFilePath;
+  /**
+   * @var array
+   */
+  protected $annotations = [];
 
   /**
-   * @var int
+   * @var array
+   */
+  protected $breakpoints = [];
+
+  /**
+   * @var string
    */
   protected $cacheBuster;
 
@@ -41,25 +48,30 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $files;
 
   /**
-   * @var array|null
-   */
-  protected $globalData = [];
-
-  /**
    * @var array
    */
-  protected $hiddenControls = [];
+  protected $hiddenControls = ['hay'];
 
-  protected $pageRenderer;
+  protected $maximumWidth = 2600;
 
-  protected $patternFooterTemplatePath;
+  protected $minimumWidth = 240;
 
-  protected $patternHeaderTemplatePath;
+  protected $templateParser;
 
   /**
    * @var PatternInterface[]
    */
   protected $patterns = [];
+
+  /**
+   * @var array
+   */
+  protected $scripts = [];
+
+  /**
+   * @var array
+   */
+  protected $stylesheets = [];
 
   /**
    * @var Types\TypeInterface[]
@@ -80,80 +92,58 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function generate($directory) {
-    $generator = new Generator($this, $directory);
-    return $generator->__invoke();
+  public function addScript($script) {
+    $this->scripts[] = $script;
   }
 
-  /**
-   * @return mixed
-   */
-  public function getAnnotationsFilePath() {
-    return $this->annotationsFilePath;
+  public function addStylesheet($stylesheet) {
+    $this->stylesheets[] = $stylesheet;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheBuster() {
-    if (!isset($this->cacheBuster)) $this->cacheBuster = (string)time();
-    return $this->cacheBuster;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGlobalData() {
-    return $this->globalData;
+  public function getBreakpoints() {
+    return $this->breakpoints;
   }
 
   /**
    * @return array
    */
-  public function getHiddenControls() {
-    return $this->hiddenControls ?: ['hay'];
+  public function getAnnotations() {
+    return $this->annotations;
   }
 
-  /**
-   * {@inheritdoc}
-   */
+  public function getCacheBuster() {
+    if (!isset($this->cacheBuster)) $this->cacheBuster = (string)time();
+    return $this->cacheBuster;
+  }
+
+  public function getHiddenControls() {
+    return $this->hiddenControls;
+  }
+
   public function getIterator() {
     return new \ArrayIterator($this->getFiles());
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public function getMaximumWidth() {
-    return '2600';
+    return $this->maximumWidth;
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public function getMinimumWidth() {
-    return '240';
+    return $this->minimumWidth;
   }
 
   /**
-   * Get the path to the style guide footer template
-   *
-   * @return string The template path
+   * @return array
    */
-  public function getPatternFooterTemplatePath() {
-    return $this->patternFooterTemplatePath;
+  public function getScripts() {
+    return $this->scripts;
   }
 
   /**
-   * Get the path to the style guide header template
-   *
-   * @return string The template path
+   * @return array
    */
-  public function getPatternHeaderTemplatePath() {
-    return $this->patternHeaderTemplatePath;
+  public function getStylesheets() {
+    return $this->stylesheets;
   }
 
   /**
@@ -164,17 +154,17 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * @param string $path
+   * @param array $breakpoints
    */
-  public function setAnnotationsFilePath($path) {
-    $this->annotationsFilePath = $path;
+  public function setBreakpoints($breakpoints) {
+    $this->breakpoints = $breakpoints;
   }
 
   /**
-   * @param array|null $data
+   * @param string $string
    */
-  public function setGlobalData($data) {
-    $this->globalData = $data;
+  public function setCacheBuster($string) {
+    $this->cacheBuster = $string;
   }
 
   /**
@@ -185,24 +175,19 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * @param string $path
+   * @param int $maximumWidth
    */
-  public function setPatternFooterTemplatePath($path) {
-    $this->patternFooterTemplatePath = $path;
+  public function setMaximumWidth($maximumWidth) {
+    $this->maximumWidth = $maximumWidth;
   }
 
   /**
-   * @param string $path
+   * @param int $minimumWidth
    */
-  public function setPatternHeaderTemplatePath($path) {
-    $this->patternHeaderTemplatePath = $path;
+  public function setMinimumWidth($minimumWidth) {
+    $this->minimumWidth = $minimumWidth;
   }
 
-  /**
-   * Add a file to the style guide
-   *
-   * @param FileInterface $file A file object
-   */
   protected function addFile(FileInterface $file) {
     $this->files[(string)$file->getPath()] = $file;
   }
@@ -219,6 +204,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected function findAssetsDirectory() {
     if (!$vendor = $this->findVendorDirectory()) return null;
     $path = implode(DIRECTORY_SEPARATOR, [$vendor, 'pattern-lab', 'styleguidekit-assets-default', 'dist']);
+    return is_dir($path) ? $path : null;
+  }
+
+  protected function findStyleguideTemplatesDirectory() {
+    if (!$vendor = $this->findVendorDirectory()) return null;
+    $path = $this->makePath([$vendor, 'pattern-lab', 'styleguidekit-twig-default', 'views']);
     return is_dir($path) ? $path : null;
   }
 
@@ -239,43 +230,23 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->types[$type];
   }
 
-  protected function getPageFooterContent() {
-    return $this->hasCustomPageFooter() ? file_get_contents($this->patternFooterTemplatePath) : '';
-  }
-
-  protected function getPageHeaderContent() {
-    return $this->hasCustomPageHeader() ? file_get_contents($this->patternHeaderTemplatePath) : '';
-  }
-
-  protected function getPageRenderer() {
-    if (!isset($this->pageRenderer)) $this->pageRenderer = $this->makePageRenderer();
-    return $this->pageRenderer;
-  }
-
   protected function getPatterns() {
     return $this->patterns;
   }
 
-  protected function hasCustomPageFooter() {
-    return !empty($this->patternFooterTemplatePath);
+  protected function getTemplate($path) {
+    $segments = explode('/', $path);
+    array_unshift($this->findStyleguideTemplatesDirectory(), $segments);
+    return file_get_contents($this->makePath($segments));
   }
 
-  protected function hasCustomPageHeader() {
-    return !empty($this->patternHeaderTemplatePath);
-  }
-
-  protected function hasCustomPageTemplates() {
-    return $this->hasCustomPageHeader() and $this->hasCustomPageFooter();
-  }
-
-  protected function hasFolderIndexes() {
-    return true;
+  protected function getTemplateParser() {
+    if (!isset($this->templateParser)) $this->templateParser = $this->makeTemplateParser();
+    return $this->templateParser;
   }
 
   protected function makeAnnotationsFile() {
-    if ($path = $this->getAnnotationsFilePath()) {
-      $this->addFile(new AnnotationsFile($path));
-    }
+    $this->addFile(new AnnotationsFile($this->annotations));
   }
 
   protected function makeAssetFiles() {
@@ -290,6 +261,15 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function makeDataFile() {
     $this->addFile(new DataFile($this));
+  }
+
+  protected function makeDocument($content, array $data = []) {
+    $content .= $this->makeGeneralFooter($data);
+    $document = new Document($content, 'Pattern Lab');
+    $document->setPatternLabHead($this->makeGeneralHeader());
+    foreach ($this->stylesheets as $stylesheet) $document->includeStylesheet($stylesheet);
+    foreach ($this->scripts as $script) $document->includeScript($script);
+    return (string)$document;
   }
 
   protected function makeFiles() {
@@ -327,13 +307,13 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->addFile(new LatestChangeFile(time()));
   }
 
-  protected function makePageRenderer() {
-    return new PageRenderer($this->getPageHeaderContent(), $this->getPageFooterContent());
-  }
-
   protected function makePages() {
     $this->makePatternPages();
-    if ($this->hasFolderIndexes()) $this->makeIndexPages();
+    $this->makeIndexPages();
+  }
+
+  protected function makePath(array $segments) {
+    return implode(DIRECTORY_SEPARATOR, $segments);
   }
 
   protected function makePatternPages() {
@@ -343,5 +323,39 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
       $this->addFile(new EscapedSourceFile($pattern));
       $this->addFile(new TemplateFile($pattern));
     }
+  }
+
+  protected function makeTemplateParser() {
+    $templates = [
+      'partials/general-footer' => $this->getTemplate('partials/general-footer.twig'),
+      'partials/general-header' => $this->getTemplate('partials/general-header.twig'),
+      'patternSection.twig' => $this->getTemplate('partials/patternSection.twig'),
+      'patternSectionSubtype.twig' => $this->getTemplate('partials/patternSectionSubtype.twig'),
+      'viewall' => $this->getTemplate('viewall.twig'),
+    ];
+    $loader = new \Twig_Loader_Array($templates);
+    return new \Twig_Environment($loader);
+  }
+
+  protected function renderPatterns(array $patterns) {
+    $vars = ['partials' => $patterns, 'patternPartial' => ''];
+    return $this->getTemplateParser()->render('viewall', $vars);
+  }
+
+  /**
+   * @param array $data
+   * @return string
+   */
+  protected function makeGeneralFooter(array $data) {
+    $vars = ['cacheBuster' => $this->cacheBuster, 'patternData' => json_encode($data)];
+    return $this->getTemplateParser()->render('partials/general-footer', $vars);
+  }
+
+  /**
+   * @return string
+   */
+  protected function makeGeneralHeader() {
+    $vars = ['cacheBuster' => $this->cacheBuster];
+    return $this->getTemplateParser()->render('partials/general-header', $vars);
   }
 }

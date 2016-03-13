@@ -33,7 +33,7 @@ class ViewAllPage extends Page implements ViewAllPageInterface {
   }
 
   public function getContent() {
-    return $this->renderer->renderPatterns($this->getPartials());
+    return $this->styleguide->renderPatterns($this->getPartials());
   }
 
   public function getPath() {

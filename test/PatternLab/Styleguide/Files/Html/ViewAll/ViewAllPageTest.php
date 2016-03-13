@@ -3,11 +3,13 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Files\FileTestCase;
+use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 
 class ViewAllPageTest extends FileTestCase {
 
   public function testPath() {
-    $page = new ViewAllPage($this->makeRenderer());
+    $styleguide = new Styleguide();
+    $page = new ViewAllPage($styleguide);
     $this->assertPath('styleguide/html/styleguide.html', $page->getPath());
   }
 }

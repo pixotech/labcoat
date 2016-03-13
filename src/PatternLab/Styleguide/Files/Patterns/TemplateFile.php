@@ -20,8 +20,4 @@ class TemplateFile extends PatternFile implements TemplateFileInterface {
   protected function getTemplateContent() {
     return $this->pattern->getTemplateContent();
   }
-
-  protected function getTemplateExtension() {
-    return 'twig';
-  }
 }

@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Files\FileTestCase;
-use Labcoat\Mocks\PatternLab\Styleguide\Files\Html\PageRenderer;
+use Labcoat\Mocks\PatternLab\Styleguide\Styleguide;
 use Labcoat\Mocks\PatternLab\Styleguide\Types\Subtype;
 
 class ViewAllSubtypePageTest extends FileTestCase {
@@ -12,7 +12,8 @@ class ViewAllSubtypePageTest extends FileTestCase {
     $name = 'subtype-id';
     $subtype = new Subtype();
     $subtype->styleguideDirectoryName = $name;
-    $page = new ViewAllSubtypePage($this->makeRenderer(), $subtype);
+    $styleguide = new Styleguide();
+    $page = new ViewAllSubtypePage($styleguide, $subtype);
     $this->assertPath("patterns/$name/index.html", $page->getPath());
   }
 
@@ -20,7 +21,8 @@ class ViewAllSubtypePageTest extends FileTestCase {
     $partial = 'subtype-name';
     $subtype = new Subtype();
     $subtype->partial = $partial;
-    $page = new ViewAllSubtypePage($this->makeRenderer(), $subtype);
+    $styleguide = new Styleguide();
+    $page = new ViewAllSubtypePage($styleguide, $subtype);
     $data = $page->getData();
     $this->assertArrayHasKey('patternPartial', $data);
     $this->assertEquals($partial, $data['patternPartial']);

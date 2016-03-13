@@ -3,7 +3,7 @@
 /**
  * @package Labcoat
  * @author Pixo <info@pixotech.com>
- * @copyright 2015, Pixo
+ * @copyright 2016, Pixo
  * @license http://opensource.org/licenses/NCSA NCSA
  */
 
@@ -14,37 +14,19 @@ use Labcoat\PatternLab\Patterns\PatternInterface;
 interface StyleguideInterface {
 
   /**
-   * @param $pattern
+   * @param PatternInterface $pattern
    */
   public function addPattern(PatternInterface $pattern);
 
   /**
-   * Generate a style guide in the provided directory
-   *
-   * @param string $directory The destination for the new style guide
+   * @return array
    */
-  public function generate($directory);
+  public function getBreakpoints();
 
   /**
    * @return string
    */
-  public function getAnnotationsFilePath();
-
-  /**
-   * Get the cache-busting string
-   *
-   * This string is added to some asset URLs to prevent stale file copies from being served
-   *
-   * @return string The cache-busting string
-   */
   public function getCacheBuster();
-
-  /**
-   * Get the array of global pattern variables
-   *
-   * @return array An array of global variables
-   */
-  public function getGlobalData();
 
   /**
    * @return array
@@ -52,45 +34,27 @@ interface StyleguideInterface {
   public function getHiddenControls();
 
   /**
-   * Maximum size for the viewport resizer
-   *
    * @return int
    */
   public function getMaximumWidth();
 
   /**
-   * Minimum size for the viewport resizer
-   *
    * @return int
    */
   public function getMinimumWidth();
 
   /**
-   * Get the path to the style guide footer template
-   *
-   * @return string The template path
+   * @return array
    */
-  public function getPatternFooterTemplatePath();
+  public function getScripts();
 
   /**
-   * Get the path to the style guide header template
-   *
-   * @return string The template path
+   * @return array
    */
-  public function getPatternHeaderTemplatePath();
+  public function getStylesheets();
 
   /**
    * @return Types\TypeInterface[]
    */
   public function getTypes();
-
-  public function setAnnotationsFilePath($path);
-
-  public function setGlobalData($data);
-
-  public function setHiddenControls(array $controls);
-
-  public function setPatternFooterTemplatePath($path);
-
-  public function setPatternHeaderTemplatePath($path);
 }

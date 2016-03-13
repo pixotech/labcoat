@@ -2,7 +2,7 @@
 
 namespace Labcoat\Mocks\PatternLab\Styleguide;
 
-use Labcoat\PatternLab\Styleguide\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\PageInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
@@ -126,5 +126,17 @@ class Styleguide implements StyleguideInterface {
    */
   public function getTypes() {
     return $this->types;
+  }
+
+  public function getBreakpoints() {
+    // TODO: Implement getBreakpoints() method.
+  }
+
+  public function getScripts() {
+    // TODO: Implement getScripts() method.
+  }
+
+  public function getStylesheets() {
+    // TODO: Implement getStylesheets() method.
   }
 }
