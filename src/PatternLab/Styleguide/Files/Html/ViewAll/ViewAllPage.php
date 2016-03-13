@@ -18,7 +18,7 @@ class ViewAllPage extends Page implements ViewAllPageInterface {
   }
 
   public function getContent() {
-    return new ViewAll($this->getPatterns(), $this->getPartial());
+    return new ViewAll($this->styleguide, $this->getPatterns(), $this->getPartial());
   }
 
   public function getPartial() {

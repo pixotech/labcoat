@@ -71,7 +71,7 @@ SCRIPT;
   }
 
   public function getPatternLoaderScript() {
-    return $this->makeScript($this->getPatternLoaderScript());
+    return $this->makeScript($this->getPatternLoaderScriptContent());
   }
 
   public function getPatternLoaderScriptContent() {

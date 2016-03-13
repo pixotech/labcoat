@@ -4,12 +4,16 @@ namespace Labcoat\PatternLab\Styleguide\Kit\Partials;
 
 use Labcoat\Html\Element;
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class PatternSection {
 
   protected $pattern;
 
-  public function __construct(PatternInterface $source) {
+  protected $styleguide;
+
+  public function __construct(StyleguideInterface $styleguide, PatternInterface $source) {
+    $this->styleguide = $styleguide;
     $this->pattern = $source;
   }
 
@@ -128,8 +132,8 @@ PATTERNLINEAGE;
 
   public function getPatternLineagesContent() {
     $content = '';
-    if ($this->hasPatternLineage()) $content .= $this->getPatternLineage();
-    if ($this->hasPatternReverseLineage()) $content .= $this->getPatternReverseLineage();
+    #if ($this->hasPatternLineage()) $content .= $this->getPatternLineage();
+    #if ($this->hasPatternReverseLineage()) $content .= $this->getPatternReverseLineage();
     if (!$this->hasPatternExtraLineage()) $content .= $this->getPatternNoExtraLineageMessage();
     return $content;
   }
@@ -140,7 +144,7 @@ PATTERNLINEAGE;
       'class' => 'patternLink',
       'data-patternpartial' => $this->getPatternPartial(),
     ];
-    return new Element('a', $attributes);
+    return new Element('a', $attributes, $this->getPattern()->getLabel());
   }
 
   public function getPatternNoExtraLineageMessage() {
@@ -167,7 +171,8 @@ PATTERNREVERSELINEAGE;
   }
 
   public function getPatternUrl() {
-    return "../../patterns/{{ partial.patternLink }}";
+    $dir = $this->styleguide->getPatternDirectoryName($this->pattern);
+    return "../../patterns/$dir/$dir.html" ;
   }
 
   public function hasPatternExtraLineage() {

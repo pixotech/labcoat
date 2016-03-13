@@ -48,7 +48,7 @@ class Partial implements PartialInterface {
   }
 
   public function getPatternUrl() {
-    $dir = $this->getPattern()->getStyleguideDirectoryName();
+    $dir = $this->getStyleguideDirectoryName();
     return "$dir/$dir.html";
   }
 
@@ -63,7 +63,6 @@ class Partial implements PartialInterface {
       'patternDescExists' => $this->hasPatternDescription(),
       'patternDesc' => $this->getPatternDescription(),
       'patternDescAdditions' => [],
-      'patternPartialCode' => $this->getPatternExample(),
       'patternLink' => $this->getPatternUrl(),
       'patternLineages' => $this->getPatternLineage(),
       'patternLineagesR' => $this->getPatternReverseLineage(),

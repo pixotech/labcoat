@@ -5,7 +5,6 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\Patterns;
 use Labcoat\Generator\Paths\Path;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\Page;
-use Labcoat\PatternLab\Styleguide\Files\Html\Partial;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class PatternPage extends Page implements PatternPageInterface {
@@ -25,7 +24,19 @@ class PatternPage extends Page implements PatternPageInterface {
   }
 
   public function getData() {
-    return new Partial($this->pattern);
+    return [
+      'patternExtension' => 'twig',
+      'cssEnabled' => false,
+      'extraOutput' => [],
+      'patternName' => $this->pattern->getLabel(),
+      'patternPartial' => $this->pattern->getPartial(),
+      'patternState' => $this->pattern->hasState() ? $this->pattern->getState() : '',
+      'patternStateExists' => $this->pattern->hasState(),
+      'patternDesc' => $this->pattern->getDescription(),
+      'patternDescExists' => (bool)$this->pattern->hasDescription(),
+      'lineage' => $this->getPatternLineage(),
+      'lineageR' => $this->getPatternReverseLineage(),
+    ];
   }
 
   public function getPath() {
@@ -35,6 +46,16 @@ class PatternPage extends Page implements PatternPageInterface {
 
   public function getPattern() {
     return $this->pattern;
+  }
+
+  public function getPatternLineage() {
+    $pattern = $this->getPattern();
+    return $pattern->hasLineage() ? $pattern->getLineage() : [];
+  }
+
+  public function getPatternReverseLineage() {
+    $pattern = $this->getPattern();
+    return $pattern->hasReverseLineage() ? $pattern->getReverseLineage() : [];
   }
 
   public function getTime() {

@@ -36,6 +36,6 @@ class GeneralHeader {
     $url .= '?' . $this->getCacheBuster();
     $attributes = ['rel' => 'stylesheet', 'href' => $url];
     if (isset($media)) $attributes['media'] = $media;
-    return new Element('a', $attributes);
+    return new Element('link', $attributes);
   }
 }

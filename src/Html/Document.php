@@ -91,7 +91,7 @@ class Document implements DocumentInterface {
     foreach ($this->scriptBlocks as $script) {
       $body .= $this->makeElement('script', $script);
     }
-    return $this->makeElement('body', $body);
+    return $this->makeElement('body', [], $body);
   }
 
   protected function makeCharsetMeta() {
@@ -107,7 +107,7 @@ class Document implements DocumentInterface {
   }
 
   protected function makeHead() {
-    return $this->makeElement('head', $this->makeHeadContent());
+    return $this->makeElement('head', [], $this->makeHeadContent());
   }
 
   protected function makeHeadContent() {
@@ -171,6 +171,6 @@ class Document implements DocumentInterface {
   }
 
   protected function makeTitle() {
-    return $this->makeElement('title', $this->getTitle());
+    return $this->makeElement('title', [], $this->getTitle());
   }
 }

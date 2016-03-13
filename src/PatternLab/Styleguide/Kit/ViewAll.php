@@ -4,6 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Kit;
 
 use Labcoat\Html\Element;
 use Labcoat\PatternLab\Styleguide\Kit\Partials\PatternSection;
+use Labcoat\PatternLab\Styleguide\StyleguideInterface;
 
 class ViewAll {
 
@@ -11,7 +12,10 @@ class ViewAll {
 
   protected $patterns = [];
 
-  public function __construct(array $patterns = [], $partial = '') {
+  protected $styleguide;
+
+  public function __construct(StyleguideInterface $styleguide, array $patterns = [], $partial = '') {
+    $this->styleguide = $styleguide;
     $this->patterns = $patterns;
   }
 
@@ -32,7 +36,9 @@ class ViewAll {
 
   public function getPatternSections() {
     $patterns = [];
-    foreach ($this->getPatterns() as $pattern) $patterns[] = new PatternSection($pattern);
+    foreach ($this->getPatterns() as $pattern) {
+      $patterns[] = new PatternSection($this->styleguide, $pattern);
+    }
     return $patterns;
   }
 
