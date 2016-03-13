@@ -18,6 +18,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($name, $type->getName());
   }
 
+  public function testNameWithoutOrdering() {
+    $name = '01-one';
+    $type = new Type($name);
+    $this->assertEquals('one', $type->getNameWithoutOrdering());
+  }
+
   public function testLabel() {
     $name = 'the-label';
     $type = new Type($name);

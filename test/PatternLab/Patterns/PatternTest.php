@@ -41,16 +41,21 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
    * @expectedException \InvalidArgumentException
    */
   public function testNameCantBeEmpty() {
-    $name = 'pattern-name';
-    $pattern = $this->makePattern($name);
-    $pattern->setName(null);
+    $pattern = $this->makePattern();
+    $pattern->setName('');
   }
 
   public function testState() {
     $state = 'state';
     $pattern = $this->makePattern();
     $pattern->setState($state);
+    $this->assertTrue($pattern->hasState());
     $this->assertEquals($state, $pattern->getState());
+  }
+
+  public function testNoState() {
+    $pattern = $this->makePattern();
+    $this->assertFalse($pattern->hasState());
   }
 
   public function testSubtype() {
@@ -74,6 +79,14 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $type = 'type';
     $pattern = $this->makePattern('name', $type);
     $this->assertEquals($type, $pattern->getType());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testTypeCantBeEmpty() {
+    $pattern = $this->makePattern();
+    $pattern->setType('');
   }
 
   protected function makePattern($name = 'name', $type = 'type', $subtype = null) {

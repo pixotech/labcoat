@@ -227,16 +227,6 @@ class Pattern implements PatternInterface {
   }
 
   /**
-   * @return string
-   */
-  public function getStyleguideDirectoryName() {
-    $parts = [$this->getType()];
-    if ($this->hasSubtype()) $parts[] = $this->getSubtype();
-    $parts[] = $this->getName();
-    return implode('-', $parts);
-  }
-
-  /**
    * @param string $subtype
    */
   public function setSubtype($subtype) {
@@ -246,7 +236,7 @@ class Pattern implements PatternInterface {
   /**
    * @param string $content
    */
-  public function setTemplateContent($content) {
+  public function setTemplate($content) {
     $this->template = $content;
   }
 

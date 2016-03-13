@@ -19,7 +19,7 @@ class TemplateFileTest extends FileTestCase {
   public function testPut() {
     $template = 'This is the template content';
     $pattern = new Pattern('name', 'type');
-    $pattern->setTemplateContent($template);
+    $pattern->setTemplate($template);
     $file = new TemplateFile(new Styleguide(), $pattern);
     $path = $this->makeFile();
     $file->put($path);
