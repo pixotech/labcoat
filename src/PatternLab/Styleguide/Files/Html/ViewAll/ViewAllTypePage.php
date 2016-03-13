@@ -4,7 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Paths\Path;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
-use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
 
@@ -24,7 +24,7 @@ class ViewAllTypePage extends ViewAllPage implements ViewAllTypePageInterface {
   }
 
   public function getPath() {
-    $dir = $this->type->getStyleguideDirectoryName();
+    $dir = $this->styleguide->getTypeDirectoryName($this->type);
     return new Path("patterns/$dir/index.html");
   }
 }

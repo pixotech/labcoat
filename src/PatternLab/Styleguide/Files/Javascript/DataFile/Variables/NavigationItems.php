@@ -2,11 +2,10 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript\DataFile\Variables;
 
-use Labcoat\PatternLab\PatternLab;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
-use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
-use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
+use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 class NavigationItems extends Variable {
 
@@ -45,7 +44,7 @@ class NavigationItems extends Variable {
   }
 
   protected function makeNavPattern(PatternInterface $pattern) {
-    $dir = $pattern->getStyleguideDirectoryName();
+    $dir = $this->styleguide->getPatternDirectoryName($pattern);
     return [
       'patternPath' => "$dir/$dir.html",
       'patternName' => $pattern->getLabel(),
@@ -56,7 +55,7 @@ class NavigationItems extends Variable {
 
   protected function makeNavSubtype(SubtypeInterface $subtype) {
     $data = [
-      'patternSubtypeLC' => PatternLab::stripOrdering($subtype->getName()),
+      'patternSubtypeLC' => $subtype->getNameWithoutOrdering(),
       'patternSubtypeUC' => $subtype->getLabel(),
       'patternSubtype' => $subtype->getName(),
       'patternSubtypeItems' => [],
@@ -73,7 +72,7 @@ class NavigationItems extends Variable {
   }
 
   protected function makeNavSubtypeItem(SubtypeInterface $subtype) {
-    $dir = $subtype->getStyleguideDirectoryName();
+    $dir = $this->styleguide->getTypeDirectoryName($subtype);
     return [
       "patternPath" => "$dir/index.html",
       "patternName" => self::VIEW_ALL,
@@ -85,7 +84,7 @@ class NavigationItems extends Variable {
 
   protected function makeNavType(TypeInterface $type) {
     $data = [
-      'patternTypeLC' => PatternLab::stripOrdering($type->getName()),
+      'patternTypeLC' => $type->getNameWithoutOrdering(),
       'patternTypeUC' => $type->getLabel(),
       'patternType' => $type->getName(),
       'patternTypeItems' => [],
@@ -108,7 +107,7 @@ class NavigationItems extends Variable {
   }
 
   protected function makeNavTypeItem(TypeInterface $type) {
-    $dir = $type->getStyleguideDirectoryName();
+    $dir = $this->styleguide->getTypeDirectoryName($type);
     return [
       "patternPath" => "$dir/index.html",
       "patternName" => self::VIEW_ALL,

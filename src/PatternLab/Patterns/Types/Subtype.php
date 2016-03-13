@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Types;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
 
@@ -32,13 +32,6 @@ class Subtype extends Type implements SubtypeInterface {
    */
   public function getPartial() {
     return 'viewall-' . $this->type->getNameWithoutOrdering() . '-' . $this->getNameWithoutOrdering();
-  }
-
-  /**
-   * @return string
-   */
-  public function getStyleguideDirectoryName() {
-    return $this->type->getStyleguideDirectoryName() .'-' . $this->name;
   }
 
   /**

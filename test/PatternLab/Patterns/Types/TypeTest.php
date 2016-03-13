@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Types;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Patterns\Pattern;
 
@@ -34,12 +34,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
     $name = 'typename';
     $type = new Type($name);
     $this->assertEquals("viewall-{$name}-all", $type->getPartial());
-  }
-
-  public function testStyleguideDirectoryName() {
-    $name = 'typename';
-    $type = new Type($name);
-    $this->assertEquals($name, $type->getStyleguideDirectoryName());
   }
 
   public function testAddPattern() {

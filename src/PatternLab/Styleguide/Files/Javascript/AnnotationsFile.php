@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Files\Javascript;
 
-use Labcoat\PatternLab\Styleguide\Annotations\AnnotationInterface;
+use Labcoat\PatternLab\Annotations\AnnotationInterface;
 use Labcoat\Generator\Files\File;
 
 class AnnotationsFile extends File implements AnnotationsFileInterface {

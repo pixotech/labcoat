@@ -20,6 +20,11 @@ interface PatternInterface {
   public function getLabel();
 
   /**
+   * @return PatternInterface[]
+   */
+  public function getLineage();
+
+  /**
    * @return string
    */
   public function getName();
@@ -28,6 +33,11 @@ interface PatternInterface {
    * @return string
    */
   public function getPartial();
+
+  /**
+   * @return PatternInterface[]
+   */
+  public function getReverseLineage();
 
   /**
    * @return string
@@ -53,6 +63,16 @@ interface PatternInterface {
    * @return bool
    */
   public function hasDescription();
+
+  /**
+   * @return bool
+   */
+  public function hasLineage();
+
+  /**
+   * @return bool
+   */
+  public function hasReverseLineage();
 
   /**
    * @return bool

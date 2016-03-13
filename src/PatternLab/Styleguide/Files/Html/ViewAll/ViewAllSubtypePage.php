@@ -3,7 +3,7 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\PatternLab\Styleguide\StyleguideInterface;
-use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
+use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
 
 class ViewAllSubtypePage extends ViewAllTypePage implements ViewAllSubtypePageInterface {
 

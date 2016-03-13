@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "pattern-lab/styleguidekit-twig-default": "*",
+    "pattern-lab/styleguidekit-assets-default": "~0.5",
     "twig/twig": "~1.0",
     "symfony/yaml": "~2.7"
   },

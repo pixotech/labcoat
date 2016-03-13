@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Types;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Patterns\Pattern;
 use Labcoat\PatternLab\Patterns\PatternInterface;
@@ -18,7 +18,7 @@ class Type implements TypeInterface {
   protected $patterns = [];
 
   /**
-   * @var SubtypeInterface[]
+   * @var Subtype[]
    */
   protected $subtypes = [];
 
@@ -77,14 +77,7 @@ class Type implements TypeInterface {
   }
 
   /**
-   * @return string
-   */
-  public function getStyleguideDirectoryName() {
-    return $this->name;
-  }
-
-  /**
-   * @return SubtypeInterface[]
+   * @return Subtype[]
    */
   public function getSubTypes() {
     return $this->subtypes;
@@ -99,7 +92,7 @@ class Type implements TypeInterface {
 
   /**
    * @param string $name
-   * @return SubtypeInterface
+   * @return Subtype
    */
   protected function getOrCreateSubtype($name) {
     if (!isset($this->subtypes[$name])) $this->subtypes[$name] = new Subtype($this, $name);

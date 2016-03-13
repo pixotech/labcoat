@@ -10,14 +10,14 @@
 namespace Labcoat\PatternLab\Styleguide;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
-use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
 interface StyleguideInterface {
 
   /**
-   * @param PatternInterface $pattern
+   * @return string
    */
-  public function addPattern(PatternInterface $pattern);
+  public function getAssetsDirectory();
 
   /**
    * @return array
@@ -67,7 +67,7 @@ interface StyleguideInterface {
   public function getTypeDirectoryName(TypeInterface $type);
 
   /**
-   * @return Types\TypeInterface[]
+   * @return array
    */
   public function getTypes();
 }

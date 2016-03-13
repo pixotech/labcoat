@@ -9,8 +9,11 @@
 
 namespace Labcoat\PatternLab\Styleguide;
 
-use Labcoat\Html\Document;
+use Labcoat\Generator\Files\FileInterface;
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Patterns\Types\SubtypeInterface;
+use Labcoat\PatternLab\Patterns\Types\Type;
+use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllPage;
 use Labcoat\PatternLab\Styleguide\Files\Javascript\AnnotationsFile;
 use Labcoat\PatternLab\Styleguide\Files\Assets\AssetFile;
@@ -22,10 +25,6 @@ use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
-use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
-use Labcoat\PatternLab\Styleguide\Types\Type;
-use Labcoat\Generator\Files\FileInterface;
-use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -33,6 +32,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    * @var array
    */
   protected $annotations = [];
+
+  /**
+   * @var string
+   */
+  protected $assetsDirectory;
 
   /**
    * @var array
@@ -54,11 +58,15 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   protected $hiddenControls = ['hay'];
 
+  /**
+   * @var int
+   */
   protected $maximumWidth = 2600;
 
+  /**
+   * @var int
+   */
   protected $minimumWidth = 240;
-
-  protected $templateParser;
 
   /**
    * @var PatternInterface[]
@@ -76,7 +84,7 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   protected $stylesheets = [];
 
   /**
-   * @var Types\TypeInterface[]
+   * @var Type[]
    */
   protected $types = [];
 
@@ -84,13 +92,13 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $str = '';
     foreach ($this->getFiles() as $file) {
       $str .= $file->getPath() . "\n";
-      $str .= '  ' . date('r', $file->getTime()) . "\n";
     }
     return $str;
   }
 
   public function addPattern(PatternInterface $pattern) {
-    $this->patterns[] = $pattern;
+    $key = $this->getPatternDirectoryName($pattern);
+    $this->patterns[$key] = $pattern;
     $this->getOrCreateType($pattern->getType())->addPattern($pattern);
   }
 
@@ -113,23 +121,46 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->annotations;
   }
 
+  /**
+   * @return string
+   */
+  public function getAssetsDirectory() {
+    if (!isset($this->assetsDirectory)) $this->assetsDirectory = $this->findAssetsDirectory();
+    return $this->assetsDirectory;
+  }
+
+  /**
+   * @return string
+   */
   public function getCacheBuster() {
     if (!isset($this->cacheBuster)) $this->cacheBuster = (string)time();
     return $this->cacheBuster;
   }
 
+  /**
+   * @return array
+   */
   public function getHiddenControls() {
     return $this->hiddenControls;
   }
 
+  /**
+   * @return \ArrayIterator
+   */
   public function getIterator() {
     return new \ArrayIterator($this->getFiles());
   }
 
+  /**
+   * @return int
+   */
   public function getMaximumWidth() {
     return $this->maximumWidth;
   }
 
+  /**
+   * @return int
+   */
   public function getMinimumWidth() {
     return $this->minimumWidth;
   }
@@ -159,6 +190,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->stylesheets;
   }
 
+  /**
+   * @param TypeInterface $type
+   * @return string
+   */
   public function getTypeDirectoryName(TypeInterface $type) {
     $segments = [$type->getName()];
     if ($type instanceof SubtypeInterface) array_unshift($segments, $type->getType()->getName());
@@ -166,10 +201,17 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
-   * @return Types\TypeInterface[]
+   * @return Type[]
    */
   public function getTypes() {
     return $this->types;
+  }
+
+  /**
+   * @param string $directory
+   */
+  public function setAssetsDirectory($directory) {
+    $this->assetsDirectory = $directory;
   }
 
   /**
@@ -226,17 +268,11 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return is_dir($path) ? $path : null;
   }
 
-  protected function findStyleguideTemplatesDirectory() {
-    if (!$vendor = $this->findVendorDirectory()) return null;
-    $path = $this->makePath([$vendor, 'pattern-lab', 'styleguidekit-twig-default', 'views']);
-    return is_dir($path) ? $path : null;
-  }
-
   protected function findVendorDirectory() {
     $className = "Composer\\Autoload\\ClassLoader";
     if (!class_exists($className)) return null;
     $c = new \ReflectionClass($className);
-    return dirname($c->getFileName()) . '/..';
+    return dirname($c->getFileName()) . DIRECTORY_SEPARATOR . '..';
   }
 
   protected function getFiles() {
@@ -253,23 +289,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return $this->patterns;
   }
 
-  protected function getTemplate($path) {
-    $segments = explode('/', $path);
-    array_unshift($this->findStyleguideTemplatesDirectory(), $segments);
-    return file_get_contents($this->makePath($segments));
-  }
-
-  protected function getTemplateParser() {
-    if (!isset($this->templateParser)) $this->templateParser = $this->makeTemplateParser();
-    return $this->templateParser;
-  }
-
   protected function makeAnnotationsFile() {
     $this->addFile(new AnnotationsFile($this->annotations));
   }
 
   protected function makeAssetFiles() {
-    if (!$assetsDir = $this->findAssetsDirectory()) return;
+    if (!$assetsDir = $this->getAssetsDirectory()) return;
     $dir = new \RecursiveDirectoryIterator($assetsDir, \FilesystemIterator::SKIP_DOTS);
     $files = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::LEAVES_ONLY);
     foreach ($files as $file => $obj) {
@@ -286,15 +311,6 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     return implode('-', $segments);
   }
 
-  protected function makeDocument($content, array $data = []) {
-    $content .= $this->makeGeneralFooter($data);
-    $document = new Document($content, 'Pattern Lab');
-    $document->setPatternLabHead($this->makeGeneralHeader());
-    foreach ($this->stylesheets as $stylesheet) $document->includeStylesheet($stylesheet);
-    foreach ($this->scripts as $script) $document->includeScript($script);
-    return (string)$document;
-  }
-
   protected function makeFiles() {
     $this->makePages();
     $this->makeAssetFiles();
@@ -304,14 +320,14 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   protected function makeIndexPages() {
-    /** @var Files\Html\ViewAll\ViewAllPageInterface[] $indexes */
-    $indexes = ['all' => new ViewAllPage($this->getPageRenderer())];
+    /** @var Files\Html\ViewAll\ViewAllPage[] $indexes */
+    $indexes = ['all' => new ViewAllPage($this)];
     foreach ($this->getTypes() as $type) {
       $typeId = $type->getName();
-      $indexes[$typeId] = new ViewAllTypePage($this->getPageRenderer(), $type);
+      $indexes[$typeId] = new ViewAllTypePage($this, $type);
       foreach ($type->getSubtypes() as $subtype) {
         $subtypeId = $subtype->getName();
-        $indexes[$subtypeId] = new ViewAllSubtypePage($this->getPageRenderer(), $subtype);
+        $indexes[$subtypeId] = new ViewAllSubtypePage($this, $subtype);
         foreach ($subtype->getPatterns() as $pattern) {
           $indexes['all']->addPattern($pattern);
           $indexes[$typeId]->addPattern($pattern);

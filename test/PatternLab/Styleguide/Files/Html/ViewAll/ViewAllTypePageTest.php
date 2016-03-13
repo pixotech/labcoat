@@ -4,7 +4,7 @@ namespace Labcoat\PatternLab\Styleguide\Files\Html\ViewAll;
 
 use Labcoat\Generator\Files\FileTestCase;
 use Labcoat\PatternLab\Styleguide\Styleguide;
-use Labcoat\PatternLab\Styleguide\Types\Type;
+use Labcoat\PatternLab\Patterns\Types\Type;
 
 class ViewAllTypePageTest extends FileTestCase {
 

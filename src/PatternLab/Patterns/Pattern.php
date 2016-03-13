@@ -33,9 +33,19 @@ class Pattern implements PatternInterface {
   protected $label;
 
   /**
+   * @var PatternInterface[]
+   */
+  protected $lineage = [];
+
+  /**
    * @var string
    */
   protected $name;
+
+  /**
+   * @var PatternInterface[]
+   */
+  protected $reverseLineage = [];
 
   /**
    * @var string
@@ -90,6 +100,13 @@ class Pattern implements PatternInterface {
   }
 
   /**
+   * @return PatternInterface[]
+   */
+  public function getLineage() {
+    return $this->lineage;
+  }
+
+  /**
    * @return string
    */
   public function getName() {
@@ -101,6 +118,13 @@ class Pattern implements PatternInterface {
    */
   public function getPartial() {
     return $this->makePartial($this->getType(), $this->getName());
+  }
+
+  /**
+   * @return PatternInterface[]
+   */
+  public function getReverseLineage() {
+    return $this->reverseLineage;
   }
 
   /**
@@ -136,6 +160,20 @@ class Pattern implements PatternInterface {
    */
   public function hasDescription() {
     return !empty($this->description);
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasLineage() {
+    return !empty($this->lineage);
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasReverseLineage() {
+    return !empty($this->reverseLineage);
   }
 
   /**

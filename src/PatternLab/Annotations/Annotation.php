@@ -1,6 +1,6 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Annotations;
+namespace Labcoat\PatternLab\Annotations;
 
 class Annotation implements AnnotationInterface {
 

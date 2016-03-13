@@ -1,15 +1,10 @@
 <?php
 
-namespace Labcoat\PatternLab\Styleguide\Types;
+namespace Labcoat\PatternLab\Patterns\Types;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
 
 interface TypeInterface {
-
-  /**
-   * @param PatternInterface $pattern
-   */
-  public function addPattern(PatternInterface $pattern);
 
   /**
    * @return string
@@ -35,11 +30,6 @@ interface TypeInterface {
    * @return PatternInterface[]
    */
   public function getPatterns();
-
-  /**
-   * @return string
-   */
-  public function getStyleguideDirectoryName();
 
   /**
    * @return SubtypeInterface[]

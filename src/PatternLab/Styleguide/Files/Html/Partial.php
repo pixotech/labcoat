@@ -73,16 +73,20 @@ class Partial implements PartialInterface {
 
   public function makePatternLineage() {
     $lineage = [];
-    foreach ($this->getPattern()->getIncludedPatterns() as $pattern) {
-      $lineage[] = (new Partial($pattern))->getLineage();
+    if ($this->getPattern()->hasLineage()) {
+      foreach ($this->getPattern()->getLineage() as $pattern) {
+        $lineage[] = (new Partial($pattern))->getLineage();
+      }
     }
     return $lineage;
   }
 
   public function makeReversePatternLineage() {
     $lineage = [];
-    foreach ($this->getPattern()->getIncludingPatterns() as $pattern) {
-      $lineage[] = (new Partial($pattern))->getLineage();
+    if ($this->getPattern()->hasReverseLineage()) {
+      foreach ($this->getPattern()->getReverseLineage() as $pattern) {
+        $lineage[] = (new Partial($pattern))->getLineage();
+      }
     }
     return $lineage;
   }
