@@ -37,6 +37,15 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($name, $pattern->getName());
   }
 
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testNameCantBeEmpty() {
+    $name = 'pattern-name';
+    $pattern = $this->makePattern($name);
+    $pattern->setName(null);
+  }
+
   public function testState() {
     $state = 'state';
     $pattern = $this->makePattern();
@@ -65,21 +74,6 @@ class PatternTest extends \PHPUnit_Framework_TestCase {
     $type = 'type';
     $pattern = $this->makePattern('name', $type);
     $this->assertEquals($type, $pattern->getType());
-  }
-
-  public function getStyleguideDirectoryName() {
-    $type = 'type';
-    $subtype = 'subtype';
-    $name = 'name';
-    $pattern = $this->makePattern($name, $type, $subtype);
-    $this->assertEquals("$type-$subtype-$name", $pattern->getStyleguideDirectoryName());
-  }
-
-  public function getStyleguideDirectoryNameWithoutSubtype() {
-    $type = 'type';
-    $name = 'name';
-    $pattern = $this->makePattern($name, $type);
-    $this->assertEquals("$type-$name", $pattern->getStyleguideDirectoryName());
   }
 
   protected function makePattern($name = 'name', $type = 'type', $subtype = null) {

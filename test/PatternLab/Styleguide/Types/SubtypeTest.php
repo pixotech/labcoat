@@ -2,60 +2,59 @@
 
 namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\Mocks\PatternLab\Patterns\Pattern;
-use Labcoat\Mocks\PatternLab\Styleguide\Types\Type;
+use Labcoat\PatternLab\Patterns\Pattern;
 
 class SubtypeTest extends \PHPUnit_Framework_TestCase {
 
   public function testType() {
-    $type = new Type();
+    $type = new Type('type');
     $subtype = new Subtype($type, 'one');
     $this->assertEquals($type, $subtype->getType());
   }
 
   public function testName() {
     $name = 'one';
-    $subtype = new Subtype(new Type(), $name);
+    $subtype = new Subtype(new Type('type'), $name);
     $this->assertEquals($name, $subtype->getName());
   }
 
   public function testNameHasOrdering() {
     $name = '01-one';
-    $subtype = new Subtype(new Type(), $name);
+    $subtype = new Subtype(new Type('type'), $name);
     $this->assertEquals($name, $subtype->getName());
   }
 
   public function testLabel() {
     $name = 'the-label';
-    $subtype = new Subtype(new Type(), $name);
+    $subtype = new Subtype(new Type('type'), $name);
     $this->assertEquals('The Label', $subtype->getLabel());
   }
 
   public function testLabelDoesntHaveOrdering() {
     $name = '01-the-label';
-    $subtype = new Subtype(new Type(), $name);
+    $subtype = new Subtype(new Type('type'), $name);
     $this->assertEquals('The Label', $subtype->getLabel());
   }
 
   public function testPartial() {
-    $type = new Type();
-    $type->name = 'typename';
+    $typename = 'typename';
+    $type = new Type($typename);
     $name = 'subtypename';
     $subtype = new Subtype($type, $name);
-    $this->assertEquals("viewall-{$type->name}-{$name}", $subtype->getPartial());
+    $this->assertEquals("viewall-{$typename}-{$name}", $subtype->getPartial());
   }
 
   public function testStyleguideDirectoryName() {
-    $type = new Type();
-    $type->name = 'typename';
+    $typename = 'typename';
+    $type = new Type($typename);
     $name = 'subtypename';
     $subtype = new Subtype($type, $name);
-    $this->assertEquals("{$type->name}-{$name}", $subtype->getStyleguideDirectoryName());
+    $this->assertEquals("{$typename}-{$name}", $subtype->getStyleguideDirectoryName());
   }
 
   public function testAddPattern() {
-    $pattern = new Pattern();
-    $subtype = new Subtype(new Type(), 'subtype');
+    $pattern = new Pattern('name', 'type');
+    $subtype = new Subtype(new Type('type'), 'subtype');
     $subtype->addPattern($pattern);
     $this->assertEquals([$pattern], $subtype->getPatterns());
   }

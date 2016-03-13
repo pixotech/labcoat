@@ -4,14 +4,15 @@ namespace Labcoat\PatternLab\Styleguide\Kit;
 
 use Labcoat\Html\Element;
 use Labcoat\PatternLab\Styleguide\Kit\Partials\PatternSection;
-use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 class ViewAll {
 
-  protected $type = [];
+  protected $partial = '';
 
-  public function __construct(TypeInterface $type) {
-    $this->type = $type;
+  protected $patterns = [];
+
+  public function __construct(array $patterns = [], $partial = '') {
+    $this->patterns = $patterns;
   }
 
   public function __toString() {
@@ -26,7 +27,7 @@ class ViewAll {
   }
 
   public function getPartial() {
-    return $this->type->getPartial();
+    return $this->partial;
   }
 
   public function getPatternSections() {
@@ -36,7 +37,7 @@ class ViewAll {
   }
 
   public function getPatterns() {
-    return $this->type->getPatterns();
+    return $this->patterns;
   }
 
   public function getPatternsContainer() {

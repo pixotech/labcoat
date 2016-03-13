@@ -15,16 +15,6 @@ interface PatternInterface {
   public function getExample();
 
   /**
-   * @return PatternInterface[]
-   */
-  public function getIncludedPatterns();
-
-  /**
-   * @return PatternInterface[]
-   */
-  public function getIncludingPatterns();
-
-  /**
    * @return string
    */
   public function getLabel();
@@ -47,22 +37,22 @@ interface PatternInterface {
   /**
    * @return string
    */
-  public function getStyleguideDirectoryName();
-
-  /**
-   * @return string
-   */
   public function getSubtype();
 
   /**
    * @return string
    */
-  public function getTemplateContent();
+  public function getTemplate();
 
   /**
    * @return string
    */
   public function getType();
+
+  /**
+   * @return bool
+   */
+  public function hasDescription();
 
   /**
    * @return bool
@@ -73,44 +63,4 @@ interface PatternInterface {
    * @return bool
    */
   public function hasSubtype();
-
-  /**
-   * @param string $description
-   */
-  public function setDescription($description);
-
-  /**
-   * @param string $example
-   */
-  public function setExample($example);
-
-  /**
-   * @param string $label
-   */
-  public function setLabel($label);
-
-  /**
-   * @param string $name
-   */
-  public function setName($name);
-
-  /**
-   * @param string $state
-   */
-  public function setState($state);
-
-  /**
-   * @param string $subtype
-   */
-  public function setSubtype($subtype);
-
-  /**
-   * @param string $content
-   */
-  public function setTemplateContent($content);
-
-  /**
-   * @param string $type
-   */
-  public function setType($type);
 }

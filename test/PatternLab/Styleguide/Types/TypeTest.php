@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\Mocks\PatternLab\Patterns\Pattern;
+use Labcoat\PatternLab\Patterns\Pattern;
 
 class TypeTest extends \PHPUnit_Framework_TestCase {
 
@@ -43,25 +43,24 @@ class TypeTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testAddPattern() {
-    $pattern = new Pattern();
-    $pattern->name = 'pattern-name';
+    $patternname = 'pattern-name';
+    $pattern = new Pattern($patternname, 'type');
     $type = new Type('type');
     $type->addPattern($pattern);
-    $this->assertEquals([$pattern->name => $pattern], $type->getPatterns());
+    $this->assertEquals([$patternname => $pattern], $type->getPatterns());
   }
 
   public function testAddPatternWithSubtype() {
-    $pattern = new Pattern();
-    $pattern->subtype = 'subtype';
+    $pattern = new Pattern('name', 'type', 'subtype');
     $type = new Type('type');
     $type->addPattern($pattern);
     $this->assertTrue($type->hasSubtypes());
     $subtypes = $type->getSubTypes();
-    $this->assertArrayHasKey($pattern->subtype, $subtypes);
+    $this->assertArrayHasKey($pattern->getSubtype(), $subtypes);
   }
 
   public function testAddPatternWithoutSubtype() {
-    $pattern = new Pattern();
+    $pattern = new Pattern('name', 'type');
     $type = new Type('type');
     $type->addPattern($pattern);
     $this->assertFalse($type->hasSubtypes());

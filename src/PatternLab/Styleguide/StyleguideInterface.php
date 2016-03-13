@@ -10,6 +10,7 @@
 namespace Labcoat\PatternLab\Styleguide;
 
 use Labcoat\PatternLab\Patterns\PatternInterface;
+use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 interface StyleguideInterface {
 
@@ -44,6 +45,12 @@ interface StyleguideInterface {
   public function getMinimumWidth();
 
   /**
+   * @param PatternInterface $pattern
+   * @return string
+   */
+  public function getPatternDirectoryName(PatternInterface $pattern);
+
+  /**
    * @return array
    */
   public function getScripts();
@@ -52,6 +59,12 @@ interface StyleguideInterface {
    * @return array
    */
   public function getStylesheets();
+
+  /**
+   * @param TypeInterface $type
+   * @return string
+   */
+  public function getTypeDirectoryName(TypeInterface $type);
 
   /**
    * @return Types\TypeInterface[]

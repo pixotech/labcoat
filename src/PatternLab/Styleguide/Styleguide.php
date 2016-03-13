@@ -22,8 +22,10 @@ use Labcoat\PatternLab\Styleguide\Files\Html\ViewAll\ViewAllTypePage;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\EscapedSourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\SourceFile;
 use Labcoat\PatternLab\Styleguide\Files\Patterns\TemplateFile;
+use Labcoat\PatternLab\Styleguide\Types\SubtypeInterface;
 use Labcoat\PatternLab\Styleguide\Types\Type;
 use Labcoat\Generator\Files\FileInterface;
+use Labcoat\PatternLab\Styleguide\Types\TypeInterface;
 
 class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
@@ -133,6 +135,17 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
   }
 
   /**
+   * @param PatternInterface $pattern
+   * @return string
+   */
+  public function getPatternDirectoryName(PatternInterface $pattern) {
+    $segments = [$pattern->getType()];
+    if ($pattern->hasSubtype()) $segments[] = $pattern->getSubtype();
+    $segments[] = $pattern->getName();
+    return $this->makeDirectoryName($segments);
+  }
+
+  /**
    * @return array
    */
   public function getScripts() {
@@ -144,6 +157,12 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
    */
   public function getStylesheets() {
     return $this->stylesheets;
+  }
+
+  public function getTypeDirectoryName(TypeInterface $type) {
+    $segments = [$type->getName()];
+    if ($type instanceof SubtypeInterface) array_unshift($segments, $type->getType()->getName());
+    return $this->makeDirectoryName($segments);
   }
 
   /**
@@ -263,6 +282,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
     $this->addFile(new DataFile($this));
   }
 
+  protected function makeDirectoryName(array $segments) {
+    return implode('-', $segments);
+  }
+
   protected function makeDocument($content, array $data = []) {
     $content .= $this->makeGeneralFooter($data);
     $document = new Document($content, 'Pattern Lab');
@@ -318,44 +341,10 @@ class Styleguide implements \IteratorAggregate, StyleguideInterface {
 
   protected function makePatternPages() {
     foreach ($this->getPatterns() as $pattern) {
-      $this->addFile(new PatternPage($this->getPageRenderer(), $pattern));
-      $this->addFile(new SourceFile($pattern));
-      $this->addFile(new EscapedSourceFile($pattern));
-      $this->addFile(new TemplateFile($pattern));
+      $this->addFile(new PatternPage($this, $pattern));
+      $this->addFile(new SourceFile($this, $pattern));
+      $this->addFile(new EscapedSourceFile($this, $pattern));
+      $this->addFile(new TemplateFile($this, $pattern));
     }
-  }
-
-  protected function makeTemplateParser() {
-    $templates = [
-      'partials/general-footer' => $this->getTemplate('partials/general-footer.twig'),
-      'partials/general-header' => $this->getTemplate('partials/general-header.twig'),
-      'patternSection.twig' => $this->getTemplate('partials/patternSection.twig'),
-      'patternSectionSubtype.twig' => $this->getTemplate('partials/patternSectionSubtype.twig'),
-      'viewall' => $this->getTemplate('viewall.twig'),
-    ];
-    $loader = new \Twig_Loader_Array($templates);
-    return new \Twig_Environment($loader);
-  }
-
-  protected function renderPatterns(array $patterns) {
-    $vars = ['partials' => $patterns, 'patternPartial' => ''];
-    return $this->getTemplateParser()->render('viewall', $vars);
-  }
-
-  /**
-   * @param array $data
-   * @return string
-   */
-  protected function makeGeneralFooter(array $data) {
-    $vars = ['cacheBuster' => $this->cacheBuster, 'patternData' => json_encode($data)];
-    return $this->getTemplateParser()->render('partials/general-footer', $vars);
-  }
-
-  /**
-   * @return string
-   */
-  protected function makeGeneralHeader() {
-    $vars = ['cacheBuster' => $this->cacheBuster];
-    return $this->getTemplateParser()->render('partials/general-header', $vars);
   }
 }

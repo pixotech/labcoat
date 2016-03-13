@@ -92,6 +92,10 @@ class Generator implements GeneratorInterface {
   }
 
   protected function makePath($path) {
-    return PatternLab::makePath([$this->path, $path]);
+    return $this->path . DIRECTORY_SEPARATOR . $this->normalizePath($path);
+  }
+
+  protected function normalizePath($path) {
+    return strtr($path, '\\/', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR);
   }
 }

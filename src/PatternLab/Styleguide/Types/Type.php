@@ -2,7 +2,7 @@
 
 namespace Labcoat\PatternLab\Styleguide\Types;
 
-use Labcoat\PatternLab\PatternLab;
+use Labcoat\PatternLab\Patterns\Pattern;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 
 class Type implements TypeInterface {
@@ -45,7 +45,7 @@ class Type implements TypeInterface {
    * @return string
    */
   public function getLabel() {
-    return PatternLab::makeLabel($this->name);
+    return Pattern::makeLabel($this->name);
   }
 
   /**
@@ -59,7 +59,7 @@ class Type implements TypeInterface {
    * @return string
    */
   public function getNameWithoutOrdering() {
-    return PatternLab::stripOrdering($this->getName());
+    return Pattern::stripOrdering($this->getName());
   }
 
   /**

@@ -3,33 +3,26 @@
 namespace Labcoat\PatternLab\Styleguide\Files\Patterns;
 
 use Labcoat\Generator\Files\FileTestCase;
-use Labcoat\Mocks\PatternLab\Patterns\Pattern;
+use Labcoat\PatternLab\Patterns\Pattern;
+use Labcoat\PatternLab\Styleguide\Styleguide;
 
 class EscapedSourceFileTest extends FileTestCase {
 
   public function testPath() {
-    $dir = 'pattern-id';
-    $pattern = new Pattern();
-    $pattern->styleguideDirectoryName = $dir;
-    $file = new EscapedSourceFile($pattern);
+    $pattern = new Pattern('name', 'type');
+    $styleguide = new Styleguide();
+    $dir = $styleguide->getPatternDirectoryName($pattern);
+    $file = new EscapedSourceFile($styleguide, $pattern);
     $this->assertPath("patterns/{$dir}/{$dir}.escaped.html", $file->getPath());
   }
 
   public function testPut() {
     $example = 'This is the <b>pattern example</b>';
-    $pattern = new Pattern();
-    $pattern->example = $example;
-    $file = new EscapedSourceFile($pattern);
+    $pattern = new Pattern('name', 'type');
+    $pattern->setExample($example);
+    $file = new EscapedSourceFile(new Styleguide(), $pattern);
     $path = $this->makeFile();
     $file->put($path);
     $this->assertEquals(htmlentities($example), file_get_contents($path));
-  }
-
-  public function testTime() {
-    $time = time();
-    $pattern = new Pattern();
-    $pattern->time = $time;
-    $file = new EscapedSourceFile($pattern);
-    $this->assertEquals($time, $file->getTime());
   }
 }

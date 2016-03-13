@@ -2,9 +2,20 @@
 
 namespace Labcoat\PatternLab\Patterns;
 
-use Labcoat\PatternLab\PatternLab;
-
 class Pattern implements PatternInterface {
+
+  public static function makeLabel($str) {
+    return ucwords(trim(preg_replace('/[-_]+/', ' ', static::stripOrdering($str))));
+  }
+
+  public static function makePartial($type, $name) {
+    return static::stripOrdering($type) . '-' . static::stripOrdering($name);
+  }
+
+  public static function stripOrdering($str) {
+    list($ordering, $ordered) = array_pad(explode('-', $str, 2), 2, null);
+    return is_numeric($ordering) ? $ordered : $str;
+  }
 
   /**
    * @var string
@@ -15,16 +26,6 @@ class Pattern implements PatternInterface {
    * @var string
    */
   protected $example = '';
-
-  /**
-   * @var PatternInterface[]
-   */
-  protected $includedPatterns = [];
-
-  /**
-   * @var PatternInterface[]
-   */
-  protected $includingPatterns = [];
 
   /**
    * @var string
@@ -49,7 +50,7 @@ class Pattern implements PatternInterface {
   /**
    * @var string
    */
-  protected $templateContent;
+  protected $template;
 
   /**
    * @var string
@@ -82,24 +83,10 @@ class Pattern implements PatternInterface {
   }
 
   /**
-   * @return PatternInterface[]
-   */
-  public function getIncludedPatterns() {
-    return $this->includedPatterns;
-  }
-
-  /**
-   * @return PatternInterface[]
-   */
-  public function getIncludingPatterns() {
-    return $this->includingPatterns;
-  }
-
-  /**
    * @return string
    */
   public function getLabel() {
-    return $this->label ?: PatternLab::makeLabel($this->getName());
+    return $this->label ?: $this->makeLabel($this->getName());
   }
 
   /**
@@ -113,7 +100,7 @@ class Pattern implements PatternInterface {
    * @return string
    */
   public function getPartial() {
-    return PatternLab::makePartial($this->getType(), $this->getName());
+    return $this->makePartial($this->getType(), $this->getName());
   }
 
   /**
@@ -133,8 +120,8 @@ class Pattern implements PatternInterface {
   /**
    * @return string
    */
-  public function getTemplateContent() {
-    return $this->templateContent;
+  public function getTemplate() {
+    return $this->template;
   }
 
   /**
@@ -142,6 +129,13 @@ class Pattern implements PatternInterface {
    */
   public function getType() {
     return $this->type;
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasDescription() {
+    return !empty($this->description);
   }
 
   /**
@@ -183,6 +177,7 @@ class Pattern implements PatternInterface {
    * @param string $name
    */
   public function setName($name) {
+    if (empty($name)) throw new \InvalidArgumentException("Name cannot be empty");
     $this->name = $name;
   }
 
@@ -214,13 +209,14 @@ class Pattern implements PatternInterface {
    * @param string $content
    */
   public function setTemplateContent($content) {
-    $this->templateContent = $content;
+    $this->template = $content;
   }
 
   /**
    * @param string $type
    */
   public function setType($type) {
+    if (empty($type)) throw new \InvalidArgumentException("Type cannot be empty");
     $this->type = $type;
   }
 }
