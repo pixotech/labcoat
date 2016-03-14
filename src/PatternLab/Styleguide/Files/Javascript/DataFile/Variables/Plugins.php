@@ -6,11 +6,7 @@ use Labcoat\PatternLab\Styleguide\Files\Javascript\Variable;
 
 class Plugins extends Variable {
 
-  public function getName() {
-    return 'plugins';
-  }
-
-  public function getValue() {
-    return [];
+  public function __construct() {
+    parent::__construct('plugins', []);
   }
 }

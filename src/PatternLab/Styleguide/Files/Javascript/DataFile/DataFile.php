@@ -45,7 +45,7 @@ class DataFile extends File implements DataFileInterface {
       'navItems' => new NavigationItems($this->styleguide),
       'patternPaths' => new PatternPaths($this->styleguide),
       'viewAllPaths' => new ViewAllPaths($this->styleguide),
-      'plugins' => new Plugins($this->styleguide),
+      'plugins' => new Plugins(),
     ];
   }
 }
