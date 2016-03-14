@@ -173,32 +173,6 @@ class Template implements TemplateInterface {
   }
 
   /**
-   * @return string
-   */
-  protected function getPathWithoutExtension() {
-    return dirname($this->getPath()) . DIRECTORY_SEPARATOR . basename($this->getPath(), '.twig');
-  }
-
-  /**
-   * @param string $extension
-   * @return \SplFileInfo
-   * @throws \OutOfBoundsException
-   */
-  protected function getSibing($extension) {
-    $file = new \SplFileInfo($this->getSiblingPath($extension));
-    if (!$file->isFile()) throw new \OutOfBoundsException('Not found: ' . $file->getPathname());
-    return $file;
-  }
-
-  /**
-   * @param string $extension
-   * @return string
-   */
-  protected function getSiblingPath($extension) {
-    return $this->getPathWithoutExtension() . '.' . $extension;
-  }
-
-  /**
    * @return int
    */
   protected function getTimestamp() {
