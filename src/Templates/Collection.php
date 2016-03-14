@@ -22,7 +22,7 @@ class Collection implements CollectionInterface, \IteratorAggregate {
     $collection = new static();
     foreach (static::makeDirectoryIterator($dir) as $path => $file) {
       try {
-        $collection->add(new Template($file, static::getIdFromPath($path, $dir)));
+        $collection->add(static::makeTemplate($dir, $path, $file));
       }
       catch (\InvalidArgumentException $e) {
         continue;
@@ -70,6 +70,16 @@ class Collection implements CollectionInterface, \IteratorAggregate {
    */
   protected static function makeDirectoryIterator($dir) {
     return new \RegexIterator(static::getFilesIterator($dir), static::getFileRegex(), \RegexIterator::MATCH);
+  }
+
+  /**
+   * @param string $directory
+   * @param string $path
+   * @param \SplFileInfo $file
+   * @return Template
+   */
+  protected static function makeTemplate($directory, $path, $file) {
+    return new Template($file, static::getIdFromPath($path, $directory));
   }
 
   /**
