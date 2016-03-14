@@ -30,6 +30,11 @@ interface TemplateInterface {
   public function getParent();
 
   /**
+   * @return string
+   */
+  public function getSource();
+
+  /**
    * @return \DateTime
    */
   public function getTime();

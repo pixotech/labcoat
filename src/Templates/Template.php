@@ -7,11 +7,6 @@ class Template implements TemplateInterface {
   /**
    * @var string
    */
-  protected static $extension = 'twig';
-
-  /**
-   * @var string
-   */
   protected $id;
 
   /**
@@ -35,56 +30,6 @@ class Template implements TemplateInterface {
   protected $valid;
 
   /**
-   * @param string $dir
-   * @return Collection
-   */
-  public static function inDirectory($dir) {
-    $collection = static::makeCollection();
-    foreach (static::makeDirectoryIterator($dir) as $path => $file) {
-      try {
-        $collection->add(new static($file, static::getIdFromPath($path, $dir)));
-      }
-      catch (\InvalidArgumentException $e) {
-        continue;
-      }
-    }
-    return $collection;
-  }
-
-  /**
-   * @return string
-   */
-  protected static function getFileRegex() {
-    return '|\.' . preg_quote(static::$extension) . '$|';
-  }
-
-  /**
-   * @param string $dir
-   * @return \RecursiveIteratorIterator
-   */
-  protected static function getFilesIterator($dir) {
-    return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
-  }
-
-  /**
-   * @param string $path
-   * @param string $dir
-   * @return string
-   */
-  protected static function getIdFromPath($path, $dir) {
-    return str_replace(DIRECTORY_SEPARATOR, '/', static::getRelativePathWithoutExtension($path, $dir));
-  }
-
-  /**
-   * @param string $path
-   * @param string $dir
-   * @return string
-   */
-  protected static function getRelativePathWithoutExtension($path, $dir) {
-    return substr($path, strlen($dir) + 1, -1 - strlen(static::$extension));
-  }
-
-  /**
    * @param \Twig_Token $token
    * @return bool
    */
@@ -98,21 +43,6 @@ class Template implements TemplateInterface {
    */
   protected static function isNameToken(\Twig_Token $token) {
     return $token->getType() == \Twig_Token::NAME_TYPE;
-  }
-
-  /**
-   * @return Collection
-   */
-  protected static function makeCollection() {
-    return new Collection();
-  }
-
-  /**
-   * @param string $dir
-   * @return \RegexIterator
-   */
-  protected static function makeDirectoryIterator($dir) {
-    return new \RegexIterator(static::getFilesIterator($dir), static::getFileRegex(), \RegexIterator::MATCH);
   }
 
   /**
@@ -179,6 +109,13 @@ class Template implements TemplateInterface {
     if (!isset($this->parentTemplate)) $this->parseTemplate();
     if (!$this->hasParent()) throw new \BadMethodCallException("No template parent");
     return $this->parentTemplate;
+  }
+
+  /**
+   * @return string
+   */
+  public function getSource() {
+    return file_get_contents($this->getFile());
   }
 
   /**
