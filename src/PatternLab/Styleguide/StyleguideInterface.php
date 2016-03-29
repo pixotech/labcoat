@@ -12,72 +12,79 @@ namespace Labcoat\PatternLab\Styleguide;
 use Labcoat\PatternLab\Patterns\PatternInterface;
 use Labcoat\PatternLab\Patterns\Types\TypeInterface;
 
-interface StyleguideInterface {
+interface StyleguideInterface
+{
+    /**
+     * @return string
+     */
+    public function getAssetsDirectory();
 
-  /**
-   * @return string
-   */
-  public function getAssetsDirectory();
+    /**
+     * @return array
+     */
+    public function getBreakpoints();
 
-  /**
-   * @return array
-   */
-  public function getBreakpoints();
+    /**
+     * @return string
+     */
+    public function getCacheBuster();
 
-  /**
-   * @return string
-   */
-  public function getCacheBuster();
+    /**
+     * @return array
+     */
+    public function getHiddenControls();
 
-  /**
-   * @return array
-   */
-  public function getHiddenControls();
+    /**
+     * @return int
+     */
+    public function getMaximumWidth();
 
-  /**
-   * @return int
-   */
-  public function getMaximumWidth();
+    /**
+     * @return int
+     */
+    public function getMinimumWidth();
 
-  /**
-   * @return int
-   */
-  public function getMinimumWidth();
+    /**
+     * @param PatternInterface $pattern
+     * @return string
+     */
+    public function getPatternDirectoryName(PatternInterface $pattern);
 
-  /**
-   * @param PatternInterface $pattern
-   * @return string
-   */
-  public function getPatternDirectoryName(PatternInterface $pattern);
+    /**
+     * @return array
+     */
+    public function getScripts();
 
-  /**
-   * @return array
-   */
-  public function getScripts();
+    /**
+     * @return array
+     */
+    public function getStylesheets();
 
-  /**
-   * @return array
-   */
-  public function getStylesheets();
+    /**
+     * @param TypeInterface $type
+     * @return string
+     */
+    public function getTypeDirectoryName(TypeInterface $type);
 
-  /**
-   * @param TypeInterface $type
-   * @return string
-   */
-  public function getTypeDirectoryName(TypeInterface $type);
+    /**
+     * @return array
+     */
+    public function getTypes();
 
-  /**
-   * @return array
-   */
-  public function getTypes();
+    /**
+     * @return bool
+     */
+    public function hasScripts();
 
-  /**
-   * @return bool
-   */
-  public function hasScripts();
+    /**
+     * @return bool
+     */
+    public function hasStylesheets();
 
-  /**
-   * @return bool
-   */
-  public function hasStylesheets();
+    /**
+     * @param $body
+     * @param array $data
+     * @return mixed
+     */
+    public function makeDocument($body, $data = []);
 }
