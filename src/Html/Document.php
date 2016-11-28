@@ -136,7 +136,7 @@ class Document implements DocumentInterface
     {
         $head = $this->makeTitle();
         $head .= $this->makeCharsetMeta();
-        $head .= $this->makeMeta('viewport', 'width=device-width');
+        $head .= $this->makeMeta('viewport', 'width=device-width, initial-scale=1');
         if (!empty($this->baseHref)) {
             $head .= $this->makeElement('base', ['href' => $this->baseHref], '');
         }
