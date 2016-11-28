@@ -1,7 +1,7 @@
 {
   "name": "pixo/labcoat",
   "type": "library",
-  "description": "Development tools for Twig",
+  "description": "Style guide generator",
   "homepage": "http://pixotech.com/",
   "license": "NCSA",
   "authors": [

@@ -52,7 +52,7 @@ class Collection implements CollectionInterface, \IteratorAggregate {
    * @return string
    */
   protected static function getIdFromPath($path, $dir) {
-    return str_replace(DIRECTORY_SEPARATOR, '/', static::getRelativePathWithoutExtension($path, $dir));
+    return str_replace(DIRECTORY_SEPARATOR, '/', static::getRelativePath($path, $dir));
   }
 
   /**
@@ -60,8 +60,8 @@ class Collection implements CollectionInterface, \IteratorAggregate {
    * @param string $dir
    * @return string
    */
-  protected static function getRelativePathWithoutExtension($path, $dir) {
-    return substr($path, strlen($dir) + 1, -1 - strlen(static::$templateExtension));
+  protected static function getRelativePath($path, $dir) {
+    return substr($path, strlen($dir) + 1);
   }
 
   /**
